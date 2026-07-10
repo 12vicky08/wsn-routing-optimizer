@@ -3,14 +3,24 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import io
 import re
+import logging
+from typing import Tuple
+
+logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
 # ==========================================
 # SECTION 1: Data Ingestion & Parsing Engine
 # ==========================================
 
-def parse_simulation_log(file_path):
+def parse_simulation_log(file_path: str) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """
     Parses a complex, multi-table simulation log from NS-3.
+
+    Args:
+        file_path (str): The path to the simulation log file.
+
+    Returns:
+        Tuple[pd.DataFrame, pd.DataFrame]: A tuple containing the round data dataframe and the summary dataframe.
     """
     
     simulation_data_frames = []
@@ -27,7 +37,7 @@ def parse_simulation_log(file_path):
         with open(file_path, 'r') as f:
             lines = f.readlines()
     except FileNotFoundError:
-        print(f"CRITICAL ERROR: File {file_path} not found.")
+        logging.error(f"CRITICAL ERROR: File {file_path} not found.")
         return pd.DataFrame(), pd.DataFrame()
 
     i = 0
@@ -66,7 +76,7 @@ def parse_simulation_log(file_path):
                 try:
                     summary_df = pd.read_csv(csv_io)
                 except pd.errors.ParserError as e:
-                    print(f"Warning: Failed to parse summary table. Error: {e}")
+                    logging.warning(f"Failed to parse summary table. Error: {e}")
                 
                 capture_mode = None 
                 continue
@@ -93,7 +103,7 @@ def parse_simulation_log(file_path):
                 df['Algorithm'] = current_algorithm 
                 simulation_data_frames.append(df)
             except Exception as e:
-                print(f"Warning: Error parsing block for {current_algorithm}: {e}")
+                logging.warning(f"Error parsing block for {current_algorithm}: {e}")
             continue
             
         i += 1
@@ -109,7 +119,16 @@ def parse_simulation_log(file_path):
 # SECTION 2: Data Cleaning
 # ==========================================
 
-def clean_and_normalize(df):
+def clean_and_normalize(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Cleans and normalizes the given dataframe by converting columns to appropriate types and dropping NaNs.
+
+    Args:
+        df (pd.DataFrame): The dataframe to clean.
+
+    Returns:
+        pd.DataFrame: The cleaned dataframe.
+    """
     if df.empty: return df
     
     type_map = {
@@ -131,9 +150,13 @@ def clean_and_normalize(df):
 # SECTION 3: Screen-Optimized Visualization
 # ==========================================
 
-def generate_visualizations(round_df, summary_df):
+def generate_visualizations(round_df: pd.DataFrame, summary_df: pd.DataFrame) -> None:
     """
     Produces plots sized for screen viewing (8x5 inches)
+
+    Args:
+        round_df (pd.DataFrame): The dataframe containing round-by-round simulation data.
+        summary_df (pd.DataFrame): The dataframe containing the summary metrics.
     """
     del summary_df
     if round_df.empty: return
@@ -196,16 +219,17 @@ def generate_visualizations(round_df, summary_df):
 # SECTION 4: Execution
 # ==========================================
 
-csv_file = 'wsn-optimizer-results.csv'
+if __name__ == '__main__':
+    csv_file = 'wsn-optimizer-results.csv'
 
-print("Starting Data Pipeline...")
-round_data, summary_data = parse_simulation_log(csv_file)
+    logging.info("Starting Data Pipeline...")
+    round_data, summary_data = parse_simulation_log(csv_file)
 
-if not round_data.empty:
-    round_data = clean_and_normalize(round_data)
-    generate_visualizations(round_data, summary_data)
-    
-    print("\n--- Summary Performance ---")
-    print(summary_data.head())
-else:
-    print("No data found.")
+    if not round_data.empty:
+        round_data = clean_and_normalize(round_data)
+        generate_visualizations(round_data, summary_data)
+
+        logging.info("\n--- Summary Performance ---")
+        print(summary_data.head())
+    else:
+        logging.warning("No data found.")

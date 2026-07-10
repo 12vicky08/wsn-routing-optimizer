@@ -279,7 +279,7 @@ void IAGAPCEnhanced::Cataclysm() {
         
         // Sort by fitness descending
         std::sort(m_population.begin(), m_population.end(), 
-          (const Chromosome& a, const Chromosome& b) { return a.fitness > b.fitness; });
+          [](const Chromosome& a, const Chromosome& b) { return a.fitness > b.fitness; });
         
         // Elitism: Keep top 5%
         int eliteCount = (int)(POPULATION_SIZE * 0.05);
@@ -354,8 +354,8 @@ void IAGAPCEnhanced::Run() {
         
         // Elitism
         std::sort(m_population.begin(), m_population.end(), 
-          (const Chromosome& a, const Chromosome& b) { return a.fitness > b.fitness; });
-        newPop.push_back(m_population); // Keep best
+          [](const Chromosome& a, const Chromosome& b) { return a.fitness > b.fitness; });
+        newPop.push_back(m_population[0]); // Keep best
         
         // Genetic Op Loop
         while(newPop.size() < POPULATION_SIZE) {
