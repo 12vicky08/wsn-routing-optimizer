@@ -16,14 +16,18 @@ jobs:
 
       - name: Make a dummy commit
         run: |
-          # Append the current date to a dummy file to ensure a change
-          echo "Daily commit: $(date)" >> dummy_daily.txt
-
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add dummy_daily.txt
-          git commit -m "Automated daily maintenance and contribution"
+          # Generate a random number between 3 and 5
+          num_commits=$(( (RANDOM % 3) + 3 ))
+
+          for i in $(seq 1 $num_commits); do
+            # Append the current date and iteration to a dummy file to ensure a change
+            echo "Daily commit iteration $i: $(date)" >> dummy_daily.txt
+            git add dummy_daily.txt
+            git commit -m "Automated daily maintenance and contribution - commit $i"
+          done
 
           # Push changes back to the main branch
           git push

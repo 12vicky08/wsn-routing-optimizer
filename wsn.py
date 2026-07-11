@@ -150,15 +150,13 @@ def clean_and_normalize(df: pd.DataFrame) -> pd.DataFrame:
 # SECTION 3: Screen-Optimized Visualization
 # ==========================================
 
-def generate_visualizations(round_df: pd.DataFrame, summary_df: pd.DataFrame) -> None:
+def generate_visualizations(round_df: pd.DataFrame) -> None:
     """
     Produces plots sized for screen viewing (8x5 inches)
 
     Args:
         round_df (pd.DataFrame): The dataframe containing round-by-round simulation data.
-        summary_df (pd.DataFrame): The dataframe containing the summary metrics.
     """
-    del summary_df
     if round_df.empty: return
 
     # --- Style Configuration (Modified for Screen) ---
@@ -227,7 +225,7 @@ if __name__ == '__main__':
 
     if not round_data.empty:
         round_data = clean_and_normalize(round_data)
-        generate_visualizations(round_data, summary_data)
+        generate_visualizations(round_data)
 
         logging.info("\n--- Summary Performance ---")
         print(summary_data.head())
