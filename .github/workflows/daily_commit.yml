@@ -10,14 +10,16 @@ on:
 jobs:
   commit:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Make a dummy commit
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "R VIKRANTH"
+          git config --global user.email "vikranthras@gmail.com"
 
           # Generate a random number between 3 and 5
           num_commits=$(( (RANDOM % 3) + 3 ))
