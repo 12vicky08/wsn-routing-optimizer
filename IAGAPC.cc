@@ -92,7 +92,6 @@ private:
     // Core Genetic Operations
     void EvaluatePopulation();
     double CalculateFitness(Chromosome &ind);
-    void Selection();
     void Crossover(const Chromosome &p1, const Chromosome &p2, Chromosome &c1, Chromosome &c2, double currentAvgFitness, double currentMaxFitness);
     void Mutation(Chromosome &ind, double currentDiversity);
     
@@ -103,7 +102,6 @@ private:
     // Trajectory Helper Functions
     std::vector<Point> GenerateSplinePath(const std::vector<Point>& rps);
     double CalculateSmoothness(const std::vector<Point>& path);
-    double CalculateResidualEnergyVariance();
 };
 
 // -------------------------------------------------------------------------
@@ -113,6 +111,12 @@ private:
 IAGAPCEnhanced::IAGAPCEnhanced(NodeContainer nodes, Ptr<EnergySourceContainer> energySources, double w, double h) 
     : m_nodes(nodes), m_energySources(energySources), m_areaWidth(w), m_areaHeight(h) {
     InitializePopulation();
+}
+
+void IAGAPCEnhanced::EvaluatePopulation() {
+    for (auto &ind : m_population) {
+        CalculateFitness(ind);
+    }
 }
 
 void IAGAPCEnhanced::InitializePopulation() {
