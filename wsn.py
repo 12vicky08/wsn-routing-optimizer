@@ -5,6 +5,7 @@ import io
 import re
 import logging
 from typing import Tuple
+import argparse
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
@@ -192,7 +193,8 @@ def generate_visualizations(round_df: pd.DataFrame) -> None:
     plt.ylabel("Total Energy (Joules)")
     plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left')
     plt.tight_layout()
-    plt.show()
+    plt.savefig("Fig1_Energy_Consumption.png")
+    plt.close()
 
     # Plot 2: Throughput
     plt.figure()
@@ -211,14 +213,19 @@ def generate_visualizations(round_df: pd.DataFrame) -> None:
     plt.ylabel("Packets Delivered")
     plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left')
     plt.tight_layout()
-    plt.show()
+    plt.savefig("Fig2_Packet_Delivery.png")
+    plt.close()
 
 # ==========================================
 # SECTION 4: Execution
 # ==========================================
 
 if __name__ == '__main__':
-    csv_file = 'wsn-optimizer-results.csv'
+    parser = argparse.ArgumentParser(description="Process WSN routing optimization results.")
+    parser.add_argument('--input', type=str, default='wsn-optimizer-results.csv', help='Input CSV file containing simulation results')
+    args = parser.parse_args()
+
+    csv_file = args.input
 
     logging.info("Starting Data Pipeline...")
     round_data, summary_data = parse_simulation_log(csv_file)
