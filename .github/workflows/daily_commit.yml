@@ -24,11 +24,26 @@ jobs:
           # Generate a random number between 3 and 5
           num_commits=$(( (RANDOM % 3) + 3 ))
 
+          messages=("Refactor routing algorithm logic" "Update simulation parameters" "Fix minor bug in metric calculation" "Improve energy efficiency model" "Update documentation")
+
           for i in $(seq 1 $num_commits); do
             # Append the current date and iteration to a dummy file to ensure a change
             echo "Daily commit iteration $i: $(date)" >> dummy_daily.txt
             git add dummy_daily.txt
-            git commit -m "Automated daily maintenance and contribution - commit $i"
+
+            # Select a random message
+            msg_index=$((RANDOM % ${#messages[@]}))
+            msg=${messages[$msg_index]}
+
+            # Generate a random offset in hours (0-11) and minutes (0-59) to spread out commits
+            hour_offset=$((RANDOM % 12))
+            minute_offset=$((RANDOM % 60))
+
+            # Set the date for the commit to simulate organic activity throughout the day
+            export GIT_AUTHOR_DATE=$(date -d "-${hour_offset} hours -${minute_offset} minutes" +'%Y-%m-%dT%H:%M:%S')
+            export GIT_COMMITTER_DATE=$GIT_AUTHOR_DATE
+
+            git commit -m "$msg - iteration $i"
           done
 
           # Push changes back to the main branch
