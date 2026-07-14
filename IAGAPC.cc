@@ -142,6 +142,10 @@ std::vector<Point> IAGAPCEnhanced::GenerateSplinePath(const std::vector<Point>& 
     std::vector<Point> splinePath;
     if (rps.size() < 4) return rps; 
 
+    // Pre-allocate memory to prevent redundant reallocations
+    // 21 points per segment (t from 0 to 1 with 0.05 step)
+    splinePath.reserve((rps.size() - 3) * 21);
+
     // Loop through control points
     for (size_t i = 0; i < rps.size() - 3; i++) {
         // Interpolate between p1 and p2 using p0 and p3 as control
