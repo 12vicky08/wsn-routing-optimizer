@@ -6,6 +6,7 @@ import re
 import logging
 from typing import Tuple
 import argparse
+from pathlib import Path
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
@@ -15,7 +16,8 @@ logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
 def parse_simulation_log(file_path: str) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """
-    Parses a complex, multi-table simulation log from NS-3.
+    Parses a complex, multi-table simulation log from NS-3. Uses regex pattern
+    matching to identify distinct data tables and context state transitions.
 
     Args:
         file_path (str): The path to the simulation log file.
@@ -34,11 +36,16 @@ def parse_simulation_log(file_path: str) -> Tuple[pd.DataFrame, pd.DataFrame]:
     round_header_pattern = re.compile(r"^\s*Round\s*,\s*MaxResidualEnergy")
     summary_header_pattern = re.compile(r"^\s*Algorithm\s*,\s*Rounds")
     
+    path = Path(file_path)
+    if not path.is_file():
+        logging.error(f"CRITICAL ERROR: File {file_path} not found or is not a file.")
+        return pd.DataFrame(), pd.DataFrame()
+
     try:
-        with open(file_path, 'r') as f:
+        with path.open('r') as f:
             lines = f.readlines()
-    except FileNotFoundError:
-        logging.error(f"CRITICAL ERROR: File {file_path} not found.")
+    except IOError as e:
+        logging.error(f"CRITICAL ERROR: Could not read file {file_path}. Error: {e}")
         return pd.DataFrame(), pd.DataFrame()
 
     i = 0
