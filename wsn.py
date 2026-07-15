@@ -43,14 +43,14 @@ def parse_simulation_log(file_path: str) -> Tuple[pd.DataFrame, pd.DataFrame]:
 
     try:
         with path.open('r') as f:
-            lines = f.readlines()
+            lines = [line.strip() for line in f]
     except IOError as e:
         logging.error(f"CRITICAL ERROR: Could not read file {file_path}. Error: {e}")
         return pd.DataFrame(), pd.DataFrame()
 
     i = 0
     while i < len(lines):
-        line = lines[i].strip()
+        line = lines[i]
         
         if not line:
             i += 1
@@ -201,7 +201,7 @@ def generate_visualizations(round_df: pd.DataFrame) -> None:
     plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left')
     plt.tight_layout()
     plt.savefig("Fig1_Energy_Consumption.png")
-    plt.close()
+    plt.close('all')
 
     # Plot 2: Throughput
     plt.figure()
@@ -221,7 +221,7 @@ def generate_visualizations(round_df: pd.DataFrame) -> None:
     plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left')
     plt.tight_layout()
     plt.savefig("Fig2_Packet_Delivery.png")
-    plt.close()
+    plt.close('all')
 
 # ==========================================
 # SECTION 4: Execution
