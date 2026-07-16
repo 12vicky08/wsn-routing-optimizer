@@ -24,7 +24,23 @@ jobs:
           # Generate a random number between 3 and 5
           num_commits=$(( (RANDOM % 3) + 3 ))
 
-          messages=("Refactor routing algorithm logic" "Update simulation parameters" "Fix minor bug in metric calculation" "Improve energy efficiency model" "Update documentation")
+          messages=(
+            "Refactor routing algorithm logic"
+            "Update simulation parameters"
+            "Fix minor bug in metric calculation"
+            "Improve energy efficiency model"
+            "Update documentation"
+            "Optimize spline trajectory generation"
+            "Tweak adaptive crossover probabilities"
+            "Clean up redundant logs"
+            "Refactor evaluation function"
+            "Tune mutation operator thresholds"
+            "Update plotting configuration"
+            "Enhance data parsing regex"
+            "Reformat C++ codebase"
+            "Adjust NS-3 energy source setup"
+            "Fix memory leak in Python script"
+          )
 
           for i in $(seq 1 $num_commits); do
             # Append the current date and iteration to a dummy file to ensure a change
