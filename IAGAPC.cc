@@ -21,27 +21,27 @@ using namespace ns3;
 // -------------------------------------------------------------------------
 // Simulation Parameters & Algorithm Constants
 // -------------------------------------------------------------------------
-const int POPULATION_SIZE = 50;
-const int MAX_GENERATIONS = 200;
-const int NUM_RPS = 10;          // Number of Rendezvous Points (Control Points)
-const double V_MAX = 20.0;       // Maximum velocity of Mobile Sink (m/s)
-const double COMM_RANGE = 100.0; // Communication range (m)
+constexpr int POPULATION_SIZE = 50;
+constexpr int MAX_GENERATIONS = 200;
+constexpr int NUM_RPS = 10;          // Number of Rendezvous Points (Control Points)
+constexpr double V_MAX = 20.0;       // Maximum velocity of Mobile Sink (m/s)
+constexpr double COMM_RANGE = 100.0; // Communication range (m)
 
 // Multi-Objective Weights
-const double W_ENERGY = 0.4;     // Weight for Residual Energy Balance
-const double W_SMOOTH = 0.3;     // Weight for Path Smoothness
-const double W_COVERAGE = 0.2;   // Weight for Coverage/PDR
-const double W_DELAY = 0.1;      // Weight for Delay/Path Length
+constexpr double W_ENERGY = 0.4;     // Weight for Residual Energy Balance
+constexpr double W_SMOOTH = 0.3;     // Weight for Path Smoothness
+constexpr double W_COVERAGE = 0.2;   // Weight for Coverage/PDR
+constexpr double W_DELAY = 0.1;      // Weight for Delay/Path Length
 
 // Adaptive Genetic Parameters
-const double PC_MAX = 0.9;
-const double PC_MIN = 0.6;
-const double PM_MAX = 0.1;
-const double PM_MIN = 0.01;
+constexpr double PC_MAX = 0.9;
+constexpr double PC_MIN = 0.6;
+constexpr double PM_MAX = 0.1;
+constexpr double PM_MIN = 0.01;
 
 // Diversity Thresholds
-const double DIVERSITY_CRIT = 25.0; // Threshold to trigger Cataclysm
-const int STAGNATION_LIMIT = 20;
+constexpr double DIVERSITY_CRIT = 25.0; // Threshold to trigger Cataclysm
+constexpr int STAGNATION_LIMIT = 20;
 
 // -------------------------------------------------------------------------
 // Data Structures
