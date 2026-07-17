@@ -359,6 +359,7 @@ void IAGAPCEnhanced::Run() {
 
         // 3. Selection & Reproduction
         std::vector<Chromosome> newPop;
+        newPop.reserve(POPULATION_SIZE);
         
         // Elitism
         std::sort(m_population.begin(), m_population.end(), 
