@@ -290,7 +290,7 @@ void IAGAPCEnhanced::Cataclysm() {
           [](const Chromosome& a, const Chromosome& b) { return a.fitness > b.fitness; });
         
         // Elitism: Keep top 5%
-        int eliteCount = (int)(POPULATION_SIZE * 0.05);
+        constexpr int eliteCount = (int)(POPULATION_SIZE * 0.05);
         
         // Regenerate the rest
         std::random_device rd;
@@ -366,15 +366,20 @@ void IAGAPCEnhanced::Run() {
           [](const Chromosome& a, const Chromosome& b) { return a.fitness > b.fitness; });
         newPop.push_back(m_population[0]); // Keep best
         
+        // Setup random generator for tournament selection
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> dis(0, POPULATION_SIZE - 1);
+
         // Genetic Op Loop
         while(newPop.size() < POPULATION_SIZE) {
             // Tournament Selection
-            int idx1 = rand() % POPULATION_SIZE;
-            int idx2 = rand() % POPULATION_SIZE;
+            int idx1 = dis(gen);
+            int idx2 = dis(gen);
             Chromosome p1 = (m_population[idx1].fitness > m_population[idx2].fitness)? m_population[idx1] : m_population[idx2];
             
-            idx1 = rand() % POPULATION_SIZE;
-            idx2 = rand() % POPULATION_SIZE;
+            idx1 = dis(gen);
+            idx2 = dis(gen);
             Chromosome p2 = (m_population[idx1].fitness > m_population[idx2].fitness)? m_population[idx1] : m_population[idx2];
             
             Chromosome c1, c2;
