@@ -155,7 +155,7 @@ def clean_and_normalize(df: pd.DataFrame) -> pd.DataFrame:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors='coerce')
     
-    df.dropna(inplace=True)
+    df = df.dropna()
     return df
 
 # ==========================================
@@ -239,7 +239,7 @@ if __name__ == '__main__':
 
     csv_file = args.input
 
-    logging.info("Starting Data Pipeline...")
+    logging.info("Starting Data Pipeline Execution...")
     round_data, summary_data = parse_simulation_log(csv_file)
 
     if not round_data.empty:
