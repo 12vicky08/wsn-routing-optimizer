@@ -151,11 +151,11 @@ def clean_and_normalize(df: pd.DataFrame) -> pd.DataFrame:
         'Throughput': 'float64'
     }
     
-    for col, _ in type_map.items():
+    for col in type_map.keys():
         if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors='coerce')
+            df.loc[:, col] = pd.to_numeric(df[col], errors='coerce')
     
-    df = df.dropna()
+    df = df.dropna().copy()
     return df
 
 # ==========================================
@@ -232,7 +232,7 @@ def generate_visualizations(round_df: pd.DataFrame) -> None:
 # SECTION 4: Execution
 # ==========================================
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser(description="Process WSN routing optimization results.")
     parser.add_argument('--input', type=str, default='wsn-optimizer-results.csv', help='Input CSV file containing simulation results')
     args = parser.parse_args()
@@ -250,3 +250,6 @@ if __name__ == '__main__':
         print(summary_data.head())
     else:
         logging.warning("No data found.")
+
+if __name__ == '__main__':
+    main()
