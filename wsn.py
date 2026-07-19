@@ -8,7 +8,7 @@ from typing import Tuple
 import argparse
 from pathlib import Path
 
-logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s: %(message)s')
 
 # ==========================================
 # SECTION 1: Data Ingestion & Parsing Engine
@@ -151,16 +151,27 @@ def clean_and_normalize(df: pd.DataFrame) -> pd.DataFrame:
         'Throughput': 'float64'
     }
     
-    for col in type_map.keys():
+    for col in type_map:
         if col in df.columns:
             df.loc[:, col] = pd.to_numeric(df[col], errors='coerce')
     
     df = df.dropna().copy()
+
+    existing_cols = {k: v for k, v in type_map.items() if k in df.columns}
+    df = df.astype(existing_cols)
     return df
 
 # ==========================================
 # SECTION 3: Screen-Optimized Visualization
 # ==========================================
+
+def save_plot(filename: str, fig: plt.Figure) -> None:
+    """
+    Helper function to adjust layout, save, and close a figure.
+    """
+    plt.tight_layout()
+    plt.savefig(filename)
+    plt.close(fig)
 
 def generate_visualizations(round_df: pd.DataFrame) -> None:
     """
@@ -203,9 +214,7 @@ def generate_visualizations(round_df: pd.DataFrame) -> None:
     plt.title("Cumulative Network Energy Consumption")
     plt.ylabel("Total Energy (Joules)")
     plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left')
-    plt.tight_layout()
-    plt.savefig("Fig1_Energy_Consumption.png")
-    plt.close(fig1)
+    save_plot("Fig1_Energy_Consumption.png", fig1)
 
     # Plot 2: Throughput
     fig2 = plt.figure()
@@ -223,9 +232,7 @@ def generate_visualizations(round_df: pd.DataFrame) -> None:
     plt.title("Cumulative Data Packet Delivery")
     plt.ylabel("Packets Delivered")
     plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left')
-    plt.tight_layout()
-    plt.savefig("Fig2_Packet_Delivery.png")
-    plt.close(fig2)
+    save_plot("Fig2_Packet_Delivery.png", fig2)
     plt.close('all')
 
 # ==========================================
