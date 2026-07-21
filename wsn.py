@@ -199,40 +199,42 @@ def generate_visualizations(round_df: pd.DataFrame) -> None:
     marker_map = {algo: markers[i % len(markers)] for i, algo in enumerate(unique_algos)}
 
     # Plot 1: Energy Consumption
-    fig1 = plt.figure()
-    sns.lineplot(
-        data=round_df, 
-        x='Round', 
-        y='TotalEnergyConsumed', 
-        hue='Algorithm', 
-        style='Algorithm',
-        palette=palette,
-        markers=marker_map,
-        dashes=False,
-        markevery=10
-    )
-    plt.title("Cumulative Network Energy Consumption")
-    plt.ylabel("Total Energy (Joules)")
-    plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left')
-    save_plot("Fig1_Energy_Consumption.png", fig1)
+    if 'TotalEnergyConsumed' in round_df.columns:
+        fig1 = plt.figure()
+        sns.lineplot(
+            data=round_df,
+            x='Round',
+            y='TotalEnergyConsumed',
+            hue='Algorithm',
+            style='Algorithm',
+            palette=palette,
+            markers=marker_map,
+            dashes=False,
+            markevery=10
+        )
+        plt.title("Cumulative Network Energy Consumption")
+        plt.ylabel("Total Energy (Joules)")
+        plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left')
+        save_plot("Fig1_Energy_Consumption.png", fig1)
 
     # Plot 2: Throughput
-    fig2 = plt.figure()
-    sns.lineplot(
-        data=round_df, 
-        x='Round', 
-        y='PacketsDelivered', 
-        hue='Algorithm', 
-        style='Algorithm',
-        palette=palette,
-        markers=marker_map,
-        dashes=False,
-        markevery=10
-    )
-    plt.title("Cumulative Data Packet Delivery")
-    plt.ylabel("Packets Delivered")
-    plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left')
-    save_plot("Fig2_Packet_Delivery.png", fig2)
+    if 'PacketsDelivered' in round_df.columns:
+        fig2 = plt.figure()
+        sns.lineplot(
+            data=round_df,
+            x='Round',
+            y='PacketsDelivered',
+            hue='Algorithm',
+            style='Algorithm',
+            palette=palette,
+            markers=marker_map,
+            dashes=False,
+            markevery=10
+        )
+        plt.title("Cumulative Data Packet Delivery")
+        plt.ylabel("Packets Delivered")
+        plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left')
+        save_plot("Fig2_Packet_Delivery.png", fig2)
     plt.close('all')
 
 # ==========================================
