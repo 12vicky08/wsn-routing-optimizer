@@ -194,6 +194,7 @@ double IAGAPCEnhanced::CalculateSmoothness(const std::vector<Point>& path) {
         double angle2 = atan2(dy2, dx2);
         
         double diff = fabs(angle2 - angle1);
+        if (diff > M_PI) diff = 2 * M_PI - diff;
         // Penalize sharp turns heavily
         totalCurvature += (diff * diff);
     }
@@ -328,8 +329,8 @@ void IAGAPCEnhanced::Crossover(const Chromosome &p1, const Chromosome &p2, Chrom
         Pc = PC_MAX;
     }
 
-    std::random_device rd;
-    std::mt19937 gen(rd());
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
     std::uniform_real_distribution<> dis(0.0, 1.0);
 
     if (dis(gen) < Pc) {
@@ -377,18 +378,18 @@ void IAGAPCEnhanced::Run() {
         
         // Setup random generator for tournament selection
         std::random_device rd;
-        std::mt19937 gen(rd());
+        std::mt19937 rand_gen(rd());
         std::uniform_int_distribution<> dis(0, POPULATION_SIZE - 1);
 
         // Genetic Op Loop
         while(newPop.size() < POPULATION_SIZE) {
             // Tournament Selection
-            int idx1 = dis(gen);
-            int idx2 = dis(gen);
+            int idx1 = dis(rand_gen);
+            int idx2 = dis(rand_gen);
             Chromosome p1 = (m_population[idx1].fitness > m_population[idx2].fitness)? m_population[idx1] : m_population[idx2];
             
-            idx1 = dis(gen);
-            idx2 = dis(gen);
+            idx1 = dis(rand_gen);
+            idx2 = dis(rand_gen);
             Chromosome p2 = (m_population[idx1].fitness > m_population[idx2].fitness)? m_population[idx1] : m_population[idx2];
             
             Chromosome c1, c2;
