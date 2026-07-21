@@ -113,6 +113,14 @@ IAGAPCEnhanced::IAGAPCEnhanced(NodeContainer nodes, Ptr<EnergySourceContainer> e
     InitializePopulation();
 }
 
+std::vector<Point> IAGAPCEnhanced::GetBestTrajectory() {
+    return GenerateSplinePath(m_globalBest.rps);
+}
+
+double IAGAPCEnhanced::GetBestFitness() {
+    return m_globalBest.fitness;
+}
+
 void IAGAPCEnhanced::EvaluatePopulation() {
     for (auto &ind : m_population) {
         CalculateFitness(ind);
@@ -350,6 +358,7 @@ void IAGAPCEnhanced::Run() {
         
         for(auto& ind : m_population) {
             if(ind.fitness > maxFit) maxFit = ind.fitness;
+            if(ind.fitness > m_globalBest.fitness) m_globalBest = ind;
             sumFit += ind.fitness;
         }
         double avgFit = sumFit / POPULATION_SIZE;

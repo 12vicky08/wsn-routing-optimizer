@@ -42,7 +42,7 @@ def parse_simulation_log(file_path: str) -> Tuple[pd.DataFrame, pd.DataFrame]:
         return pd.DataFrame(), pd.DataFrame()
 
     try:
-        with path.open('r') as f:
+        with path.open('r', encoding='utf-8') as f:
             lines = [line.strip() for line in f]
     except IOError as e:
         logging.error(f"CRITICAL ERROR: Could not read file {file_path}. Error: {e}")
@@ -239,7 +239,7 @@ def generate_visualizations(round_df: pd.DataFrame) -> None:
 # SECTION 4: Execution
 # ==========================================
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="Process WSN routing optimization results.")
     parser.add_argument('--input', type=str, default='wsn-optimizer-results.csv', help='Input CSV file containing simulation results')
     args = parser.parse_args()
