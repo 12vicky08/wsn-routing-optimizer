@@ -131,6 +131,14 @@ def parse_simulation_log(file_path: str) -> Tuple[pd.DataFrame, pd.DataFrame]:
 # SECTION 2: Data Cleaning
 # ==========================================
 
+TYPE_MAP = {
+    'Round': 'int32',
+    'MaxResidualEnergy': 'float64',
+    'PacketsDelivered': 'int32',
+    'TotalEnergyConsumed': 'float64',
+    'Throughput': 'float64'
+}
+
 def clean_and_normalize(df: pd.DataFrame) -> pd.DataFrame:
     """
     Cleans and normalizes the given dataframe by converting columns to appropriate types and dropping NaNs.
@@ -143,21 +151,13 @@ def clean_and_normalize(df: pd.DataFrame) -> pd.DataFrame:
     """
     if df.empty: return df
     
-    type_map = {
-        'Round': 'int32',
-        'MaxResidualEnergy': 'float64',
-        'PacketsDelivered': 'int32',
-        'TotalEnergyConsumed': 'float64',
-        'Throughput': 'float64'
-    }
-    
-    for col in type_map:
+    for col in TYPE_MAP:
         if col in df.columns:
             df.loc[:, col] = pd.to_numeric(df[col], errors='coerce')
     
     df = df.dropna().copy()
 
-    existing_cols = {k: v for k, v in type_map.items() if k in df.columns}
+    existing_cols = {k: v for k, v in TYPE_MAP.items() if k in df.columns}
     df = df.astype(existing_cols)
     return df
 
@@ -165,12 +165,12 @@ def clean_and_normalize(df: pd.DataFrame) -> pd.DataFrame:
 # SECTION 3: Screen-Optimized Visualization
 # ==========================================
 
-def save_plot(filename: str, fig: plt.Figure) -> None:
+def save_plot(filename: str, fig: plt.Figure, dpi: int = 100) -> None:
     """
     Helper function to adjust layout, save, and close a figure.
     """
     plt.tight_layout()
-    plt.savefig(filename)
+    plt.savefig(filename, dpi=dpi)
     plt.close(fig)
 
 def generate_visualizations(round_df: pd.DataFrame) -> None:

@@ -75,8 +75,8 @@ class IAGAPCEnhanced {
 public:
     IAGAPCEnhanced(NodeContainer nodes, Ptr<EnergySourceContainer> energySources, double areaWidth, double areaHeight);
     void Run();
-    std::vector<Point> GetBestTrajectory();
-    double GetBestFitness();
+    std::vector<Point> GetBestTrajectory() const;
+    double GetBestFitness() const;
 
 private:
     NodeContainer m_nodes;
@@ -97,11 +97,11 @@ private:
     
     // Advanced Mechanisms
     void Cataclysm(); // Diversity reboot mechanism
-    double CalculateDiversity();
+    double CalculateDiversity() const;
     
     // Trajectory Helper Functions
-    std::vector<Point> GenerateSplinePath(const std::vector<Point>& rps);
-    double CalculateSmoothness(const std::vector<Point>& path);
+    std::vector<Point> GenerateSplinePath(const std::vector<Point>& rps) const;
+    double CalculateSmoothness(const std::vector<Point>& path) const;
 };
 
 // -------------------------------------------------------------------------
@@ -113,11 +113,11 @@ IAGAPCEnhanced::IAGAPCEnhanced(NodeContainer nodes, Ptr<EnergySourceContainer> e
     InitializePopulation();
 }
 
-std::vector<Point> IAGAPCEnhanced::GetBestTrajectory() {
+std::vector<Point> IAGAPCEnhanced::GetBestTrajectory() const {
     return GenerateSplinePath(m_globalBest.rps);
 }
 
-double IAGAPCEnhanced::GetBestFitness() {
+double IAGAPCEnhanced::GetBestFitness() const {
     return m_globalBest.fitness;
 }
 
@@ -146,7 +146,7 @@ void IAGAPCEnhanced::InitializePopulation() {
 
 // Catmull-Rom Spline Interpolation
 // Converts discrete RPs into a smooth, kinematic-friendly path
-std::vector<Point> IAGAPCEnhanced::GenerateSplinePath(const std::vector<Point>& rps) {
+std::vector<Point> IAGAPCEnhanced::GenerateSplinePath(const std::vector<Point>& rps) const {
     std::vector<Point> splinePath;
     if (rps.size() < 4) return rps; 
 
@@ -179,7 +179,7 @@ std::vector<Point> IAGAPCEnhanced::GenerateSplinePath(const std::vector<Point>& 
 }
 
 // Evaluate smoothness based on curvature
-double IAGAPCEnhanced::CalculateSmoothness(const std::vector<Point>& path) {
+double IAGAPCEnhanced::CalculateSmoothness(const std::vector<Point>& path) const {
     double totalCurvature = 0.0;
     if (path.size() < 3) return 0.0;
 
@@ -270,7 +270,7 @@ double IAGAPCEnhanced::CalculateFitness(Chromosome &ind) {
 }
 
 // Diversity Calculation (Average Euclidean distance between all pairs)
-double IAGAPCEnhanced::CalculateDiversity() {
+double IAGAPCEnhanced::CalculateDiversity() const {
     double totalDist = 0;
     int count = 0;
     for(size_t i=0; i<m_population.size(); ++i) {
