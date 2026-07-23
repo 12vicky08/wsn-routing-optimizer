@@ -258,7 +258,7 @@ double IAGAPCEnhanced::CalculateFitness(Chromosome &ind) {
         }
         if (isCovered) coveredNodes++;
     }
-    ind.coverageMetric = (double)coveredNodes / m_nodes.GetN();
+    ind.coverageMetric = static_cast<double>(coveredNodes) / m_nodes.GetN();
 
     // Weighted Sum
     ind.fitness = (W_ENERGY * ind.energyMetric) + 
@@ -299,7 +299,7 @@ void IAGAPCEnhanced::Cataclysm() {
           [](const Chromosome& a, const Chromosome& b) { return a.fitness > b.fitness; });
         
         // Elitism: Keep top 5%
-        constexpr int eliteCount = (int)(POPULATION_SIZE * 0.05);
+        constexpr int eliteCount = static_cast<int>(POPULATION_SIZE * 0.05);
         
         // Regenerate the rest
         std::random_device rd;

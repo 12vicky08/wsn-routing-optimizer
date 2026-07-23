@@ -7,6 +7,7 @@ import logging
 from typing import Tuple
 import argparse
 from pathlib import Path
+import sys
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s: %(message)s')
 
@@ -38,8 +39,7 @@ def parse_simulation_log(file_path: str) -> Tuple[pd.DataFrame, pd.DataFrame]:
     
     path = Path(file_path)
     if not path.is_file():
-        logging.error(f"CRITICAL ERROR: File {file_path} not found or is not a file.")
-        return pd.DataFrame(), pd.DataFrame()
+        raise FileNotFoundError(f"CRITICAL ERROR: File {file_path} not found or is not a file.")
 
     try:
         with path.open('r', encoding='utf-8') as f:
@@ -170,7 +170,7 @@ def save_plot(filename: str, fig: plt.Figure, dpi: int = 100) -> None:
     Helper function to adjust layout, save, and close a figure.
     """
     plt.tight_layout()
-    plt.savefig(filename, dpi=dpi)
+    plt.savefig(filename, dpi=dpi, bbox_inches='tight')
     plt.close(fig)
 
 def generate_visualizations(round_df: pd.DataFrame) -> None:
@@ -249,7 +249,11 @@ def main() -> None:
     csv_file = args.input
 
     logging.info("Starting Data Pipeline Execution...")
-    round_data, summary_data = parse_simulation_log(csv_file)
+    try:
+        round_data, summary_data = parse_simulation_log(csv_file)
+    except FileNotFoundError as e:
+        logging.error(e)
+        sys.exit(1)
 
     if not round_data.empty:
         round_data = clean_and_normalize(round_data)
