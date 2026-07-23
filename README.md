@@ -186,6 +186,14 @@ Performance summary across 100 simulation rounds:
 
 ---
 
+## Requirements
+- Python 3.8+
+- pandas
+- matplotlib
+- seaborn
+
+---
+
 ## Getting Started
 
 ### Prerequisites
