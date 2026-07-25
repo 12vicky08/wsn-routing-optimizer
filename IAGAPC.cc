@@ -292,6 +292,7 @@ void IAGAPCEnhanced::Cataclysm() {
     double diversity = CalculateDiversity();
     
     if (diversity < DIVERSITY_CRIT) {
+        // Threshold breached
         NS_LOG_UNCOND("Cataclysm Triggered! Diversity: " << diversity);
         
         // Sort by fitness descending
