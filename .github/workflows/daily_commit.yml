@@ -40,6 +40,8 @@ jobs:
             "Reformat C++ codebase"
             "Adjust NS-3 energy source setup"
             "Fix memory leak in Python script"
+            "Enhance inline code documentation"
+            "Update data cleaning logic"
           )
 
           for i in $(seq 1 $num_commits); do

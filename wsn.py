@@ -136,7 +136,11 @@ TYPE_MAP = {
     'MaxResidualEnergy': 'float64',
     'PacketsDelivered': 'int32',
     'TotalEnergyConsumed': 'float64',
-    'Throughput': 'float64'
+    'Throughput': 'float64',
+    'AvgHops': 'float64',
+    'MinDelay': 'float64',
+    'PacketLoss': 'int32',
+    'EnergyEfficiency': 'float64'
 }
 
 def clean_and_normalize(df: pd.DataFrame) -> pd.DataFrame:
@@ -155,7 +159,7 @@ def clean_and_normalize(df: pd.DataFrame) -> pd.DataFrame:
         if col in df.columns:
             df.loc[:, col] = pd.to_numeric(df[col], errors='coerce')
     
-    df = df.dropna().copy()
+    df = df.dropna().copy()  # Ensure data cleanliness for analysis
 
     existing_cols = {k: v for k, v in TYPE_MAP.items() if k in df.columns}
     df = df.astype(existing_cols)
