@@ -10,7 +10,7 @@ import logging
 import re
 import sys
 from pathlib import Path
-from typing import Tuple
+from typing import Tuple, Union
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -28,7 +28,7 @@ logging.basicConfig(
 
 # pylint: disable=too-many-locals,too-many-branches,too-many-statements
 def parse_simulation_log(
-    file_path: str
+    file_path: Union[str, Path]
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """
     Parses a complex, multi-table simulation log from NS-3. Uses regex pattern
@@ -205,8 +205,8 @@ def save_plot(filename: str, fig: plt.Figure, dpi: int = 100) -> None:
     """
     Helper function to adjust layout, save, and close a figure.
     """
-    plt.tight_layout()
-    plt.savefig(filename, dpi=dpi, bbox_inches='tight')
+    fig.tight_layout()
+    fig.savefig(filename, dpi=dpi, bbox_inches='tight')
     plt.close(fig)
 
 

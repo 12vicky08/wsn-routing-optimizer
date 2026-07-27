@@ -185,13 +185,13 @@ double IAGAPCEnhanced::CalculateSmoothness(const std::vector<Point>& path) const
 
     for (size_t i = 1; i < path.size() - 1; ++i) {
         // Calculate change in angle
-        double dx1 = path[i].x - path[i-1].x;
-        double dy1 = path[i].y - path[i-1].y;
-        double dx2 = path[i+1].x - path[i].x;
-        double dy2 = path[i+1].y - path[i].y;
+        double deltaX1 = path[i].x - path[i-1].x;
+        double deltaY1 = path[i].y - path[i-1].y;
+        double deltaX2 = path[i+1].x - path[i].x;
+        double deltaY2 = path[i+1].y - path[i].y;
         
-        double angle1 = atan2(dy1, dx1);
-        double angle2 = atan2(dy2, dx2);
+        double angle1 = atan2(deltaY1, deltaX1);
+        double angle2 = atan2(deltaY2, deltaX2);
         
         double diff = fabs(angle2 - angle1);
         if (diff > M_PI) diff = 2 * M_PI - diff;
@@ -234,12 +234,12 @@ double IAGAPCEnhanced::CalculateFitness(Chromosome &ind) {
     ind.smoothMetric = CalculateSmoothness(smoothPath);
 
     // 3. Delay Factor (Path Length)
-    double pathLen = 0;
+    double pathLength = 0;
     for(size_t i=0; i<smoothPath.size()-1; ++i) {
-        pathLen += std::hypot(smoothPath[i+1].x - smoothPath[i].x, 
-                              smoothPath[i+1].y - smoothPath[i].y);
+        pathLength += std::hypot(smoothPath[i+1].x - smoothPath[i].x,
+                                 smoothPath[i+1].y - smoothPath[i].y);
     }
-    ind.delayMetric = 1.0 / (1.0 + (pathLen / V_MAX));
+    ind.delayMetric = 1.0 / (1.0 + (pathLength / V_MAX));
 
     // 4. Coverage Factor
     // Check how many nodes are within COMM_RANGE of at least one point on the path
