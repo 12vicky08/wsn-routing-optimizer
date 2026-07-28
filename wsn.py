@@ -20,6 +20,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s: %(message)s'
 )
+logger = logging.getLogger(__name__)
 
 # ==========================================
 # SECTION 1: Data Ingestion & Parsing Engine
@@ -62,7 +63,7 @@ def parse_simulation_log(
         with path.open('r', encoding='utf-8') as f:
             lines = [line.strip() for line in f]
     except IOError as e:
-        logging.error(
+        logger.error(
             "CRITICAL ERROR: Could not read file %s. Error: %s",
             file_path, e
         )
@@ -104,12 +105,12 @@ def parse_simulation_log(
                 try:
                     summary_df = pd.read_csv(csv_io, skipinitialspace=True)
                 except pd.errors.ParserError as e:
-                    logging.warning(
+                    logger.warning(
                         "Failed to parse summary table. Error: %s", e
                     )
                 # pylint: disable=broad-exception-caught
                 except Exception as e:
-                    logging.warning(
+                    logger.warning(
                         "Unexpected error when parsing summary table. "
                         "Error: %s", e
                     )
@@ -140,11 +141,11 @@ def parse_simulation_log(
                 df['Algorithm'] = current_algorithm
                 simulation_data_frames.append(df)
             except pd.errors.ParserError as e:
-                logging.warning(
+                logger.warning(
                     "Parser error for block %s: %s", current_algorithm, e
                 )
             except Exception as e:  # pylint: disable=broad-exception-caught
-                logging.warning(
+                logger.warning(
                     "Error parsing block for %s: %s", current_algorithm, e
                 )
             continue
@@ -284,9 +285,9 @@ def generate_visualizations(round_df: pd.DataFrame) -> None:
 # ==========================================
 
 
-def main() -> None:
+def setup_argparser() -> argparse.ArgumentParser:
     """
-    Main function to execute the data pipeline.
+    Set up the command line argument parser.
     """
     parser = argparse.ArgumentParser(
         description="Process WSN routing optimization results."
@@ -297,25 +298,32 @@ def main() -> None:
         default='wsn-optimizer-results.csv',
         help='Input CSV file containing simulation results'
     )
+    return parser
+
+def main() -> None:
+    """
+    Main function to execute the data pipeline.
+    """
+    parser = setup_argparser()
     args = parser.parse_args()
 
     csv_file = args.input
 
-    logging.info("Starting Data Pipeline Execution...")
+    logger.info("Starting Data Pipeline Execution...")
     try:
         round_data, summary_data = parse_simulation_log(csv_file)
     except FileNotFoundError as e:
-        logging.error(e)
+        logger.error(e)
         sys.exit(1)
 
     if not round_data.empty:
         round_data = clean_and_normalize(round_data)
         generate_visualizations(round_data)
 
-        logging.info("\n--- Summary Performance ---")
+        logger.info("\n--- Summary Performance ---")
         print(summary_data.head())
     else:
-        logging.warning("No data found.")
+        logger.warning("No data found.")
 
 
 if __name__ == '__main__':
