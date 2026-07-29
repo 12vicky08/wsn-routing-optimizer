@@ -26,7 +26,54 @@ logging.basicConfig(
 # ==========================================
 
 
-# pylint: disable=too-many-locals,too-many-branches,too-many-statements
+def _parse_round_block(lines: list, start_idx: int, current_algorithm: str) -> Tuple[pd.DataFrame, int]:
+    """Helper to parse a round data block."""
+    table_buffer = [lines[start_idx]]
+    i = start_idx + 1
+    while i < len(lines):
+        data_row = lines[i].strip()
+        if not data_row or (',' not in data_row and not data_row.isdigit()):
+            break
+        table_buffer.append(data_row)
+        i += 1
+
+    df = pd.DataFrame()
+    csv_io = io.StringIO("\n".join(table_buffer))
+    try:
+        df = pd.read_csv(csv_io, skipinitialspace=True)
+        df['Algorithm'] = current_algorithm
+    except pd.errors.ParserError as e:
+        logging.warning("Parser error for block %s: %s", current_algorithm, e)
+    except Exception as e:  # pylint: disable=broad-exception-caught
+        logging.warning("Error parsing block for %s: %s", current_algorithm, e)
+
+    return df, i
+
+
+def _parse_summary_block(lines: list, start_idx: int) -> Tuple[pd.DataFrame, int]:
+    """Helper to parse the summary table block."""
+    summary_buffer = [lines[start_idx]]
+    i = start_idx + 1
+    while i < len(lines):
+        next_line = lines[i].strip()
+        if not next_line or "BEST ALGORITHM" in next_line:
+            break
+        summary_buffer.append(next_line)
+        i += 1
+
+    summary_df = pd.DataFrame()
+    csv_io = io.StringIO("\n".join(summary_buffer))
+    try:
+        summary_df = pd.read_csv(csv_io, skipinitialspace=True)
+    except pd.errors.ParserError as e:
+        logging.warning("Failed to parse summary table. Error: %s", e)
+    # pylint: disable=broad-exception-caught
+    except Exception as e:
+        logging.warning("Unexpected error when parsing summary table. Error: %s", e)
+
+    return summary_df, i
+
+
 def parse_simulation_log(
     file_path: Union[str, Path]
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
@@ -91,29 +138,7 @@ def parse_simulation_log(
         # Case A: Processing Global Summary Table
         if capture_mode == 'summary':
             if summary_header_pattern.match(line):
-                summary_buffer = [line]
-                i += 1
-                while i < len(lines):
-                    next_line = lines[i].strip()
-                    if not next_line or "BEST ALGORITHM" in next_line:
-                        break
-                    summary_buffer.append(next_line)
-                    i += 1
-
-                csv_io = io.StringIO("\n".join(summary_buffer))
-                try:
-                    summary_df = pd.read_csv(csv_io, skipinitialspace=True)
-                except pd.errors.ParserError as e:
-                    logging.warning(
-                        "Failed to parse summary table. Error: %s", e
-                    )
-                # pylint: disable=broad-exception-caught
-                except Exception as e:
-                    logging.warning(
-                        "Unexpected error when parsing summary table. "
-                        "Error: %s", e
-                    )
-
+                summary_df, i = _parse_summary_block(lines, i)
                 capture_mode = None
                 continue
 
@@ -124,29 +149,9 @@ def parse_simulation_log(
             continue
 
         if round_header_pattern.match(line) and current_algorithm:
-            table_buffer = [line]
-            i += 1
-            while i < len(lines):
-                data_row = lines[i].strip()
-                if not data_row or (',' not in data_row and
-                                    not data_row.isdigit()):
-                    break
-                table_buffer.append(data_row)
-                i += 1
-
-            csv_io = io.StringIO("\n".join(table_buffer))
-            try:
-                df = pd.read_csv(csv_io, skipinitialspace=True)
-                df['Algorithm'] = current_algorithm
+            df, i = _parse_round_block(lines, i, current_algorithm)
+            if not df.empty:
                 simulation_data_frames.append(df)
-            except pd.errors.ParserError as e:
-                logging.warning(
-                    "Parser error for block %s: %s", current_algorithm, e
-                )
-            except Exception as e:  # pylint: disable=broad-exception-caught
-                logging.warning(
-                    "Error parsing block for %s: %s", current_algorithm, e
-                )
             continue
 
         i += 1
