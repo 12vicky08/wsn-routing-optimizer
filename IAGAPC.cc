@@ -43,6 +43,8 @@ constexpr double PM_MIN = 0.01;
 constexpr double DIVERSITY_CRIT = 25.0; // Threshold to trigger Cataclysm
 constexpr int STAGNATION_LIMIT = 20;
 
+constexpr double EPSILON = 1e-5; // Small value to prevent division by zero
+
 // -------------------------------------------------------------------------
 // Data Structures
 // -------------------------------------------------------------------------
@@ -183,6 +185,11 @@ double IAGAPCEnhanced::CalculateSmoothness(const std::vector<Point>& path) const
     double totalCurvature = 0.0;
     if (path.size() < 3) return 0.0;
 
+    auto normalizeAngleDiff = [](double a1, double a2) {
+        double d = std::fabs(a2 - a1);
+        return (d > M_PI) ? (2 * M_PI - d) : d;
+    };
+
     for (size_t i = 1; i < path.size() - 1; ++i) {
         // Calculate change in angle
         double deltaX1 = path[i].x - path[i-1].x;
@@ -193,8 +200,7 @@ double IAGAPCEnhanced::CalculateSmoothness(const std::vector<Point>& path) const
         double angle1 = atan2(deltaY1, deltaX1);
         double angle2 = atan2(deltaY2, deltaX2);
         
-        double diff = fabs(angle2 - angle1);
-        if (diff > M_PI) diff = 2 * M_PI - diff;
+        double diff = normalizeAngleDiff(angle1, angle2);
         // Penalize sharp turns heavily
         totalCurvature += (diff * diff);
     }
@@ -228,7 +234,7 @@ double IAGAPCEnhanced::CalculateFitness(Chromosome &ind) {
     }
     energyVar /= m_nodes.GetN();
     
-    ind.energyMetric = minEnergy / (sqrt(energyVar) + 1e-5); // Maximize MinEnergy, Minimize Var
+    ind.energyMetric = minEnergy / (sqrt(energyVar) + EPSILON); // Maximize MinEnergy, Minimize Var
 
     // 2. Smoothness Factor
     ind.smoothMetric = CalculateSmoothness(smoothPath);
@@ -324,7 +330,7 @@ void IAGAPCEnhanced::Crossover(const Chromosome &p1, const Chromosome &p2, Chrom
     
     // Adaptive Pc Formula
     if (f_prime >= f_avg) {
-        Pc = PC_MAX * (f_max - f_prime) / (f_max - f_avg + 1e-5);
+        Pc = PC_MAX * (f_max - f_prime) / (f_max - f_avg + EPSILON);
     } else {
         Pc = PC_MAX;
     }
