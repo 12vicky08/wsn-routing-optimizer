@@ -89,6 +89,8 @@ private:
     // Initialization
     void InitializePopulation();
     
+    std::mt19937 m_rng;
+
     // Core Genetic Operations
     void EvaluatePopulation();
     double CalculateFitness(Chromosome &ind);
@@ -110,6 +112,8 @@ private:
 
 IAGAPCEnhanced::IAGAPCEnhanced(NodeContainer nodes, Ptr<EnergySourceContainer> energySources, double w, double h) 
     : m_nodes(nodes), m_energySources(energySources), m_areaWidth(w), m_areaHeight(h) {
+    std::random_device rd;
+    m_rng.seed(rd());
     InitializePopulation();
 }
 
@@ -128,8 +132,6 @@ void IAGAPCEnhanced::EvaluatePopulation() {
 }
 
 void IAGAPCEnhanced::InitializePopulation() {
-    std::random_device rd;
-    std::mt19937 gen(rd());
     std::uniform_real_distribution<> disX(0, m_areaWidth);
     std::uniform_real_distribution<> disY(0, m_areaHeight);
     std::uniform_real_distribution<> disTime(5.0, 30.0);
@@ -137,8 +139,8 @@ void IAGAPCEnhanced::InitializePopulation() {
     for (int i = 0; i < POPULATION_SIZE; ++i) {
         Chromosome ind;
         for (int j = 0; j < NUM_RPS; ++j) {
-            ind.rps.push_back({disX(gen), disY(gen)});
-            ind.dwellTimes.push_back(disTime(gen));
+            ind.rps.push_back({disX(m_rng), disY(m_rng)});
+            ind.dwellTimes.push_back(disTime(m_rng));
         }
         m_population.push_back(ind);
     }
@@ -302,14 +304,12 @@ void IAGAPCEnhanced::Cataclysm() {
         constexpr int eliteCount = static_cast<int>(POPULATION_SIZE * 0.05);
         
         // Regenerate the rest
-        std::random_device rd;
-        std::mt19937 gen(rd());
         std::uniform_real_distribution<> disX(0, m_areaWidth);
         std::uniform_real_distribution<> disY(0, m_areaHeight);
         
         for (int i = eliteCount; i < POPULATION_SIZE; ++i) {
              for (int j = 0; j < NUM_RPS; ++j) {
-                m_population[i].rps[j] = {disX(gen), disY(gen)};
+                m_population[i].rps[j] = {disX(m_rng), disY(m_rng)};
             }
             // Reset fitness
             m_population[i].fitness = 0.0;
@@ -329,13 +329,11 @@ void IAGAPCEnhanced::Crossover(const Chromosome &p1, const Chromosome &p2, Chrom
         Pc = PC_MAX;
     }
 
-    static std::random_device rd;
-    static std::mt19937 gen(rd());
     std::uniform_real_distribution<> dis(0.0, 1.0);
 
-    if (dis(gen) < Pc) {
+    if (dis(m_rng) < Pc) {
         // Arithmetic Crossover
-        double alpha = dis(gen);
+        double alpha = dis(m_rng);
         for (int i = 0; i < NUM_RPS; ++i) {
             c1.rps[i].x = alpha * p1.rps[i].x + (1 - alpha) * p2.rps[i].x;
             c1.rps[i].y = alpha * p1.rps[i].y + (1 - alpha) * p2.rps[i].y;
@@ -377,19 +375,17 @@ void IAGAPCEnhanced::Run() {
         newPop.push_back(m_population[0]); // Keep best
         
         // Setup random generator for tournament selection
-        std::random_device rd;
-        std::mt19937 rand_gen(rd());
         std::uniform_int_distribution<> dis(0, POPULATION_SIZE - 1);
 
         // Genetic Op Loop
         while(newPop.size() < POPULATION_SIZE) {
             // Tournament Selection
-            int idx1 = dis(rand_gen);
-            int idx2 = dis(rand_gen);
+            int idx1 = dis(m_rng);
+            int idx2 = dis(m_rng);
             Chromosome p1 = (m_population[idx1].fitness > m_population[idx2].fitness)? m_population[idx1] : m_population[idx2];
             
-            idx1 = dis(rand_gen);
-            idx2 = dis(rand_gen);
+            idx1 = dis(m_rng);
+            idx2 = dis(m_rng);
             Chromosome p2 = (m_population[idx1].fitness > m_population[idx2].fitness)? m_population[idx1] : m_population[idx2];
             
             Chromosome c1, c2;
@@ -415,15 +411,13 @@ void IAGAPCEnhanced::Mutation(Chromosome &ind, double diversity) {
     // Adaptive Pm: Higher mutation when diversity is low
     double Pm = PM_MIN + (PM_MAX - PM_MIN) * exp(-0.1 * diversity);
     
-    std::random_device rd;
-    std::mt19937 gen(rd());
     std::uniform_real_distribution<> dis(0.0, 1.0);
     std::normal_distribution<> gauss(0.0, 10.0); // Gaussian mutation
 
     for (int i = 0; i < NUM_RPS; ++i) {
-        if (dis(gen) < Pm) {
-            ind.rps[i].x += gauss(gen);
-            ind.rps[i].y += gauss(gen);
+        if (dis(m_rng) < Pm) {
+            ind.rps[i].x += gauss(m_rng);
+            ind.rps[i].y += gauss(m_rng);
             
             // Bounds check
             ind.rps[i].x = std::max(0.0, std::min(m_areaWidth, ind.rps[i].x));
