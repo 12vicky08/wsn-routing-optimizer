@@ -363,7 +363,7 @@ void IAGAPCEnhanced::Run() {
         double sumFit = 0.0;
         EvaluatePopulation();
         
-        for(auto& ind : m_population) {
+        for(const auto& ind : m_population) {
             if(ind.fitness > maxFit) maxFit = ind.fitness;
             if(ind.fitness > m_globalBest.fitness) m_globalBest = ind;
             sumFit += ind.fitness;

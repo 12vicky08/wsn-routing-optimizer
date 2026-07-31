@@ -287,7 +287,7 @@ def generate_visualizations(round_df: pd.DataFrame) -> None:
 
 def setup_argparser() -> argparse.ArgumentParser:
     """
-    Set up the command line argument parser.
+    Set up the command line argument parser for WSN data processing.
     """
     parser = argparse.ArgumentParser(
         description="Process WSN routing optimization results."
@@ -302,7 +302,7 @@ def setup_argparser() -> argparse.ArgumentParser:
 
 def main() -> None:
     """
-    Main function to execute the data pipeline.
+    Main execution entry point for the WSN data pipeline.
     """
     parser = setup_argparser()
     args = parser.parse_args()

@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+set -euo pipefail
 
 # Configure Git User
 git config --global user.name "R VIKRANTH"
