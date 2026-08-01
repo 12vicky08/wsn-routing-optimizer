@@ -59,7 +59,7 @@ struct Chromosome {
     std::vector<double> dwellTimes; // Time spent at each RP
     double fitness;
     double diversityScore;
-    
+
     // Evaluation Metrics
     double energyMetric;
     double smoothMetric;
@@ -90,17 +90,17 @@ private:
 
     // Initialization
     void InitializePopulation();
-    
+
     // Core Genetic Operations
     void EvaluatePopulation();
     double CalculateFitness(Chromosome &ind);
     void Crossover(const Chromosome &p1, const Chromosome &p2, Chromosome &c1, Chromosome &c2, double currentAvgFitness, double currentMaxFitness);
     void Mutation(Chromosome &ind, double currentDiversity);
-    
+
     // Advanced Mechanisms
     void Cataclysm(); // Diversity reboot mechanism
     double CalculateDiversity() const;
-    
+
     // Trajectory Helper Functions
     std::vector<Point> GenerateSplinePath(const std::vector<Point>& rps) const;
     double CalculateSmoothness(const std::vector<Point>& path) const;
@@ -110,7 +110,7 @@ private:
 // Implementation
 // -------------------------------------------------------------------------
 
-IAGAPCEnhanced::IAGAPCEnhanced(NodeContainer nodes, Ptr<EnergySourceContainer> energySources, double w, double h) 
+IAGAPCEnhanced::IAGAPCEnhanced(NodeContainer nodes, Ptr<EnergySourceContainer> energySources, double w, double h)
     : m_nodes(nodes), m_energySources(energySources), m_areaWidth(w), m_areaHeight(h) {
     InitializePopulation();
 }
@@ -150,7 +150,7 @@ void IAGAPCEnhanced::InitializePopulation() {
 // Converts discrete RPs into a smooth, kinematic-friendly path
 std::vector<Point> IAGAPCEnhanced::GenerateSplinePath(const std::vector<Point>& rps) const {
     std::vector<Point> splinePath;
-    if (rps.size() < 4) return rps; 
+    if (rps.size() < 4) return rps;
 
     // Pre-allocate memory to prevent redundant reallocations
     // 21 points per segment (t from 0 to 1 with 0.05 step)
@@ -162,18 +162,18 @@ std::vector<Point> IAGAPCEnhanced::GenerateSplinePath(const std::vector<Point>& 
         for (double t = 0; t <= 1; t += 0.05) {
             double t2 = t * t;
             double t3 = t2 * t;
-            
+
             // Catmull-Rom Basis Matrix application
             double x = 0.5 * ((2 * rps[i+1].x) +
                        (-rps[i].x + rps[i+2].x) * t +
                        (2*rps[i].x - 5*rps[i+1].x + 4*rps[i+2].x - rps[i+3].x) * t2 +
                        (-rps[i].x + 3*rps[i+1].x - 3*rps[i+2].x + rps[i+3].x) * t3);
-            
+
             double y = 0.5 * ((2 * rps[i+1].y) +
                        (-rps[i].y + rps[i+2].y) * t +
                        (2*rps[i].y - 5*rps[i+1].y + 4*rps[i+2].y - rps[i+3].y) * t2 +
                        (-rps[i].y + 3*rps[i+1].y - 3*rps[i+2].y + rps[i+3].y) * t3);
-            
+
             splinePath.push_back({x, y});
         }
     }
@@ -196,15 +196,15 @@ double IAGAPCEnhanced::CalculateSmoothness(const std::vector<Point>& path) const
         double deltaY1 = path[i].y - path[i-1].y;
         double deltaX2 = path[i+1].x - path[i].x;
         double deltaY2 = path[i+1].y - path[i].y;
-        
+
         double angle1 = atan2(deltaY1, deltaX1);
         double angle2 = atan2(deltaY2, deltaX2);
-        
+
         double diff = normalizeAngleDiff(angle1, angle2);
         // Penalize sharp turns heavily
         totalCurvature += (diff * diff);
     }
-    
+
     // Normalize: Lower curvature -> Higher Score
     return 1.0 / (1.0 + (totalCurvature / path.size()));
 }
@@ -212,12 +212,12 @@ double IAGAPCEnhanced::CalculateSmoothness(const std::vector<Point>& path) const
 // Multi-Objective Fitness Function
 double IAGAPCEnhanced::CalculateFitness(Chromosome &ind) {
     std::vector<Point> smoothPath = GenerateSplinePath(ind.rps);
-    
+
     // 1. Residual Energy Factor
     // In a real NS-3 sim, this would run a mini-simulation of data packet flow
-    double minEnergy = 100.0; 
+    double minEnergy = 100.0;
     double energyVar = 0.0;
-    
+
     // Placeholder logic for energy extraction from NS-3 Energy Models
     // This assumes the trajectory was just "run" or estimated
     double sumEnergy = 0.0;
@@ -233,7 +233,7 @@ double IAGAPCEnhanced::CalculateFitness(Chromosome &ind) {
          energyVar += pow(e - avgEnergy, 2);
     }
     energyVar /= m_nodes.GetN();
-    
+
     ind.energyMetric = minEnergy / (sqrt(energyVar) + EPSILON); // Maximize MinEnergy, Minimize Var
 
     // 2. Smoothness Factor
@@ -254,7 +254,7 @@ double IAGAPCEnhanced::CalculateFitness(Chromosome &ind) {
         Ptr<Node> n = m_nodes.Get(i);
         Ptr<MobilityModel> mob = n->GetObject<MobilityModel>();
         Vector pos = mob->GetPosition();
-        
+
         bool isCovered = false;
         for (const auto& p : smoothPath) {
             if (std::hypot(pos.x - p.x, pos.y - p.y) <= COMM_RANGE) {
@@ -267,11 +267,11 @@ double IAGAPCEnhanced::CalculateFitness(Chromosome &ind) {
     ind.coverageMetric = static_cast<double>(coveredNodes) / m_nodes.GetN();
 
     // Weighted Sum
-    ind.fitness = (W_ENERGY * ind.energyMetric) + 
-                  (W_SMOOTH * ind.smoothMetric) + 
-                  (W_COVERAGE * ind.coverageMetric) + 
+    ind.fitness = (W_ENERGY * ind.energyMetric) +
+                  (W_SMOOTH * ind.smoothMetric) +
+                  (W_COVERAGE * ind.coverageMetric) +
                   (W_DELAY * ind.delayMetric);
-                  
+
     return ind.fitness;
 }
 
@@ -296,23 +296,23 @@ double IAGAPCEnhanced::CalculateDiversity() const {
 // The "Cataclysm" Operator: Resets population if diversity is too low
 void IAGAPCEnhanced::Cataclysm() {
     double diversity = CalculateDiversity();
-    
+
     if (diversity < DIVERSITY_CRIT) {
         NS_LOG_UNCOND("Cataclysm Triggered! Diversity: " << diversity);
-        
+
         // Sort by fitness descending
-        std::sort(m_population.begin(), m_population.end(), 
+        std::sort(m_population.begin(), m_population.end(),
           [](const Chromosome& a, const Chromosome& b) { return a.fitness > b.fitness; });
-        
+
         // Elitism: Keep top 5%
         constexpr int eliteCount = static_cast<int>(POPULATION_SIZE * 0.05);
-        
+
         // Regenerate the rest
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_real_distribution<> disX(0, m_areaWidth);
         std::uniform_real_distribution<> disY(0, m_areaHeight);
-        
+
         for (int i = eliteCount; i < POPULATION_SIZE; ++i) {
              for (int j = 0; j < NUM_RPS; ++j) {
                 m_population[i].rps[j] = {disX(gen), disY(gen)};
@@ -327,7 +327,7 @@ void IAGAPCEnhanced::Cataclysm() {
 void IAGAPCEnhanced::Crossover(const Chromosome &p1, const Chromosome &p2, Chromosome &c1, Chromosome &c2, double f_avg, double f_max) {
     double f_prime = std::max(p1.fitness, p2.fitness);
     double Pc;
-    
+
     // Adaptive Pc Formula
     if (f_prime >= f_avg) {
         Pc = PC_MAX * (f_max - f_prime) / (f_max - f_avg + EPSILON);
@@ -357,12 +357,12 @@ void IAGAPCEnhanced::Crossover(const Chromosome &p1, const Chromosome &p2, Chrom
 // Main Loop
 void IAGAPCEnhanced::Run() {
     for (int gen = 0; gen < MAX_GENERATIONS; ++gen) {
-        
+
         // 1. Evaluate
         double maxFit = -1.0;
         double sumFit = 0.0;
         EvaluatePopulation();
-        
+
         for(const auto& ind : m_population) {
             if(ind.fitness > maxFit) maxFit = ind.fitness;
             if(ind.fitness > m_globalBest.fitness) m_globalBest = ind;
@@ -376,12 +376,12 @@ void IAGAPCEnhanced::Run() {
         // 3. Selection & Reproduction
         std::vector<Chromosome> newPop;
         newPop.reserve(POPULATION_SIZE);
-        
+
         // Elitism
-        std::sort(m_population.begin(), m_population.end(), 
+        std::sort(m_population.begin(), m_population.end(),
           [](const Chromosome& a, const Chromosome& b) { return a.fitness > b.fitness; });
         newPop.push_back(m_population[0]); // Keep best
-        
+
         // Setup random generator for tournament selection
         std::random_device rd;
         std::mt19937 rand_gen(rd());
@@ -393,24 +393,24 @@ void IAGAPCEnhanced::Run() {
             int idx1 = dis(rand_gen);
             int idx2 = dis(rand_gen);
             Chromosome p1 = (m_population[idx1].fitness > m_population[idx2].fitness)? m_population[idx1] : m_population[idx2];
-            
+
             idx1 = dis(rand_gen);
             idx2 = dis(rand_gen);
             Chromosome p2 = (m_population[idx1].fitness > m_population[idx2].fitness)? m_population[idx1] : m_population[idx2];
-            
+
             Chromosome c1, c2;
             Crossover(p1, p2, c1, c2, avgFit, maxFit);
-            
+
             double diversity = CalculateDiversity();
             Mutation(c1, diversity);
             Mutation(c2, diversity);
-            
+
             newPop.push_back(c1);
             if(newPop.size() < POPULATION_SIZE) newPop.push_back(c2);
         }
-        
+
         m_population = newPop;
-        
+
         if (gen % 10 == 0) {
             NS_LOG_UNCOND("Generation " << gen << " Best Fitness: " << maxFit);
         }
@@ -420,7 +420,7 @@ void IAGAPCEnhanced::Run() {
 void IAGAPCEnhanced::Mutation(Chromosome &ind, double diversity) {
     // Adaptive Pm: Higher mutation when diversity is low
     double Pm = PM_MIN + (PM_MAX - PM_MIN) * exp(-0.1 * diversity);
-    
+
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> dis(0.0, 1.0);
@@ -430,7 +430,7 @@ void IAGAPCEnhanced::Mutation(Chromosome &ind, double diversity) {
         if (dis(gen) < Pm) {
             ind.rps[i].x += gauss(gen);
             ind.rps[i].y += gauss(gen);
-            
+
             // Bounds check
             ind.rps[i].x = std::max(0.0, std::min(m_areaWidth, ind.rps[i].x));
             ind.rps[i].y = std::max(0.0, std::min(m_areaHeight, ind.rps[i].y));
