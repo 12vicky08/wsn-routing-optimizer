@@ -189,7 +189,7 @@ def clean_and_normalize(df: pd.DataFrame) -> pd.DataFrame:
 
     for col in TYPE_MAP:
         if col in df.columns:
-            df.loc[:, col] = pd.to_numeric(df[col], errors='coerce')
+            df[col] = pd.to_numeric(df[col], errors='coerce')
 
     df = df.dropna().copy()
 
