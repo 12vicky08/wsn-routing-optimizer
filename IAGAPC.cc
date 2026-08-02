@@ -241,9 +241,11 @@ double IAGAPCEnhanced::CalculateFitness(Chromosome &ind) {
 
     // 3. Delay Factor (Path Length)
     double pathLength = 0;
-    for(size_t i=0; i<smoothPath.size()-1; ++i) {
-        pathLength += std::hypot(smoothPath[i+1].x - smoothPath[i].x,
-                                 smoothPath[i+1].y - smoothPath[i].y);
+    if (smoothPath.size() > 1) {
+        for(size_t i=0; i<smoothPath.size()-1; ++i) {
+            pathLength += std::hypot(smoothPath[i+1].x - smoothPath[i].x,
+                                     smoothPath[i+1].y - smoothPath[i].y);
+        }
     }
     ind.delayMetric = 1.0 / (1.0 + (pathLength / V_MAX));
 
