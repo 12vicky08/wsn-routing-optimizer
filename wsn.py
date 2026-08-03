@@ -63,7 +63,7 @@ def parse_simulation_log(
         with path.open('r', encoding='utf-8') as f:
             lines = [line.strip() for line in f]
     except IOError as e:
-        logger.error(
+        logger.exception(
             "CRITICAL ERROR: Could not read file %s. Error: %s",
             file_path, e
         )
@@ -105,12 +105,12 @@ def parse_simulation_log(
                 try:
                     summary_df = pd.read_csv(csv_io, skipinitialspace=True)
                 except pd.errors.ParserError as e:
-                    logger.warning(
+                    logger.exception(
                         "Failed to parse summary table. Error: %s", e
                     )
                 # pylint: disable=broad-exception-caught
                 except Exception as e:
-                    logger.warning(
+                    logger.exception(
                         "Unexpected error when parsing summary table. "
                         "Error: %s", e
                     )
@@ -141,11 +141,11 @@ def parse_simulation_log(
                 df['Algorithm'] = current_algorithm
                 simulation_data_frames.append(df)
             except pd.errors.ParserError as e:
-                logger.warning(
+                logger.exception(
                     "Parser error for block %s: %s", current_algorithm, e
                 )
             except Exception as e:  # pylint: disable=broad-exception-caught
-                logger.warning(
+                logger.exception(
                     "Error parsing block for %s: %s", current_algorithm, e
                 )
             continue

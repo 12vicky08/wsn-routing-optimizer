@@ -229,6 +229,12 @@ cd ~/ns-3-dev
 
 ---
 
+## Contribution Tracking
+
+This repository includes a script (`run_daily_commits.sh`) and a GitHub action (`.github/workflows/daily_commit.yml`) to automatically generate between 3 to 6 simulated daily commits. The commits append to `dummy_daily.txt` and do not alter the main codebase, helping to maintain a consistent contribution graph footprint.
+
+---
+
 ## How It Works
 
 ### The IAGAPC-Enhanced Algorithm
