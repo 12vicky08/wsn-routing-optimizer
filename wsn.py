@@ -187,11 +187,18 @@ def clean_and_normalize(df: pd.DataFrame) -> pd.DataFrame:
     if df.empty:
         return df
 
+    initial_len = len(df)
+
     for col in TYPE_MAP:
         if col in df.columns:
             df.loc[:, col] = pd.to_numeric(df[col], errors='coerce')
 
     df = df.dropna().copy()
+
+    final_len = len(df)
+    dropped = initial_len - final_len
+    if dropped > 0:
+        logger.info("Dropped %d rows with missing or invalid data.", dropped)
 
     existing_cols = {k: v for k, v in TYPE_MAP.items() if k in df.columns}
     df = df.astype(existing_cols)
@@ -209,6 +216,7 @@ def save_plot(filename: str, fig: plt.Figure, dpi: int = 100) -> None:
     fig.tight_layout()
     fig.savefig(filename, dpi=dpi, bbox_inches='tight')
     plt.close(fig)
+    logger.info("Saved plot to %s", filename)
 
 
 def generate_visualizations(round_df: pd.DataFrame) -> None:
@@ -220,7 +228,10 @@ def generate_visualizations(round_df: pd.DataFrame) -> None:
             simulation data.
     """
     if round_df.empty:
+        logger.warning("Empty dataframe provided to generate_visualizations.")
         return
+
+    logger.info("Generating visualizations...")
 
     # --- Style Configuration (Modified for Screen) ---
     sns.set_theme(style="whitegrid")
@@ -290,13 +301,14 @@ def setup_argparser() -> argparse.ArgumentParser:
     Set up the command line argument parser for WSN data processing.
     """
     parser = argparse.ArgumentParser(
-        description="Process WSN routing optimization results."
+        description="Processes WSN routing optimization results. "
+                    "Extracts metrics and generates comparative visualizations."
     )
     parser.add_argument(
         '--input',
         type=str,
         default='wsn-optimizer-results.csv',
-        help='Input CSV file containing simulation results'
+        help='Path to the input CSV file containing simulation results.'
     )
     return parser
 
