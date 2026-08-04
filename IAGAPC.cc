@@ -53,6 +53,10 @@ struct Point {
     double x, y;
 };
 
+inline double Distance(const Point& a, const Point& b) {
+    return std::hypot(a.x - b.x, a.y - b.y);
+}
+
 // Chromosome represents a potential trajectory solution
 struct Chromosome {
     std::vector<Point> rps;        // Sequence of Rendezvous Points
@@ -242,8 +246,7 @@ double IAGAPCEnhanced::CalculateFitness(Chromosome &ind) {
     // 3. Delay Factor (Path Length)
     double pathLength = 0;
     for(size_t i=0; i<smoothPath.size()-1; ++i) {
-        pathLength += std::hypot(smoothPath[i+1].x - smoothPath[i].x,
-                                 smoothPath[i+1].y - smoothPath[i].y);
+        pathLength += Distance(smoothPath[i+1], smoothPath[i]);
     }
     ind.delayMetric = 1.0 / (1.0 + (pathLength / V_MAX));
 
@@ -257,7 +260,7 @@ double IAGAPCEnhanced::CalculateFitness(Chromosome &ind) {
 
         bool isCovered = false;
         for (const auto& p : smoothPath) {
-            if (std::hypot(pos.x - p.x, pos.y - p.y) <= COMM_RANGE) {
+            if (Distance({pos.x, pos.y}, p) <= COMM_RANGE) {
                 isCovered = true;
                 break;
             }
@@ -283,8 +286,7 @@ double IAGAPCEnhanced::CalculateDiversity() const {
         for(size_t j=i+1; j<m_population.size(); ++j) {
             double dist = 0;
             for(size_t k=0; k<NUM_RPS; ++k) {
-                dist += std::hypot(m_population[i].rps[k].x - m_population[j].rps[k].x,
-                                   m_population[i].rps[k].y - m_population[j].rps[k].y);
+                dist += Distance(m_population[i].rps[k], m_population[j].rps[k]);
             }
             totalDist += dist;
             count++;
