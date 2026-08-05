@@ -201,8 +201,11 @@ def clean_and_normalize(df: pd.DataFrame) -> pd.DataFrame:
 # SECTION 3: Screen-Optimized Visualization
 # ==========================================
 
+DEFAULT_DPI = 100
+DEFAULT_FIG_SIZE = (8, 5)
 
-def save_plot(filename: str, fig: plt.Figure, dpi: int = 100) -> None:
+
+def save_plot(filename: str, fig: plt.Figure, dpi: int = DEFAULT_DPI) -> None:
     """
     Helper function to adjust layout, save, and close a figure.
     """
@@ -228,8 +231,8 @@ def generate_visualizations(round_df: pd.DataFrame) -> None:
         'font.family': 'sans-serif',   # Cleaner for screens
         'font.size': 10,
         'axes.titlesize': 12,
-        'figure.figsize': (8, 5),      # <--- MODIFIED: Smaller size
-        'figure.dpi': 100,             # <--- MODIFIED: Standard DPI
+        'figure.figsize': DEFAULT_FIG_SIZE,      # <--- MODIFIED: Smaller size
+        'figure.dpi': DEFAULT_DPI,             # <--- MODIFIED: Standard DPI
         'lines.linewidth': 2
     })
 
