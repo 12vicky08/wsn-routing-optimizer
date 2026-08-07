@@ -71,7 +71,7 @@ struct Chromosome {
     double coverageMetric;
     double delayMetric;
 
-    Chromosome() : fitness(0.0), diversityScore(0.0) {}
+    Chromosome() : fitness(0.0), diversityScore(0.0), energyMetric(0.0), smoothMetric(0.0), coverageMetric(0.0), delayMetric(0.0) {}
 };
 
 // -------------------------------------------------------------------------
@@ -320,8 +320,12 @@ void IAGAPCEnhanced::Cataclysm() {
              for (int j = 0; j < NUM_RPS; ++j) {
                 m_population[i].rps[j] = {disX(gen), disY(gen)};
             }
-            // Reset fitness
+            // Reset fitness and metrics
             m_population[i].fitness = 0.0;
+            m_population[i].energyMetric = 0.0;
+            m_population[i].smoothMetric = 0.0;
+            m_population[i].coverageMetric = 0.0;
+            m_population[i].delayMetric = 0.0;
         }
     }
 }

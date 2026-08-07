@@ -3,6 +3,7 @@
 set -euo pipefail
 
 # Configure Git User
+# Hardcoded to ensure automated commits track towards the user's contribution graph
 git config --global user.name "R VIKRANTH"
 git config --global user.email "vikranthras@gmail.com"
 

@@ -316,8 +316,11 @@ def main() -> None:
     logger.info("Starting Data Pipeline Execution...")
     try:
         round_data, summary_data = parse_simulation_log(csv_file)
-    except FileNotFoundError as e:
-        logger.error(e)
+    except FileNotFoundError:
+        logger.error(
+            "Simulation result file %s not found. Please ensure the file exists.",
+            csv_file
+        )
         sys.exit(1)
 
     if not round_data.empty:
