@@ -7,6 +7,7 @@ of WSN routing algorithms.
 import argparse
 import io
 import logging
+import os
 import re
 import sys
 from pathlib import Path
@@ -205,22 +206,26 @@ DEFAULT_DPI = 100
 DEFAULT_FIG_SIZE = (8, 5)
 
 
-def save_plot(filename: str, fig: plt.Figure, dpi: int = DEFAULT_DPI) -> None:
+def save_plot(filename: str, fig: plt.Figure, dpi: int = DEFAULT_DPI, output_dir: str = '.') -> None:
     """
     Helper function to adjust layout, save, and close a figure.
     """
+    if output_dir != '.':
+        os.makedirs(output_dir, exist_ok=True)
+    filepath = os.path.join(output_dir, filename)
     fig.tight_layout()
-    fig.savefig(filename, dpi=dpi, bbox_inches='tight')
+    fig.savefig(filepath, dpi=dpi, bbox_inches='tight')
     plt.close(fig)
 
 
-def generate_visualizations(round_df: pd.DataFrame) -> None:
+def generate_visualizations(round_df: pd.DataFrame, output_dir: str = '.') -> None:
     """
     Produces plots sized for screen viewing (8x5 inches)
 
     Args:
         round_df (pd.DataFrame): The dataframe containing round-by-round
             simulation data.
+        output_dir (str): Directory where plots should be saved.
     """
     if round_df.empty:
         return
@@ -261,7 +266,7 @@ def generate_visualizations(round_df: pd.DataFrame) -> None:
         plt.title("Cumulative Network Energy Consumption")
         plt.ylabel("Total Energy (Joules)")
         plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left')
-        save_plot("Fig1_Energy_Consumption.png", fig1)
+        save_plot("Fig1_Energy_Consumption.png", fig1, output_dir=output_dir)
 
     # Plot 2: Throughput
     if 'PacketsDelivered' in round_df.columns:
@@ -280,7 +285,7 @@ def generate_visualizations(round_df: pd.DataFrame) -> None:
         plt.title("Cumulative Data Packet Delivery")
         plt.ylabel("Packets Delivered")
         plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left')
-        save_plot("Fig2_Packet_Delivery.png", fig2)
+        save_plot("Fig2_Packet_Delivery.png", fig2, output_dir=output_dir)
     plt.close('all')
 
 # ==========================================
@@ -300,6 +305,12 @@ def setup_argparser() -> argparse.ArgumentParser:
         type=str,
         default='wsn-optimizer-results.csv',
         help='Input CSV file containing simulation results'
+    )
+    parser.add_argument(
+        '--output-dir',
+        type=str,
+        default='.',
+        help='Directory to save output plots'
     )
     return parser
 
@@ -325,7 +336,7 @@ def main() -> None:
 
     if not round_data.empty:
         round_data = clean_and_normalize(round_data)
-        generate_visualizations(round_data)
+        generate_visualizations(round_data, output_dir=args.output_dir)
 
         logger.info("\n--- Summary Performance ---")
         print(summary_data.head())
