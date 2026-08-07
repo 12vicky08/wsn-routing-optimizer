@@ -21,6 +21,7 @@ using namespace ns3;
 // -------------------------------------------------------------------------
 // Simulation Parameters & Algorithm Constants
 // -------------------------------------------------------------------------
+constexpr int POINTS_PER_SEGMENT = 21;
 constexpr int POPULATION_SIZE = 50;
 constexpr int MAX_GENERATIONS = 200;
 constexpr int NUM_RPS = 10;          // Number of Rendezvous Points (Control Points)
@@ -158,7 +159,7 @@ std::vector<Point> IAGAPCEnhanced::GenerateSplinePath(const std::vector<Point>& 
 
     // Pre-allocate memory to prevent redundant reallocations
     // 21 points per segment (t from 0 to 1 with 0.05 step)
-    splinePath.reserve((rps.size() - 3) * 21);
+    splinePath.reserve((rps.size() - 3) * POINTS_PER_SEGMENT);
 
     // Loop through control points
     for (size_t i = 0; i < rps.size() - 3; i++) {
@@ -210,7 +211,7 @@ double IAGAPCEnhanced::CalculateSmoothness(const std::vector<Point>& path) const
     }
 
     // Normalize: Lower curvature -> Higher Score
-    return 1.0 / (1.0 + (totalCurvature / path.size()));
+    return 1.0 / (1.0 + (totalCurvature / static_cast<double>(path.size())));
 }
 
 // Multi-Objective Fitness Function
