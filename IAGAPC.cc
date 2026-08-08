@@ -10,11 +10,11 @@
 #include "ns3/energy-module.h"
 #include "ns3/wifi-module.h"
 #include "ns3/internet-module.h"
-#include <vector>
-#include <cmath>
 #include <algorithm>
-#include <random>
+#include <cmath>
 #include <iostream>
+#include <random>
+#include <vector>
 
 using namespace ns3;
 
