@@ -206,7 +206,9 @@ DEFAULT_DPI = 100
 DEFAULT_FIG_SIZE = (8, 5)
 
 
-def save_plot(filename: str, fig: plt.Figure, dpi: int = DEFAULT_DPI, output_dir: str = '.') -> None:
+def save_plot(
+    filename: str, fig: plt.Figure, dpi: int = DEFAULT_DPI, output_dir: str = '.'
+) -> None:
     """
     Helper function to adjust layout, save, and close a figure.
     """
@@ -338,8 +340,7 @@ def main() -> None:
         round_data = clean_and_normalize(round_data)
         generate_visualizations(round_data, output_dir=args.output_dir)
 
-        logger.info("\n--- Summary Performance ---")
-        print(summary_data.head())
+        logger.info("\n--- Summary Performance ---\n%s", summary_data.head())
     else:
         logger.warning("No data found.")
 
