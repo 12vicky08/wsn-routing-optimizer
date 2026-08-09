@@ -17,11 +17,14 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s: %(message)s'
-)
-logger = logging.getLogger(__name__)
+def setup_logging():
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s: %(message)s'
+    )
+    return logging.getLogger(__name__)
+
+logger = setup_logging()
 
 # ==========================================
 # SECTION 1: Data Ingestion & Parsing Engine
@@ -218,6 +221,19 @@ def save_plot(filename: str, fig: plt.Figure, dpi: int = DEFAULT_DPI, output_dir
     plt.close(fig)
 
 
+def configure_plot_style():
+    """Configures the seaborn and matplotlib styles for the plots."""
+    sns.set_theme(style="whitegrid")
+    plt.rcParams.update({
+        'font.family': 'sans-serif',   # Cleaner for screens
+        'font.size': 10,
+        'axes.titlesize': 12,
+        'figure.figsize': DEFAULT_FIG_SIZE,      # <--- MODIFIED: Smaller size
+        'figure.dpi': DEFAULT_DPI,             # <--- MODIFIED: Standard DPI
+        'lines.linewidth': 2
+    })
+
+
 def generate_visualizations(round_df: pd.DataFrame, output_dir: str = '.') -> None:
     """
     Produces plots sized for screen viewing (8x5 inches)
@@ -231,15 +247,7 @@ def generate_visualizations(round_df: pd.DataFrame, output_dir: str = '.') -> No
         return
 
     # --- Style Configuration (Modified for Screen) ---
-    sns.set_theme(style="whitegrid")
-    plt.rcParams.update({
-        'font.family': 'sans-serif',   # Cleaner for screens
-        'font.size': 10,
-        'axes.titlesize': 12,
-        'figure.figsize': DEFAULT_FIG_SIZE,      # <--- MODIFIED: Smaller size
-        'figure.dpi': DEFAULT_DPI,             # <--- MODIFIED: Standard DPI
-        'lines.linewidth': 2
-    })
+    configure_plot_style()
 
     unique_algos = round_df['Algorithm'].unique()
     palette = sns.color_palette("colorblind", n_colors=len(unique_algos))
