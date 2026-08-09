@@ -141,8 +141,11 @@ void IAGAPCEnhanced::InitializePopulation() {
     std::uniform_real_distribution<> disY(0, m_areaHeight);
     std::uniform_real_distribution<> disTime(5.0, 30.0);
 
+    m_population.reserve(POPULATION_SIZE);
     for (int i = 0; i < POPULATION_SIZE; ++i) {
         Chromosome ind;
+        ind.rps.reserve(NUM_RPS);
+        ind.dwellTimes.reserve(NUM_RPS);
         for (int j = 0; j < NUM_RPS; ++j) {
             ind.rps.push_back({disX(gen), disY(gen)});
             ind.dwellTimes.push_back(disTime(gen));
@@ -235,7 +238,8 @@ double IAGAPCEnhanced::CalculateFitness(Chromosome &ind) {
     // Calculate Variance
     for (uint32_t i = 0; i < m_nodes.GetN(); ++i) {
          double e = m_energySources->Get(i)->GetRemainingEnergy();
-         energyVar += pow(e - avgEnergy, 2);
+         double diff = e - avgEnergy;
+         energyVar += diff * diff;
     }
     energyVar /= m_nodes.GetN();
 
