@@ -210,9 +210,10 @@ def save_plot(filename: str, fig: plt.Figure, dpi: int = DEFAULT_DPI, output_dir
     """
     Helper function to adjust layout, save, and close a figure.
     """
+    out_path = Path(output_dir)
     if output_dir != '.':
-        os.makedirs(output_dir, exist_ok=True)
-    filepath = os.path.join(output_dir, filename)
+        out_path.mkdir(parents=True, exist_ok=True)
+    filepath = out_path / filename
     fig.tight_layout()
     fig.savefig(filepath, dpi=dpi, bbox_inches='tight')
     plt.close(fig)
@@ -296,6 +297,10 @@ def generate_visualizations(round_df: pd.DataFrame, output_dir: str = '.') -> No
 def setup_argparser() -> argparse.ArgumentParser:
     """
     Set up the command line argument parser for WSN data processing.
+
+    Returns:
+        argparse.ArgumentParser: The configured argument parser object
+            for processing input and output directory paths.
     """
     parser = argparse.ArgumentParser(
         description="Process WSN routing optimization results."
