@@ -23,6 +23,10 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# Regex Patterns for Context Detection
+ROUND_HEADER_PATTERN = re.compile(r"^\s*Round\s*,\s*MaxResidualEnergy")
+SUMMARY_HEADER_PATTERN = re.compile(r"^\s*Algorithm\s*,\s*Rounds")
+
 # ==========================================
 # SECTION 1: Data Ingestion & Parsing Engine
 # ==========================================
@@ -49,10 +53,6 @@ def parse_simulation_log(
 
     current_algorithm = None
     capture_mode = None  # States: 'rounds', 'summary', 'best_algo', None
-
-    # Regex Patterns for Context Detection
-    round_header_pattern = re.compile(r"^\s*Round\s*,\s*MaxResidualEnergy")
-    summary_header_pattern = re.compile(r"^\s*Algorithm\s*,\s*Rounds")
 
     path = Path(file_path)
     if not path.is_file():
@@ -92,7 +92,7 @@ def parse_simulation_log(
 
         # Case A: Processing Global Summary Table
         if capture_mode == 'summary':
-            if summary_header_pattern.match(line):
+            if SUMMARY_HEADER_PATTERN.match(line):
                 summary_buffer = [line]
                 i += 1
                 while i < len(lines):
@@ -120,12 +120,12 @@ def parse_simulation_log(
                 continue
 
         # Case B: Processing Algorithm Sections (Round Data)
-        if ',' not in line and not round_header_pattern.match(line):
+        if ',' not in line and not ROUND_HEADER_PATTERN.match(line):
             current_algorithm = line
             i += 1
             continue
 
-        if round_header_pattern.match(line) and current_algorithm:
+        if ROUND_HEADER_PATTERN.match(line) and current_algorithm:
             table_buffer = [line]
             i += 1
             while i < len(lines):
@@ -165,6 +165,7 @@ def parse_simulation_log(
 # SECTION 2: Data Cleaning
 # ==========================================
 
+# Mapping of column names to their expected pandas data types for normalization
 TYPE_MAP = {
     'Round': 'int32',
     'MaxResidualEnergy': 'float64',
@@ -188,12 +189,15 @@ def clean_and_normalize(df: pd.DataFrame) -> pd.DataFrame:
     if df.empty:
         return df
 
+    # Convert configured columns to numeric types
     for col in TYPE_MAP:
         if col in df.columns:
             df.loc[:, col] = pd.to_numeric(df[col], errors='coerce')
 
+    # Drop any rows containing missing or unparseable data
     df = df.dropna().copy()
 
+    # Apply specific data types from TYPE_MAP
     existing_cols = {k: v for k, v in TYPE_MAP.items() if k in df.columns}
     df = df.astype(existing_cols)
     return df
@@ -304,13 +308,13 @@ def setup_argparser() -> argparse.ArgumentParser:
         '--input',
         type=str,
         default='wsn-optimizer-results.csv',
-        help='Input CSV file containing simulation results'
+        help='Path to the input CSV file containing raw NS-3 simulation results'
     )
     parser.add_argument(
         '--output-dir',
         type=str,
         default='.',
-        help='Directory to save output plots'
+        help='Path to the directory where generated visualization plots will be saved'
     )
     return parser
 
