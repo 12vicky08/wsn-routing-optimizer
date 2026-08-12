@@ -206,7 +206,12 @@ DEFAULT_DPI = 100
 DEFAULT_FIG_SIZE = (8, 5)
 
 
-def save_plot(filename: str, fig: plt.Figure, dpi: int = DEFAULT_DPI, output_dir: str = '.') -> None:
+def save_plot(
+    filename: str,
+    fig: plt.Figure,
+    dpi: int = DEFAULT_DPI,
+    output_dir: str = '.'
+) -> None:
     """
     Helper function to adjust layout, save, and close a figure.
     """
