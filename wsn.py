@@ -7,7 +7,6 @@ of WSN routing algorithms.
 import argparse
 import io
 import logging
-import os
 import re
 import sys
 from pathlib import Path
@@ -206,13 +205,19 @@ DEFAULT_DPI = 100
 DEFAULT_FIG_SIZE = (8, 5)
 
 
-def save_plot(filename: str, fig: plt.Figure, dpi: int = DEFAULT_DPI, output_dir: str = '.') -> None:
+def save_plot(
+    filename: str,
+    fig: plt.Figure,
+    dpi: int = DEFAULT_DPI,
+    output_dir: str = '.'
+) -> None:
     """
     Helper function to adjust layout, save, and close a figure.
     """
+    out_path = Path(output_dir)
     if output_dir != '.':
-        os.makedirs(output_dir, exist_ok=True)
-    filepath = os.path.join(output_dir, filename)
+        out_path.mkdir(parents=True, exist_ok=True)
+    filepath = out_path / filename
     fig.tight_layout()
     fig.savefig(filepath, dpi=dpi, bbox_inches='tight')
     plt.close(fig)
@@ -220,7 +225,9 @@ def save_plot(filename: str, fig: plt.Figure, dpi: int = DEFAULT_DPI, output_dir
 
 def generate_visualizations(round_df: pd.DataFrame, output_dir: str = '.') -> None:
     """
-    Produces plots sized for screen viewing (8x5 inches)
+    Produces plots sized for screen viewing (8x5 inches) for key metrics like
+    energy consumption and throughput. Plots are generated using Seaborn and
+    Matplotlib, mapped with distinctive colors and markers for each algorithm.
 
     Args:
         round_df (pd.DataFrame): The dataframe containing round-by-round
@@ -337,6 +344,7 @@ def main() -> None:
     if not round_data.empty:
         round_data = clean_and_normalize(round_data)
         generate_visualizations(round_data, output_dir=args.output_dir)
+        logger.info("Visualizations generated successfully in %s", args.output_dir)
 
         logger.info("\n--- Summary Performance ---")
         print(summary_data.head())
