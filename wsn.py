@@ -11,7 +11,7 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import Tuple, Union
+from typing import Dict, Tuple, Union
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -165,7 +165,7 @@ def parse_simulation_log(
 # SECTION 2: Data Cleaning
 # ==========================================
 
-TYPE_MAP = {
+TYPE_MAP: Dict[str, str] = {
     'Round': 'int32',
     'MaxResidualEnergy': 'float64',
     'PacketsDelivered': 'int32',
@@ -206,7 +206,12 @@ DEFAULT_DPI = 100
 DEFAULT_FIG_SIZE = (8, 5)
 
 
-def save_plot(filename: str, fig: plt.Figure, dpi: int = DEFAULT_DPI, output_dir: str = '.') -> None:
+def save_plot(
+    filename: str,
+    fig: plt.Figure,
+    dpi: int = DEFAULT_DPI,
+    output_dir: str = '.'
+) -> None:
     """
     Helper function to adjust layout, save, and close a figure.
     """
