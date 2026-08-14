@@ -190,7 +190,7 @@ double IAGAPCEnhanced::CalculateSmoothness(const std::vector<Point>& path) const
     double totalCurvature = 0.0;
     if (path.size() < 3) return 0.0;
 
-    auto normalizeAngleDiff = [](double a1, double a2) {
+    auto normalizeAngleDiff = [](double a1, double a2) -> double {
         double d = std::fabs(a2 - a1);
         return (d > M_PI) ? (2 * M_PI - d) : d;
     };
