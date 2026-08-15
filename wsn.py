@@ -198,6 +198,7 @@ def clean_and_normalize(df: pd.DataFrame) -> pd.DataFrame:
     df = df.astype(existing_cols)
     return df
 
+
 # ==========================================
 # SECTION 3: Screen-Optimized Visualization
 # ==========================================
@@ -206,7 +207,12 @@ DEFAULT_DPI = 100
 DEFAULT_FIG_SIZE = (8, 5)
 
 
-def save_plot(filename: str, fig: plt.Figure, dpi: int = DEFAULT_DPI, output_dir: str = '.') -> None:
+def save_plot(
+    filename: str,
+    fig: plt.Figure,
+    dpi: int = DEFAULT_DPI,
+    output_dir: str = '.'
+) -> None:
     """
     Helper function to adjust layout, save, and close a figure.
     """
@@ -218,7 +224,9 @@ def save_plot(filename: str, fig: plt.Figure, dpi: int = DEFAULT_DPI, output_dir
     plt.close(fig)
 
 
-def generate_visualizations(round_df: pd.DataFrame, output_dir: str = '.') -> None:
+def generate_visualizations(
+    round_df: pd.DataFrame, output_dir: str = '.'
+) -> None:
     """
     Produces plots sized for screen viewing (8x5 inches)
 
@@ -329,7 +337,8 @@ def main() -> None:
         round_data, summary_data = parse_simulation_log(csv_file)
     except FileNotFoundError:
         logger.error(
-            "Simulation result file %s not found. Please ensure the file exists.",
+            "Simulation result file %s not found. "
+            "Please ensure the file exists.",
             csv_file
         )
         sys.exit(1)
