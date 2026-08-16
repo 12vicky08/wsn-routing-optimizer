@@ -7,8 +7,8 @@ set -euo pipefail
 git config --global user.name "R VIKRANTH"
 git config --global user.email "vikranthras@gmail.com"
 
-# Generate a random number of commits between 3 and 6
-num_commits=$(( (RANDOM % 4) + 3 ))
+# Generate a random number of commits between 3 and 5
+num_commits=$(( (RANDOM % 3) + 3 ))
 
 messages=(
   "Refactor routing algorithm logic"
