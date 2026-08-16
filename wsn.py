@@ -201,6 +201,7 @@ def clean_and_normalize(df: pd.DataFrame) -> pd.DataFrame:
     df = df.astype(existing_cols)
     return df
 
+
 # ==========================================
 # SECTION 3: Screen-Optimized Visualization
 # ==========================================
@@ -227,7 +228,9 @@ def save_plot(
     plt.close(fig)
 
 
-def generate_visualizations(round_df: pd.DataFrame, output_dir: str = '.') -> None:
+def generate_visualizations(
+    round_df: pd.DataFrame, output_dir: str = '.'
+) -> None:
     """
     Produces plots sized for screen viewing (8x5 inches) for key metrics like
     energy consumption and throughput. Plots are generated using Seaborn and
@@ -340,7 +343,8 @@ def main() -> None:
         round_data, summary_data = parse_simulation_log(csv_file)
     except FileNotFoundError:
         logger.error(
-            "Simulation result file %s not found. Please ensure the file exists.",
+            "Simulation result file %s not found. "
+            "Please ensure the file exists.",
             csv_file
         )
         sys.exit(1)
