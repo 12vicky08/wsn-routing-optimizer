@@ -310,6 +310,10 @@ def generate_visualizations(
 def setup_argparser() -> argparse.ArgumentParser:
     """
     Set up the command line argument parser for WSN data processing.
+
+    Returns:
+        argparse.ArgumentParser: The configured argument parser object
+            for processing input and output directory paths.
     """
     parser = argparse.ArgumentParser(
         description="Process WSN routing optimization results."

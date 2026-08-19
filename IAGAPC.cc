@@ -202,8 +202,8 @@ double IAGAPCEnhanced::CalculateSmoothness(const std::vector<Point>& path) const
         double deltaX2 = path[i+1].x - path[i].x;
         double deltaY2 = path[i+1].y - path[i].y;
 
-        double angle1 = atan2(deltaY1, deltaX1);
-        double angle2 = atan2(deltaY2, deltaX2);
+        double angle1 = std::atan2(deltaY1, deltaX1);
+        double angle2 = std::atan2(deltaY2, deltaX2);
 
         double diff = normalizeAngleDiff(angle1, angle2);
         // Penalize sharp turns heavily
@@ -235,7 +235,8 @@ double IAGAPCEnhanced::CalculateFitness(Chromosome &ind) {
     // Calculate Variance
     for (uint32_t i = 0; i < m_nodes.GetN(); ++i) {
          double e = m_energySources->Get(i)->GetRemainingEnergy();
-         energyVar += pow(e - avgEnergy, 2);
+         double diff = e - avgEnergy;
+         energyVar += diff * diff;
     }
     energyVar /= m_nodes.GetN();
 
