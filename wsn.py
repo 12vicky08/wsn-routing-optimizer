@@ -111,8 +111,8 @@ def parse_simulation_log(
                 # pylint: disable=broad-exception-caught
                 except Exception as e:
                     logger.exception(
-                        "Unexpected error when parsing summary table. "
-                        "Error: %s", e
+                        "Unexpected error %s when parsing summary table. "
+                        "Error: %s", type(e).__name__, e
                     )
 
                 capture_mode = None
@@ -146,7 +146,7 @@ def parse_simulation_log(
                 )
             except Exception as e:  # pylint: disable=broad-exception-caught
                 logger.exception(
-                    "Error parsing block for %s: %s", current_algorithm, e
+                    "Error %s parsing block for %s: %s", type(e).__name__, current_algorithm, e
                 )
             continue
 
