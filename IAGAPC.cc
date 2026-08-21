@@ -235,7 +235,7 @@ double IAGAPCEnhanced::CalculateFitness(Chromosome &ind) {
     // Calculate Variance
     for (uint32_t i = 0; i < m_nodes.GetN(); ++i) {
          double e = m_energySources->Get(i)->GetRemainingEnergy();
-         energyVar += pow(e - avgEnergy, 2);
+         energyVar += (e - avgEnergy) * (e - avgEnergy);
     }
     energyVar /= m_nodes.GetN();
 
