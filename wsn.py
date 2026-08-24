@@ -146,7 +146,8 @@ def parse_simulation_log(
                 )
             except Exception as e:  # pylint: disable=broad-exception-caught
                 logger.exception(
-                    "Error %s parsing block for %s: %s", type(e).__name__, current_algorithm, e
+                    "Error %s parsing block for %s: %s", type(
+                        e).__name__, current_algorithm, e
                 )
             continue
 
@@ -318,16 +319,17 @@ def setup_argparser() -> argparse.ArgumentParser:
         '--input',
         type=str,
         default='wsn-optimizer-results.csv',
-        help='Path to the input CSV file containing raw NS-3 simulation results'
+        help="Path to the input CSV file containing raw NS-3 results"
     )
     parser.add_argument(
         '--output-dir',
         type=str,
         default='.',
-        help='Path to the directory where generated visualization plots will be saved'
+        help="Path to the directory to save generated plots"
     )
     return parser
 
+# Main execution block
 
 def main() -> None:
     """
@@ -352,7 +354,8 @@ def main() -> None:
     if not round_data.empty:
         round_data = clean_and_normalize(round_data)
         generate_visualizations(round_data, output_dir=args.output_dir)
-        logger.info("Visualizations generated successfully in %s", args.output_dir)
+        logger.info("Visualizations generated successfully in %s",
+                    args.output_dir)
 
         logger.info("\n--- Summary Performance ---")
         print(summary_data.head())
