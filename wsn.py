@@ -331,6 +331,7 @@ def setup_argparser() -> argparse.ArgumentParser:
 
 # Main execution block
 
+
 def main() -> None:
     """
     Main execution entry point for the WSN data pipeline.
