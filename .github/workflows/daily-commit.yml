@@ -2,8 +2,8 @@ name: Daily Contribution
 
 on:
   schedule:
-    # Run every day at 12:00 PM UTC
-    - cron: '0 12 * * *'
+    # Run 4 times a day (every 6 hours) to generate 4 commits daily
+    - cron: '0 */6 * * *'
   # Allow manual trigger as well
   workflow_dispatch:
 
@@ -21,8 +21,8 @@ jobs:
           git config --global user.name "R VIKRANTH"
           git config --global user.email "vikranthras@gmail.com"
 
-          # Generate a random number between 3 and 5
-          num_commits=$(( (RANDOM % 3) + 3 ))
+          # We only need 1 commit per run because the cron job runs 4 times a day
+          num_commits=1
 
           messages=(
             "Refactor routing algorithm logic"
