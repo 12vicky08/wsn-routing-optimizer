@@ -192,7 +192,7 @@ def clean_and_normalize(df: pd.DataFrame) -> pd.DataFrame:
     # Convert configured columns to numeric types
     for col in TYPE_MAP:
         if col in df.columns:
-            df.loc[:, col] = pd.to_numeric(df[col], errors='coerce')
+            df[col] = pd.to_numeric(df[col], errors='coerce')
 
     # Drop any rows containing missing or unparseable data
     df = df.dropna().copy()
@@ -331,6 +331,7 @@ def setup_argparser() -> argparse.ArgumentParser:
 
 # Main execution block
 
+
 def main() -> None:
     """
     Main execution entry point for the WSN data pipeline.
@@ -358,7 +359,7 @@ def main() -> None:
                     args.output_dir)
 
         logger.info("\n--- Summary Performance ---")
-        print(summary_data.head())
+        logger.info("\n%s", summary_data.head())
     else:
         logger.warning("No data found.")
 
