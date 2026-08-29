@@ -9,6 +9,7 @@ import io
 import logging
 import re
 import sys
+import time
 from pathlib import Path
 from typing import Tuple, Union
 
@@ -341,6 +342,7 @@ def main() -> None:
 
     csv_file = args.input
 
+    start_time = time.time()
     logger.info("Starting Data Pipeline Execution...")
     try:
         round_data, summary_data = parse_simulation_log(csv_file)
@@ -362,6 +364,11 @@ def main() -> None:
         logger.info("\n%s", summary_data.head())
     else:
         logger.warning("No data found.")
+
+    end_time = time.time()
+    execution_time = end_time - start_time
+    logger.info("Data Pipeline Execution completed in %.2f seconds.",
+                execution_time)
 
 
 if __name__ == '__main__':
