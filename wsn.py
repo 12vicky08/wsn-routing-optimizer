@@ -230,7 +230,7 @@ def save_plot(
 
 
 def generate_visualizations(
-    round_df: pd.DataFrame, output_dir: str = '.'
+    round_df: pd.DataFrame, output_dir: str = '.', plot_format: str = 'png'
 ) -> None:
     """
     Produces plots sized for screen viewing (8x5 inches) for key metrics like
@@ -281,7 +281,11 @@ def generate_visualizations(
         plt.title("Cumulative Network Energy Consumption")
         plt.ylabel("Total Energy (Joules)")
         plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left')
-        save_plot("Fig1_Energy_Consumption.png", fig1, output_dir=output_dir)
+        save_plot(
+            f"Fig1_Energy_Consumption.{plot_format}",
+            fig1,
+            output_dir=output_dir
+        )
 
     # Plot 2: Throughput
     if 'PacketsDelivered' in round_df.columns:
@@ -300,7 +304,11 @@ def generate_visualizations(
         plt.title("Cumulative Data Packet Delivery")
         plt.ylabel("Packets Delivered")
         plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left')
-        save_plot("Fig2_Packet_Delivery.png", fig2, output_dir=output_dir)
+        save_plot(
+            f"Fig2_Packet_Delivery.{plot_format}",
+            fig2,
+            output_dir=output_dir
+        )
     plt.close('all')
 
 # ==========================================
@@ -326,6 +334,13 @@ def setup_argparser() -> argparse.ArgumentParser:
         type=str,
         default='.',
         help="Path to the directory to save generated plots"
+    )
+    parser.add_argument(
+        '--format',
+        type=str,
+        choices=['png', 'pdf', 'svg'],
+        default='png',
+        help="Format to save the generated plots (png, pdf, svg)"
     )
     return parser
 
@@ -354,7 +369,9 @@ def main() -> None:
 
     if not round_data.empty:
         round_data = clean_and_normalize(round_data)
-        generate_visualizations(round_data, output_dir=args.output_dir)
+        generate_visualizations(
+            round_data, output_dir=args.output_dir, plot_format=args.format
+        )
         logger.info("Visualizations generated successfully in %s",
                     args.output_dir)
 
