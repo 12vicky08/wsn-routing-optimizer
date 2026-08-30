@@ -2,8 +2,8 @@ name: Daily Contribution
 
 on:
   schedule:
-    # Run 4 times a day (every 6 hours) to generate 4 commits daily
-    - cron: '0 */6 * * *'
+    # Run once a day at 12:00 PM UTC to generate 3-5 commits
+    - cron: '0 12 * * *'
   # Allow manual trigger as well
   workflow_dispatch:
 
@@ -16,51 +16,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Make a dummy commit
+      - name: Make dummy commits
         run: |
-          git config --global user.name "R VIKRANTH"
-          git config --global user.email "vikranthras@gmail.com"
-
-          # We only need 1 commit per run because the cron job runs 4 times a day
-          num_commits=1
-
-          messages=(
-            "Refactor routing algorithm logic"
-            "Update simulation parameters"
-            "Fix minor bug in metric calculation"
-            "Improve energy efficiency model"
-            "Update documentation"
-            "Optimize spline trajectory generation"
-            "Tweak adaptive crossover probabilities"
-            "Clean up redundant logs"
-            "Refactor evaluation function"
-            "Tune mutation operator thresholds"
-            "Update plotting configuration"
-            "Enhance data parsing regex"
-            "Reformat C++ codebase"
-            "Adjust NS-3 energy source setup"
-            "Fix memory leak in Python script"
-          )
-
-          for i in $(seq 1 $num_commits); do
-            # Append the current date and iteration to a dummy file to ensure a change
-            echo "Daily commit iteration $i: $(date)" >> dummy_daily.txt
-            git add dummy_daily.txt
-
-            # Select a random message
-            msg_index=$((RANDOM % ${#messages[@]}))
-            msg=${messages[$msg_index]}
-
-            # Generate a random offset in hours (0-11) and minutes (0-59) to spread out commits
-            hour_offset=$((RANDOM % 12))
-            minute_offset=$((RANDOM % 60))
-
-            # Set the date for the commit to simulate organic activity throughout the day
-            export GIT_AUTHOR_DATE=$(date -d "-${hour_offset} hours -${minute_offset} minutes" +'%Y-%m-%dT%H:%M:%S')
-            export GIT_COMMITTER_DATE=$GIT_AUTHOR_DATE
-
-            git commit -m "$msg - iteration $i"
-          done
+          chmod +x run_daily_commits.sh
+          ./run_daily_commits.sh
 
           # Push changes back to the main branch
           git push

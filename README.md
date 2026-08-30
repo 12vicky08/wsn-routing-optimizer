@@ -205,13 +205,15 @@ pip install pandas matplotlib seaborn
 ### Run the Analysis Pipeline
 
 `ash
-python wsn.py
+python wsn.py --format png
 `
+
+You can optionally specify `--format` to change the generated plot image types (e.g. `png`, `pdf`, `svg`).
 
 This will:
 1. Parse wsn-optimizer-results.csv
 2. Clean and normalize the data
-3. Display interactive comparison plots
+3. Generate comparison plots in the specified format
 4. Print the summary performance table
 
 ### Run the NS-3 Simulation (Optional)
