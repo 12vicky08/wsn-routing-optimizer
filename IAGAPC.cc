@@ -172,7 +172,8 @@ IAGAPCEnhanced::GenerateSplinePath(const std::vector<Point> &rps) const {
   // Loop through control points
   for (size_t i = 0; i < rps.size() - 3; i++) {
     // Interpolate between p1 and p2 using p0 and p3 as control
-    for (double t = 0; t <= 1; t += 0.05) {
+    for (int step = 0; step <= 20; ++step) {
+      double t = step * 0.05;
       double t2 = t * t;
       double t3 = t2 * t;
 
