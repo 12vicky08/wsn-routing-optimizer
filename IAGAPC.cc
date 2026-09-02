@@ -85,8 +85,8 @@ public:
   IAGAPCEnhanced(NodeContainer nodes, Ptr<EnergySourceContainer> energySources,
                  double areaWidth, double areaHeight);
   void Run();
-  std::vector<Point> GetBestTrajectory() const;
-  double GetBestFitness() const;
+  [[nodiscard]] std::vector<Point> GetBestTrajectory() const;
+  [[nodiscard]] double GetBestFitness() const;
 
 private:
   NodeContainer m_nodes;
@@ -128,11 +128,13 @@ IAGAPCEnhanced::IAGAPCEnhanced(NodeContainer nodes,
   InitializePopulation();
 }
 
-std::vector<Point> IAGAPCEnhanced::GetBestTrajectory() const {
+[[nodiscard]] std::vector<Point> IAGAPCEnhanced::GetBestTrajectory() const {
   return GenerateSplinePath(m_globalBest.rps);
 }
 
-double IAGAPCEnhanced::GetBestFitness() const { return m_globalBest.fitness; }
+[[nodiscard]] double IAGAPCEnhanced::GetBestFitness() const {
+  return m_globalBest.fitness;
+}
 
 void IAGAPCEnhanced::EvaluatePopulation() {
   for (auto &ind : m_population) {
@@ -149,6 +151,8 @@ void IAGAPCEnhanced::InitializePopulation() {
 
   for (int i = 0; i < POPULATION_SIZE; ++i) {
     Chromosome ind;
+    ind.rps.reserve(NUM_RPS);
+    ind.dwellTimes.reserve(NUM_RPS);
     for (int j = 0; j < NUM_RPS; ++j) {
       ind.rps.push_back({disX(gen), disY(gen)});
       ind.dwellTimes.push_back(disTime(gen));
@@ -425,15 +429,17 @@ void IAGAPCEnhanced::Run() {
       // Tournament Selection
       int idx1 = dis(rand_gen);
       int idx2 = dis(rand_gen);
-      Chromosome p1 = (m_population[idx1].fitness > m_population[idx2].fitness)
-                          ? m_population[idx1]
-                          : m_population[idx2];
+      const Chromosome &p1 =
+          (m_population[idx1].fitness > m_population[idx2].fitness)
+              ? m_population[idx1]
+              : m_population[idx2];
 
       idx1 = dis(rand_gen);
       idx2 = dis(rand_gen);
-      Chromosome p2 = (m_population[idx1].fitness > m_population[idx2].fitness)
-                          ? m_population[idx1]
-                          : m_population[idx2];
+      const Chromosome &p2 =
+          (m_population[idx1].fitness > m_population[idx2].fitness)
+              ? m_population[idx1]
+              : m_population[idx2];
 
       Chromosome c1, c2;
       Crossover(p1, p2, c1, c2, avgFit, maxFit);
