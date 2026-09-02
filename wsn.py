@@ -375,8 +375,9 @@ def main() -> None:
         logger.info("Visualizations generated successfully in %s",
                     args.output_dir)
 
-        logger.info("\n--- Summary Performance ---")
-        logger.info("\n%s", summary_data.head())
+        if not summary_data.empty:
+            logger.info("\n--- Summary Performance ---")
+            logger.info("\n%s", summary_data.head())
     else:
         logger.warning("No data found.")
 
