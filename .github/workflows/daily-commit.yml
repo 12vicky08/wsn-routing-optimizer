@@ -2,8 +2,8 @@ name: Daily Contribution
 
 on:
   schedule:
-    # Run once a day at 12:00 PM UTC to generate 3-5 commits
-    - cron: '0 12 * * *'
+    # Run 4 times a day to generate multiple commits
+    - cron: '0 */6 * * *'
   # Allow manual trigger as well
   workflow_dispatch:
 
