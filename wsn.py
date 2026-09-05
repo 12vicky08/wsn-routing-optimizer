@@ -195,7 +195,12 @@ def clean_and_normalize(df: pd.DataFrame) -> pd.DataFrame:
             df[col] = pd.to_numeric(df[col], errors='coerce')
 
     # Drop any rows containing missing or unparseable data
+    initial_len = len(df)
     df = df.dropna().copy()
+    dropped = initial_len - len(df)
+    if dropped > 0:
+        logger.info("Dropped %d incomplete/missing rows during cleaning.",
+                    dropped)
 
     # Apply specific data types from TYPE_MAP
     existing_cols = {k: v for k, v in TYPE_MAP.items() if k in df.columns}

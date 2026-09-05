@@ -208,7 +208,7 @@ double
 IAGAPCEnhanced::CalculateSmoothness(const std::vector<Point> &path) const {
   double totalCurvature = 0.0;
   if (path.size() < 3)
-    return 0.0;
+    return 1.0;
 
   auto normalizeAngleDiff = [](double a1, double a2) {
     double d = std::fabs(a2 - a1);
@@ -268,7 +268,7 @@ double IAGAPCEnhanced::CalculateFitness(Chromosome &ind) {
 
   // 3. Delay Factor (Path Length)
   double pathLength = 0;
-  for (size_t i = 0; i < smoothPath.size() - 1; ++i) {
+  for (size_t i = 0; i + 1 < smoothPath.size(); ++i) {
     pathLength += Distance(smoothPath[i + 1], smoothPath[i]);
   }
   ind.delayMetric = 1.0 / (1.0 + (pathLength / V_MAX));
@@ -339,13 +339,16 @@ void IAGAPCEnhanced::Cataclysm() {
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> disX(0, m_areaWidth);
     std::uniform_real_distribution<> disY(0, m_areaHeight);
+    std::uniform_real_distribution<> disTime(5.0, 30.0);
 
     for (int i = eliteCount; i < POPULATION_SIZE; ++i) {
       for (int j = 0; j < NUM_RPS; ++j) {
         m_population[i].rps[j] = {disX(gen), disY(gen)};
+        m_population[i].dwellTimes[j] = disTime(gen);
       }
       // Reset fitness and metrics
       m_population[i].fitness = 0.0;
+      m_population[i].diversityScore = 0.0;
       m_population[i].energyMetric = 0.0;
       m_population[i].smoothMetric = 0.0;
       m_population[i].coverageMetric = 0.0;
