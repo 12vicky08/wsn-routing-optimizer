@@ -186,8 +186,8 @@ def clean_and_normalize(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: The cleaned dataframe.
     """
-    if df.empty:
-        return df
+    if df is None or df.empty:
+        return pd.DataFrame()
 
     # Convert configured columns to numeric types
     for col in TYPE_MAP:
@@ -209,20 +209,22 @@ def clean_and_normalize(df: pd.DataFrame) -> pd.DataFrame:
 
 DEFAULT_DPI = 100
 DEFAULT_FIG_SIZE = (8, 5)
+FONT_SIZE = 10
+AXES_TITLE_SIZE = 12
+LINE_WIDTH = 2
 
 
 def save_plot(
     filename: str,
     fig: plt.Figure,
     dpi: int = DEFAULT_DPI,
-    output_dir: str = '.'
+    output_dir: Union[str, Path] = '.'
 ) -> None:
     """
     Helper function to adjust layout, save, and close a figure.
     """
     out_path = Path(output_dir)
-    if output_dir != '.':
-        out_path.mkdir(parents=True, exist_ok=True)
+    out_path.mkdir(parents=True, exist_ok=True)
     filepath = out_path / filename
     fig.tight_layout()
     fig.savefig(filepath, dpi=dpi, bbox_inches='tight')
@@ -230,7 +232,7 @@ def save_plot(
 
 
 def generate_visualizations(
-    round_df: pd.DataFrame, output_dir: str = '.', plot_format: str = 'png'
+    round_df: pd.DataFrame, output_dir: Union[str, Path] = '.', plot_format: str = 'png'
 ) -> None:
     """
     Produces plots sized for screen viewing (8x5 inches) for key metrics like
@@ -249,11 +251,11 @@ def generate_visualizations(
     sns.set_theme(style="whitegrid")
     plt.rcParams.update({
         'font.family': 'sans-serif',   # Cleaner for screens
-        'font.size': 10,
-        'axes.titlesize': 12,
-        'figure.figsize': DEFAULT_FIG_SIZE,      # <--- MODIFIED: Smaller size
-        'figure.dpi': DEFAULT_DPI,             # <--- MODIFIED: Standard DPI
-        'lines.linewidth': 2
+        'font.size': FONT_SIZE,
+        'axes.titlesize': AXES_TITLE_SIZE,
+        'figure.figsize': DEFAULT_FIG_SIZE,
+        'figure.dpi': DEFAULT_DPI,
+        'lines.linewidth': LINE_WIDTH
     })
 
     unique_algos = round_df['Algorithm'].unique()
