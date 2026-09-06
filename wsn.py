@@ -31,6 +31,65 @@ SUMMARY_HEADER_PATTERN = re.compile(r"^\s*Algorithm\s*,\s*Rounds")
 # ==========================================
 
 
+def _parse_round_data(
+    lines: list[str], start_idx: int, current_algorithm: str
+) -> Tuple[pd.DataFrame, int]:
+    """
+    Parses the round data table for a specific algorithm.
+    """
+    table_buffer = [lines[start_idx]]
+    i = start_idx + 1
+    while i < len(lines):
+        data_row = lines[i].strip()
+        if not data_row or (',' not in data_row and not data_row.isdigit()):
+            break
+        table_buffer.append(data_row)
+        i += 1
+
+    csv_io = io.StringIO("\n".join(table_buffer))
+    df = pd.DataFrame()
+    try:
+        df = pd.read_csv(csv_io, skipinitialspace=True)
+        df['Algorithm'] = current_algorithm
+    except pd.errors.ParserError as e:
+        logger.exception("Parser error for block %s: %s", current_algorithm, e)
+    # pylint: disable=broad-exception-caught
+    except Exception as e:
+        logger.exception(
+            "Error %s parsing block for %s: %s",
+            type(e).__name__, current_algorithm, e
+        )
+    return df, i
+
+
+def _parse_summary_table(lines: list[str], start_idx: int) -> Tuple[pd.DataFrame, int]:
+    """
+    Parses the summary table from the given lines starting at start_idx.
+    """
+    summary_buffer = [lines[start_idx]]
+    i = start_idx + 1
+    while i < len(lines):
+        next_line = lines[i].strip()
+        if not next_line or "BEST ALGORITHM" in next_line:
+            break
+        summary_buffer.append(next_line)
+        i += 1
+
+    csv_io = io.StringIO("\n".join(summary_buffer))
+    summary_df = pd.DataFrame()
+    try:
+        summary_df = pd.read_csv(csv_io, skipinitialspace=True)
+    except pd.errors.ParserError as e:
+        logger.exception("Failed to parse summary table. Error: %s", e)
+    # pylint: disable=broad-exception-caught
+    except Exception as e:
+        logger.exception(
+            "Unexpected error %s when parsing summary table. Error: %s",
+            type(e).__name__, e
+        )
+    return summary_df, i
+
+
 # pylint: disable=too-many-locals,too-many-branches,too-many-statements
 def parse_simulation_log(
     file_path: Union[str, Path]
@@ -92,29 +151,7 @@ def parse_simulation_log(
         # Case A: Processing Global Summary Table
         if capture_mode == 'summary':
             if SUMMARY_HEADER_PATTERN.match(line):
-                summary_buffer = [line]
-                i += 1
-                while i < len(lines):
-                    next_line = lines[i].strip()
-                    if not next_line or "BEST ALGORITHM" in next_line:
-                        break
-                    summary_buffer.append(next_line)
-                    i += 1
-
-                csv_io = io.StringIO("\n".join(summary_buffer))
-                try:
-                    summary_df = pd.read_csv(csv_io, skipinitialspace=True)
-                except pd.errors.ParserError as e:
-                    logger.exception(
-                        "Failed to parse summary table. Error: %s", e
-                    )
-                # pylint: disable=broad-exception-caught
-                except Exception as e:
-                    logger.exception(
-                        "Unexpected error %s when parsing summary table. "
-                        "Error: %s", type(e).__name__, e
-                    )
-
+                summary_df, i = _parse_summary_table(lines, i)
                 capture_mode = None
                 continue
 
@@ -125,30 +162,9 @@ def parse_simulation_log(
             continue
 
         if ROUND_HEADER_PATTERN.match(line) and current_algorithm:
-            table_buffer = [line]
-            i += 1
-            while i < len(lines):
-                data_row = lines[i].strip()
-                if not data_row or (',' not in data_row and
-                                    not data_row.isdigit()):
-                    break
-                table_buffer.append(data_row)
-                i += 1
-
-            csv_io = io.StringIO("\n".join(table_buffer))
-            try:
-                df = pd.read_csv(csv_io, skipinitialspace=True)
-                df['Algorithm'] = current_algorithm
+            df, i = _parse_round_data(lines, i, current_algorithm)
+            if not df.empty:
                 simulation_data_frames.append(df)
-            except pd.errors.ParserError as e:
-                logger.exception(
-                    "Parser error for block %s: %s", current_algorithm, e
-                )
-            except Exception as e:  # pylint: disable=broad-exception-caught
-                logger.exception(
-                    "Error %s parsing block for %s: %s", type(
-                        e).__name__, current_algorithm, e
-                )
             continue
 
         i += 1
@@ -230,10 +246,13 @@ def save_plot(
 
 
 def generate_visualizations(
-    round_df: pd.DataFrame, output_dir: str = '.', plot_format: str = 'png'
+    round_df: pd.DataFrame,
+    output_dir: str = '.',
+    plot_format: str = 'png',
+    fig_size: Tuple[int, int] = DEFAULT_FIG_SIZE
 ) -> None:
     """
-    Produces plots sized for screen viewing (8x5 inches) for key metrics like
+    Produces plots sized for screen viewing for key metrics like
     energy consumption and throughput. Plots are generated using Seaborn and
     Matplotlib, mapped with distinctive colors and markers for each algorithm.
 
@@ -241,6 +260,8 @@ def generate_visualizations(
         round_df (pd.DataFrame): The dataframe containing round-by-round
             simulation data.
         output_dir (str): Directory where plots should be saved.
+        plot_format (str): The format to save the plots in.
+        fig_size (Tuple[int, int]): Dimensions of the figure to generate.
     """
     if round_df.empty:
         return
@@ -251,7 +272,7 @@ def generate_visualizations(
         'font.family': 'sans-serif',   # Cleaner for screens
         'font.size': 10,
         'axes.titlesize': 12,
-        'figure.figsize': DEFAULT_FIG_SIZE,      # <--- MODIFIED: Smaller size
+        'figure.figsize': fig_size,      # <--- MODIFIED: Smaller size
         'figure.dpi': DEFAULT_DPI,             # <--- MODIFIED: Standard DPI
         'lines.linewidth': 2
     })
