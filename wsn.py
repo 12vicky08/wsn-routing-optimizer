@@ -226,6 +226,7 @@ def save_plot(
     filepath = out_path / filename
     fig.tight_layout()
     fig.savefig(filepath, dpi=dpi, bbox_inches='tight')
+    logger.info("Saved plot to %s", filepath)
     plt.close(fig)
 
 
@@ -378,8 +379,10 @@ def main() -> None:
         if not summary_data.empty:
             logger.info("\n--- Summary Performance ---")
             logger.info("\n%s", summary_data.head())
+        sys.exit(0)
     else:
         logger.warning("No data found.")
+        sys.exit(1)
 
 
 if __name__ == '__main__':

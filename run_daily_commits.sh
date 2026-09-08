@@ -32,8 +32,8 @@ echo "Starting daily commit generation: $num_commits commits to be created."
 
 for i in $(seq 1 $num_commits); do
   # Append to a dummy file to ensure a file change
-  echo "Daily commit iteration $i: $(date)" >> dummy_daily.txt
-  git add dummy_daily.txt
+  echo "Daily commit iteration $i: $(date)" >> "dummy_daily.txt"
+  git add "dummy_daily.txt"
 
   # Select a random commit message
   msg_index=$((RANDOM % ${#messages[@]}))
