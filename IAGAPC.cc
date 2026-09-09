@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <limits>
 #include <random>
 #include <vector>
 
@@ -43,6 +44,8 @@ constexpr double PM_MIN = 0.01;
 // Diversity Thresholds
 constexpr double DIVERSITY_CRIT = 25.0; // Threshold to trigger Cataclysm
 constexpr int STAGNATION_LIMIT = 20;
+constexpr double ELITE_FRACTION =
+    0.05; // Fraction of population to keep during Cataclysm
 
 constexpr double EPSILON = 1e-5; // Small value to prevent division by zero
 
@@ -143,8 +146,8 @@ void IAGAPCEnhanced::EvaluatePopulation() {
 }
 
 void IAGAPCEnhanced::InitializePopulation() {
-  std::random_device rd;
-  std::mt19937 gen(rd());
+  static std::random_device rd;
+  static std::mt19937 gen(rd());
   std::uniform_real_distribution<> disX(0, m_areaWidth);
   std::uniform_real_distribution<> disY(0, m_areaHeight);
   std::uniform_real_distribution<> disTime(5.0, 30.0);
@@ -240,7 +243,7 @@ double IAGAPCEnhanced::CalculateFitness(Chromosome &ind) {
 
   // 1. Residual Energy Factor
   // In a real NS-3 sim, this would run a mini-simulation of data packet flow
-  double minEnergy = 100.0;
+  double minEnergy = std::numeric_limits<double>::max();
   double energyVar = 0.0;
 
   // Placeholder logic for energy extraction from NS-3 Energy Models
@@ -331,12 +334,13 @@ void IAGAPCEnhanced::Cataclysm() {
                 return a.fitness > b.fitness;
               });
 
-    // Elitism: Keep top 5%
-    constexpr int eliteCount = static_cast<int>(POPULATION_SIZE * 0.05);
+    // Elitism: Keep top elite fraction
+    constexpr int eliteCount =
+        static_cast<int>(POPULATION_SIZE * ELITE_FRACTION);
 
     // Regenerate the rest
-    std::random_device rd;
-    std::mt19937 gen(rd());
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
     std::uniform_real_distribution<> disX(0, m_areaWidth);
     std::uniform_real_distribution<> disY(0, m_areaHeight);
 
@@ -420,8 +424,8 @@ void IAGAPCEnhanced::Run() {
     newPop.push_back(m_population[0]); // Keep best
 
     // Setup random generator for tournament selection
-    std::random_device rd;
-    std::mt19937 rand_gen(rd());
+    static std::random_device rd;
+    static std::mt19937 rand_gen(rd());
     std::uniform_int_distribution<> dis(0, POPULATION_SIZE - 1);
 
     // Genetic Op Loop
@@ -465,8 +469,8 @@ void IAGAPCEnhanced::Mutation(Chromosome &ind, double diversity) {
   // Adaptive Pm: Higher mutation when diversity is low
   double Pm = PM_MIN + (PM_MAX - PM_MIN) * exp(-0.1 * diversity);
 
-  std::random_device rd;
-  std::mt19937 gen(rd());
+  static std::random_device rd;
+  static std::mt19937 gen(rd());
   std::uniform_real_distribution<> dis(0.0, 1.0);
   std::normal_distribution<> gauss(0.0, 10.0); // Gaussian mutation
 

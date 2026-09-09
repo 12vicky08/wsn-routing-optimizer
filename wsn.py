@@ -103,7 +103,8 @@ def parse_simulation_log(
 
                 csv_io = io.StringIO("\n".join(summary_buffer))
                 try:
-                    summary_df = pd.read_csv(csv_io, skipinitialspace=True)
+                    summary_df = pd.read_csv(
+                        csv_io, skipinitialspace=True, on_bad_lines='skip')
                 except pd.errors.ParserError as e:
                     logger.exception(
                         "Failed to parse summary table. Error: %s", e
@@ -137,7 +138,8 @@ def parse_simulation_log(
 
             csv_io = io.StringIO("\n".join(table_buffer))
             try:
-                df = pd.read_csv(csv_io, skipinitialspace=True)
+                df = pd.read_csv(
+                    csv_io, skipinitialspace=True, on_bad_lines='skip')
                 df['Algorithm'] = current_algorithm
                 simulation_data_frames.append(df)
             except pd.errors.ParserError as e:
