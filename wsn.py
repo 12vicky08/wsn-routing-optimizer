@@ -166,7 +166,7 @@ def parse_simulation_log(
 # ==========================================
 
 # Mapping of column names to their expected pandas data types for normalization
-TYPE_MAP = {
+TYPE_MAP: dict[str, str] = {
     'Round': 'int32',
     'MaxResidualEnergy': 'float64',
     'PacketsDelivered': 'int32',

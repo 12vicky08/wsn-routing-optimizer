@@ -247,7 +247,7 @@ double IAGAPCEnhanced::CalculateFitness(Chromosome &ind) {
   // This assumes the trajectory was just "run" or estimated
   double sumEnergy = 0.0;
   for (uint32_t i = 0; i < m_nodes.GetN(); ++i) {
-    double e = m_energySources->Get(i)->GetRemainingEnergy();
+    const double e = m_energySources->Get(i)->GetRemainingEnergy();
     if (e < minEnergy)
       minEnergy = e;
     sumEnergy += e;
@@ -255,7 +255,7 @@ double IAGAPCEnhanced::CalculateFitness(Chromosome &ind) {
   double avgEnergy = sumEnergy / m_nodes.GetN();
   // Calculate Variance
   for (uint32_t i = 0; i < m_nodes.GetN(); ++i) {
-    double e = m_energySources->Get(i)->GetRemainingEnergy();
+    const double e = m_energySources->Get(i)->GetRemainingEnergy();
     energyVar += (e - avgEnergy) * (e - avgEnergy);
   }
   energyVar /= m_nodes.GetN();
