@@ -215,19 +215,24 @@ IAGAPCEnhanced::CalculateSmoothness(const std::vector<Point> &path) const {
     return (d > M_PI) ? (2 * M_PI - d) : d;
   };
 
+  if (path.size() < 3)
+    return 0.0;
+
+  double deltaX = path[1].x - path[0].x;
+  double deltaY = path[1].y - path[0].y;
+  double prevAngle = atan2(deltaY, deltaX);
+
   for (size_t i = 1; i < path.size() - 1; ++i) {
     // Calculate change in angle
-    double deltaX1 = path[i].x - path[i - 1].x;
-    double deltaY1 = path[i].y - path[i - 1].y;
-    double deltaX2 = path[i + 1].x - path[i].x;
-    double deltaY2 = path[i + 1].y - path[i].y;
+    double deltaX_next = path[i + 1].x - path[i].x;
+    double deltaY_next = path[i + 1].y - path[i].y;
 
-    double angle1 = atan2(deltaY1, deltaX1);
-    double angle2 = atan2(deltaY2, deltaX2);
+    double currentAngle = atan2(deltaY_next, deltaX_next);
 
-    double diff = normalizeAngleDiff(angle1, angle2);
+    double diff = normalizeAngleDiff(prevAngle, currentAngle);
     // Penalize sharp turns heavily
     totalCurvature += (diff * diff);
+    prevAngle = currentAngle;
   }
 
   // Normalize: Lower curvature -> Higher Score
