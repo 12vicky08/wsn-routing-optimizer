@@ -23,7 +23,9 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Regex Patterns for Context Detection
+# Matches the header row for round-by-round simulation data
 ROUND_HEADER_PATTERN = re.compile(r"^\s*Round\s*,\s*MaxResidualEnergy")
+# Matches the header row for the final summary performance table
 SUMMARY_HEADER_PATTERN = re.compile(r"^\s*Algorithm\s*,\s*Rounds")
 
 # ==========================================
@@ -178,13 +180,15 @@ TYPE_MAP = {
 def clean_and_normalize(df: pd.DataFrame) -> pd.DataFrame:
     """
     Cleans and normalizes the given dataframe by converting columns to
-    appropriate types and dropping NaNs.
+    appropriate types based on TYPE_MAP, coercing unparseable values to NaN,
+    and subsequently dropping any rows containing missing or unparseable data.
 
     Args:
         df (pd.DataFrame): The dataframe to clean.
 
     Returns:
-        pd.DataFrame: The cleaned dataframe.
+        pd.DataFrame: The cleaned dataframe with columns cast to their
+        appropriate data types.
     """
     if df.empty:
         return df

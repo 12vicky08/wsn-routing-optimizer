@@ -21,6 +21,7 @@ using namespace ns3;
 // -------------------------------------------------------------------------
 // Simulation Parameters & Algorithm Constants
 // -------------------------------------------------------------------------
+// Number of points generated per spline segment (t from 0 to 1 with 0.05 step)
 constexpr int POINTS_PER_SEGMENT = 21;
 constexpr int POPULATION_SIZE = 50;
 constexpr int MAX_GENERATIONS = 200;
