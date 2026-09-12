@@ -191,6 +191,7 @@ Performance summary across 100 simulation rounds:
 - pandas
 - matplotlib
 - seaborn
+- Memory: At least 4GB RAM recommended
 
 ---
 
