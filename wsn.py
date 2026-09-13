@@ -378,6 +378,8 @@ def main() -> None:
         if not summary_data.empty:
             logger.info("\n--- Summary Performance ---")
             logger.info("\n%s", summary_data.head())
+
+        logger.info("Data Pipeline Execution Completed Successfully.")
     else:
         logger.warning("No data found.")
 
