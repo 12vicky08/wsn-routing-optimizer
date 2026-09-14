@@ -24,7 +24,7 @@ using namespace ns3;
 constexpr int POINTS_PER_SEGMENT = 21;
 constexpr int POPULATION_SIZE = 50;
 constexpr int MAX_GENERATIONS = 200;
-constexpr int NUM_RPS = 10;    // Number of Rendezvous Points (Control Points)
+constexpr int NUM_RPS = 10;    // Total Number of Rendezvous Points (Control Points)
 constexpr double V_MAX = 20.0; // Maximum velocity of Mobile Sink (m/s)
 constexpr double COMM_RANGE = 100.0; // Communication range (m)
 

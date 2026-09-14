@@ -354,16 +354,16 @@ def main() -> None:
     parser = setup_argparser()
     args = parser.parse_args()
 
-    csv_file = args.input
+    input_csv_file = args.input
 
     logger.info("Starting Data Pipeline Execution...")
     try:
-        round_data, summary_data = parse_simulation_log(csv_file)
+        round_data, summary_data = parse_simulation_log(input_csv_file)
     except FileNotFoundError:
         logger.error(
             "Simulation result file %s not found. "
             "Please ensure the file exists.",
-            csv_file
+            input_csv_file
         )
         sys.exit(1)
 
