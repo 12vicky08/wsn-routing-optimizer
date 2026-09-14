@@ -229,6 +229,70 @@ def save_plot(
     plt.close(fig)
 
 
+def plot_energy_consumption(
+    round_df: pd.DataFrame, palette: list, marker_map: dict,
+    output_dir: str, plot_format: str
+) -> None:
+    """
+    Generates and saves the energy consumption plot.
+    """
+    if 'TotalEnergyConsumed' not in round_df.columns:
+        return
+
+    fig1 = plt.figure()
+    sns.lineplot(
+        data=round_df,
+        x='Round',
+        y='TotalEnergyConsumed',
+        hue='Algorithm',
+        style='Algorithm',
+        palette=palette,
+        markers=marker_map,
+        dashes=False,
+        markevery=10
+    )
+    plt.title("Cumulative Network Energy Consumption")
+    plt.ylabel("Total Energy (Joules)")
+    plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left')
+    save_plot(
+        f"Fig1_Energy_Consumption.{plot_format}",
+        fig1,
+        output_dir=output_dir
+    )
+
+
+def plot_packet_delivery(
+    round_df: pd.DataFrame, palette: list, marker_map: dict,
+    output_dir: str, plot_format: str
+) -> None:
+    """
+    Generates and saves the packet delivery plot.
+    """
+    if 'PacketsDelivered' not in round_df.columns:
+        return
+
+    fig2 = plt.figure()
+    sns.lineplot(
+        data=round_df,
+        x='Round',
+        y='PacketsDelivered',
+        hue='Algorithm',
+        style='Algorithm',
+        palette=palette,
+        markers=marker_map,
+        dashes=False,
+        markevery=10
+    )
+    plt.title("Cumulative Data Packet Delivery")
+    plt.ylabel("Packets Delivered")
+    plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left')
+    save_plot(
+        f"Fig2_Packet_Delivery.{plot_format}",
+        fig2,
+        output_dir=output_dir
+    )
+
+
 def generate_visualizations(
     round_df: pd.DataFrame, output_dir: str = '.', plot_format: str = 'png'
 ) -> None:
@@ -265,50 +329,12 @@ def generate_visualizations(
     }
 
     # Plot 1: Energy Consumption
-    if 'TotalEnergyConsumed' in round_df.columns:
-        fig1 = plt.figure()
-        sns.lineplot(
-            data=round_df,
-            x='Round',
-            y='TotalEnergyConsumed',
-            hue='Algorithm',
-            style='Algorithm',
-            palette=palette,
-            markers=marker_map,
-            dashes=False,
-            markevery=10
-        )
-        plt.title("Cumulative Network Energy Consumption")
-        plt.ylabel("Total Energy (Joules)")
-        plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left')
-        save_plot(
-            f"Fig1_Energy_Consumption.{plot_format}",
-            fig1,
-            output_dir=output_dir
-        )
+    plot_energy_consumption(
+        round_df, palette, marker_map, output_dir, plot_format)
 
     # Plot 2: Throughput
-    if 'PacketsDelivered' in round_df.columns:
-        fig2 = plt.figure()
-        sns.lineplot(
-            data=round_df,
-            x='Round',
-            y='PacketsDelivered',
-            hue='Algorithm',
-            style='Algorithm',
-            palette=palette,
-            markers=marker_map,
-            dashes=False,
-            markevery=10
-        )
-        plt.title("Cumulative Data Packet Delivery")
-        plt.ylabel("Packets Delivered")
-        plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left')
-        save_plot(
-            f"Fig2_Packet_Delivery.{plot_format}",
-            fig2,
-            output_dir=output_dir
-        )
+    plot_packet_delivery(round_df, palette, marker_map,
+                         output_dir, plot_format)
     plt.close('all')
 
 # ==========================================
