@@ -94,8 +94,7 @@ The Python pipeline (wsn.py) is organized into four modular stages:
 - Reads the raw NS-3 multi-table CSV log (wsn-optimizer-results.csv)
 - Uses **regex-based context detection** to distinguish between algorithm sections, round data tables, and the global summary table
 - Employs a **state machine** (capture_mode) to handle different parsing contexts
-- Outputs two DataFrames: 
-ound_data (per-round metrics) and summary_data (final comparison)
+- Outputs two DataFrames: `round_data` (per-round metrics) and `summary_data` (final comparison)
 
 ### Stage 2: Data Cleaning & Normalization
 
