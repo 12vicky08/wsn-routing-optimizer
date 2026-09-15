@@ -1,0 +1,59 @@
+source_file: An_effective_hybrid_genetic_algorithm_and_tabu_sea.pdf
+title: An effective hybrid genetic algorithm and tabu search for maximizing network lifetime using coverage sets scheduling in wireless sensor networks
+authors: Nemat allah Mottaki; Homayun Motameni; Hosein Mohamadi
+venue_year: The Journal of Supercomputing, 2023
+problem: >
+  In directional sensor networks (DSNs), once coverage sets are formed, scheduling
+  the order and activation duration of these (non-disjoint) coverage sets to maximize
+  network lifetime is an NP-hard problem (Maximum Coverage Sets Scheduling, MCSS).
+  As the number of sensors grows, the number of coverage sets and possible schedule
+  permutations (n!) grows too, making finding a near-optimal schedule difficult.
+approach: >
+  Two algorithms are proposed: (1) a GA-based algorithm (GA) using order/permutation
+  chromosome representation, binary tournament selection, CX2 crossover, and swap
+  mutation to search for near-optimal coverage set scheduling; (2) a Hybrid Algorithm
+  (HA) combining GA (global search) with Tabu Search (TS, local search using a tabu
+  list and aspiration criterion) to refine chromosomes and escape local optima. Both
+  are compared against the previously proposed MCSSA algorithm.
+sink_mobility: unknown
+routing_clustering_scheme: >
+  Not a routing/clustering scheme in the traditional sense; the paper addresses
+  coverage-set scheduling (activation ordering of non-disjoint sensor coverage sets)
+  rather than routing or clustering.
+simulator: unknown (no simulator name/version stated; custom experiments, results averaged over 20 runs)
+node_count: 200-1200 directional sensors (N); number of coverage sets (M) 10-80 and 100-800 depending on experiment
+area: 1000m x 1000m square monitored region
+energy_model: >
+  Each sensor has an energy level b_i; when a coverage set is active its sensors'
+  energy decreases; a coverage set's lifetime equals the activity time of its
+  least-energy sensor; negligible energy consumed when changing sector; no detailed
+  radio/energy consumption formula (e.g., no first-order radio model) given.
+metrics_reported:
+  - "Network lifetime (time units, as per Eq. 1: sum of coverage set activation times t_i)"
+key_numeric_results:
+  - "Worked example: 7 sensors, energy levels b=(4,3,5,5,5,2,3), 3 non-disjoint coverage sets; best schedules (c3,c2,c1) and (c3,c1,c2) achieve total network lifetime = 7, vs. worst schedules (c2,c1,c3)/(c2,c3,c1) = 5 (Table 2)."
+  - "Illustrative example (Sect 1.1): 5 sensors/4 targets with 3 non-disjoint coverage sets each active 0.5h; scheduling increases network lifetime from h (all-active baseline) to 1.5h."
+  - "Experiment 1 (active time slots varied [0,10] to [50,60], T=20,N=100,M=100,R=200): Hybrid GA-TS > GA > MCSSA in network lifetime (Fig. 5, values not tabulated numerically in text)."
+  - "Experiment 2 (coverage sets 10-60, T=10,N=300,R=200): proposed algorithms outperform MCSSA; network lifetime not significantly prolonged by increasing coverage sets due to shared sensors (Fig. 6)."
+  - "Experiment 3 (targets 5-30, N=100,M=100,R=200, sensor energy=10): proposed algorithms outperform MCSSA; lifetime decreases as targets increase (Fig. 7)."
+  - "Experiment 4 (sensors 200-1200, T=20,M=100,R=200, active time=10): network lifetime increases with sensor count; proposed algorithms outperform MCSSA (Fig. 8)."
+  - "Experiments 5-8: network lifetime increases with active time slots, number of sensors, and sensing radius R (R=100,200,300 tested); increases only slightly with number of coverage sets due to shared sensors among sets (Figs. 9-12)."
+stated_limitations: >
+  Authors note GA does not guarantee an optimal result and different runs may yield
+  different outcomes; achieving global/near-global optimization with GA requires
+  high computational cost, especially for large search spaces; GA may identify
+  promising regions but struggle to locate the exact optimum, leaving room for
+  improvement -- motivating the TS refinement step. Greedy-based methods (like prior
+  work's Greedy-MCSS) can get stuck in local minima. Future work: apply multi-objective
+  evolutionary algorithms (MOEAs) to coverage set scheduling.
+citation_fields:
+  bibkey: mottaki2023hybridga
+  authors_bibtex: Mottaki, Nemat allah and Motameni, Homayun and Mohamadi, Hosein
+  title: An effective hybrid genetic algorithm and tabu search for maximizing network lifetime using coverage sets scheduling in wireless sensor networks
+  year: 2023
+  journal_or_booktitle: The Journal of Supercomputing
+  volume: "79"
+  number: unknown
+  pages: 3277-3297
+  doi: 10.1007/s11227-022-04710-1
+  publisher: Springer

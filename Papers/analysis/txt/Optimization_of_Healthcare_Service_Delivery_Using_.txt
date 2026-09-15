@@ -1,0 +1,806 @@
+                                                Volume 28, 2025
+
+    OPTIMIZATION OF HEALTHCARE SERVICE DELIVERY
+           USING DEEP GENETIC ALGORITHM
+ Girimurugan B*                      Business School, Koneru Lakshmaiah                  skbgiri@yahoo.co.in
+                                     Education Foundation, Vaddeswaram,
+                                     Andhra Pradesh, India
+ Ashvin T.K                          KPR College of Arts Science and                     tk_ashvin@yahoo.com
+                                     Research, Coimbatore, Tamilnadu,
+                                     India
+ Hemalatha T                         KPR College of Arts Science and                     hemasanthosh.phd@gmail.com
+                                     Research, Coimbatore, Tamilnadu,
+                                     India
+ Riyaz Hussain Sk                    Department of Electronics and                       riyazhussain786@gmail.com
+                                     Communication Engineering, Rajiv
+                                     Gandhi University of Knowledge
+                                     Technologies–Nuzvid, Andhra
+                                     Pradesh, India
+ Sannidhan M S                       Department of CSE, NMAM Institute                   sannidhan@nitte.edu.in
+                                     of Technology (Nitte Deemed to be
+                                     University), Mangaluru, Karnataka,
+                                     India
+ Umaya Salma Shajahan                Department of Management Studies,                   umayasalma@sonamgmt.org
+                                     Sona College of Technology, Salem,
+                                     Tamilnadu, India
+* Corresponding author
+
+ABSTRACT
+ Aim/Purpose                 The main goal of this work is a new framework that combines genetic algo-
+                             rithms with deep learning. The delivery of healthcare services will be optimized
+                             as the aim of this research.
+
+
+
+Accepting Editor Eli Cohen │Received: October 18, 2024│ Revised: January 24, 2025 │ Accepted: January 26,
+2025.
+Cite as: Girimurugan. B., Ashvin, T.K., Hemalatha, T., Riyaz Hussain, Sk., Sannidhan, M S., & Shajahan , U. S.
+(2025). Optimization of healthcare service delivery using deep genetic algorithm. Informing Science: The Interna-
+tional Journal of an Emerging Transdiscipline, 28, Article 3. https://doi.org/10.28945/5447
+(CC BY-NC 4.0) This article is licensed to you under a Creative Commons Attribution-NonCommercial 4.0 International
+License. When you copy and redistribute this paper in full or in part, you need to provide proper attribution to it to ensure
+that others can later locate this work (and to ensure that others do not accuse you of plagiarism). You may (and we encour-
+age you to) adapt, remix, transform, and build upon the material for any non-commercial purposes. This license does not
+permit you to use this material for commercial purposes.
+Optimization of Healthcare Service Delivery
+
+
+    Background          Optimizing the provision of healthcare services is essential to ensuring that pa-
+                        tients get suitable and timely treatments and materials.
+    Methodology         This work presents a new framework for DGA-based healthcare service delivery
+                        optimization by the application of this methodology. The procedure consists of
+                        two stages: training a deep neural network to assess the feasibility of possible so-
+                        lutions and encoding the problem space into a format appropriate for genetic
+                        operations. The neural network evaluations are used as the guiding principle as
+                        the genetic algorithm iteratively creates a population of solutions by selection,
+                        crossover, and mutation.
+    Contribution        The main contribution of this work is the solution of the optimization issues re-
+                        lated to the provision of healthcare services by combining deep learning and ge-
+                        netic algorithms. Ultimately, we want to improve patient outcomes and resource
+                        use by leveraging the potential of DGAs to improve the efficacy and efficiency
+                        of healthcare systems.
+    Findings            The results of laboratory experiments show that the proposed approach is suc-
+                        cessful in optimizing the provision of healthcare services. The proposed DGAs
+                        enable more high-quality solutions than conventional optimization methods.
+    Recommendations     This work presents a novel framework that uses deep genetic algorithms
+    for Researchers     (DGAs) to effectively optimize the provision of healthcare services and address
+                        these issues.
+    Future Research     This work can be enhanced using several deep-learning algorithms to achieve
+                        better accuracy and performance.
+    Keywords            healthcare, service delivery, optimization, deep genetic algorithm, patient out-
+                        comes
+
+
+INTRODUCTION
+The need to optimize the provision of healthcare services has grown in the last few years to guaran-
+tee that patients get their supplies and treatments on schedule and effectively (Squires et al., 2022).
+Conversely, one major challenge to the successful accomplishment of this goal is the complexity and
+unpredictable nature of healthcare institutions (Son et al., 2020). The complexity of healthcare opera-
+tions makes traditional optimization techniques often unable to handle them (Sharma & Kumar,
+2022).
+B ACKGROUND
+Among the numerous provisions of healthcare services are patient scheduling, resource allocation,
+inventory control, and treatment planning (Arivazhagan et al., 2022). Better patient results, lower
+costs, and the most effective use of available resources depend on the effective coordination of these
+processes (Saravanan, Sankaradass, et al., 2023; Yadav et al., 2024; Yuvaraj et al., 2022).
+C H ALLENGES
+For several reasons, it is not feasible to provide healthcare services at their best (Uniyal et al., 2024).
+Many things lead to the necessity of striking a balance between conflicting goals, such as cutting ex-
+penses, cutting wait times, and raising patient satisfaction (Saravanan, Parameshachari, et al., 2023).
+Additional variables that impede the optimization process are variations in patient demand, resource
+availability, and treatment plans (Subramani et al., 2023). Another level of complication to the chal-
+lenges related to optimization is the requirement for healthcare systems to adjust to changing de-
+mographics, technological breakthroughs, and legal requirements.
+
+
+
+2
+                             Girimurugan, Ashvin, Hemalatha, Riyaz Hussain, Sannidhan, & Shajahan
+
+
+OBJECTIVES
+The main goal of this work is a new framework that combines genetic algorithms with deep learning.
+The delivery of healthcare services will be optimized as the aim of this research. More precisely, our
+objectives consist of the following:
+     1. Creating a thorough model that faithfully depicts the complex interactions inside healthcare
+        systems.
+     2. Assessing the proposed performance using large-scale experiments with datasets from the
+        actual healthcare industry.
+N OVELTY AND C ONTRIBUTIONS
+This work presents a novel framework that uses deep genetic algorithms (DGAs) to effectively opti-
+mize the provision of healthcare services and address these issues. This work primarily contributes
+the following:
+     1. The development of a new framework for healthcare service delivery optimization by using
+        deep genetic algorithms.
+     2. The application of deep learning methods to the modeling of complex healthcare systems
+        and to increase the effectiveness of the optimization process.
+     3. Thorough testing using actual healthcare data to give empirical confirmation of the efficiency
+        and scalability of the proposed framework.
+
+RELATED WORKS
+The literature examining a range of approaches and techniques on the topic has been produced by
+the great interest shown by both researchers and practitioners in optimizing the delivery of healthcare
+services. We will look at a few related works that have attempted to accomplish similar objectives but
+encountered similar difficulties.
+Traditionally used optimization techniques, such as integer and linear programming, have been exten-
+sively applied to improve healthcare provision. Using mixed-integer linear programming, for instance,
+Goyal et al. (2021), Ittannavar and Havaldar (2022), Liu et al. (2023), Maguluri et al. (2023), and
+Wirsansky (2020), optimized nurse scheduling in hospitals.
+Recently, researchers have looked into the potential of fusing deep learning with optimization tech-
+niques to address challenging optimization problems in the healthcare sector. Datta et al. (2023) pro-
+posed combining deep learning and genetic algorithms to maximize hospital bed distribution. The
+degree of the patient’s illness and the resources available are two of the many considerations made by
+this approach. In a similar spirit, Shwetabh and Ambhaikar (2024) created a deep reinforcement
+learning-based method for cancer treatment scheduling optimization.
+Hybrid approaches, which combine several optimization techniques, have also started to be studied
+in the optimization of healthcare service delivery (Talpur et al., 2024). Several aspects are considered
+by this method, such as the duration of surgical cases and the availability of personnel. Furthermore,
+Alolaiwy et al. (2023) created an ant colony optimization and hybrid genetic algorithm to maximize
+ambulance routing in emergency medical services. Reducing ambulance travel distances and arrival
+times was the aim of this strategy.
+Approaches used in research to optimize the provision of healthcare services are quite diverse. These
+comprise conventional optimization techniques, deep learning approaches, heuristic algorithms, and
+hybrid methods. Particular promise is shown by deep learning combined with optimization methods
+in efficiently addressing the complexity and variability of healthcare systems. Even if every method
+has pros and drawbacks, combining optimization methods with deep learning shows especially
+promise.
+
+
+                                                                                                           3
+Optimization of Healthcare Service Delivery
+
+
+This work advances a new framework that uses deep genetic algorithms to maximize the provision of
+healthcare services, building on earlier work. The main objective of this project is to enhance
+resource use and patient outcomes in different healthcare environments.
+The proposed method might face challenges in under-resourced healthcare settings or environments
+with limited data availability. Its reliance on high computational resources and quality data may limit
+its effectiveness in rural or low-income healthcare systems, highlighting areas for future research and
+tailored adaptations.
+Implementing the method in real-world healthcare requires significant computational resources and
+skilled personnel. Resource constraints in healthcare environments may limit its adoption, emphasiz-
+ing the need for optimizing computational efficiency and exploring cost-effective implementation
+strategies to ensure broader applicability.
+Incorporating diverse real-world case studies, such as outpatient and emergency healthcare systems,
+would enhance the manuscript by demonstrating scalability and adaptability across varied patient
+populations and settings. These case studies would validate its practical relevance and guide future
+implementations. Sensitivity analysis for parameter settings would also provide insights into the flexi-
+bility and reliability of the proposed method.
+The termination condition for the optimization process requires a detailed explanation, including the
+criteria or thresholds used, such as a convergence rate, maximum iterations, or an acceptable error
+margin. This ensures transparency in the methodology and helps readers understand how the process
+concludes effectively.
+The feature extraction process requires further elaboration. A detailed explanation of how features
+are selected, preprocessed, and transformed for the model would provide better insights into the ap-
+proach’s robustness.
+The feature extraction process can be elaborated by detailing how features are selected based on rele-
+vance to the target variable, using statistical analysis or domain expertise. Preprocessing steps ensure
+data quality, including normalization, outlier removal, and handling missing values. Feature transfor-
+mation, such as dimensionality reduction techniques, enhances model robustness by focusing on key
+attributes.
+
+PROPOSED METHOD
+The healthcare system faces complex challenges, such as long patient wait times, inefficient use of
+resources, and varying treatment outcomes. These issues stem from the large number of variables in-
+volved, such as patient conditions, available treatments, and resource constraints. Traditional meth-
+ods for improving healthcare services are often insufficient to handle this complexity.
+This paper proposes a novel approach to healthcare optimization that combines the power of Deep
+Learning with Genetic Algorithms (GAs), aiming to improve patient outcomes, reduce wait times,
+and optimize resource use.
+This method is proposed to optimize healthcare services using a novel approach combining deep
+learning techniques with genetic algorithms (GAs). The combination of the optimization potential of
+genetic algorithms with the expressive power of deep neural networks in this hybrid approach suc-
+cessfully tackles the complexity and variability inherent in healthcare systems (Figure 1).
+
+
+
+
+4
+                          Girimurugan, Ashvin, Hemalatha, Riyaz Hussain, Sannidhan, & Shajahan
+
+
+                                         Encode the
+                                       problem space
+
+
+                                          Define the
+                                           variables
+
+
+                                       Deep Neural
+                                     Network Training
+
+
+                                     Genetic Algorithm
+                                       Initialization
+
+
+                                     Fitness Evaluation
+
+
+                                           Genetic
+                                          Operations
+
+
+                                        Fitness-Based
+                                           Selection
+
+
+                                         Termination
+                                           Criteria
+                               Figure 1. Proposed DGA method
+
+DGA F RAMEWORK
+  • Clarity of Optimization Goals: The method is clear in its description of optimization goals (e.g.,
+     reducing patient wait times and improving resource use). However, it might be helpful to
+     provide concrete examples of how these objectives are measured and quantified in a
+     healthcare setting (e.g., specific patient outcomes or resource utilization metrics).
+  • Chromosome Representation: While the process is explained, it would be beneficial to elaborate
+     further on how the solutions (chromosomes) are represented in the genetic algorithm. This
+     could include more specific details about the types of features or parameters involved and
+     how they impact healthcare delivery.
+
+
+
+                                                                                                         5
+Optimization of Healthcare Service Delivery
+
+
+DEEP N EURAL N ETWORK (DNN) T RAINING
+The feature extraction process is crucial in deep learning applications. More detail on the types of
+features extracted from patient data and the methods used to preprocess or select these features
+would provide deeper insights. For example, explaining how features like demographic data, medical
+history, or real-time monitoring data (from wearables) are incorporated would be valuable.
+Every chromosome in the population has its fitness evaluated using the trained DNN. This stage is
+needed to get a fitness score, and it involves running the encoded representation of every solution
+through the DNN. With respect to the optimization goals – which could be reducing patient wait
+times, optimizing resource use, or improving treatment plans – the fitness score measures the quality
+of the solution.
+The genetic method is able to iteratively evolve the population of solutions by use of selection, cross-
+over, and mutation. Many selection strategies are applied to hold onto high-fitness solutions for the
+next generation favorably. Selection for raffles and competitions are two instances of these mecha-
+nisms. Applying crossover and mutation operators allows one to produce new offspring solutions.
+To add variety and exploration to the population, these operators combine and alter already present
+chromosomes.
+The fitness scores of the offspring solutions are compared with the fitness scores of their parent so-
+lutions following a DNN fitness evaluation of the offspring solutions. Based on the fitness scores, a
+whole new population is selected for the following generation, with solutions exhibiting higher fit-
+ness values being preferred.
+The genetic algorithm will keep repeating the selection, crossover, and mutation processes up to a
+termination criterion. Some other termination criteria are getting to a maximum number of iterations
+or satisfactory solution quality. After the optimization process is finished, the best fitness score solu-
+tion best reflects the best approach for providing healthcare services.
+The ultimate optimized solution produced by the genetic algorithm based on Table 1 can be inter-
+preted and applied inside the healthcare system to enhance patient outcomes, resource use, and oper-
+ational effectiveness.
+                   Table 1. Parameters and hyperparameters of GA and DNN
+                   Parameter/hyperparameter                       Value
+                  Population size                                   100
+                  Maximum generations                                50
+                  Crossover probability                             0.8
+                  Mutation probability                              0.1
+                  Number of features                                 10
+                  Selection method                         Tournament selection
+                  Crossover method                        Single-point Crossover
+                  Mutation method                           Gaussian mutation
+                  Fitness evaluation metric                      Accuracy
+                  Learning rate                                    0.001
+                  Batch size                                         32
+                  Network architecture                  Convolutional neural network
+                  Number of Convolutional Layers                     3
+                  Number of Recurrent Layers                         2
+                  Dropout rate                                      0.2
+                  Weight decay                                    0.0001
+                  Optimizer                                       Adam
+                  Activation function                             ReLU
+
+
+6
+                              Girimurugan, Ashvin, Hemalatha, Riyaz Hussain, Sannidhan, & Shajahan
+
+
+                   Parameter/hyperparameter                      Value
+                  Epochs                                           50
+                  Number of individuals selected                   20
+                  Crossover point                               Random
+                  Mutation rate                                   0.05
+                  Termination criterion                 Maximum generations reached
+                  Evaluation dataset size                        10000
+                  Validation split                                 0.2
+
+DEEP N EURAL N ETWORK T RAINING FOR F EATURE E XTRACTION OF
+P ATIENT DETAILS
+The optimization of the provision of healthcare services is made possible by the deep neural network
+(DNN) training method for feature extraction of patient details.
+Data Collection and Preprocessing
+First, patient data must be gathered from a range of sources, such as wearables, laboratory tests, med-
+ical imaging, and electronic health records (EHRs).
+Feature Extraction
+In the setting of improving the provision of healthcare services, extracted features have been in-
+cluded.
+
+GENETIC ALGORITHM FOR C LASSIFICATION OF P ATIENTS IN
+H EALTH CARE DELIVERY S ERVICES
+In classifying patients in healthcare delivery services, a Genetic Algorithm (GA) can be employed as a
+machine learning technique to optimize the classification process.
+Initialization
+     • The first step involves initializing a population of potential solutions. In patient classification,
+         each solution (or individual) represents a possible set of features and parameters that define a
+         classification model.
+     • The features could include various patient attributes, such as age, gender, medical history,
+         symptoms, and diagnostic test results.
+     • The parameters define the configuration of the classification model, such as the choice of
+         algorithm, hyperparameters, and feature selection.
+Evaluation
+    • Each individual in the population is evaluated based on performance in classifying patients
+       into different categories (e.g., disease diagnoses, risk levels, treatment response).
+    • The evaluation metric could be accuracy, precision, recall, F1 score, or any other suitable
+       measure, depending on the specific classification task and objectives.
+Selection
+    • Individuals are selected for reproduction (or crossover) based on their fitness, i.e., their per-
+        formance in the classification task
+                                        P(x)=∑i=1 f(x)/f(xi)
+        where N is the population size, and 𝑥𝑥𝑥𝑥xi are all individuals in the population.
+     • Selection methods such as tournament selection, roulette wheel selection, or rank-based se-
+        lection are commonly used to preferentially retain high-fitness individuals while preserving
+        diversity in the population.
+
+
+                                                                                                          7
+Optimization of Healthcare Service Delivery
+
+
+Crossover
+    • Selected individuals undergo crossover, where pairs of solutions exchange genetic infor-
+       mation to produce offspring (new solutions).
+    • Crossover involves selecting random points in the feature space and exchanging the corre-
+       sponding features between the parent individuals to create offspring solutions that inherit
+       traits from both parents.
+    • This process mimics genetic recombination and introduces diversity into the population, po-
+       tentially generating better-performing solutions.
+Mutation
+   • To introduce additional genetic diversity and exploration, mutation is applied to some off-
+       spring solutions.
+   • Mutation involves randomly modifying a small proportion of features or parameters in the
+       offspring solutions to explore new regions of the solution space.
+   • This helps prevent premature convergence and enables the algorithm to discover novel and
+       potentially better solutions.
+Termination
+    • The algorithm iterates through the selection, crossover, and mutation steps for a predefined
+      number of generations or until a termination criterion is met.
+    • Termination criteria could include reaching a maximum number of generations, achieving a
+      desired level of fitness, or observing negligible improvement over successive generations.
+F ITNESS E VALUATION
+Fitness evaluation in a genetic algorithm assesses the quality of each individual (solution) in the popu-
+lation based on how well it performs in solving the problem at hand. In classifying patients in
+healthcare delivery services, the fitness function evaluates how effectively a particular set of features
+or parameters can classify patients into different categories (e.g., disease diagnoses and risk levels).
+Here is how fitness evaluation works and an example of a fitness function. The fitness evaluation
+process involves applying a fitness function to each individual in the population to compute its fit-
+ness value. This fitness value quantifies the individual’s performance or suitability as a solution to the
+optimization problem. The higher the fitness value, the better the solution.
+Let us consider a scenario where we want to classify patients into two categories – Healthy and Dis-
+eased – based on their medical records and diagnostic test results. We can define a fitness function
+that measures the accuracy of the classification performed by a given set of features or parameters.
+Suppose yi represents the true label (0 for healthy, 1 for diseased) of patient i, and y’i represents the
+predicted label obtained using the classification model corresponding to the individual being evalu-
+ated. The fitness function f(x) can be defined as the classification accuracy: f(x) = Number of cor-
+rectly classified patients/Total number of patients. Mathematically, it can be represented as:
+                              f(x) = (1/N)∑i=1N CorrectlyClassified(yi,y^i)
+Suppose we have a population of individuals (solutions), each representing a different combination
+of features or parameters for patient classification. For each individual, we compute its classification
+accuracy using the fitness function described above. Individuals with higher accuracy values have
+higher fitness values, indicating their suitability as solutions. Fitness evaluation provides the genetic
+algorithm with a quantitative measure of the performance of each individual in the population, guid-
+ing the selection, crossover, and mutation operations toward better solutions over successive genera-
+tions.
+
+
+
+
+8
+                                   Girimurugan, Ashvin, Hemalatha, Riyaz Hussain, Sannidhan, & Shajahan
+
+
+RESULTS
+We conduct simulations using a Python-based healthcare optimization framework implemented in
+TensorFlow for deep learning functionalities and DEAP for genetic algorithm operations. The exper-
+iments are run on a computing cluster consisting of Intel Xeon processors with 64GB RAM and
+NVIDIA Tesla V100 GPUs.
+We compare our deep genetic algorithm (DGA) method with other techniques among the ones now
+in use, such as genetic reinforcement learning and simulated annealing. In order to simulate the
+annealing process, we use a temperature schedule with an initial temperature of 100 and a cooling
+rate of 0.95. We employ a genetic algorithm in combination with a reinforcement learning policy in
+the process of genetic reinforcement learning for exploration. The foundation for our assessment of
+the approaches is a dataset of 10,000 patient records with different patient demographics, treatment
+options, and resource limitations, as given in Table 2. The performance of several optimization
+techniques for the provision of healthcare services is shown in a discussion of the results found in
+Figures 2-6 and Tables 3-6.
+                                                    Table 2. Setup
+                Experimental setup                          Value
+                   Fitness function                        Accuracy
+              Neural network architecture   3 hidden layers, 64 neurons per layer
+                 Activation function                        ReLU
+               Optimization algorithm                       Adam
+                     Learning rate                          0.001
+                 Data preprocessing       Feature scaling, Missing value imputation
+                 Termination criteria          Maximum generations reached
+                 Evaluation metrics         Solution quality, Convergence speed
+                     Dataset size                          10,000 s
+
+
+                             Simulated Annealing               Genetic Reinforcement Learning
+                             Deep Genetic Method
+                        1
+
+               SCORE   0.5
+
+                        0
+                                   10              20           30           40           50
+                                                             PATIENTS
+
+                                             Figure 2. Fitness score
+                                              Table 3. Fitness score
+             Number of             Simulated            Genetic reinforcement       Deep genetic
+              patients             annealing                  learning                method
+                 10                   0.75                       0.78                  0.82
+                 20                   0.80                       0.81                  0.85
+                 30                   0.82                       0.84                  0.87
+                 40                   0.85                       0.86                  0.89
+                 50                   0.88                       0.89                  0.91
+
+
+                                                                                                     9
+Optimization of Healthcare Service Delivery
+
+
+                                 Simulated Annealing              Genetic Reinforcement Learning
+                                 Deep Genetic Method
+                     60
+                     40
+              RATE
+                     20
+                         0
+                                     10            20              30           40            50
+                                                                PATIENTS
+
+                                      Figure 3. Convergence rate (in iterations)
+                                               Table 4. Convergence rate
+             Number of                    Simulated         Genetic reinforcement      Deep genetic
+              patients                    annealing               learning               method
+                 10                          20                       18                   15
+                 20                          25                       22                   20
+                 30                          30                       28                   25
+                 40                          35                       32                   30
+                 50                          40                       36                   35
+
+
+                                 Simulated Annealing              Genetic Reinforcement Learning
+                                 Deep Genetic Method
+                             1
+                         0.8
+
+
+               QUALITY
+                         0.6
+                         0.4
+                         0.2
+                             0
+                                       10              20          30           40            50
+                                                                PATIENTS
+
+                                                Figure 4. Solution quality
+
+                                                Table 5. Solution quality
+             Number of                    Simulated         Genetic reinforcement      Deep genetic
+              patients                    annealing               learning               method
+                 10                          0.75                    0.78                 0.82
+                 20                          0.80                    0.81                 0.85
+                 30                          0.82                    0.84                 0.87
+                 40                          0.85                    0.86                 0.89
+                 50                          0.88                    0.89                 0.91
+
+
+
+
+10
+                                 Girimurugan, Ashvin, Hemalatha, Riyaz Hussain, Sannidhan, & Shajahan
+
+
+                           Simulated Annealing               Genetic Reinforcement Learning
+                           Deep Genetic Method
+                     0.6
+                     0.4
+              LOSS
+                     0.2
+                      0
+                                10               20           30            40           50
+                                                           PATIENTS
+
+                                       Figure 5. Loss in optimization
+
+                                        Table 6. Loss in optimization
+
+             Number of           Simulated            Genetic reinforcement       Deep genetic
+              patients           annealing                  learning                method
+                     10               0.55                     0.52                     0.48
+                     20               0.50                     0.48                     0.45
+                     30               0.48                     0.45                     0.42
+                     40               0.45                     0.42                     0.40
+                     50               0.42                     0.40                     0.38
+
+
+
+                           Simulated Annealing                Genetic Reinforcement Learning
+                           Deep Genetic Method
+                     200
+                     150
+              LOSS   100
+                      50
+                       0
+                                 10              20           30            40            50
+                                                            PATIENTS
+
+                                             Figure 6. Scalability
+
+                                             Table 7. Scalability
+             Number of           Simulated            Genetic reinforcement        Deep genetic
+              patients           annealing                  learning                 method
+                 10                 100                        120                      80
+                 20                 110                        130                      85
+                 30                 120                        140                      90
+                 40                 130                        150                      95
+                 50                 140                        160                     100
+
+The experiments show that the deep genetic approach issue is better than other methods now in use,
+such as genetic reinforcement learning and simulated annealing, in terms of optimizing the provision
+
+
+                                                                                                  11
+Optimization of Healthcare Service Delivery
+
+
+of healthcare services. Superior performance is continuously shown by the deep genetic approach in
+a number of evaluation criteria, such as scalability, convergence rate, and quality of the solutions.
+This proves the approach works well for handling the complexity of healthcare optimization jobs.
+The proposed method yields a notable achievable percent from the range of 5 to 10, which focuses
+on genetic reinforcement learning and simulated annealing. The fewer iterations needed for conver-
+gence across a range of patient population sizes result in a percentage increase in efficiency, which
+can be between 10-20%.
+Regarding computational efficiency, quantitative evidence like reduced computation time, memory
+usage, or energy consumption compared to baseline methods should be provided. Qualitative in-
+sights, such as leveraging parallel computing or optimized algorithms, could further justify claims of
+improved resource utilization.
+While the deep genetic algorithm (DGA) method holds great promise for optimizing healthcare ser-
+vices, it is important to recognize that it may not be universally applicable across all healthcare envi-
+ronments. Key limitations, such as the reliance on high-quality data, computational resources, the
+ability to adapt to dynamic conditions, and ethical considerations around data privacy, must be ad-
+dressed for broader adoption.
+One of the key advantages of the DGA is its computational efficiency. Traditional optimization tech-
+niques, such as simulated annealing and genetic reinforcement learning, often require significantly
+more iterations or generations to converge on an optimal or near-optimal solution. This can result in
+longer computation times, especially when dealing with large and complex healthcare datasets. In
+contrast, the DGA method leverages Deep Neural Networks (DNNs) for feature extraction, ena-
+bling the algorithm to process large datasets more effectively by focusing on the most relevant fea-
+tures. Additionally, the hybrid approach of using genetic algorithms (which evolve solutions through
+selection, crossover, and mutation) significantly reduces the number of iterations needed compared
+to methods that rely purely on stochastic or gradient-based optimization. By effectively combining
+these two approaches, DGA achieves faster convergence and lower computation time.
+I NFERENCES
+The main issue in the inference is the focus on the scalability analysis and how efficiently the deep
+genetic approach is performed in terms of computing. In real-world healthcare applications, the deep
+genetic method is well suited where prompt decision-making and resource allocation are crucial due
+to its effective use of computing resources. In terms of limitations and findings, it mainly addresses
+the potential deep genetic approach. Also, it provides a significant percentage of gaining the scalabil-
+ity, convergence rate, and optimal solution in terms of quality and standard aspects.
+
+CONCLUSION
+In this paper, the proposed deep genetic method presents a viable way to maximize the provision of
+healthcare services. The main contribution of this work is the solution of the optimization issues re-
+lated to the provision of healthcare services by combining deep learning and genetic algorithms. Ulti-
+mately, we want to improve patient outcomes and resource use by leveraging the potential of DGAs
+to improve the efficacy and efficiency of healthcare systems. We have shown by extensive experi-
+mental evaluations that the deep genetic method is better than other currently in use techniques, such
+as simulated annealing and genetic reinforcement learning.
+The proposed approach holds significant potential for optimizing healthcare services through im-
+proved decision-making and resource allocation. Practical implications include enabling healthcare
+administrators to predict and manage patient needs more effectively, improving operational effi-
+ciency, and enhancing patient outcomes. Policymakers can leverage this method to design AI-driven
+
+
+
+
+12
+                                Girimurugan, Ashvin, Hemalatha, Riyaz Hussain, Sannidhan, & Shajahan
+
+
+frameworks for resource-constrained environments. Future developments should focus on overcom-
+ing implementation challenges, such as computational demands and integrating existing systems. Ex-
+panding the model’s use in diverse healthcare settings and strategies to address ethical concerns like
+privacy and algorithmic bias can pave the way for scalable and equitable AI solutions in healthcare
+optimization.
+The integration of deep learning and genetic algorithms in healthcare raises key ethical considera-
+tions. Ensuring patient data privacy and security is paramount, given the sensitive nature of
+healthcare information. Addressing algorithmic bias is critical to prevent disparities in care for spe-
+cific populations. Transparency in decision-making processes is essential to maintain trust among
+healthcare professionals and patients. Human oversight should complement AI-driven decisions to
+ensure accountability and ethical clinical practices. Furthermore, equitable access to such technolo-
+gies must be prioritized to avoid widening gaps in healthcare delivery. Comprehensive policies and
+stakeholder collaboration are necessary to address these ethical challenges effectively.
+ The proposed approach has significant potential for scalability beyond healthcare, offering relevance
+in sectors like finance, education, and supply chain management. This method can address challenges
+such as fraud detection, personalized learning, and resource allocation by leveraging its capabilities in
+pattern recognition, optimization, and decision-making. Discussing cross-sector applications could
+broaden the manuscript’s appeal and highlight its adaptability to diverse domains. Additionally, in-
+sights into sector-specific modifications or implementation strategies would showcase the method’s
+versatility. Emphasizing these possibilities enhances the manuscript’s impact, positioning the ap-
+proach as a valuable tool for addressing complex, data-driven problems across multiple industries.
+
+REFERENCES
+Alolaiwy, M., Hawsawi, T., Zohdy, M., Kaur, A., & Louis, S. (2023). Multi-objective routing optimization in
+    electric and flying vehicles: A genetic algorithm perspective. Applied Sciences, 13(18), 10427.
+    https://doi.org/10.3390/app131810427
+Arivazhagan, N., Somasundaram, K., Vijendra Babu, D., Gomathy Nayagam, M., Bommi, R. M., Mohammad,
+    Gouse Baig, Kumar, Puranam Revanth, Natarajan, Yuvaraj, Arulkarthick, V. J., Shanmuganathan, V. K.,
+    Srihari, K., Ragul Vignesh, M., & Prabhu Sundramurthy, V. (2022). Cloud-internet of health things
+    (IOHT) task scheduling using hybrid moth flame optimization with deep neural network algorithm for E
+    healthcare systems. Scientific Programming, 2022, Article 4100352. https://doi.org/10.1155/2022/4100352
+Datta, S., Kapoor, R., & Mehta, P. (2023). A multi-objective optimization model for outpatient care delivery
+    with service fairness. Business Process Management Journal, 29(3), 630-652. https://doi.org/10.1108/BPMJ-07-
+    2022-0335
+Goyal, A., Kaushik, S., & Khan, R. (2021). IoT based cloud network for smart health care using optimization
+   algorithm. Informatics in Medicine Unlocked, 27, 100792. https://doi.org/10.1016/j.imu.2021.100792
+Ittannavar, S. S., & Havaldar, R. H. (2022). Detection of breast cancer using the infinite feature selection with
+     genetic algorithm and deep neural network. Distributed and Parallel Databases, 40, 675-697.
+     https://doi.org/10.1007/s10619-021-07355-w
+Liu, J., Li, Y., Li, Y., Zibo, C., Lian, X., & Zhang, Y. (2023). Location optimization of emergency medical facili-
+     ties for public health emergencies in megacities based on genetic algorithm. Engineering, Construction and Ar-
+     chitectural Management, 30(8), 3330-3356. https://doi.org/10.1108/ECAM-07-2021-0637
+Maguluri, L. P., Farooqui, M. A., Sultana, H. P., & Saravanan, V. (2023, May). An artificial intelligence based
+   machine learning approach for automatic blood glucose level identification of diabetes patients. Proceedings
+   of the International Conference on Disruptive Technologies, Greater Noida, India, 104-109.
+   https://doi.org/10.1109/ICDT57929.2023.10150866
+
+
+
+
+                                                                                                                13
+Optimization of Healthcare Service Delivery
+
+
+Saravanan, V., Parameshachari, B. D., Hussein, A. H. A., Shilpa, N., & Adnan, M. M. (2023, November). Deep
+    learning techniques based secured biometric authentication and classification using ECG signal. Proceedings
+    of the International Conference on Integrated Intelligence and Communication Systems, Kalaburagi, India, 1-5.
+    https://doi.org/10.1109/ICIICS59993.2023.10421295
+Saravanan, V., Sankaradass, V., Shanmathi, M., Bhimavarapu, J. P., Deivakani, M., & Ramasamy, S. (2023,
+    May). An early detection of ovarian cancer and the accurate spreading range in human body by using deep
+    medical learning model. Proceedings of the International Conference on Disruptive Technologies, Greater Noida, India,
+    68-72. https://doi.org/10.1109/ICDT57929.2023.10151103
+Sharma, S., & Kumar, V. (2022). Application of genetic algorithms in healthcare: A review. In B. K. Tripathy,
+    P. Lingras, A. K. Kar, & C. L. Chowdhary (Eds.), Next generation healthcare informatics (pp. 75-86). Springer.
+    https://doi.org/10.1007/978-981-19-2416-3_5
+Shwetabh, K., & Ambhaikar, A. (2024). Smart health monitoring system of agricultural machines: Deep learn-
+   ing-based optimization with IoT and AI. BIO Web of Conferences, 82, 5007. https://doi.org/10.1051/bio-
+   conf/20248205007
+Son, L. H., Ciaramella, A., Thu Huyen, D. T., Staiano, A., Tuan, T. M., & Van Hai, P. (2020). Predictive relia-
+    bility and validity of hospital cost analysis with dynamic neural network and genetic algorithm. Neural Com-
+    puting and Applications, 32, 15237-15248. https://doi.org/10.1007/s00521-020-04876-w
+Squires, M., Tao, X., Elangovan, S., Gururajan, R., Zhou, X., & Acharya, U. R. (2022). A novel genetic algo-
+    rithm based system for the scheduling of medical treatments. Expert Systems with Applications, 195, 116464.
+    https://doi.org/10.1016/j.eswa.2021.116464
+Subramani, M., Saravanan, V., Muralidharan, A., Durai, R., & Ramasamy, S. (2023). Theoretical insights on the
+    development of a 55–77 graphene sheet by embedding Agn=1-4 and Pdn=1-4 metal nanoclusters for efficient
+    CO2 capture. Journal of Molecular Graphics and Modelling, 124, 108573.
+    https://doi.org/10.1016/j.jmgm.2023.108573
+Talpur, F., Korejo, I. A., Chandio, A. A., Ghulam, A., & Talpur, M. S. H. (2024). ML-based detection of DDoS
+    attacks using evolutionary algorithms optimization. Sensors, 24(5), 1672.
+    https://doi.org/10.3390/s24051672
+Uniyal, A., Pooja, Narang, H., Vats, S., Sharma, V., & Yadav, S. P. (2024, February). Employing DL-based algo-
+    rithm for gender and age identification. Proceedings of the IEEE International Conference on Computing, Power and
+    Communication Technologies, Greater Noida, India, 1459-1464.
+    https://doi.org/10.1109/IC2PCT60090.2024.10486667
+Wirsansky, E. (2020). Hands-on genetic algorithms with Python: Applying genetic algorithms to solve real-world deep learning
+    and artificial intelligence problems. Packt.
+Yadav, R. S., Singh, A., & Yadav, S. P. (2024, March). The smart fuzzy-based image recognition model for
+    modern healthcare. Proceedings of the 2nd International Conference on Disruptive Technologies, Greater Noida, India,
+    250-254. https://doi.org/10.1109/ICDT61202.2024.10489059
+Yuvaraj, N., Sivakumar, C., & Shankar, A. (2022). The speech-language processing model for managing the
+   neuro-muscle disorder patients by using deep learning. NeuroQuantology, 20(8), 918-925. https://www.neu-
+   roquantology.com/media/article_pdfs/918-925.pdf
+
+
+
+
+14
+                             Girimurugan, Ashvin, Hemalatha, Riyaz Hussain, Sannidhan, & Shajahan
+
+
+AUTHORS
+                            Dr. B. Girimurugan is an assistant professor at the KL Business School,
+                            Koneru Lakshmaiah Education Foundation (Deemed to be University),
+                            and Andhra Pradesh. He has 15 years of teaching experience, 2 years of
+                            industry experience, and 10 years of research experience. His area of in-
+                            terest is marketing management, particularly consumer behavior and digi-
+                            tal marketing. He has presented about 36 papers at various National and
+                            International conferences and seminars. He has published 55 articles in
+                            reputed journals, 19 of which are indexed in Scopus and Wos. He has re-
+                            ceived funding from DST thrice for organizing an entrepreneurship
+                            awareness program.
+
+
+                            Mr. T. K. Ashvin has an M.Sc., MBA, and NET (Management) and
+                            brings over 5 years of industry experience and 10 years of teaching ex-
+                            pertise. With a strong background in marketing, he has taken the lead in
+                            training students in sales and marketing. Known for his optimism, he has
+                            delivered numerous presentations at corporate forums and presented re-
+                            search papers at various national conferences.
+
+
+
+
+                             Dr. Hemalatha T has completed her BBA and MBA from Bharathiar
+                             University. She obtained MPhil and PhD degrees from Bharathiar Uni-
+                             versity. Dr. Hemalatha T is an associate professor and head of BBA in
+                             the School of Management, KPR College of Arts Science and Research,
+                             Coimbatore, and an accomplished academic and researcher specializing
+                             in human resources, marketing, and general management. With more
+                             than 15 years of teaching experience at undergraduate and postgraduate
+                             levels and four years in industry, she has guided M.Phil. scholars and has
+                             four Ph.D. scholars under her mentorship. She has successfully received
+                             government grants, supporting impactful projects funded by major agen-
+                             cies such as the TNSCST and RBI. She has presented and published pa-
+pers in various international and national conferences and journals. She has participated in various
+seminars and FDPs.
+
+
+
+
+                                                                                                    15
+Optimization of Healthcare Service Delivery
+
+
+                           Dr. Riyaz Hussain Shaik received a B.Tech degree in Electronics and
+                           Communications Engineering from Jawaharlal Nehru Technological Uni-
+                           versity, Hyderabad, in 2008 and an M.Tech degree in Communication
+                           Systems from the National Institute of Technology, Tiruchirappalli, in
+                           2010. Since 2010, he has been an assistant professor in the Department of
+                           ECE, Rajiv Gandhi University of Knowledge Technologies, Nuzvid. He
+                           is currently pursuing his Ph.D. degree in the Department of ECE at Ja-
+                           waharlal Nehru Technological University, Ananthapuramu, India. He has
+                           15 papers in international and national journals and conferences. His re-
+                           search interests include channel modeling, resource allocation for wireless
+                           relay systems, cooperative communications, wireless energy harvesting,
+                           and deep learning methods and techniques.
+
+                           Dr. Sannidhan M S is an associate professor in the Computer Science
+                           and Engineering Department at NMAM Institute of Technology, Nitte.
+                           He completed his PhD in image processing in 2022 from Visvesvaraya
+                           Technological University. He also holds a Bachelor of Engineering (2009)
+                           and a Master of Technology (2012) in Computer Science and Engineering
+                           from the same university. He has published several papers in reputed
+                           journals and conferences on topics such as face recognition, image seg-
+                           mentation, medical image analysis, machine learning, quantum convolu-
+                           tional neural networks, and DNS security. He is passionate about teach-
+                           ing and learning. He believes in outcome-based education and strives to
+                           provide a conducive learning environment for his students.
+
+
+                       Prof. Umaya Salma Shajahan has 18 years of teaching experience in fi-
+                       nance and management subjects and relevant areas. She achieved an
+                       award for Developing Academic Game Plans and Strategies in 2010. She
+                       has authored books published by Sona Versity, Sona College of Technol-
+                       ogy, Salem, and articles in the International Journal of Advanced Scientific Re-
+                       search & Development and the South Asian Journal of Marketing and Manage-
+                       ment Research. Her research endeavors have been instrumental in advanc-
+                       ing the understanding of various financial concepts. From liquidity man-
+                       agement in the automobile industry to the impact of working capital man-
+                       agement on firm performance, her studies have garnered recognition in
+                       journals, contributing significantly to the body of knowledge in finance
+and management. She completed a Six Sigma Green Belt certification program from Benchmark
+Australia.
+
+
+
+
+16
+

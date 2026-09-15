@@ -1,0 +1,75 @@
+source_file: Energy-efficient_Genetic_Algorithm_variants_of_PEG.pdf
+title: "Energy-efficient genetic algorithm variants of PEGASIS for 3D Wireless Sensor Networks"
+authors: Aaqil Somauroo; Vandana Bassoo
+venue_year: "Applied Computing and Informatics, 2019 (Vol. 19 No. 3/4, 2023 pagination)"
+problem: >
+  WSN nodes are energy-constrained and battery replacement is infeasible in remote deployments;
+  existing chain-based routing protocols like PEGASIS are largely studied only in 2D despite many
+  real applications requiring 3D deployment (e.g., underwater, trees, tunnels, mines), and the
+  greedy chain-building algorithm used in PEGASIS produces non-optimal chains, especially in 3D.
+approach: >
+  PEG-GA and clustered variants (PEG-GA Vertical Clustering, PEG-GA Spherical Clustering): extend
+  PEGASIS to 3D and replace its greedy TSP-based chain-building algorithm with a genetic algorithm
+  to build a near-minimal-length chain. Clustering (vertical, by x-coordinate; spherical, by radial
+  distance from network center) is added to shorten chains and reduce delay, using multi-hop
+  inter-cluster transmission. A new weighted energy-and-distance-aware cluster head (CH) selection
+  scheme (separate weights for primary vs secondary CH) is proposed to improve load balancing,
+  with weights tuned via trial-and-error simulation to maximize First Node Death (FND).
+sink_mobility: static
+routing_clustering_scheme: >
+  Chain-based routing (PEGASIS-derived) with GA-built chains; clustering variants: Vertical
+  Clustering (clusters by x-coordinate, cuboid-shaped, threshold (C-1)M/Ctotal < x < CM/Ctotal) and
+  Spherical Clustering (clusters by radial distance r from network center, threshold
+  (C-1)R/Ctotal < r < CR/Ctotal); multi-hop inter-cluster transmission to primary CH which then
+  transmits to BS; CH selection via weighted score of residual energy and distance (Eq. 7-10),
+  with different weights for primary and secondary CH.
+simulator: MATLAB (version not specified)
+node_count: 100
+area: "100 m x 100 m x 100 m (3D cubic space)"
+energy_model: >
+  First-order radio model. ETx-elec/Rx-elec = Eelec*k; ETx-amp = efs*k*d^2 (if d<d0) or emp*k*d^4
+  (if d>d0); d0 = sqrt(efs/emp); ERx = Eelec*L; data aggregation cost EDA-tot = s*k*Eda. Parameters:
+  Eelec = 50 nJ/bit, efs = 10 pJ/m^2, emp = 0.0013 pJ/bit/m^4, Eda = 5 nJ/bit/signal, E0 (initial
+  energy per node) = 0.5 J, packet size k = 2000 bits, C (control token?) = 1 ms, GA population
+  size = 100, GA iterations = 10000.
+metrics_reported:
+  - "Network lifetime: First Node Death (FND) / stability period (rounds)"
+  - "Half Node Death (HND) (rounds)"
+  - "Last Node Death (LND) (rounds)"
+  - "Residual energy vs round number (graph)"
+  - "Percentage residual energy of whole network at FND (%) -- load balancing indicator"
+  - "Maximum delay (rounds/time, delay = (Tq+Tp+Td)*hops = c*hops)"
+  - "Average energy consumed per node per round for first 1000 rounds (Eavg-1000, J)"
+key_numeric_results:
+  - "BS inside network: PEG-GA Vertical Clustering(3) improves FND by 817% over PEGASIS"
+  - "BS inside network: FND -- PEGASIS 236 rounds, PEG-GA 2133 rounds, PEG-GA Spherical Clustering(3) 1944, PEG-GA Spherical Clustering(8) 1603, PEG-GA Vertical Clustering(3) 2164, PEG-GA Vertical Clustering(8) 1755"
+  - "BS inside: HND -- PEGASIS 1752, PEG-GA 2297, Spherical(3) 2268, Spherical(8) 2172, Vertical(3) 2265, Vertical(8) 2127"
+  - "BS inside: LND -- PEGASIS 2160, PEG-GA 2932, Spherical(3) 2343, Spherical(8) 2239, Vertical(3) 2324, Vertical(8) 2227"
+  - "BS inside: PEG-GA Vertical Clustering(3) outperforms PEG-GA by 31 rounds in FND"
+  - "BS inside: 804% increase in FND from PEGASIS to PEG-GA"
+  - "BS inside: percentage residual energy at FND -- PEGASIS 85.5%, PEG-GA 7.0%, Spherical(3) 12.4%, Spherical(8) 21.6%, Vertical(3) 2.8%, Vertical(8) 15.4% (lower = better load balancing)"
+  - "BS outside network: PEG-GA Vertical Clustering(3) improves FND by 420% over PEGASIS and 42.7% over PEG-GA"
+  - "BS outside: FND -- PEGASIS 307, PEG-GA 1117, Spherical(3) 1574, Spherical(8) 1469, Vertical(3) 1595, Vertical(9) 1544"
+  - "BS outside: HND -- PEGASIS 1163, PEG-GA 1579, Spherical(3) 1628, Spherical(8) 1540, Vertical(3) 1647, Vertical(9) 1597"
+  - "BS outside: LND -- PEGASIS 1365, PEG-GA 1782, Spherical(3) 1678, Spherical(8) 1589, Vertical(3) 1697, Vertical(9) 1647"
+  - "BS outside: percentage residual energy at FND -- PEGASIS 73.5%, PEG-GA 26.9%, Spherical(3) 1.6%, Spherical(8) 2.7%, Vertical(3) 1.5%, Vertical(9) 1.6%"
+  - "BS outside: 1.1% residual-energy-at-FND difference between PEG-GA Spherical Clustering(8) and PEG-GA Vertical Clustering(9)"
+  - "Cluster sizes tested: PEG-GA Spherical Clustering 3 and 8 clusters (BS in/out); PEG-GA Vertical Clustering 3 and 9 clusters (BS in), 3 and 9 (BS out, table shows 3 and 9)"
+stated_limitations: >
+  Weights for CH selection (w1-w4) are determined by trial and error rather than an optimization
+  algorithm; the paper suggests future work could use Particle Swarm Optimisation for weight
+  selection. Clustering builds chains separately per cluster rather than solving the problem as a
+  multiple traveling salesman problem (suggested as future improvement to further minimize chain
+  length). Only homogeneous networks with static nodes and static base station were studied;
+  heterogeneous networks and mobility of nodes/base station are noted as unexplored future work.
+citation_fields:
+  bibkey: somauroo2019energy
+  authors_bibtex: "Somauroo, Aaqil and Bassoo, Vandana"
+  title: "Energy-efficient genetic algorithm variants of PEGASIS for 3D Wireless Sensor Networks"
+  year: 2019
+  journal_or_booktitle: Applied Computing and Informatics
+  volume: 19
+  number: "3/4"
+  pages: 186-208
+  doi: 10.1016/j.aci.2019.07.002
+  publisher: Emerald Publishing Limited

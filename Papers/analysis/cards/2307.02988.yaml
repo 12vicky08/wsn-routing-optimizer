@@ -1,0 +1,77 @@
+source_file: 2307.02988.pdf
+title: "UAV Swarms for Joint Data Ferrying and Dynamic Cell Coverage via Optimal Transport Descent and Quadratic Assignment"
+authors: Kai Cui; Lars Baumgärtner; Burak Yilmaz; Mengguang Li; Christian Fabian; Benjamin Becker; Lin Xiang; Maximilian Bauer; Heinz Koeppl
+venue_year: "arXiv preprint (arXiv:2307.02988v1 [cs.NI]), 2023"
+problem: >
+  In crisis scenarios where standard communication infrastructure is unavailable, a limited
+  number of UAVs must jointly provide delay-tolerant networking (DTN) data ferrying for
+  large amounts of low-priority data and dynamic cellular coverage (reserved for
+  high-priority/emergency traffic) to potentially mobile ground users, using only a
+  resource-constrained swarm.
+approach: >
+  Joint data ferrying and cell coverage algorithm combining: (1) an optimal-transport-based
+  cell coverage formulation with capacity constraints, solved via an alternating minimization
+  (AM) algorithm (Algorithm 1) that tracks dynamic capacity-constrained user clusters with
+  UAVs, using the POT (Python Optimal Transport) library; and (2) inter-cluster DTN data
+  ferrying via periodic UAV rotation between clusters, formulated as a quadratic assignment
+  problem (QAP) and solved either via a TSP-based rotation (minimizing distance travelled,
+  solved with OR-Tools) or a delay-optimized "binary-jumping" rotation (solved via a custom
+  genetic algorithm with cycle crossover, Algorithm 3). The two components are combined into
+  a synchronous joint algorithm (Algorithm 2).
+sink_mobility: controlled/optimized-trajectory
+routing_clustering_scheme: >
+  Cell/user clustering via optimal-transport-based alternating minimization with capacity
+  constraints (medoid-restricted, generalizing capacitated k-means/k-medoids); DTN message
+  routing within/between clusters uses epidemic flooding over WiFi; inter-cluster UAV
+  rotation scheduling solved as TSP (OR-Tools) or QAP via genetic algorithm (binary-jumping).
+simulator: >
+  Custom Python implementation (NumPy, POT library, OR-Tools) for coverage/ferrying
+  optimization; The ONE simulator (DTN protocol evaluation) for epidemic-flooding message
+  delivery; BonnMotion for generating mobility traces (RWP, SMOOTH, SLAW models).
+node_count: >
+  Default scenario: M=100 ground users, N=10 UAVs. Scalability/parameter sweeps tested
+  M in {100, 300, 600, 1000} ground users and varying N (UAVs), e.g. N up to ~20 in Fig. 6/7
+  and larger ranges in the scalability runtime plot (Fig. 8). Real-world demo used 4
+  nano-quadrotor UAVs.
+area: "8 km x 8 km (X = [-4 km, 4 km]^2)"
+energy_model: >
+  No explicit radio/battery energy-dissipation model is used; energy cost is proxied by
+  total distance travelled by UAVs (Dtot), computed from the Frobenius inner product of a
+  distance matrix D and rotation weight matrix W (Eq. 11, 13), given UAV velocity v = 20 m/s.
+metrics_reported:
+  - "Average time to delivery (TTD) for DTN messages, in seconds"
+  - "Probability of delivery (p_deliver) - probability a message reaches its recipient by end of scenario"
+  - "Time-averaged cell coverage (c-bar), fraction of users covered"
+  - "Total distance travelled by UAVs (Dtot), in km"
+  - "Algorithm wall-clock runtime for 100 epochs, in seconds (scalability evaluation)"
+key_numeric_results:
+  - "Table I default parameters: area [-4km,4km]^2; UAV velocity v=20 m/s; time interval dT=10s; rotation interval Trot=6*dT; total time Ttot=12h; N=10 UAVs; M=100 ground users; capacity ratio R=1.3; cell coverage range r=1km; AM iterations N_AM=4; GA iterations N_GA=100; GA generation size k=100; DTN wireless range r_DTN=100m; DTN transmit speed v_DTN=6570 kB/s; DTN buffer size b_DTN=20MB; DTN message interval T_DTN=10s; DTN message size m_DTN=25kB; DTN TTL t_DTN=300 min."
+  - "Table II performance comparison (95% CI): TSP-based rotation: TTD=4146s±310s, p_deliver=0.831±0.003, coverage c-bar=0.77±0.03, Dtot=3055km±164km."
+  - "Binary-jumping: TTD=4206s±305s, p_deliver=0.831±0.003, coverage c-bar=0.781±0.029, Dtot=2663km±147km."
+  - "Circular heuristic baseline: TTD=5088s±412s, p_deliver=0.817±0.006, coverage c-bar=0.495±0.014, Dtot=7233km±10.3km."
+  - "RWP heuristic baseline: TTD=4677s±359s, p_deliver=0.825±0.005, coverage c-bar=0.505±0.012, Dtot=8276km±1.36km."
+  - "No UAVs baseline: TTD=7124s±770s, p_deliver=0.747±0.02 (coverage/distance not applicable)."
+  - "Binary-jumping performs best overall; TSP-based rotation slightly improves TTD over binary-jumping (within confidence interval, not definitive); binary-jumping excels in distance travelled."
+  - "Theoretical time complexity O(max(N,M)^3) with empirical complexity O(max(N,M)^2) for optimal transport step (Algorithm 1); O(N^2) for medoid computation; QAP fitness evaluation O(N log N)."
+  - "Scenarios simulated for 43200 s (12 hours), with 100 ground nodes, 10 movement traces per mobility model (RWP, SMOOTH, SLAW) generated via BonnMotion."
+  - "Runtime benchmark (Fig. 8) measured on a 2.4 GHz Quad-Core Intel Core i5 for 100 epochs, stated to remain significantly below 100*dT (i.e., feasible for real-time online use) and scales close-to-linearly with N and M."
+stated_limitations: >
+  Author-acknowledged limitations (Conclusion, Sec. VII, and scalability discussion, Sec. V-B):
+  the approach remains agnostic to actual user mobility/behavior (future work could exploit
+  known/predicted user mobility); battery levels of UAVs are not modeled (future work could
+  add a recharging cluster); the effect of unknown user locations is not addressed (future
+  work could use mean-field limits); the current algorithm implementation is not parallelized,
+  so runtime could be further improved via parallelization and code optimization; for the
+  binary-jumping QAP, TTD improvement over TSP-based rotation was not statistically definitive
+  given the confidence intervals.
+citation_fields:
+  bibkey: cui2023uavswarms
+  authors_bibtex: "Cui, Kai and Baumgärtner, Lars and Yilmaz, Burak and Li, Mengguang and Fabian, Christian and Becker, Benjamin and Xiang, Lin and Bauer, Maximilian and Koeppl, Heinz"
+  title: "UAV Swarms for Joint Data Ferrying and Dynamic Cell Coverage via Optimal Transport Descent and Quadratic Assignment"
+  year: 2023
+  journal_or_booktitle: "arXiv preprint arXiv:2307.02988"
+  volume: unknown
+  number: unknown
+  pages: unknown
+  doi: unknown
+  publisher: unknown

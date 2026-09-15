@@ -1,0 +1,833 @@
+Int. J. Advanced Intelligence Paradigms, Vol. 18, No. 1, 2021                               3
+
+
+Distributed genetic algorithm for lifetime coverage
+optimisation in wireless sensor networks
+
+         Ali Kadhum Idrees*
+         Department of Computer Science,
+         University of Babylon,
+         Babylon, Iraq
+         Email: ali.idrees@uobabylon.edu.iq
+         *Corresponding author
+
+
+         Wathiq Laftah Al-Yaseen
+         Kerbala Technical Institute,
+         Al-Furat Al-Awsat Technical University,
+         56001, Kerbala, Iraq
+         Email: inkr.wth@atu.edu.iq
+
+         Abstract: In this paper, a protocol called distributed genetic algorithm for
+         lifetime coverage optimisation (DiGALCO) is suggested to preserve the
+         coverage and enhance the lifetime of a wireless sensor network (WSN).
+         DiGALCO combines three energy-efficient schemes: virtual network
+         subdivision into subfields, distributed cluster head selection in each subfield,
+         followed by sensor activity scheduling-based genetic algorithm (GA)
+         optimisation performed by each cluster head. DiGALCO works into rounds.
+         Each round consists of three phases: discovery, cluster head selection and GA
+         decision and sensing. The decision process, which results in an activity
+         scheduling vector, is achieved by a cluster head node through executing the GA
+         to pick out a set of sensors staying active for monitoring through the current
+         sensing round. In comparison with other protocols, several experimental results
+         were done by using OMNeT++ network simulator show that DiGALCO is
+         capable of prolonging the lifetime of WSN and gives enhanced coverage
+         performance.
+
+         Keywords: wireless sensor networks; WSN; coverage; network lifetime;
+         genetic algorithm; scheduling.
+
+         Reference to this paper should be made as follows: Idrees, A.K. and
+         Al-Yaseen, W.L. (2021) ‘Distributed genetic algorithm for lifetime coverage
+         optimisation in wireless sensor networks’, Int. J. Advanced Intelligence
+         Paradigms, Vol. 18, No. 1, pp.3–24.
+
+         Biographical notes: Ali Kadhum Idrees received his BSc and MSc in
+         Computer Science from the University of Babylon, Iraq in 2000 and 2003
+         respectively. He received his PhD in Computer Science (wireless networks) in
+         2015 from the University of Franche-Comte (UFC), France. He is currently an
+         Assistant Professor in Computer Science at the University of Babylon, Iraq. He
+         has several research papers in wireless sensor networks (WSNs) and computer
+         networks. His research interests include wireless networks, WSNs, SDN,
+         IoT, distributed computing, data mining and optimisation in communication
+         networks.
+
+
+Copyright © 2021 Inderscience Enterprises Ltd.
+4        A.K. Idrees and W.L. Al-Yaseen
+
+         Wathiq Laftah Al-Yaseen is currently a Lecturer in the Department of
+         Computer Systems Techniques at Kerbala Technical Institute in Al-Furat
+         Al-Awsat Technical University, Kerbala, Iraq. He received his Master of
+         Computer Science from the University of Babylon, Iraq. He received his
+         PhD of Computer Science from FTSM/UKM, Malaysia. His research
+         interests include artificial intelligence, network security, machine learning and
+         bioinformatics.
+
+
+
+
+1   Introduction
+
+The advances in the micro-electronics and wireless communications technologies have
+led to emergence of a new type of networks: wireless sensor networks (WSNs). This type
+of networks consists of a large tiny low-cost devices (called sensors) deployed in the area
+of interest to be monitored. A sensor node can sense, process and forward data over a
+wireless communication to a sink node. WSNs can be used in several applications like
+smart agriculture, healthcare, nature environment protection, transportation, smart cities,
+military, etc. (Akyildiz et al., 2002; Yick et al., 2008). WSN represents as one of the most
+important technologies for the future (Rawat et al., 2014). The coverage problem is one
+of the essential research topics in WSNs (Fan and Jin, 2010). In WSNs, the quality of
+service (QoS) of the sensing task is measured by coverage. The coverage refers to how
+well the area of interest is monitored by the deployed nodes with a minimum amount of
+energy (Zhu et al., 2012). In the published literature, three types of coverage can be found
+(Ghosh and Das, 2008). Area coverage is to cover all the area of interest. Target coverage
+is to cover a limited number of points or targets in the area of interest. The main objective
+of barrier coverage is to detect an event when it try to cross a barrier such as intrusion
+detection or border surveillance. This article focuses on the area coverage.
+     It is beneficial to deploy a large number of sensors in the sensing field because of the
+limited life of sensor node and the difficulty of replacing the batteries in remote
+environments. WSN can exploit the redundant sensors to extend the network lifetime. In
+dense WSN, it is unnecessary to turn on all sensors at the same time. The WSN lifetime
+would be reduced if all the sensor nodes are turned on at a time. Scheduling scheme is
+required to put some sensors in an active state to provide sensing services and put other
+sensors in a sleep state to save power thus increase the lifetime of WSN. The main
+advantages of scheduling the sensors are to activate a less number of sensors, increase the
+battery life of the sensor node, decrease the collision on the channel and extend the WSN
+lifetime (Yu et al., 2012).
+     This paper makes the following contributions:
+1   The work presented in this article concentrates on the area coverage problem,
+    with the aim of improving the lifetime of WSN by using an energy-efficient
+    scheduling-based genetic algorithm (GA) optimisation. The proposed protocol is
+    called distributed genetic algorithm for lifetime coverage optimisation (DiGALCO),
+    conserves the coverage and extends the lifetime of WSNs. DiGALCO protocol relies
+    on the framework of the distributed lifetime coverage optimisation (DiLCO) protocol
+    (Idrees et al., 2015). The main idea of this framework is to exploit spatial and
+    temporal subdivision. The sensing field is virtually partitioned into smaller subfields.
+         Distributed genetic algorithm for lifetime coverage optimisation                   5
+
+    After that, the lifetime is subdivided into rounds inside each subfield. This way of
+    grouping of sensor nodes is similar to clustering. Inside each subregion, the sensor
+    nodes cooperate with each other to select the cluster head which will apply the GA to
+    provide the best representative set of sensor nodes to take the responsibility of
+    sensing during the current round. DiGALCO protocol uses a distributed efficient
+    way to select the cluster head inside the subfield.
+2   DiGALCO protocol uses a GA instead of optimisation solver in order to schedule
+    nodes’ activities periodically inside the subregion. The coverage problem
+    formulation is modified to consider nodes centres instead of the primary points
+    during solving the optimisation problem.
+3   The discrete event simulator OMNeT++ is used to conduct the experimental results
+    to illustrate the efficiency of DiGALCO protocol. The DiGALCO protocol has been
+    compared to four methods found in the related works: DESK (Vu et al., 2006), GAF
+    (Xu et al., 2001), DiLCO protocol published in Idrees et al. (2015) and also to the
+    PeCO protocol (Idrees et al., 2016). DiLCO and PeCO use the same framework as
+    DiGALCO but they are relayed on GLPK optimisation solver for sensor scheduling.
+The rest of this article is organised as follows. Section shows the related literature in the
+field. Section 3 is allocated to DiGALCO protocol illustration. Section 4 exhibits the
+experimental results conducted using OMNeT++ simulator (Varga, 2003). Finally, we
+provide conclusion and future works in Section 5.
+
+
+
+2   Related works
+
+Recently, the coverage problem has been received a high attention, which concentrates on
+how the physical space could be well monitored after the deployment. Coverage is one of
+the QoS parameters in WSNs, which is highly concerned with power depletion Zhu et al.
+(2012). The related works of the coverage problem are summarised in this section and the
+shortcomings of reviewed approaches are being summarised.
+    Xu et al. (2001) proposed a geography-informed energy saving routing algorithm for
+ad hoc network, called GAF. In this algorithm, nodes use geographic information of
+location to partition the sensing field into fixed small cells. Each cell remains with a
+constant size. Every sensor inside a cell has two states either sleep or listen. There is only
+one sensor node stays awake within each fixed cell in order to perform the data sensing
+and communication tasks. The GPS is used by each sensor node to join itself with a
+certain cell. Vu et al. (2006) introduced a distributed energy-efficient scheduling
+algorithm for K-coverage in WSNs, called DESK. DESK operates into rounds. The
+algorithm requires only onehop neighbour information. With DESK, every sensor
+determines its state (Sleep or Active) depending on the perimeter coverage model that
+presented by Huang et al. (2005).
+    Li et al. (2011) presented a framework to convert any complete coverage problem to
+an incomplete coverage with a certain ratio of coverage by means of executing an
+algorithm to provide sets with a complete coverage and converting the sets of full
+coverage to sets of partial coverage via modifying the range of sensing. Özdemir et al.
+(2013) employ a recently developed multiobjective optimisation algorithm, named
+6        A.K. Idrees and W.L. Al-Yaseen
+
+multi-objective evolutionary algorithm based on decomposition (MOEA/D) to maintain
+the coverage and save the energy simultaneously in WSNs. The aim of the work
+presented by Rebai et al. (2014) is to provide a full coverage for a grid by spreading the
+required sensor nodes whilst preserving connectivity between the sensor nodes and a
+sink. A branch and bound (B&B) method is proposed to optimally resolve this problem.
+Mostafaei and Shojafar (2015) presented a new and effective approach for cover set
+generation depending on imperialist competitive algorithm (ICA). In order to observe all
+the targets in the sensing field, the sensors that have to be chosen in several cover sets are
+determined by ICA.
+    A learning automata approaches are introduced in the works (Mostafaei and Meybodi,
+2013; Mohamadi et al., 2013; Mostafaei et al., 2015) to treat the problem of coverage in
+sensor networks. In order to extend the lifetime of the sensor network, the nodes are
+scheduled in several sets to cover the sensing field. Amgoth and Jana (2015) suggested an
+algorithm named distributed energy and coverage-aware routing (DECAR) to monitor the
+sensing field for the longest time as possible in the WSNs. Effective clustering and
+cluster head election approaches are used by the algorithm for routing. Bara’a et al.
+(2015), the authors introduce a multiobjective disjoint reliable sensor covers problem
+(DRSC). Two multiobjective metaheuristic approaches (called MOEA/D and NSGAII)
+are used to deal with this problem. They suggested using one heuristic approach instead
+of the crossover and mutation operators. The heuristic method incorporates in its
+mechanism a problem-specific knowledge. Results show that the positive effect of
+suggested heuristic method on the total performance of applied MOEAs. Abdulhalim and
+Bara’a (2015) presented a multi-layer metaheuristic approach to maximise the set covers
+number and minimise the overall number of nodes utilised by every set cover. The
+reliability of coverage of every cover set is improved by using postheuristic operator that
+receive the result of the multi-layer GA.
+    Idrees et al. (2015) suggested a new protocol named DiLCO to save the energy and
+keeps the coverage in WSNs. DiLCO represents an improvement on the previous work
+introduced by Idrees et al. (2014). DiLCO protocol is based on two stages. The sensing
+field is virtually divided into smaller subregions in the first stage whilst the DiLCO
+protocol is distributed inside every node in the network in the second stage. The proposed
+protocol performs an election method to select the leader in each small subregion. After
+that, the sensor node leader executes an optimisation solver for resolve the node activity
+scheduling optimisation to select the best group of nodes that provide a good coverage
+and improve the WSN lifetime. DiLCO is periodic and it includes four steps: exchange of
+information, selection of the leader, sensor schedule production decision and monitoring.
+The simulation results illustrate that DiLCO provides better performance compared with
+other existing methods. Idrees et al. (2016) presented a new protocol named PeCO that
+based on a new proposed coverage optimisation model. PeCO protocol uses an integer
+program to provide an optimal sensor schedule based on the perimeter coverage model
+and instead of using points as in DiLCO. The results show that PeCO can improve the
+network lifetime and maintain the coverage for a longest time compared with other
+methods.
+    Several algorithms to maintain the coverage and maximise the network lifetime were
+proposed in Cardei and Wu (2006), Wang (2011), Zhu et al. (2012), Valera et al. (2014),
+Liang et al. (2014) and Sangwan and Singh (2015).
+         Distributed genetic algorithm for lifetime coverage optimisation                7
+
+2.1 Shortcomings
+In spite of many energy efficient protocols for maintaining the coverage and improving
+the network lifetime in WSNs were proposed, non of them ensure the coverage for the
+sensing field with optimal minimum number of active sensor nodes and for a long time.
+For example, in a full centralised algorithm, optimal solutions can be given by using
+optimisation approaches, but in the same time, a high energy is consumed due to
+algorithm execution time and the communications among the sensors in the sensing field.
+Therefore, the full centralised approaches are not good candidate to use them especially
+in large WSNs. Whilst, a full distributed algorithms can not give optimal solutions
+because they use only local information of the neighbouring sensors, but in the same
+time, the energy consumption during the communications and executing the algorithm is
+highly lower. Whatever the case, this would result in a shorter lifetime coverage in
+WSNs.
+
+2.2 Our protocol
+
+In this article, DiGALCO in WSNs, called DiGALCO is suggested. The sensing field is
+partitioned into small subregions and a DiGALCO protocol is distributed in each sensor
+in the subregion. The WSN lifetime in each subregion is divided into rounds, each round
+includes three stages: Discovery, Cluster election, sensor node activity scheduling-based
+GA optimisation and sensing. The cluster heads are elected in an independent,
+asynchronous and distributed way in all the subregions of the WSN. After that, energy-
+efficient activity scheduling mechanism-based GA optimisation is performed by each
+cluster head in the subregions. GA optimisation is based on the sensor nodes centres in
+order to produce the optimal cover set of active sensor nodes, which are responsible of
+sensing during the current round. DiGALCO protocol merges and uses the main
+advantages of the centralised and distributed approaches and avoids the most of their
+disadvantages.
+
+
+
+3   DiGALCO protocol description
+
+In this section, DiGALCO protocol is presented that distributed in each sensor node in
+the network. It is based on three energy-efficient techniques: virtual network subdivision,
+cluster head election and sensor activity scheduling-based GA optimisation for ensuring
+sensing coverage while minimising energy consumption, applied periodically to
+efficiently improve the network lifetime.
+
+3.1 Network model
+
+The homogeneous static sensor nodes are deployed in a uniform and random way in the
+area of interest. The communication range (Rc) and sensing range (Rs) are the same for all
+the sensor nodes. Each sensor node started with a different level of energy. The sensor
+network is dense to guarantee a full coverage for the sensing field. Every sensor node
+determines its position based on a software (localisation algorithm) or hardware (GPS)
+8          A.K. Idrees and W.L. Al-Yaseen
+
+unit. Furthermore, The sensing field is subdivided in a uniform way and the nodes are
+localised uniformly over the field. If the distance between two sensor nodes less than or
+equal to 2Rs, Then they are called neighbours. The sensor disk model is used by both
+sensing and communication ranges.
+
+3.2 Protocol idea
+DiGALCO protocol is based on two steps. The sensing field is partitioned uniformly into
+smaller virtual subregions in the first step (Idrees et al., 2015). Second, DiGALCO
+protocol is then distributed and executed simultaneously in each sensor node in each
+subregion. Figure 1 shows proposed DiGALCO protocol.
+
+Figure 1    Proposed DiGALCO protocol (see online version for colours)
+
+
+
+
+As in the DiLCO protocol Idrees et al. (2015), DiGALCO protocol uses the same two
+packets during its implementation: INFO packet used for information exchange among
+sensor nodes and ActiveSleep packet used to inform sensor nodes to go Sleep or to
+remain Active during the monitoring time. Furthermore, every node in the network can
+be in one of the following five possible states: computation (sensor applies the
+optimisation process), active, sleep, listening and communication (transmitting or
+receiving packet). Figure 1 shows that the proposed DiGALCO protocol lifetime is
+divided into rounds, where each round is consists of three phases: discovery, cluster head
+election and sensor node activity scheduling-based GA optimisation, as well as
+monitoring. For each round, there will be only one schedule of sensor nodes responsible
+for monitoring the sensing field. This periodic scheduling is useful due to enhancement
+the robustness of the network against sensor node failures Idrees et al. (2015). The
+flowchart of DiGALCO protocol executed in each sensor node is presented in Figure 2.
+    As shown in Figure 2, if remaining power of sj ≥ Eth (the minimum power required by
+the sensor to remain active for one round). Then, the sensor node will send and receive
+information packets to and from other nodes in the subregion. This packet contains sensor
+id, position and resedual power (REj). Once the first phase is completed, each sensor node
+in the subregion apply cluster head election procedure to elect the cluster head of the
+current subregion. Each sj in the subregion applying equation (1) and for each sensor k, k
+ Nj, where Nj is the overall nodes number in the subregion. The node will has a weight
+wk to every node k in the subregion. The node k that has the maximum weight wk will be
+elected as a head of cluster for this round. All the sensor nodes in the subregion will
+apply the same equation (1) and they will have the same winner as cluster head for the
+            Distributed genetic algorithm for lifetime coverage optimisation                9
+
+subregion. After that, if the sensor node is cluster head, it will apply a GA to produce the
+best schedule for the current round (see Section 3.4).
+
+             REk                 d (k , i)   
+      wk    *   
+             Emax 
+                        *
+                            iN j 
+                                      1            z
+                                         2 * Rs   
+                                                                                          (1)
+                                                 
+
+           ID 
+      z   k  * δ ,     1, k  N j , and δ  0.005
+           Nj 
+
+      d (k , i)           xk  xi 2   yk  yi 2                                     (2)
+
+As soon as the GA execution is terminated, the optimal sensor schedule is produced. The
+cluster head will send an ActiveSleep packet to each node in the subregion to inform it its
+new status. If the node does not represent a cluster head, it waits for ActiveSleep packet
+to change its status during monitoring time.
+
+3.3 Coverage problem definition
+In this section, the problem of coverage is mathematically modelled. The following
+notations are used throughout the section. In a subregion R, a set S of sensor nodes
+S = {s1, s2, …, si, …, sS N }, a set C of sensors centres C = {c1, c2, …, cj, …, cS N } and a
+set of alive sensors A  S, A = {s1, s2, …, sk, …, sS A }. Find the best representative sensor
+node set X, X = {x1, x2, …, xk, …, xS A }, that cover all the sensors centres in the subregion
+R with the minimum number of nodes in order to enhance the coverage lifetime of WSN.
+               1 if node centre j is covered by node k ,
+      Yk , j                                                                            (3)
+               0 otherwise.
+           1 if node k is Active,
+      Xk                                                                                (4)
+           0 otherwise.
+               SA
+      ¡j     Y  X 
+               k 1
+                           k, j   k                                                       (5)
+
+Hence, the problem of lifetime coverage optimisation is modelled as follow.
+              SN
+      min     ¡
+              j1
+                      j                                                                   (6)
+
+
+Subject to
+       SA
+
+        Y  X   1 j  S
+       k 1
+               k, j        k                 N                                            (7)
+
+      X k  {0, 1}, k  S A                                                              (8)
+
+      ¡ j  N , j  S N                                                                  (9)
+10         A.K. Idrees and W.L. Al-Yaseen
+
+Figure 2    The flowchart of DIGALCO protocol (see online version for colours)
+         Distributed genetic algorithm for lifetime coverage optimisation               11
+
+3.4 GA for lifetime coverage optimisation
+Metaheuristics are a generic search strategies for exploring search spaces for solving the
+complex problems. These strategies have to dynamically balance between the
+exploitation and the exploration in both the stored experience of search and the space of
+search respectively. The solutions with the best quality can be determined in the space of
+search by using this balancing. They prevent consume a long time in the areas of the
+space of search that are searched or do not produce solutions with the best quality.
+Therefore, in order to solve the problem of optimisation and produce a good solution, the
+metaheuristic approach is the best candidate, especially with inadequate information or
+limited capacity of processing (Bianchi et al., 2009). GA is one of the population-based
+metaheuristic approaches that simulates the process of natural selection (Hassanien et al.,
+2015). GA starts with a population of random candidate solutions (called individuals or
+phenotypes). GA uses genetic operators inspired by natural evolution, such as selection,
+mutation, evaluation, crossover and replacement so as to improve the initial population of
+candidate solutions. This process repeated until a stopping criterion is satisfied. Since
+integer linear programming is NP-hard; (Sherali and Driscoll, 2000), many problem
+instances are complicated and so heuristic methods must be used instead. GA is a
+metaheuristic technique suitable to solve NP-hard problems and provide approximate
+solutions. In comparison with optimisation solvers, GA provides a near optimal solution
+with acceptable execution time, as well as it requires a less amount of memory especially
+for large size problems. Optimisation solvers provide optimal solution, but they require
+higher execution time and amount of memory for large problem.
+     In this section, we present a metaheuristic-based GA to solve proposed lifetime
+coverage optimisation problem. The proposed GA provides a near optimal schedule for
+sensing per round. The proposed GA is based on the mathematical model which is
+presented in Section 3.3. Algorithm 1 shows the proposed GA to solve the coverage
+lifetime optimisation problem. The new protocol which is based on GA in the decision
+phase is named as DiGALCO. The proposed GA can be explained in more details as
+follow.
+     The GA algorithm can be explained in more detail as follow:
+1   Representation: Since the proposed GA’s goal is to find the optimal (or near optimal)
+    schedule of the sensor nodes which takes the responsibility of monitoring the
+    subregion R in the next phase, a chromosome is defined as a schedule for SA sensor
+    nodes and each chromosome contains SA genes. Therefore, the gene of such a
+    chromosome is the schedule of a sensor. In other words, the genes corresponding to
+    active nodes have the value of one, the others are zero. Figure 3 shows solution
+    representation in the proposed GA.
+2   Initialise population: The initial population is randomly generated and each
+    chromosome in the GA population represents a possible sensors schedule solution to
+    cover the entire subregion.
+3   Compute ¡ j and penality function Pj: After creating the initial population, each
+    individual ind compute the parameters ¡ ind
+                                             j  and Pjind [see equations (10) and (11)]
+    so as to use them in the next step.
+12        A.K. Idrees and W.L. Al-Yaseen
+
+            0
+                                                              Y  X   0,
+                                                              SA
+                                                                     ind    ind
+                                                      if            k, j   k
+                                                              k 1
+       ¡j  
+        ind
+                                                                                           (10)
+                  k 1  Ykind, j  X kind  otherwise.
+                         SA
+            
+            
+
+                S
+                                     Y  X   0,
+                                     SA
+                                                ind     ind
+                    N         if
+       Pjind                       k 1       k, j    k
+                                                                                           (11)
+                0           otherwise.
+
+4    Evaluate population: After creating the initial population, each individual is
+     evaluated and assigned a fitness value according to the fitness function that
+     illustrated in equation (12). In the proposed GA, the optimal (or near optimal)
+     candidate solution, is the one with the minimum value for the fitness function. The
+     lower the fitness values been assigned to an individual, the better opportunity it get
+     survived. In the proposed work, the function rewards the decrease in the sensor
+     nodes which cover the same sensor centre and penalises the decrease to zero in the
+     sensor nodes which cover the sensor centre.
+                  SN
+       F ind    ¡  P 
+                  j 1
+                               ind
+                                j
+                                          ind
+                                          j                                                (12)
+
+
+5    Selection: In order to generate a new generation, a portion of the existing population
+     is elected based on a fitness function that ranks the fitness of each candidate solution
+     and preferentially select the best solutions. A best individual selection (BIS) is used
+     by the proposed GA. By using BIS, a best two individuals are selected from the
+     current population based on fitness values of individuals. The selected best two
+     individuals sent to the mating pool.
+6    Crossover: Crossover is a genetic operator used to take more than one parent
+     solutions and produce a child solution from them. If crossover probability Pc is
+     100%, then the crossover operation takes place between two individuals. If it is 0%,
+     the two selected individuals in the mating pool will be the new chromosomes without
+     crossover. In the proposed GA, a two-point crossover is used. The two-point
+     crossover is explained in Figure 4.
+7    Mutation: Mutation is a divergence operation which introduces random
+     modifications. The purpose of the mutation is to maintain diversity within the
+     population and prevent premature convergence. Mutation is used to add new genetic
+     information (divergence) in order to achieve a global search over the solution search
+     space and avoid to fall in local optima. The mutation operator in the proposed GA
+     works as follow: If mutation probability Pm is 100%, then the mutation operation
+     takes place on the new individual. Two different indices are selected randomly
+     within the schedule solution. After that, the contents of the positions are exchanged.
+     If mutation probability Pm is 0%, then the mutation operation does not take place.
+8    Before evaluating each new individual, update ¡ind 1 , Pind1, ¡ind 2 , and Pind2 of
+     Childind1 and Childind2 respectively using equations (10) and 11.
+              Distributed genetic algorithm for lifetime coverage optimisation         13
+
+9       Evaluate new individuals: After updating the parameters ¡ j and Pj, each new
+        individual is evaluated using equation (12).
+10 Replacement: After evaluation of new children, Triple Tournament Replacement
+   (TTR) will be applied for each new individual. In TTR strategy, three individuals are
+   selected randomly from the population. Find the worst from them and then check its
+   fitness with the new individual fitness. If the fitness of the new individual is better
+   than the fitness of the worst individual, replace the new individual with the worst
+   one. Otherwise, the replacement is not done.
+11 Stopping criteria: The proposed GA ends its execution as soon as one of two
+   stopping criteria is reached, which make use of two parameters, called MaxIter and
+   MaxMinFit respectively. The MaxIter parameter refers to a maximum number of
+   iterations that performed by the GA. The MaxMinF it is met when the maximum
+   fitness value in the population is equal to the minimum fitness value. The best
+   solution will be chosen as a schedule of sensor nodes for the sensing phase in the
+   current round.
+Algorithm 1 GA(sj)
+
+    Input: Spop, Pc, Pm and SA
+    Output: X = {x1, x2, …, xk, …, xS A }, the schedule of sensor nodes
+
+    foreach Individual ind  Spop do
+       Generate Randomly Chromosome X;
+       Compute ¡ ind and Pind;
+       Evaluate Individual Xind;
+    end
+    while Stopping criteria is not satisfied do
+       Selection (ind1, ind2);
+       Crossover
+       (Pc, Xind1, Xind2, Childind1, Childind2);
+       Mutation (Pm, Childind1, Childind2);
+       Update ¡ind 1 and Pind1 of Childind1;
+       Update ¡ ind 2 and Pind2 of Childind2;
+       Evaluate New Individuals Childind1 and Childind2;
+       Replacement (Childind1, Childind2);
+    end
+    {(X1, …, Xk, …, xS A )} = Select Best Solution
+    (Spop);
+    return X;
+14         A.K. Idrees and W.L. Al-Yaseen
+
+Figure 3    Solution representation by the proposed GA, (a) sensors status inside the subregion
+            (b) candidate solution represented by chromosome for the sensors in (a) (see online
+            version for colours)
+
+
+
+
+                                                (a)
+
+
+
+
+                                                (b)
+
+
+Figure 4    Two-point crossover (see online version for colours)
+
+
+
+
+4    Performance evaluation and analysis
+
+The performance of DiGALCO protocol is evaluated by achieving several experiments
+using OMNeT++ network simulator (Varga, 2003). Table 1 illustrates the parameters
+used in this simulation.
+    Fifty executions are achieved using various WSN topologies. The introduced results
+are an average of these 50 executions. Five network sizes (100 to 300 nodes) are used by
+           Distributed genetic algorithm for lifetime coverage optimisation            15
+
+the simulations. The nodes are deployed in a controlled way over a sensing field of
+(50 × 25) m2 to ensure initial full coverage with current sensing range. The sensing field
+of WSN is assumed to be partitioned into 16 regular subregions and the proposed
+protocol used the same energy model that explained in Idrees et al. (2015).
+Table 1      Parameters used during the simulations
+
+ Parameter                                               Value
+ Sensing field                                        (50 × 25) m2
+ Nodes number                            100, 150, 200, 250 and 300 nodes
+ Initial energy                                  500–700 Joules
+ Sensing period                                       60 minutes
+ Ethr                                                  36 Joules
+ Rs                                                       5m
+ Rc                                                      10 m
+ Pc                                                      0.95
+ Pm                                                       0.5
+ MaxIter                                                 1,000
+ Spop                                                     50
+
+Each sensor node initialised its power randomly within the range [500–700]. In the
+experimentations, the same performance metrics that used by Idrees et al. (2015) are used
+to evaluate the efficiency of DiGALCO protocol. These metrics are coverage ratio (CR),
+active sensors ratio (ASR), network lifetime and energy consumption. Besides
+DiGALCO, four other methods are used for the purpose of comparison. These methods
+are DESK (Vu et al., 2006), GAF (Xu et al., 2001), DiLCO protocol (Idrees et al., 2015)
+and PeCO protocol (Idrees et al., 2016). The same framework is used by DiGALCO,
+PeCO and DiLCO protocols. These protocols are used different mathematical models and
+optimisation approaches so as to provide the best schedule of sensor nodes for monitoring
+in the sensing phase. DiLCO protocol attempts to ensure the full area coverage by
+covering a set of points in the sensing field. PeCO protocol tries to provide a certain
+coverage level for every sensor perimeter. DiLCO and PeCO used an integer program
+that implemented by the GLPK optimisation solver. DiGALCO protocol attempts to fulfil
+the coverage of centre points of sensor nodes. DiGALCO protocol uses GA to optimise
+both coverage and network lifetime.
+
+4.1 Coverage ratio
+The average ratio of coverage of the five protocols for 200 nodes is shown in Figure 5.
+For the first rounds, DESK, GAF and DiLCO produce a lightly better ratio of coverage
+(with respectively 99.99%, 99.91% and 99.02%), in comparison with the (98.76% and
+97.88%) provided by PeCO and DiGALCO respectively. The reason behind this is that
+DiGALCO, PeCO and DiLCO turn off a larger number of redundant nodes compared
+with GAF and DESK protocols. After the round 33th, DiGALCO protocol gives better
+coverage performance compared with other approaches and maintains a level of coverage
+bigger than 80% for a larger number of rounds. This increased performance of coverage
+caused by a large amount of saved energy by DiGALCO in the first rounds.
+16         A.K. Idrees and W.L. Al-Yaseen
+
+4.2 Active sensors ratio
+In each round, it is necessary to decrease the active nodes number in order to conserve a
+large amount of power and consequently to maximise the WSN lifetime. Figure 6
+exhibits the ratio of average active nodes for 200 deployed nodes. In the first fourteen
+rounds, DESK and GAF activate 30.36 % and 34.96 % nodes whilst DiLCO, PeCO and
+DiGALCO activate 17.92 %, 20.16 % and 19.64 % active sensor nodes respectively.
+DiGALCO protocol activates a higher nodes number when the rounds number increases
+compared with PeCO, DESK and GAF in order to provide a higher level of coverage as
+displayed in Figure 5.
+
+Figure 5    CR for 200 deployed nodes (see online version for colours)
+
+
+
+
+4.3 Energy consumption
+This section presents the impact of energy consumed by the network during the different
+status of sensor nodes (such as communication, computation, listening, active and sleep
+status) for various WSN sizes and the comparison with other approaches is investigated.
+Figures 7(a) and 7(b) exhibit the consumed energy for various WSN sizes and for
+Lifetime95 and Lifetime50. The comparison illustrates the superiority of DiGALCO in the
+power saving. The two figures show the reduced consumption of energy by DiGALCO
+compared with other approaches. When the network size is greater than 200 nodes, the
+consumed energy is the lowest with PeCO for Lifetime50.
+           Distributed genetic algorithm for lifetime coverage optimisation           17
+
+Figure 6    ASR for 200 deployed nodes (see online version for colours)
+
+
+
+
+4.4 Network lifetime
+The comparison results show that DiGALCO and DiLCO provide a better lifetime
+improvement for Lifetime95, whilst DiGALCO and PeCO give the best results for
+Lifetime50. In Figures 8(a) and 8(b), Lifetime95 and Lifetime50 are exhibited for various
+WSN densities. These figures show that DiGALCO, DiLCO and PeCO enhance the
+network lifetime when the WSN size increases. In the network lifetime for Lifetime95
+[see Figure 8(a)], DiGALCO protocol can enhance the network lifetime up to 4.7%,
+32.6%, 24.4% and 14% compared to DiLCO, DESK, GAF and PeCO protocols
+respectively. In the network lifetime for Lifetime50 [see Figure 8(b)], DiGALCO protocol
+can enhance the network lifetime up to 17.2%, 46%, 25.4% compared to DiLCO, DESK
+and GAF protocols respectively, Whilst, PeCO protocol enhance the network lifetime up
+to 2.4% compared to DiGALCO protocol.
+    Figure 9 shows the comparison results among three protocol (DiLCO, PeCO and
+DiGALCO) from the coverage lifetime point of view and for various levels of coverage.
+The network able to provide a coverage level higher than 80%, 85%,90% and 95% by
+Protocol/80, Protocol/85, Protocol/90 and Protocol/95 respectively, where the word
+Protocol refers to DiGALCO, PeCO, or DiLCO. In fact, some applications do not need a
+full coverage in all the time, for instance, forest fire application requires only 80%
+coverage level in the rainy seasons whilst it requires a full coverage in the summer
+seasons Li et al. (2011). DiGALCO always outperforms PeCO and DiLCO for all levels
+of coverage. Furthermore, the enhancement increases when the network size increases.
+18         A.K. Idrees and W.L. Al-Yaseen
+
+Figure 7    Energy consumption per period for (a) Lifetime95 and (b) Lifetime50 (see online version
+            for colours)
+
+
+
+
+                                                 (a)
+
+
+
+
+                                                 (b)
+           Distributed genetic algorithm for lifetime coverage optimisation                           19
+
+Figure 8    Network lifetime for (a) Lifetime95 and (b) Lifetime50 (see online version for colours)
+
+
+
+
+                                                  (a)
+
+
+
+
+                                                 (b)
+20         A.K. Idrees and W.L. Al-Yaseen
+
+Figure 9    Network lifetime for different CRs (see online version for colours)
+
+
+
+
+4.5 Discussions
+This section discuss the feasibility of our protocol in a real limited resources wireless
+sensor better than existing distributed techniques. The average execution time is required
+to solve our proposed coverage optimisation problem is reported for several methods and
+different network sizes. We compute the original execution time on a DELL laptop with
+Intel Core i3 2370 M (2.4 GHz) processor (2 cores) and the MIPS (Million Instructions
+Per Second) rate equal to 35330. In order to be compatible with the use of a sensor node
+with Atmels AVR ATmega103L microcontroller (6 MHz) and a MIPS rate equal to 6 to
+                                                              35330 1 
+run the optimisation resolution, this time is multiplied by           and reported on
+                                                              2       6
+Figure 10.
+    Figure 10 shows that DiGALCO protocol has lower execution times in comparison
+with other methods due to utilising a metaheuristic method (GA) to find good
+approximate solutions for the coverage optimisation problem instead of using the
+optimisation solver.
+    In practice, executing GLPK (GNU linear Programming Kit available in the public
+domain) on a sensor node is obviously intractable because it consumes a huge memory
+inside the sensor node. Therefore, a lightweight heuristic can be a good candidate to solve
+the optimisation problem. From the space complexity point of view, DiGALCO protocol
+takes O(SA Spop) as space complexity. If we consider a WSN of 300 nodes, the number of
+sensor nodes in each subregion is 18.5. Therefore, each cluster head in the subregion will
+execute the GA with a maximum number of sensor nodes equal to 19 nodes. In our
+         Distributed genetic algorithm for lifetime coverage optimisation              21
+
+simulation, we represent the chromosome as a vector of integer values and we consider
+Spop to 50. The memory needed by our protocol is composed of two parts: the constant
+space plus the variable space. The variable part of space is nearly equal to 1.9 KB (19 *
+2 bytes * 50 = 1,900 bytes). Since each sensor node (Medusa II) which uses Atmels AVR
+ATmega103L microcontroller has 128 KB of memory, therefore, this can ensure that our
+proposed GA can be executed by real sensor node.
+
+Figure 10 Execution time (in seconds) (see online version for colours)
+
+
+
+
+DiGALCO protocol optimise both the coverage and lifetime in each subregion of the
+WSN. It is a hybrid of centralised and distributed methods. It is a distributed on the
+subregions obtained by dividing the area of interest into subregions and it achieves the
+optimisation at each cluster head in the subregions to provide the best schedule of sensor
+nodes in a centralised way to preserve the coverage and to enhance the WSN lifetime. To
+be acceptable for large-scale networks, the sensing field in the DiGALCO protocol is
+partitioned into many smaller subregions. One cluster head will be selected to run the
+optimisation algorithm (GA) to provide the active sensors for the current round.
+Therefore, DiGALCO protocol is scalable and a globally distributed approach, whilst it is
+centralised in each subregion. In the full distributed approaches, the decision is based
+only on the local information from the neighbouring nodes and there is no optimisation.
+This is why our DiGALCO protocol is better than existing distributed techniques because
+of applying a distributed optimisation on the subregions. The comparison results which
+are explained in the Sections 4.1–4.4 ensure the superiority of our proposed DiGALCO
+protocol in comparison with other existing techniques.
+22        A.K. Idrees and W.L. Al-Yaseen
+
+5    Conclusions and future works
+
+The optimisation of lifetime coverage problem in sensor networks has been investigated
+in this article. A protocol named DiGALCO for maintaining the coverage and enhance
+the lifetime is proposed. DiGALCO is responsible for scheduling the sensor nodes
+activities periodically. DiGALCO is distributed inside the nodes in the subregions that
+obtained after dividing the sensing field in the first phase. It works into rounds and is
+based on the GA to choose the schedule of sensor nodes operating in active status for
+each round. In a subregion, DiGALCO is responsible for selecting the cluster head sensor
+node which will then apply a GA for activity scheduling of sensor nodes. The main
+challenges include how to elect the cluster head efficiently in the subregion as well as
+selecting the best schedule of sensor nodes to maintain a good CR. Several simulations
+have been performed to assess the performance of DiGALCO. The results illustrate that
+DiGALCO protocol is better than other methods in terms of lifetime, coverage level,
+active nodes ratio and consumed energy. In future, we plan to extend our work so that the
+optimisation algorithm provides multiple sensing rounds schedule. In addition, the
+optimisation model can be improved to consider into account the heterogeneity of the
+nodes in the network.
+
+
+References
+Abdulhalim, M.F. and Bara’a, A.A. (2015) ‘Multi-layer genetic algorithm for maximum disjoint
+    reliable set covers problem in wireless sensor networks’, Wireless Personal Communications,
+    Vol. 80, No. 1, pp.203–227.
+Akyildiz, I.F., Su, W., Sankarasubramaniam, Y. and Cayirci, E. (2002) ‘A survey on sensor
+    networks’, IEEE Communications Magazine, Vol. 40, No. 8, pp.102–114.
+Amgoth, T. and Jana, P.K. (2015) ‘Energy and coverage-aware routing algorithm for wireless
+   sensor networks’, Wireless Personal Communications, Vol. 81, No. 2, pp.531–545.
+Bara’a, AA., Khalil, E.A., Özdemir, S. and Yıldız, O. (2015) ‘A multi-objective disjoint set covers
+    for reliable lifetime maximization of wireless sensor networks’, Wireless Personal
+    Communications, Vol. 81, No. 2, pp.819–838.
+Bianchi, L., Dorigo, M., Gambardella, L.M. and Gutjahr, W.J. (2009) ‘A survey on metaheuristics
+    for stochastic combinatorial optimization’, Natural Computing: an International Journal,
+    Vol. 8, No. 2, pp.239–287.
+Cardei, M. and Wu, J. (2006) ‘Energy-efficient coverage problems in wireless ad-hoc sensor
+    networks’, Computer Communications, Vol. 29, No. 4, pp.413–420.
+Fan, G. and Jin, S. (2010) ‘Coverage problem in wireless sensor network: a survey’, Journal of
+     Networks, Vol. 5, No. 9, pp.1033–1040.
+Ghosh, A. and Das, S.K. (2008) ‘Coverage and connectivity issues in wireless sensor networks: a
+    survey’, Pervasive and Mobile Computing, Vol. 4, No. 3, pp.303–334.
+Hassanien, A.E., Grosan, C. and Tolba, M.F. (2015) Applications of Intelligent Optimization in
+    Biology and Medicine, Springer.
+Huang, C.F. and Tseng, Y.C. (2005) ‘The coverage problem in a wireless sensor network’, Mobile
+    Networks and Applications, Vol. 10, No. 4, pp.519–528.
+Idrees, A.K., Deschinkel, K., Salomon, M. and Couturier, R. (2014) ‘Coverage and lifetime
+     optimization in heterogeneous energy wireless sensor networks’, ICN 2014, p.60.
+          Distributed genetic algorithm for lifetime coverage optimisation                     23
+
+Idrees, A.K., Deschinkel, K., Salomon, M. and Couturier, R. (2015) ‘Distributed lifetime coverage
+     optimization protocol in wireless sensor networks’, The Journal of Supercomputing, Vol. 71,
+     No. 12, pp.4578–4593.
+Idrees, A.K., Deschinkel, K., Salomon, M. and Couturier, R. (2016) ‘Perimeter-based coverage
+     optimization to improve lifetime in wireless sensor networks’, Engineering Optimization,
+     Vol. 48, No. 11, pp.1951–1972.
+Li, Y., Vu, C., Ai, C., Chen, G. and Zhao, Y. (2011) ‘Transforming complete coverage algorithms
+     to partial coverage algorithms for wireless sensor networks’, IEEE Transactions on Parallel
+     and Distributed Systems, Vol. 22, No. 4, pp.695–703.
+Liang, J., Liu, M. and Kui, X. (2014) ‘A survey of coverage problems in wireless sensor networks’,
+    Sensors and Transducers, Vol. 163, No. 1, pp.240.
+Mohamadi, H., Ismail, A.S., Salleh, S. and Nodehi, A. (2013) ‘Learning automata-based algorithms
+   for solving the target coverage problem in directional sensor networks’, Wireless Personal
+   Communications, Vol. 73, No. 3, pp.1309–1330.
+Mostafaei, H. and Meybodi, M.R. (2013) ‘Maximizing lifetime of target coverage in wireless
+    sensor networks using learning automata’, Wireless Personal Communications, Vol. 71, No. 2,
+    pp.1461–1477.
+Mostafaei, H. and Shojafar, M. (2015) ‘A new metaheuristic algorithm for maximizing lifetime of
+    wireless sensor networks’, Wireless Personal Communications, Vol. 82, No. 2, pp.723–742.
+Mostafaei, H., Chowdhury, M.U., Islam, R. and Gholizadeh, H. (2015) ‘Connected P-percent
+    coverage in wireless sensor networks based on degree constraint dominating set approach’, in
+    Proceedings of the 18th ACM International Conference on Modeling, Analysis and Simulation
+    of Wireless and Mobile Systems, pp.157–160.
+Mostafaei, H., Esnaashari, M. and Meybodi, M.R. (2015) ‘A coverage monitoring algorithm based
+    on learning automata for wireless sensor networks’, Appl. Math, Vol. 9, No. 3, pp.1–9.
+Özdemir, S. and Bara’a, A.A. and Khalil, Ö.A. (2013) ‘Multi-objective evolutionary algorithm
+    based on decomposition for energy efficient coverage in wireless sensor networks’, Wireless
+    Personal Communications, Vol. 71, No. 1, pp.195–215.
+Rawat, P., Singh, K.D., Chaouchi, H. and Bonnin, J.M. (2014) ‘Wireless sensor networks: a survey
+   on recent developments and potential synergies’, The Journal of Supercomputing, Vol. 68,
+   no. 1, pp.1–48.
+Rebai, M., Le Berre, M., Hnaien, F., Snoussi, H. and Khoukhi, L. (2014) ‘A branch and bound
+    algorithm for the critical grid coverage problem in wireless sensor networks’, International
+    Journal of Distributed Sensor Networks, Vol. 10, No. 2, p.9.
+Sangwan, A. and Singh, R.P. (2015) ‘Survey on coverage problems in wireless sensor networks’,
+    Wireless Personal Communications, Vol. 80, No. 4, pp.1475–1500.
+Sherali, H.D. and Driscoll, P.J. (2000) ‘Evolution and state-of-the-art in integer programming’,
+    Journal of Computational and Applied Mathematics, Vol. 124, No. 1, pp.319–340.
+The Wikipedia, the free encyclopedia [online] https://en.wikipedia.org/wiki/.
+Valera, A.C., Soh, W.S. and Tan, H.P. (2014) ‘Survey on wakeup scheduling for
+    environmentally-powered wireless sensor networks’, Computer Communications, Vol. 52,
+    pp.21–36.
+Varga, A. (2003) OMNeT++ Discrete Event Simulation System [online] http://www.omnetpp.org.
+Vu, C.T., Gao, S., Deshmukh, W.P. and Li, Y. (2006) ‘Distributed energy-efficient scheduling
+    approach for k-coverage in wireless sensor networks’, in IEEE Military Communications
+    Conference, MILCOM 2006, pp.1–7.
+Wang, B. (2011) ‘Coverage problems in sensor networks: a survey’, ACM Computing Surveys
+   (CSUR), Vol. 43, No. 4, p.32.
+24       A.K. Idrees and W.L. Al-Yaseen
+
+Xu, Y., Heidemann, J. and Estrin, D. (2001) ‘Geography-informed energy conservation for ad hoc
+    routing’, in Proceedings of the 7th Annual International Conference on Mobile Computing
+    and Networking, pp.70–84.
+Yick, J., Mukherjee, B. and Ghosal, D. (2008) ‘Wireless sensor network survey’, Computer
+    Networks, Vol. 52, No. 12, pp.2292–2330.
+Yu, J., Ren, S., Wan, S., Yu, D. and Wang, G. (2012) ‘A stochastic-coverage scheduling algorithm
+     in wireless sensor networks’, International Journal of Distributed Sensor Networks.
+Zhu, C., Zheng, C., Shu, L. and Han, G. (2012) ‘A survey on coverage and connectivity issues in
+    wireless sensor networks’, Journal of Network and Computer Applications, Vol. 35, No. 2,
+    pp.619–632.
+

@@ -1,0 +1,78 @@
+source_file: download_pub.pdf
+title: "A Two-Phase Genetic Algorithm Approach for Sleep Scheduling, Routing, and Clustering in Heterogeneous Wireless Sensor Networks"
+authors: Sarah Abdulelah Abbas; Leili Farzinvash; Mina Zolfy
+venue_year: "Preprints.org (preprint, not peer-reviewed), 2025"
+problem: >
+  In Heterogeneous Wireless Sensor Networks (HWSNs), existing clustering, routing, and
+  sleep-scheduling approaches have been studied in isolation, leading to suboptimal energy
+  distribution, limited network lifetime, and weak network coverage; no prior work
+  concurrently optimizes all three (sleep scheduling, routing/tree construction, and
+  clustering) together.
+approach: >
+  A two-phase Genetic Algorithm (GA) framework. Phase 1 jointly solves sleep scheduling of
+  super nodes and routing-tree construction using a chromosome (2 x |super nodes| matrix)
+  with custom ring-based initialization (network divided into concentric rings around the BS,
+  equal number of awake super nodes per ring, inspired by unequal clustering), a cost function
+  combining orphan-node minimization and maximizing minimum remaining energy on the tree, and
+  customized selection (Roulette Wheel Selection), single-point crossover with a repair
+  procedure, and an adaptive mutation operator. Phase 2 performs clustering of normal nodes to
+  awake super nodes (CHs) using a separate GA with chromosome = array of normal nodes assigned
+  to CHs, and a cost function balancing equal cluster-member distribution, maximizing minimum
+  CH energy, and normal-node energy balance.
+sink_mobility: static
+routing_clustering_scheme: >
+  Two-phase GA: Phase 1 = sleep scheduling + tree (routing) construction among super nodes
+  using ring-based unequal clustering initialization; Phase 2 = clustering of normal nodes to
+  awake super nodes (CHs) via GA with load-balancing and energy-based cost function.
+simulator: "WSNSimPy (Python library for discrete event simulation of WSNs); version unknown"
+node_count: >
+  Two networks tested: Network A (denoted WSN1 in text, garbled formatting) = 60 super nodes +
+  200 normal nodes; Network B (denoted WSN2) = 80 super nodes + 250 normal nodes (denser).
+  Exact network labels garbled in extracted text (shown as blank subscripts).
+area: 200m x 200m
+energy_model: >
+  Radio energy model from Heinzelman et al. (LEACH-style, ref [34]): transmit/receive energy
+  based on packet size, internal circuit energy, and amplifier energy (free space model below
+  threshold distance, multipath fading model beyond it). Parameters from Table 1: super node
+  initial energy = 10J, normal node initial energy = 2J, super node transmission range = 90m,
+  normal node transmission range = 30m, E_elec = 50nJ/bit, free-space amplifier = 10pJ/bit/m^2,
+  multipath amplifier = 0.0013pJ/bit/m^4, 50 time slices per round, 4 rings, 50% of super nodes
+  kept awake.
+metrics_reported:
+  - "Area/normal node coverage (%)"
+  - "Total energy consumption (of super nodes)"
+  - "First Node Die (FND) -- round number"
+  - "Last Node Die (LND) -- round number"
+  - "Number of available super nodes (over time slices)"
+key_numeric_results:
+  - "Abstract-level summary result: proposed algorithm reduces energy consumption and improves network coverage by 16.7% and 24.9% respectively (vs. baselines, exact comparator/network unspecified in abstract), and extends network lifetime by 532 rounds."
+  - "Normal node coverage improvement in denser network (60 super nodes/200 normal nodes): 8.6%, 29%, 31.1%, 51.1% over HEDHMG, EFCRPSO, EFEBPSO, CRCGA respectively."
+  - "Normal node coverage improvement in sparser/other network (80 super nodes/250 normal nodes): 5.6%, 14.5%, 27.4%, 33.4% over same baselines respectively."
+  - "Total energy consumption reduction in first network: 10.5%, 14%, 16.4%, 18.7% vs HEDHMG, EFCRPSO, EFEBPSO, CRCGA respectively."
+  - "Total energy consumption reduction in second network: 10.7%, 16.9%, 20.7%, 21% vs same baselines respectively."
+  - "FND improvement in first network: 56, 167, 293, 402 rounds vs HEDHMG, EFCRPSO, EFEBPSO, CRCGA respectively."
+  - "LND improvement in first network: 140, 620, 615, 810 rounds vs same baselines respectively."
+  - "FND improvement in second network: 161, 311, 487, 532 rounds vs HEDHMG, EFCRPSO, EFEBPSO, CRCGA respectively."
+  - "LND improvement in second network: 128, 508, 681, 757 rounds vs same baselines respectively."
+  - "Number of available super nodes after 1800 time slices, first network: +5 over HEDHMG, +16 over EFCRPSO, +21 over EFEBPSO, +35 over CRCGA."
+  - "Number of available super nodes after 1800 time slices, second network: +5 over HEDHMG, +15 over EFCRPSO, +26 over EFEBPSO, +28 over CRCGA."
+  - "GA parameters (Table 2): population size = 30, number of iterations = 50; cost-function weights alpha1=0.5, alpha2=0.5 (phase 1); beta1=0.3, beta2=0.4, beta3=0.3 (phase 2, approximate mapping -- exact symbol-to-weight correspondence garbled in extracted text)."
+stated_limitations: >
+  Not explicitly a dedicated limitations section, but the paper notes: determining the optimal
+  number of rings is a complex process requiring trial-and-error (not analytically derived);
+  the method is evaluated only via simulation (WSNSimPy), not on real hardware/testbeds. Future
+  work section (Section 6) states intent to explore other energy-saving techniques (dynamic
+  modulation scaling), integrate sleep scheduling into multi-channel multi-radio HWSNs, and
+  test other metaheuristics (e.g., GWO combined with GA) -- implying current method does not
+  cover these. Paper is a preprint, explicitly marked "Not peer-reviewed."
+citation_fields:
+  bibkey: abbas2025twophase
+  authors_bibtex: "Abbas, Sarah Abdulelah and Farzinvash, Leili and Zolfy, Mina"
+  title: "A Two-Phase Genetic Algorithm Approach for Sleep Scheduling, Routing, and Clustering in Heterogeneous Wireless Sensor Networks"
+  year: 2025
+  journal_or_booktitle: "Preprints.org (preprint)"
+  volume: unknown
+  number: unknown
+  pages: unknown
+  doi: 10.20944/preprints202509.0430.v1
+  publisher: "Preprints.org / MDPI"

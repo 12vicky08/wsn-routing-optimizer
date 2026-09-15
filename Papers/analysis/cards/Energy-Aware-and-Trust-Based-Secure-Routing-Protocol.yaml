@@ -1,0 +1,71 @@
+source_file: Energy-Aware-and-Trust-Based-Secure-Routing-Protocol-for-Wireless-Sensor-Networks-Using-Adaptive-Genetic-Algorithm.pdf
+title: Energy-Aware and Trust-Based Secure Routing Protocol for Wireless Sensor Networks Using Adaptive Genetic Algorithm
+authors: Youjia Han; Huangshui Hu; Yuxin Guo
+venue_year: IEEE Access, 2022
+problem: >
+  Wireless sensor networks face challenges of energy optimization and security enhancement;
+  traditional trust-based security mechanisms cannot simultaneously defend against multiple
+  common routing attacks (black hole, selective forwarding, sinkhole, hello flooding) and
+  special trust attacks (on-off, bad-mouth), are slow to identify malicious nodes, and incur
+  high energy consumption, so finding a secure and energy-saving route remains an open problem.
+approach: >
+  TAGA (Trust and Adaptive Genetic Algorithm) protocol: constructs a comprehensive node trust
+  value from direct trust (with volatilization factor and adaptive penalty factor) and indirect
+  trust (with a filtering mechanism against bad-mouth attacks); uses a novel threshold function
+  for cluster-head (CH) selection based on dynamic comprehensive trust value and residual energy
+  (built on the LEACH framework); and applies an adaptive genetic algorithm (real-number coding,
+  adaptive crossover probability, adaptive mutation probability, random crossover mapping) to
+  find the optimal secure, energy-efficient multi-hop route among cluster heads.
+sink_mobility: static
+routing_clustering_scheme: >
+  Hierarchical clustering based on classical LEACH framework with an improved trust- and
+  energy-based CH election threshold (Equation 18/19), plus adaptive genetic algorithm (AGA)
+  based multi-hop routing among cluster heads.
+simulator: "MATLAB (referred to in text as 'MTALB', likely a typo/extraction artifact; version unknown)"
+node_count: "100 nodes (base scenario); 1000 nodes (large-scale scenario)"
+area: "100m x 100m (base scenario); 1000m x 1000m (large-scale scenario)"
+energy_model: >
+  First-order radio energy model (same as used in refs [30],[34]): transmission energy
+  Esj = s*Eelec + s*εfs*d^2 (d<d0) or s*Eelec + s*εmp*d^4 (d>=d0); reception energy
+  Erj = s*Eelec; data aggregation energy EDA = s*Epb; threshold distance d0 = sqrt(εfs/εmp).
+  Exact numeric parameter values are in Table 3, which was not extracted as text (only the
+  table caption is present in the source text).
+metrics_reported:
+  - "Number/percentage of packets discarded (lost) by malicious nodes, under black hole, hello flood, selective forwarding, sinkhole, and on-off attacks"
+  - "Number of false trust values (malicious recommendations) spread under bad-mouth attacks"
+  - "Standard deviation of nodes' comprehensive trust values (used to set threshold χ)"
+  - "Energy consumption of the network (vs. number of rounds)"
+  - "Energy efficiency improvement (%) relative to compared protocols"
+  - "Time complexity (Big-O) of the algorithm"
+key_numeric_results:
+  - "Trust threshold set to 0.35; standard deviation threshold χ set to 0.08 (based on max std dev 0.1125 and min std dev 0.090994 observed at round 20)"
+  - "Convergence of comprehensive trust values occurs after the 20th round"
+  - "Under black hole attacks: TAGA reduces packet loss by an average of 16.96% vs IASR and 25.48% vs EOSR"
+  - "Under hello flood attacks: TAGA reduces packet loss by an average of 19.83% vs IASR and 33.13% vs EOSR"
+  - "Under selective forwarding attacks (malicious drop probability 70%): TAGA reduces packet loss by an average of 10.11% vs IASR and 21.54% vs EOSR"
+  - "Under sinkhole attacks: TAGA reduces packet loss by an average of 20.83% vs IASR and 36.2% vs EOSR"
+  - "Under on-off attacks: TAGA reduces packet loss by an average of 26.72% vs IASR and 35.45% vs EOSR"
+  - "Energy efficiency of TAGA increased by 4.97% vs IASR and 14.84% vs EOSR (100 node scenario)"
+  - "Large-scale network (1000 nodes, 1000m x 1000m, 30% malicious nodes): TAGA improves defense performance by 28.27% (black hole), 24.15% (hello flood), 24.95% (selective forwarding), 24.86% (sinkhole), 26.29% (on-off) vs IASR; and by 31.08%, 26.47%, 28.03%, 27.58%, 28.08% respectively vs EOSR"
+  - "Average packet loss in the 1000m x 1000m scenario is lower than in the 100m x 100m scenario by 36.48% (black hole), 63.6% (hello flood), 47.49% (selective forwarding), 44.09% (sinkhole), 39.09% (on-off)"
+  - "Overall time complexity of TAGA: O(n^2), where n is the number of nodes"
+  - "IASR and EOSR fail to identify malicious nodes that only launch bad-mouth attacks (spread false trust values without dropping packets) in the large-scale scenario"
+stated_limitations: >
+  No explicit 'Limitations' section is stated by the authors. The paper notes limitations of
+  prior/related works (e.g., EOSR and IASR do not account for the negative impact of historical
+  evaluation on current trust evaluation, and do not penalize bad-behaving nodes to speed up
+  identification, causing them to lose more packets under attack; IASR and EOSR cannot reduce
+  the trust of nodes launching bad-mouth-only attacks). The authors do not explicitly discuss
+  TAGA's own limitations, scalability beyond the tested 1000-node/1000m scenario, or overhead of
+  the genetic algorithm computation in real deployments.
+citation_fields:
+  bibkey: han2022taga
+  authors_bibtex: "Han, Youjia and Hu, Huangshui and Guo, Yuxin"
+  title: Energy-Aware and Trust-Based Secure Routing Protocol for Wireless Sensor Networks Using Adaptive Genetic Algorithm
+  year: 2022
+  journal_or_booktitle: IEEE Access
+  volume: "10"
+  number: unknown
+  pages: 11538-11550
+  doi: 10.1109/ACCESS.2022.3144015
+  publisher: IEEE

@@ -1,0 +1,42 @@
+source_file: cs-1029.pdf
+title: "A genetic algorithm-based energy-aware multi-hop clustering scheme for heterogeneous wireless sensor networks"
+authors: "R. Muthukkumar; Lalit Garg; K. Maharajan; M. Jayalakshmi; Nz Jhanjhi; S. Parthiban; G. Saritha"
+venue_year: "PeerJ Computer Science, 2022"
+problem: "Energy-constrained heterogeneous sensor nodes make it difficult to design energy-aware clustering schemes that minimise energy consumption and delay while selecting optimum cluster heads and extending network lifetime in heterogeneous WSNs (HWSNs)."
+approach: "GA-EMC (Genetic Algorithm-based Energy-aware Multi-hop Clustering): a genetic-algorithm-based scheme that selects optimal cluster heads (CHs) and their positions using a fitness function based on distance, number of optimal CHs, and residual energy; uses multi-hop communication and deploys more supernodes near the sink to mitigate the hot-spot problem, plus an optimised transmission scheduling framework (SINR-based) to reduce end-to-end delay."
+sink_mobility: static
+routing_clustering_scheme: "GA-based multi-hop clustering with four phases: Heterogeneous Nodes Deployment, Clustering Formulation (CH Selection + CM Association), Next-hop Neighbour Selection (merit-value based, Eq. 12), and Packet Transmission (dynamic TDMA scheduling); binary-coded chromosomes, roulette wheel selection, single-point crossover, bit-level mutation."
+simulator: "Network Simulator 2 (NS2)"
+node_count: 400
+area: "800 x 800 m^2"
+energy_model: "Optimised energy model (Abo-Zahhad et al., 2015) with free-space (d^2) / multipath fading (d^4) radio model; parameters: initial energy of normal node = 0.5 J, packet size = 4 KB, transmit amplifier energy (labelled g in text/likely epsilon_fs or epsilon_mp) = 10 pJ/bit/m^2, c (likely epsilon_mp related) = 0.0013 pJ/bit, q (energy dissipated at source/sink, i.e. E_elec) = 50 nJ/bit, heterogeneity coefficients a and b = 1 and 2, mutation probability Pm = 0.6, crossover probability pc = 0.03, GA population size = 20, maximum generations = 20."
+metrics_reported:
+  - "Network lifetime (number of rounds until first/last node dies)"
+  - "Throughput (number of data packets sent to sink)"
+  - "Network stability period (rounds until first node death)"
+  - "End-to-end delay (seconds)"
+  - "Average energy consumption (per round)"
+  - "Percentage of nodes died vs number of rounds, for different sink locations"
+key_numeric_results:
+  - "GA-EMC: first node dies at 1,800 rounds; last node dies at 2,100 rounds"
+  - "EEWC: nodes die starting at 1,000 rounds"
+  - "E-MDSP: nodes die starting at 1,600 rounds"
+  - "Stability duration comparison: GA-EMC vs EEWC increases from 1,000 to 2,500 rounds; GA-EMC vs E-MDSP increases from 1,600 to 2,500 rounds"
+  - "End-to-end delay at 2,500 rounds: EEWC = 0.04 s (worst), GA-EMC = 0.02 s (best, lowest delay)"
+  - "Average energy consumption: GA-EMC lower than EEWC and E-MDSP despite transmitting more packets"
+  - "Across three sink-position scenarios (center 100,100; top-right corner 200,200; outside field 100,300), GA-EMC extends round of last node death by 30.94% on average vs EEWC/E-MDSP"
+  - "Round of first node death postponed by 10.98%, 23.47%, and 46.94% in scenarios 1, 2, and 3 respectively"
+  - "GA-EMC provides a 27.13% improvement in round of first node death, averaged across different sink positions, vs EEWC and E-MDSP"
+  - "Table 6: e.g. at 100% nodes died, sink at center: GA-EMC = 2,641 rounds, E-MDSP = 2,611, EEWC = 1,813 rounds; sink outside field: GA-EMC = 1,831, E-MDSP = 1,801, EEWC = 1,485 rounds"
+stated_limitations: "Authors state that as future work, the simulation can be repeated to study the impact of varying the number of nodes in HWSNs, and that GA-EMC's performance can be analysed in actual (not simulated) HWSNs in practical scenarios, implying the current study is simulation-only and evaluated at a fixed node count."
+citation_fields:
+  bibkey: muthukkumar2022gaemc
+  authors_bibtex: "Muthukkumar, R. and Garg, Lalit and Maharajan, K. and Jayalakshmi, M. and Jhanjhi, Nz and Parthiban, S. and Saritha, G."
+  title: "A genetic algorithm-based energy-aware multi-hop clustering scheme for heterogeneous wireless sensor networks"
+  year: 2022
+  journal_or_booktitle: "PeerJ Computer Science"
+  volume: "8"
+  number: unknown
+  pages: unknown
+  doi: "10.7717/peerj-cs.1029"
+  publisher: "PeerJ Inc."

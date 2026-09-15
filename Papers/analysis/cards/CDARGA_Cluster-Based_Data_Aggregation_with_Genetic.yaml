@@ -1,0 +1,31 @@
+source_file: CDARGA_Cluster-Based_Data_Aggregation_with_Genetic.pdf
+title: "CDARGA: Cluster-Based Data Aggregation with Genetic Routing Algorithm in Wireless Sensor Networks"
+authors: "R. Kowsalya; B. Rosiline Jeetha"
+venue_year: "International Journal of Recent Technology and Engineering (IJRTE), ISSN 2277-3878 (Online), Volume-8 Issue-6, March 2020"
+problem: "In WSNs, the distance from the base station and imbalanced energy consumption among sensor nodes during data transformation, combined with difficulties in cluster-head selection and energy consumption in Centralized Clustering-Task Scheduling, reduce network lifetime."
+approach: "CDARGA (Cluster-Based Data Aggregation Routing with Genetic search Algorithm): a centralized cluster-head selection (CCHS) scheme combined with a genetic-algorithm-based routing protocol that computes a fitness function using distance, energy, and a hyper round policy to select cluster heads and aggregate data before forwarding to the base station."
+sink_mobility: static
+routing_clustering_scheme: "Centralized Cluster Head Selection (CCHS) with hyper round policy; genetic-algorithm-based cluster routing (population = route, chromosome = full route from origin to BS, gene = neighboring node, with crossover and mutation operators) built on prior Simple Energy-efficient Data Collecting (SEDC)/MCCHS work by the same authors"
+simulator: "NS2 (NS 2.34) Network Simulator, run on Fedora OS PC with Intel Core i5 3.20 GHz, 8 GB RAM"
+node_count: "2-50 sensor nodes, in steps of 10"
+area: "1000 x 1000 m"
+energy_model: "Energy Utilization (EU) modeled as sum of Energy Transmission (ET), Energy Reception (ER), and Event Sensing (ES) per node; Initial Energy = 100 Joules, Node Energy = 100 Joules"
+metrics_reported:
+  - "Energy consumption (Joules, vs. number of nodes)"
+  - "Throughput (average throughput vs. number of nodes)"
+key_numeric_results:
+  - "Simulation parameters: Number of Sensor Nodes 2-50 (steps of 10); Simulation Area 1000x1000 m; Number of Cluster Heads = 8; Initial Energy = 100 Joules; Node Energy = 100 Joules; Number of Packets = 400"
+  - "CDARGA shows lower energy consumption than existing RP-MAC protocol (Movva Pavani and Polipalli Trinatha Rao, 2019) across tested node counts (Fig. 6); exact numeric values not given in extracted text"
+  - "CDARGA shows higher average throughput than RP-MAC across number of nodes tested (Fig. 7); exact numeric values not given in extracted text"
+stated_limitations: "unknown (no explicit limitations section; paper only states CDARGA performs 'better than' RP-MAC and that GSTEB, a related prior method discussed in related work, has a drawback of slightly high average packet drop)"
+citation_fields:
+  bibkey: kowsalya2020cdarga
+  authors_bibtex: "Kowsalya, R. and Rosiline Jeetha, B."
+  title: "CDARGA: Cluster-Based Data Aggregation with Genetic Routing Algorithm in Wireless Sensor Networks"
+  year: 2020
+  journal_or_booktitle: "International Journal of Recent Technology and Engineering (IJRTE)"
+  volume: "8"
+  number: "6"
+  pages: unknown
+  doi: "10.35940/ijrte.F8443.038620"
+  publisher: "Blue Eyes Intelligence Engineering and Sciences Publication (BEIESP)"

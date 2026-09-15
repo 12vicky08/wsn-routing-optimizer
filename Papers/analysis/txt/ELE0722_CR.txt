@@ -1,0 +1,414 @@
+JOURNAL OF SUSTAINABLE ENGINEERING AND TECHNOLOGY                                      Vol. 1, no. 1, June, 2024, pp. 75 – 81
+
+
+           Energy-Efficient Clustering in Wireless Sensor Network: A
+             Comparison between Genetic Algorithm and Bacteria
+                                  Conjugation
+                                           B. D Bala1, H. M Hassan2, S. M Lawan1
+          1
+           Department of Electrical Engineering, Faculty of Engineering, Aliko Dangote University of Science and
+                                         Technology, Wudil, 713281, Kano, Nigeria
+           2,
+              Department of Electronics and Communication Engineering, Sharda University, Greater Noida, India
+
+
+
+      ARTICLE INFO                                      ABSTRACT
+      Article History                                   Wireless Sensor Networks are resource restrained in terms of
+      Received: 15 November 2022                        energy consumption, lifetime, and processing speed. The
+      Accepted: 11 July 2023                            prevalent goals of many types of research in Wireless Sensor
+      Published: 19 August 2024                         Networks are to lessen the energy consumption among the
+                                                        sensor nodes and improve the life time of the network. Of all the
+      Corresponding Author:                             measures, designing an efficient clustering protocol stands out.
+      Name: B. D Bala                                   As a result, this research focuses on energy-efficient clustering
+      Affiliation: Department of Electrical             in Wireless Sensor Networks. In this work, Genetic Algorithm is
+      Engineering, Faculty of Engineering,              used to optimize clustering using the Mobile LEACH protocol. It
+      Aliko Dangote University of Science               is observed that Genetic Algorithm has been used to optimize
+      and Technology,                                   LEACH in the previous works, but little attention is made on
+      Email: bdbala2@kustwudil.edu.ng                   Mobile LEACH. LEACH and Mobile LEACH with Genetic
+                                                        Algorithm are implemented and simulated in MATLAB. The
+                                                        results show that the introduction of mobility and optimization
+                                                        using LEACH increases the stability period of the network. This
+                                                        accounts for about a 25% decrease in the energy consumed by
+                                                        the nodes of the network. It is therefore a rule of thumb in
+                                                        optimization that using algorithm A, successfully in a particular
+                                                        problem does not guarantee its effectiveness, it is          then
+                                                        compared with other optimization techniques. As a result,
+                                                        adaptive clustering of Mobile LEACH optimized with Bacteria
+                                                        Conjugation Operator (BCO) is also implemented and the result
+                                                        obtained outperforms the adaptive clustering obtained with
+                                                        Genetic Algorithm.
+
+                                                        Keywords:    Wireless Sensor Network (WSN) · Adaptive
+                                                                     Clustering · LEACH-M (Less Energy Adaptive
+                                                                     Channel Head-Mobile) · Genetic Algorithm (GA) ·
+                                                                     Bacteria Conjugation Operator (BCO).
+
+
+
+     1.       INTRODUCTION
+
+              Wireless Sensor Network (WSN) is a collection of small and tiny low-powered sensors with sensing,
+     data processing, transmitting, and receiving abilities. These minute sensors collect sensed data from the
+     environment or the application for which they are deployed, transmit, and relay the information to the sink.
+     The base station is equipped with sink nodes that collect and aggregate the information from the sensors and
+     a decision is made therein. WSN is a synergistic coupling of the sensor, network technology, and wireless
+     communication [1]. The nodes are densely and randomly deployed with a battery as their source of energy. It
+     is therefore impractical to recharge the sensor nodes owing to the inaccessibility of the distribution areas [2].
+
+     www.joset.com.ng
+     ©Aliko University of Science and Technology 2024
+Bala et al.                                                         J. Sustainable Eng. & Technol. 1(1): 75 – 81 (2024)
+
+The energy consumption of each node has to be balanced to add to the longevity of the network [2]. So, energy
+is consumed in various ways, but heavily during transmission once the connection has been established.
+Consequently, designing a competent energy routing protocol is indeed necessary to increase the potential
+lifetime of the network.
+          Clustering is an important term in WSN that connotes the way the nodes present in the network
+organize themselves into clusters based on certain parameters. It applies to big networks especially ad hoc
+where the sensors are employed for sensing purposes. If the whole sensor nodes communicate with one
+another to transmit the sensed information to their destination, network congestion and collision will set in
+and eventually render the network less energy efficient due to limited resources. Clustering is one of the
+solutions that meet the effective resource utilization and load balancing in WSN. In a clustered network, the
+sensor nodes are arranged cluster-wise and one serves as the CH that oversees the activities of the cluster and
+the remaining nodes send data to it. The CH is charged with the responsibility of aggregating the data and
+sending it to the base station.
+          High-capacity node advertises themselves as the CH and others join in proximity. Instead, each node
+sends the data directly to BS over a large distance, it then transmits within the cluster over a short distance.
+Also, the periodic re-election of CH from residual energy guarantees balanced energy consumption within the
+cluster. The efficiency of data transmission is increased by clustering by aggregating the data within the cluster.
+Many hierarchical clustering algorithms have been presented in research and deployed for application based
+on some parameters. The selection is left with some open issues that need to be addressed especially with the
+advent of technologies like the Internet of Things (IoT), Vehicular Ad hoc Networks (VANET). As everything will
+be connected through the internet, sensor nodes will be employed to connect things wirelessly for data
+transfer. So, security, connectivity, retrieval, and storage of data are some of the challenges facing clustering
+techniques in WSN as the network operates in an open environment. This paper focuses on energy-efficient
+clustering with specific importance on optimizing energy consumption using Genetic Algorithm and Bacterial
+Conjugation Operator.
+
+2.        Theories and related works
+
+2.1      Clustering algorithm in WSN
+         The LEACH is regarded as the first and furthermost prominent clustering algorithm in WSN. It is
+amenable to a homogenous sensor network. The basic concept is to form clusters based on the strong received
+signal strength (RSS) received from the head of clusters. This enables the cluster heads (CHs) to be used as
+gateways to reach the destination [3]. The sole aim of introducing LEACH is to reduce power consumption [4].
+LEACH segments the network into clusters and each cluster has a leader that rotates roundly. CH sends data
+directly to the base station (BS) and uses a data aggregation technique to decrease the energy consumption
+of the nodes and extend the lifetime of the network. The operation of LEACH is performed in two stages: setup
+and steady-state phase. The cluster setup stage is the one in which each node decides on contending for CH.
+The decision depends on the desired percentage of CH in the network and the number of times a node has
+been a CH. Sequel to this choice, each node is randomly assigned a value between the values (0 and 1). The
+value is then compared with a threshold as in equation (1), if the threshold is greater than the value, the node
+is elected as the CH. Then, the CH invites the remaining nodes to join it by broadcasting advertising messages,
+and a cluster is made for the current round. The nodes will then be allowed to transmit data to CH by scheduling
+time division multiple access (TDMA). In the steady-state stage, data transmission starts and each sensor node
+sends according to the time slot. It can then be turned off and the CH should always be ON to receive data
+from the sensor nodes.
+                            𝑃𝑖
+                                        𝑖𝑓 𝑠(𝑖) ∈ 𝐺
+         𝑇(𝑠𝑖) = { 1−𝑃𝑖(𝑟 𝑚𝑜𝑑 1⁄𝑃𝑖 )                                                                 (1)
+                   0                       𝑜𝑡ℎ𝑒𝑟𝑤𝑖𝑠𝑒
+
+LEACH-M is a Mobile-WSN protocol that provides a highly flexible routing method to deal with CH selection
+and regular changes in topology. The implementation is based on the following equations
+
+          𝐸𝑇 (𝑙, 𝑑) = 𝐸𝑒𝑙𝑒𝑐 ∗ 𝐿 + 𝜀𝑎𝑚𝑝 ∗ 𝐿 ∗ 𝑑 2                                                          (2)
+          𝐸𝑅 (𝑙, 𝑑) = 𝐸𝑒𝑙𝑒𝑐 ∗ 𝐿                                                                           (3)
+
+
+                                                        76
+Bala et al.                                                            J. Sustainable Eng. & Technol. 1(1): 75 – 81 (2024)
+
+ The detection threshold is represented as 𝑃𝑡ℎ𝑟𝑒𝑠ℎ . The packet is discarded when the received power is lower
+than the threshold, because it cannot be detected and received. However, if the power obtained is higher than
+the threshold, the reception of the packet is successful. According to Kim etal., LEACH-M is used to confirm
+that a node is capable of communicating within the time slot allotted in TDMA. The main concept of LEACH-
+M is to check whether a mobile node is capable of communication with specified CH at TDMA. In LEACH, CH
+gathers the sensed info according to TDMA. There is a minor adjustment in the steady state to support mobility.
+As shown the fig2. below, CH first sends a request message to member nodes for data transmission. CH will
+include node time slot type when the data is sent by the nodes, which data is received by labeling the nodes
+from which data is received at the end of the data frame in the time slot. If at the end of the frame, the data is
+not obtained from the same node, it is removed from the cluster due to mobility. The node which is discarded
+or did not receive a request message for two successive frames should join a new cluster.
+
+2.2       Optimizing Clustering using Genetic Algorithm
+
+
+         To build a well-functional design, optimization is needed according to the requirements. To achieve
+the desired objective of minimizing energy consumption or maximizing the existence of the network, network
+optimization is necessary. Energy consumption, security, network life, and packet delivery ratio are some
+routing challenges in a WSN.
+Genetic algorithm (GA) is a computational model used to solve optimization problems by imitating genetic
+processes in the context of evolutionary theory. Genetic operators like selection, reproduction(crossover), and
+mutation are used to mimic biological evolution. In GA, a population is initialized and each individual
+symbolizes a possible solution. The important stage of the evolutionary process is using the fitness function to
+find individuals that are close to the best solution for the problem and with the help of crossover, individuals
+with the highest fitness are combined to form new individuals. It considers that the possible arrangement of a
+problem is an entity and that an arrangement of parameters may convey it. Parameters are seen as
+chromosome genes and can be organized in binary figures by a series of values. A positive value called fitness
+value is used to address the problem to represent the level of goodness of the chromosome, and this value is
+firmly identified with its objective value [5].
+         The best clustering strategy is very difficult to find in a large-scale wireless sensor network. In clustering
+protocols, meta-heuristic methods such as genetic algorithms, particle swarm optimization, fuzzy-based
+algorithms, and ant colony algorithms are also used. In this section, a comparative study of clustering,
+optimization-based clustering, and multi hop routing using Genetic algorithm is highlighted.
+Research on energy-efficient adaptive clustering protocol based on Genetic Algorithm and Genetic Algorithm
+inter-cluster communication is presented in [6]. In the work, a comparison is made among LEACH, inter
+clustering in LEACH, and optimized LEACH using GA. The author uses the base station as the determinant to
+select the cluster head by introducing the preparation phase in the GA-based adaptive clustering to eliminate
+the effect of a probability value on the network performance. In [7], an energy-efficient GA method using
+Virtual Grid-based dynamic route adjustment is introduced. Total energy and total distance i.e., the location
+from the origin to the destination and energy of nodes form the fitness function. The best location for the
+highest fitness is represented by a line and the optimal route to reduce overhead. In [8], a hierarchical clustered
+sensor network is presented to select cluster heads with the help of GA. The Genetic Algorithm performs
+hierarchical clustering with parameters like distance, remaining energy, and concentration- to constitute the
+fitness function. Type-2 fuzzy logic is also used to achieve hierarchical clustering. The two methods are then
+compared in each cluster with equal and random distribution. The performance of the two methods is
+evaluated by considering the number of alive nodes, dead node counts, and residual energy. GA is also used
+with some adjustments for evaluation in the work presented in Multi-hop optimization in WSN using GA [9].
+The distance and energy consumption are used to optimize the path to the nearest neighbour. One or more
+sinks are deployed with a variable number of sensor nodes for the sake of simulation. Enhanced GA energy
+efficient Multi-hop Path in WSN is proposed in [10]. The optimal multi-hop path between the source cluster
+heads and destination through the intermediate node is found using the new Optimal Multi-hop Path Finding
+Method (OMPFM). The approach also improves LEACH by modifying the CH selection and the chromosome is
+enhanced using GA. The following form the fitness function; the ratio of CHs included in the path (N par) of the
+participating CHs and the average distance from the source, CH, and the intermediate node. In [11], GA-based
+optimized LEACH protocol for energy-efficient WSN. LEACH and GA are utilized for energy-effective routing.
+
+                                                          77
+Bala et al.                                                                  J. Sustainable Eng. & Technol. 1(1): 75 – 81 (2024)
+
+LEACH executes the clustering and the data processing while GA optimizes the routing. The residual energy of
+the nodes is only the fitness function. It is also referred as OLEACH. The concept of a trusted route is presented
+to reduce the search time to store the route if the transmitted data repeats. Also, GA-based clustering approach
+for WSN to optimize routing techniques is elucidated in [12]. The cluster head establishes an equilibrium
+between the load and a suitable path between the sensor node and sink. The intermediate CHs and CH
+communicate in the chain-like system to reach the BS.
+It is a point to observe that all the works presented in the section above used GA to optimize LEACH but few
+consider Mobile LEACH (LEACH-M). Despite the fact that the network is enhanced in several ways loopholes
+such as; insufficient to guarantee an optimal number of clusters, inability to select nodes based on energy and
+location cannot ignored [13]. Therefore, considering the speed of network execution, flexibility, and reliability
+of LEACH-M, the proposed work is based on optimizing the clustering of LEACH-M using GA and BCO.
+
+2.3        The Proposed Work
+
+           The proposed work is centered on optimizing mobile clustering using GA. In this work, GA is used to
+select the best path to transfer the aggregated information from CHs to BS in a bid to reducee energy
+consumption and improve the lifetime of the network. The following; the average distance from the source
+CH and BS, the percentage of the participated CH from the CHs, and the total number of participations in the
+transmission path are considered to formulate the fitness function of the problem.
+
+The work is done in two stages. The first stage focuses on the formation of mobile energy- efficient clustering
+using GA. LEACH-M clustering consists of a set up and steady-state phase. Stage 2 is the selection of the
+optimal path to send data to BS through CHs. As a result, GA is initiated in each round with the parameters in
+the fitness function.
+
+Steps to implement the Proposed Work.
+
+The steps to implement the proposed work optimized with GA are as follows:
+
+      1.   Initialization of parameters
+      2.   Energy parameters allocations
+      3.   Generation of the initial population for CH selection
+      4.   Evaluation of fitness function. The fitness function used is as follows:
+                                                     𝑁𝑝𝑎𝑟
+                             𝐹(𝑐) = 𝑑(𝐶𝐻𝑠, 𝐵𝑆) + (          ) + 𝑁𝑜 𝑜𝑓 𝑃𝑎𝑟𝑡                                    (4)
+                                                      𝑁
+           𝑑(𝐶𝐻𝑠, 𝐵𝑆) is the average distance between CH and BS,
+               𝑁𝑝𝑎𝑟
+           (          ) is the percentage of participated CH from all participated CH in GA
+                𝑁
+           𝑁𝑜 𝑜𝑓 𝑃𝑎𝑟𝑡 is the total number of participations in the transmission process [14]
+      5.   The population is then updated.
+      6.   The population fitness function is then replicated and then compared with the initial one.
+      7.   If the successive fitness function is greater than the initial population, then it is considered and the
+           next iteration begins. In that round, the best node is then chosen as the CH
+      8.   Data is then transmitted between the nodes and CH, then between the CH and the sink
+      9.   And, the final fitness parameters are estimated.
+      10. A comparison is made between the original population and the recent fitness function. Lower current
+           fitness function will lead to an update in the population. This will continue until it becomes greater
+           than the initial population.
+
+The steps to implement the proposed work optimized with BCO are as follows:
+
+      1.   The parameters are initialized
+      2.   Allotment of energy parameters
+
+
+                                                                 78
+Bala et al.                                                              J. Sustainable Eng. & Technol. 1(1): 75 – 81 (2024)
+
+      3.   The initial population of CH selection is generated
+      4.   Initialize the positions
+      5.   Prepare the fitness parameters
+      6.   Evaluate the population
+      7.   Sort the population
+      8.   Store the best chromosome
+      9.   Perform horizontal Gene Transfer and store the new chromosome
+      10. Calculate the number of similar genes
+      11. Repeat steps 5 and 6
+      12. Perform mutation
+      13. Repeat 5and 6
+      14. Sort the population
+      15. Store the best fit
+
+3.         Results and Discussion
+
+3.1        Results of LEACH-M optimized with GA
+
+          Fifty nodes are dispersed in the field of 100m * 100m dimension. Some of the nodes are labeled as
+normal nodes and the others are advanced nodes depending on the energy of the nodes. The network is
+demarcated into clusters with the help of the Vinoroi diagram function in MATLAB and nodes in a particular
+cluster are differentiated with colors. The demarcation is done in such a way that if the threshold energy is
+greater than the energy of any node in a given cluster or CH within the cluster, the such node will be
+automatically discarded simply because demarcation changes at each round. In this case, 2000 is taken as the
+maximum round. While simulating the network, at the 200th round, a zero number of dead nodes are observed
+compared to LEACH where no node is with energy. Figure 1 shows the relationship between the number of
+dead and alive nodes at each round. It is observed that the lowest number of dead nodes is observed at the
+500th round and at the 2000th round about 120 nodes have exhausted their energy. This indicates GA has
+lessened the energy consumption and also improve the lifetime of the overall network by increasing the
+stability period of the network.
+
+
+
+                            Comparison of Dead Nodes and Alive
+              3000
+
+              2500
+
+              2000
+
+              1500
+
+              1000
+
+                500
+
+                  0
+                        1        2     3       4       5        6    7         8       9       10      11
+
+                                      Rounds       Number of Deads   Number of Alive
+
+                                Figure 1. Comparison between Dead Nodes and Alive Nodes
+
+
+
+
+3.2        Results of LEACH-M optimized with BCO
+
+
+                                                           79
+Bala et al.                                                                          J. Sustainable Eng. & Technol. 1(1): 75 – 81 (2024)
+
+             In this case, 200 nodes are dispersed in the field of 100m * 100m dimension. The first dead node is
+observed in the 1218th round and more than 20 dead nodes are observed in the 2000th round, while the
+3000th round yields around 125 dead nodes. Figure 2 shows the relationship between the number of dead and
+alive nodes at each round. It is observed that the lowest number of dead nodes is observed at the 1500th
+round and at the 3000th round about 125 nodes have exhausted their energy. This means that with the
+introduction of BCO in LEACH-M, the energy consumption is reduced when compared with LEACH-M
+optimized with GA.
+
+
+                           Comparison of Dead Nodes and Alive Nodes
+      3500
+
+      3000
+                                                                                                         3000
+      2500
+                                                                                         2500
+      2000
+                                                                         2000
+      1500
+                                                       1500
+      1000
+                                        1000
+      500
+               100 0 200   500 0 200           0 200          2 198             25 175          55 145      125 75
+        0
+                   1           2               3              4                 5               6               7              8
+
+                                   Rounds      Number of Dead Nodes                 Number of Alive Nodes
+
+                               Figure 2. Comparison between Dead Nodes and Alive Nodes
+
+Table 1. Comparison of Routing Protocols used in the proposed work.
+ Routing Protocol           Number of Nodes            Rounds                         Dead Nodes                    Alive Nodes
+ LEACH                                100                          20                            20                       80
+                                                                   50                            70                       30
+                                                                  140                               0                     100
+ LEACH-M optimized                     50                         950                               1                     49
+ with GA                                                          1200                           25                       25
+                                                                  2000                           45                        5
+ LEACH-M optimized                    200                         1218                              1                     99
+ with BCO                                                         2000                           20                       180
+                                                                  3000                          125                       75
+
+
+
+
+4.0          Conclusion
+
+             A comparison between GA and BCO for energy-efficient clustering in wireless sensor network has been
+presented. Mobility of the channel head (CH) in the energy clustering (LEACH-M) has been given great
+attention due to its role in network stability. Therefore, LEACH-M has been optimized with two different
+algorithms; GA and BCO. It was found that optimization of LEACH-M with BCO outperformed in adaptive
+clustering than that with GA with less than 25% decrease in energy consumed by the nodes of the network.
+
+
+
+
+4.           REFERENCES
+
+
+                                                                  80
+Bala et al.                                                          J. Sustainable Eng. & Technol. 1(1): 75 – 81 (2024)
+
+
+[1]      Dong, Y., Chang, H., Zou, Z., & Tang, S. (2010). Energy aware routing algorithm for WSN applications in
+         border surveillance. 2010 IEEE International Conference on Technologies for Homeland Security
+         (HST). doi:10.1109/ths.2010.5654979
+[2]      Li, X.-H., & Guan, Z.-H. (2013). Energy-Aware Routing in Wireless Sensor Networks Using Local
+         Betweenness Centrality. International Journal of Distributed Sensor Networks, 9(5),
+         307038. doi:10.1155/2013/307038
+[3]      Aslam, N.; Phillips, W.; Robertson, W.; Sivakumar, S. A multi-criterion optimization technique for energy
+         efficient cluster formation in wireless sensor networks. Inf. Fusion 2011, 12, 202–212.
+[4]      E. Ever, R. Luchmun, L. Mostarda, A. Navarra, and P. Shah, “UHEED - an unequal clustering algorithm
+         for wireless sensor networks,” Sensornets 2012.
+[5]      P. K. Yadav, Dr. N. L. Prajapati, “An overview of Genetic algorithm and modeling”, International Journal
+         of Scientific and Research Publications, vol. 2, no. 9, pp. 1-4, September 2012.
+[6]      Deif, D., Gadallah, Y. A comprehensive wireless sensor network reliability metric for critical Internet of
+         Things applications. J Wireless Com Network 2017, 145 (2017).
+[7]      Dâmaso, A., Rosa, N., & Maciel, P. (2014). Reliability of Wireless Sensor Networks. Sensors, 14(9), 15760–
+         15785. doi:10.3390/s140915760
+[8]      Jan, B., Farman, H., Javed, H., Montrucchio, B., Khan, M., & Ali, S. (2017). Energy Efficient Hierarchical
+         Clustering Approaches in Wireless Sensor Networks: A Survey. Wireless Communications and Mobile
+         Computing
+[9]      Liu, M., Xu, S., & Sun, S. (2012). An agent-assisted QoS-based routing algorithm for wireless sensor
+         networks. Journal of Network and Computer Applications, 35(1), 29–36.
+[10]      Brijesh L. Kundaliya, Sarman K. Hadia. Routing Algorithms for Wireless Sensor Networks: Analyzed and
+         Compared (2019). Wireless Personal Communication
+[11]     Sirbu, A., & Alecsandrescu, I.-E. (2017). Enhanced genetic algorithm for energy efficient dynamic ad hoc
+         wireless sensor networks. 2017 International Symposium on Signals, Circuits and Systems
+         (ISSCS). doi:10.1109/isscs.2017.8034920
+[12]     Pratyay Kuila, Prasanta K. Jana (2018). Clustering and Routing Algorithms for Wireless Sensor Network.
+         U.S CRC Press
+[13]     E. Ever, R. Luchmun, L. Mostarda, A. Navarra, and P. Shah, “UHEED - an unequal clustering algorithm
+         for wireless sensor networks,” Sensornets 2012, 2012.
+[14]     H. M. Hassan, R. Priyadarshini "Optimization Techniques for IoT Using Adaptive Clustering," 2021
+         International Conference on Computing, Communication, and Intelligent Systems (ICCCIS), 2021, pp.
+         766-771, doi:10.1109/ICCCIS51004.2021.9397128.
+[15]     Kale Navnath Dattatraya, K. Raghava Rao (2021) “Hybrid based cluster head selection for maximizing
+         network lifetime and energy efficiency in WSN,” Journal of King Saud University - Computer and
+         Information Sciences.
+[16]     Yun Xu, Wanguo Liao, Menggui Tian (2021) “An Energy Efficient Routing Protocol for D Wireless Sensor
+         Networks” IEEE Sensors Journal.
+[17]     Mohammed Al-Salabi, Mohammed Anbar, Tat Chee Wan(2018) “Genetic algorithm based protocols to
+         select cluster heads and find multihop path in Wireless Sensor Networks Review,” MATEC Web of
+         Conferences
+
+
+
+
+                                                        81
+

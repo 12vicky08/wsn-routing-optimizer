@@ -1,0 +1,57 @@
+source_file: "6391-Article Text-19394-1-10-20250930.pdf"
+title: "A Hybrid Genetic Algorithm and Tabu Search for Construction Site Layout Planning Problem"
+authors: "Trieu Xuan Hoa; Tranh Thanh Thuong"
+venue_year: "Journal of Telecommunication, Electronic and Computer Engineering (JTEC), 2025"
+problem: >
+  Construction Site Layout Planning (CSLP) is formulated as a Quadratic Assignment
+  Problem (NP-hard): optimally allocating n predefined facilities to m predetermined
+  locations to minimize total transportation/interaction cost between facilities, while
+  existing metaheuristics (ACO, PSO, etc.) either lack global search capability or
+  struggle to escape local optima.
+approach: >
+  GA-Tabu (GATA): a hybrid algorithm that embeds Tabu Search as a local-search
+  refinement step applied to elite individuals within each generation of a Genetic
+  Algorithm. GA performs global exploration (roulette wheel selection, Partially
+  Mapped Crossover, swap mutation) while Tabu Search intensifies local search around
+  top-performing individuals using a tabu list to prevent cycling, aiming to balance
+  exploration and exploitation and speed convergence.
+sink_mobility: unknown
+routing_clustering_scheme: unknown
+simulator: "unknown (custom implementation tested on a computer with Core i5 2.7GHz CPU and 8GB RAM)"
+node_count: unknown
+area: unknown
+energy_model: unknown
+metrics_reported:
+  - "Total transportation/interaction cost (objective function value, arbitrary cost units) - Equation (1)"
+  - "CPU time per run (milliseconds)"
+  - "Best and average result over 10 runs per case study"
+key_numeric_results:
+  - "GA-Tabu configured with population size 100, 20 generations, 2000 candidate solutions evaluated, crossover probability 0.8, mutation probability 0.1, Tabu Search neighborhood size 10, tabu list size 7, terminating at 2000 iterations or no further improvement."
+  - "Case Study 1 (11 facilities, 11 locations, unconstrained): Best result = 12150, Average = 12166.4, Best time = 2831 ms."
+  - "Case Study 2 (fixed gate constraints): Best result = 12150, Average = 12218.9, Best time = 2769 ms."
+  - "Case Study 3 (size-restricted placement): Best result = 12404 (all 10 runs), Average = 12404, Best time = 2899 ms."
+  - "GA-Tabu result matched lopt-aiNet and outperformed GA, PSO, ACO, ACO-PA, opt-aiNet on the benchmark case studies."
+  - "In Case 2, GA-Tabu outcome was superior to prior results (from Vu et al. reference [17]) by 3.1%."
+  - "In Case 3, GA-Tabu outcome was superior to prior results (from reference [17]) by 1.6%."
+  - "Material handling cost optimization potential of 20-60% depending on facility layout, cited from Lam et al. (reference [2])."
+  - "Example combinatorial growth: n=15 facilities yields 1,307,674,368,000 (~10^13) feasible configurations (Table 1)."
+stated_limitations: >
+  The dataset assumes fixed and symmetric flow and distance values, which may not fully
+  capture dynamic or asymmetric real-world conditions; variations in facility size must be
+  carefully encoded as constraints to avoid infeasible assignments. Future work directions
+  noted by authors: adaptive parameter tuning (dynamic crossover/mutation rates),
+  hybridization with reinforcement learning, integration of real-time BIM data for dynamic
+  layout adjustments, applying GA-Tabu to larger-scale layouts, incorporating time-dependent
+  facility interactions, extending to 3D spatial planning, and exploring parallel or
+  cloud-based implementations for scalability.
+citation_fields:
+  bibkey: "hoa2025gatabu"
+  authors_bibtex: "Hoa, Trieu Xuan and Thuong, Tranh Thanh"
+  title: "A Hybrid Genetic Algorithm and Tabu Search for Construction Site Layout Planning Problem"
+  year: "2025"
+  journal_or_booktitle: "Journal of Telecommunication, Electronic and Computer Engineering"
+  volume: "17"
+  number: "3"
+  pages: "1-6"
+  doi: "https://doi.org/10.54554/jtec.2025.17.03.001"
+  publisher: unknown

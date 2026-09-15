@@ -1,0 +1,31 @@
+extraction_quality: poor — abstract/highlights only; full text is paywalled on ScienceDirect and the .webarchive file only captured the preview page
+source_file: "An efficient cluster head election based on optimized genetic algorithm for movable sinks in IoT ena.webarchive"
+title: "An efficient cluster head election based on optimized genetic algorithm for movable sinks in IoT enabled HWSNs"
+authors: Aridaman Singh Nandan; Samayveer Singh; Lalit K. Awasthi
+venue_year: "Applied Soft Computing, Volume 107, August 2021, 107318"
+problem: "IoT-enabled WSNs suffer high energy dissipation from inefficient data collection by resource-constrained sensors, limiting network longevity; the hot-spot problem is also cited as a target issue."
+approach: "OptiGACHS (Optimized Genetic Algorithm-based Cluster Head Selection) protocol — improved cluster head selection using distance, density, and energy criteria, combined with multiple movable sinks."
+sink_mobility: controlled/optimized-trajectory
+routing_clustering_scheme: "Genetic-algorithm-optimized cluster head election (OptiGACHS), multiple movable sinks to alleviate hot-spot problem, new deployment strategy for network energy optimization"
+simulator: unknown
+node_count: unknown
+area: unknown
+energy_model: unknown
+metrics_reported: unknown — abstract states "performance evaluation of OptiGACHS variants is done against GAOC and MS-GAOC" but specific metrics not visible in extracted preview text
+key_numeric_results: []
+stated_limitations: unknown — not visible in abstract/highlights-only extraction
+citation_fields:
+  bibkey: nandan2021optigachs
+  authors_bibtex: "Nandan, Aridaman Singh and Singh, Samayveer and Awasthi, Lalit K."
+  title: "An efficient cluster head election based on optimized genetic algorithm for movable sinks in IoT enabled HWSNs"
+  year: 2021
+  journal_or_booktitle: "Applied Soft Computing"
+  volume: 107
+  number: unknown
+  pages: "107318"
+  doi: "10.1016/j.asoc.2021.107318"
+  publisher: Elsevier
+note_to_human: >
+  This card is materially incomplete (abstract-level only). If this source is needed for the
+  literature matrix beyond a citation-only mention, please supply the full PDF — the current
+  .webarchive only saved the ScienceDirect preview page, not the article body.

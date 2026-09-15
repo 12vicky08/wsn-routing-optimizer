@@ -1,0 +1,66 @@
+source_file: Wireless.pdf
+title: "Wireless Sensor Network Optimization Using Genetic Algorithm"
+authors: "Aseel B. Alnajjar; Azhar M. Kadim; Ruaa Abdullah Jaber; Najwan Abed Hasan; Ehsan Qahtan Ahmed; Mohammed Sahib Mahdi Altaei; Ahmed L. Khalaf"
+venue_year: "Journal of Robotics and Control (JRC), Volume 3, Issue 6, 2022"
+problem: >
+  In a WSN, each cluster head (CH) has a limited communication/bandwidth capacity, so the
+  number of sensors it can serve is restricted; exceeding this limit weakens connection service.
+  The main challenge is how to distribute cluster heads over a specified sensing area so that
+  all high-sensor-range (HSR) and low-sensor-range (LSR) sensors remain connected to their
+  nearest CH while keeping energy consumption stable and minimal.
+approach: >
+  A two-stage genetic algorithm (GA) based WSN optimization technique. Stage 1 generates a WSN
+  model (random placement of CH, HSR, and LSR sensors within a 2D sensing area) subject to
+  assumed conditions. Stage 2 applies a GA -- with a novel two-dimensional integer-encoded
+  chromosome representation (crossover exchanges the "lower half area" between individuals) and
+  mutation that inverts the type of ~5% of sensors -- to find the CH distribution that minimizes
+  a weighted fitness function combining operating energy (OE), communication energy (CE),
+  sensors-per-cluster-head error (SCE/OCE), and sensors-out-of-range error (SORE).
+sink_mobility: unknown
+routing_clustering_scheme: >
+  GA-optimized non-uniform redistribution of cluster heads (CH) among HSR and LSR sensors;
+  each individual/chromosome encodes CH, HSR, and LSR sensor types and locations; selection
+  keeps top 50% by fitness, single-point crossover exchanges "lower half" regions between
+  paired chromosomes, mutation flips sensor type with probability 0.001 (~5% of genes inverted).
+simulator: unknown
+node_count: "NCH=90, NHSR=180 (2x NCH), NLSR=360 (2x NHSR); total N=630 sensors per WSN model; population size of 100 individuals (WSN models) per GA generation"
+area: "30 x 30 length units (unspecified physical units)"
+energy_model: >
+  Operating Energy (OE) = 20*(NCH/N) + 2*(NHSR/N) + (NLSR/N) [Eq. 1]; Communication Energy (CE)
+  = sum over CH and their sensors of mu*d_ji^k, with mu=1 and k=3 (topological constants) [Eq. 2],
+  based on model attributed to Ferentinos & Tsiligiridis [10] and Michalewicz & Fogel [11].
+metrics_reported:
+  - "Operating Energy (OE)"
+  - "Communication Energy (CE)"
+  - "Sensors-per-Cluster-head Error (SCE, labeled OCE in Table 2)"
+  - "Sensors Out-of-Range Error (SORE), count of unconnected active sensors"
+  - "Fitness function F (weighted sum of OE, CE, SCE, SORE)"
+  - "Number of cluster heads (NCH) variation across generations"
+key_numeric_results:
+  - "GA parameters: population size = 100, mutation rate = 0.001, crossover type = single crossover, generation size = 1000"
+  - "HSR sensors cover a circular region of radius 10 length units; LSR sensors cover radius 5 length units"
+  - "Fitness function weights: w1=0.4, w2=0.3, w3=0.2, w4=0.1"
+  - "Max CH connection capacity: 10 HSR + 10 LSR sensors per CH (default 15 active sensors used in SCE definition)"
+  - "Mutation: probability 0.001 (0.001%), affecting ~5% (~45 genes) of sensors per chromosome"
+  - "Selection: 50% of population (50 chromosomes / 25 pairs) selected each generation; crossover repeated 50 times to produce 100 individuals for next generation"
+  - "Stop condition: fitness function change <=0.01 (or no change) OR 1000 generations reached"
+  - "Table 2, four initial WSN models (before optimization): Model-1 OE=6.069, CE=21.142, OCE=0.021, SORE=102, F=18.974; Model-2 OE=5.994, CE=10.937, OCE=0.003, SORE=96, F=15.279; Model-3 OE=5.892, CE=6.800, OCE=0.004, SORE=92, F=13.597; Model-4 OE=5.986, CE=3.166, OCE=0.004, SORE=84, F=11.745"
+  - "Fitness function F values were higher in the first generation than in the last generation, and fluctuations decreased with more generations"
+  - "NCH begins at a constant value of 90 and varies with generations due to single crossover, stabilizing (fewer fluctuations) by the last generation"
+stated_limitations: >
+  Some sensors occupy locations far from any CH and remain unconnected due to random initial
+  distribution. The authors state it is "hoped that the work will be developed" to apply
+  clustering operations such as k-means on the resulting WSN models, and that the proposed
+  method can be applied to mobile sensors (implying the current work does not address mobile
+  sensors or k-means clustering).
+citation_fields:
+  bibkey: alnajjar2022wsnga
+  authors_bibtex: "Alnajjar, Aseel B. and Kadim, Azhar M. and Jaber, Ruaa Abdullah and Hasan, Najwan Abed and Ahmed, Ehsan Qahtan and Altaei, Mohammed Sahib Mahdi and Khalaf, Ahmed L."
+  title: "Wireless Sensor Network Optimization Using Genetic Algorithm"
+  year: 2022
+  journal_or_booktitle: "Journal of Robotics and Control (JRC)"
+  volume: 3
+  number: 6
+  pages: "827-835"
+  doi: "10.18196/jrc.v3i6.16526"
+  publisher: unknown

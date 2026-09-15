@@ -1,0 +1,648 @@
+                                         UAV Swarms for Joint Data Ferrying and Dynamic
+                                         Cell Coverage via Optimal Transport Descent and
+                                                      Quadratic Assignment
+                                                    Kai Cui, Lars Baumgärtner, Burak Yilmaz, Mengguang Li, Christian Fabian, Benjamin Becker,
+                                                                           Lin Xiang, Maximilian Bauer, Heinz Koeppl
+
+
+                                           Abstract—Both data ferrying with disruption-tolerant network-               of the participating nodes, which act as "data mules" to
+                                        ing (DTN) and mobile cellular base stations constitute important               physically transfer the data. UAVs can be rapidly deployed to
+                                        techniques for UAV-aided communication in situations of crises
+
+
+
+
+arXiv:2307.02988v1 [cs.NI] 6 Jul 2023
+                                                                                                                       affected areas during emergencies such as natural disasters. By
+                                        where standard communication infrastructure is unavailable.
+                                        For optimal use of a limited number of UAVs, we propose                        carrying wireless communication equipment, UAVs can provide
+                                        providing both DTN and a cellular base station on each UAV.                    temporary communication coverage to DTNs and data ferrying
+                                        Here, DTN is used for large amounts of low-priority data, while                in remote or disaster-stricken areas. UAVs can also fly to areas
+                                        capacity-constrained cell coverage remains reserved for emergency              difficult to access, such as mountainous or forested areas, or
+                                        calls or command and control. We optimize cell coverage via                    survey areas and collect data useful for disaster response.
+                                        a novel optimal transport-based formulation using alternating
+                                        minimization, while for data ferrying we periodically deliver                     Even though researchers have proposed UAVs as data ferries
+                                        data between dynamic clusters by solving quadratic assignment                  in the past [1]–[4], there remain many open challenges for
+                                        problems. In our evaluation, we consider different scenarios with              practical deployments. Finding optimal coverage of the nodes
+                                        varying mobility models and a wide range of flight patterns.                   on the ground is essential. If the locations of ground nodes
+                                        Overall, we tractably achieve optimal cell coverage under quality-             are not known, flight patterns must either be optimized for
+                                        of-service costs with DTN-based data ferrying, enabling large-scale
+                                        deployment of UAV swarms for crisis communication.                             area coverage, or a sweep of the area must be performed to
+                                           Index Terms—UAV swarms, data ferrying, cell coverage,                       detect nodes before providing coverage. Furthermore, nodes
+                                        alternating minimization, quadratic assignment problem                         on the ground might also be moving, and different radio link
+                                                                                                                       technologies have different characteristics such as communica-
+                                                                  I. I NTRODUCTION                                     tion range, bandwidth, etc. Limited resources available on the
+                                                                                                                       UAV, e.g., data storage capacities and battery power, are major
+                                           In recent years, Unmanned Aerial Vehicles (UAV) have
+                                                                                                                       challenges to take into account when planning flight trajectories
+                                        become essential tools for professional first responders thanks
+                                                                                                                       and missions. Finally, a swarm of UAVs can increase the
+                                        to their mobility and versatility. Today they are mainly used
+                                                                                                                       communication capabilities significantly, but requires additional
+                                        for taking aerial pictures of disaster areas and sensor readings
+                                                                                                                       effort to coordinate and cooperate. Here, we address the optimal
+                                        autonomously. In our highly connected world, communication
+                                                                                                                       coverage of nodes in a tractable manner, amenable to large
+                                        is vital for coordination of civilians, professional respon-
+                                                                                                                       swarms and dynamically moving user nodes.
+                                        ders and even (partially) autonomous systems or IoT. Thus,
+                                                                                                                          At the same time, another approach to communication via
+                                        when communication infrastructure is disrupted, alternative
+                                                                                                                       UAVs is based on the usage of UAVs as mobile cellular base
+                                        means of communication must be quickly established. For
+                                                                                                                       stations. With the miniaturization of base station equipment,
+                                        such challenging conditions where connectivity is intermittent
+                                                                                                                       exploiting UAVs as aerial base stations to reinforce or com-
+                                        or unavailable for long periods, Delay-Tolerant Networking
+                                                                                                                       plement cellular coverage has attracted significant interests in
+                                        (DTN) provides a commonly used way to enable resilient
+                                                                                                                       academia, industry, and standardization organizations such as
+                                        communication without stable end-to-end connectivity. In this
+                                                                                                                       the 3rd Generation Partnership Project (3GPP) [5]. Unlike the
+                                        store-carry-and-forward approach, data is stored at intermediate
+                                                                                                                       DTN scenario, aerial base stations are designed to provide
+                                        nodes and forwarded to the next node until connectivity is
+                                                                                                                       reliable, energy-efficient cellular communication services with
+                                        available. Thus, message delivery depends on the mobility
+                                                                                                                       guarantees for e.g. communication data rates, reliability, delays,
+                                           This work has been co-funded by the LOEWE initiative (Hesse, Germany)       and information timeliness, even in challenging emergency
+                                        within the emergenCITY center, the State of Hesse and HOLM as part of the      situations. While aerial base stations can enable flexible
+                                        "Innovations in Logistics and Mobility" programme of the Hessian Ministry of   deployments and relocation, establish strong line-of-sight
+                                        Economics, Energy, Transport and Housing (HA project no.: 1010/21-12), and
+                                        the Hessian Ministry of Science and the Arts (HMWK) within the projects        (LoS) channels, and enhance resilience of ground networks
+                                        "The Third Wave of Artificial Intelligence - 3AI" and hessian.AI.              amid malfunction, they also need to overcome several new
+                                           The authors are with the Departments of Electrical Engineering and          challenges such as time-varying topologies, blockages in urban
+                                        Information Technology, Computer Science, and Mechanical Engineering,
+                                        Technische Universität Darmstadt, 64287 Darmstadt, Germany. (e-mail:           environments, and LoS interference [6]. Moreover, UAVs are
+                                        {heinz.koeppl}@tu-darmstadt.de).                                               often subject to limited size, weight, power, and radio resources.
+                                                                  for variables used in evaluation are given in Sec. V.
+                                                                     Consider a potentially large number of users on the ground,
+                                                                  and many UAVs for data ferrying and cell coverage with limited
+                                                                  capacity, such that each UAV may serve only a limited number
+                                                                  of users. We assume that at any time t ∈ N there are users i =
+                                                                  1, . . . , M at time-dependent positions Xi (t) = (xi (t), yi (t)) ∈
+                                                                  X in the area of operations X ⊆ R2 , following a certain
+                                                                  mobility model as will be discussed in Sec. V-A. This can be
+                                                                  understood e.g. as mobility data of a city’s mobile phone users
+Fig. 1: Overview of the proposed two-layer communication over the day, or mobility behavior obtained from surveying
+infrastructure. Blue ellipses represent the dynamic cell coverage in crisis situations. Analogously, for each UAV j = 1, . . . , N
+provided by the UAVs. In contrast, grey lines indicate exem- we define UAV positions ξj (t) ∈ X , which can be moved at a
+plary connections between DTN nodes, with yellow ellipses maximum velocity v in order to achieve dynamic user coverage
+representing DTN communication range.                             and data ferrying. We write X(t) for the vector of all user
+                                                                  locations, and similarly ξ(t) for UAV locations.
+                                                                     A. Delay-tolerant networking
+   In order to deal with resource constraints in crisis scenarios,
+                                                                        Delay- or disruption-tolerant networking (DTN) uses a Store,
+it is thus of importance to consider not only DTN-based
+                                                                     Carry & Forward architecture to cope with intermittent network
+communication, but also the availability of dynamic cellular
+                                                                     connectivity. Data is transmitted as bundles on a hop-to-hop
+coverage as a second layer of communication infrastructure
+                                                                     basis, thus, no stable end-to-end route between a source and
+reserved for high-priority data such as emergency calls or
+                                                                     a destination is needed. Instead, intermediate nodes act as
+command and control of dynamically moving users on the
+                                                                     data mules, physically carrying data around until it reaches
+ground. Therefore, it is important to enable both data ferrying
+                                                                     its destination. Therefore, besides routing strategies such as
+and cellular coverage simultaneously, as depicted in Fig. 1. In
+                                                                     epidemic flooding and PRoPHET [8], node mobility plays an
+this work, for cell coverage, we generalize optimal transport
+                                                                     essential role in bundle delivery rates for such networks. The
+formulation for optimal UAV swarm cell association [7] to
+                                                                     official standard protocol as defined by the IETF DTN Working
+include UAV capacities that need not be fully assigned to all
+                                                                     Group is the Bundle Protocol (BP) version 7 (RFC 9171) [9].
+users. Furthermore, in contrast to previous work, we then solve
+                                                                        The first goal of our work is thus to use UAVs as controllable
+both coverage and data ferrying jointly. The latter is achieved by
+                                                                     mobile nodes to improve the DTN message delivery rates and
+first solving the coverage problem via alternating minimization
+                                                                     delays. In our work, we consider epidemic flooding via WiFi,
+for dynamically tracking capacity-constrained clusters, and
+                                                                     using the TheONE simulator [10], where we generate one
+then applying combinatorial optimization problems such as
+                                                                     message every TDTN > 0 time units at a random ground user,
+the traveling salesman problem (TSP) and related quadratic
+                                                                     with another random ground user as destination.
+assignment problems (QAP) for inter-cluster data ferrying.
+   Our contributions can be summarized as: (i) Formulating           B. Cell coverage
+an optimal-transport-based problem and algorithm for optimal            In contrast to DTN, cell coverage defines the problem of
+cell coverage via UAVs with novel capacity constraints; (ii)         covering all users optimally at any time, using UAVs as mobile
+Enabling distance-optimized and delay-optimized data ferrying        base stations. For example, one could provide LTE coverage
+by transporting data between user clusters via combinatorial         via UAVs [11] for uplink and downlink data communication
+optimization problems; (iii) Combining data ferrying with cell       to a limited number of ground users within range r > 0.
+coverage in order to optimally use available UAVs for both              To solve the problem of providing optimal cell coverage,
+DTN and cellular base stations, giving extensive theoretical and     we assume that the underlying cell association problem of
+empirical support for the algorithm by considering different         associating ground users to UAVs at any specific time instant
+scenarios with varying mobility models and a wide range              is solved optimally through an optimal transport formulation.
+of flight patterns. To the best of our knowledge, our work           More specifically, we conceptually generalize the optimal
+constitutes one of the first to combine data ferrying with cell      transport procedure introduced in [7] by allowing UAV base
+coverage, with applicability in resource-constrained scenarios       stations to have arbitrary constraints on total capacity, i.e. not
+or crises. We begin by describing the underlying scenario and        all UAVs must be fully assigned to users, and vice versa.
+our proposed algorithms. We then move on to a theoretical               1) Optimal cell association: Using a cost function d such
+and empirical evaluation, including a small real demonstration       as distance on X to define costs d(X, ξ) of associating users
+over a city model using indoor UAVs. Lastly, we close by             at position X with a UAV at position ξ, we define the  optimal
+discussing related and future work.                                                         1
+                                                                                              PM            1
+                                                                                                               PN
+                                                                     transport cost Wd M i=1 δXi (t) , N j=1 δξj (t) (see e.g.
+                      II. BACKGROUND                                 [12])
+                                                                         PM between the locations (empirical
+                                                                                                     PN         distribution) of users
+                                                                      1                           1
+                                                                     M     i=1 δ Xi (t) and UAVs  N        δ
+                                                                                                       j=1 j ξ (t) . Choosing
+  In this section, we provide a brief background on the scenario
+and model on which we base our algorithms. Precise values                             d(X, ξ) = 1(r,∞) (∥X − ξ∥2 ),                (1)
+allows the optimal transport cost to formalize the notion of
+best achievable coverage under optimal cell association [7] for
+a maximum communication range of r > 0, assuming that the
+total capacity of all UAVs is equal to the total number of users
+on the ground, i.e. all UAVs must be fully assigned to users.
+   2) Capacity constraints: So far, the optimal transport
+formulation assumes the same amount of mass between
+UAVs and users, i.e. all UAVs must be fully assigned to
+users, and vice versa. To model differing capacity cases, we
+formally embed the user positions in the extended space                Fig. 2: Simple example of 8 UAVs tracking 8 clusters of users
+X̄ := X × {0, 1} by X̄(t) := (X(t)T , 0)T , and similarly for          (colored dots). UAVs start at random initial starting points (grey
+        ¯ := (ξ(t)T , 0)T . We then instead use
+UAVs ξ(t)                                                              triangles). Black arrows depict the moving trajectories of each
+          ¯ = 1(r,∞) (∥X̄ − ξ∥
+                            ¯ 2 ) · 1{1} (X̄3 ) · 1{1} (ξ¯3 ),         UAV (red triangle). As the user clusters move counterclockwise,
+    d(X̄, ξ)                                                     (2)
+                                                                       the UAVs successfully track the dynamic motion of the clusters.
+where ·3 denotes the last component (zero for real UAVs and
+users), to allow for UAVs to not be fully assigned to users (in
+case of more capacity than needed by users): This is done by           coverage problem, generalizing algorithms for the NP-hard
+adding virtual users at (0, 0, 1) ∈ X̄ to obtain the new cost          k-means [13] or k-medoids [14] problem in clustering, by
+                                                                       limiting cluster sizes. A simple example is illustrated in Fig. 2.
+  c(X̄(t), ξ̄(t)) = Wdvec (X̄(t), ξ̄(t)) :=                               We find optimal positions of UAVs ξ for given current
+     
+               M                               N
+                                                                      locations of users, such that when the UAVs track these
+         1    X                   1         1 X                        positions over time, the cell coverage of users is optimized.
+ Wd              δ     + (1 − )δ(0,0,1) ,       δ         (3)                                                   ′
+       M R i=1 X̄i (t)           R          N j=1 ξ̄j (t)              Assume a set of M ′ users X̄ ∈ X̄ M , including virtual users.
+                                                                       For any UAV (or cluster) i, we keep assignments Ci ⊆ [M ′ ]
+which formalizes the best achievable coverage for higher               of users to a UAV with C = (Ci )i∈[N ] . If C constitutes the
+capacity of UAVs than required by users, i.e. if more capacity         currently optimal assignment of users to UAVs (an optimal
+is available than required by users, the unused UAV capacity           transport plan [12]) given that the UAVs are located at ξ̄, then
+is assigned to a virtual user at zero cost. Here we add a              the optimal transport cost (3) is given by
+mass of (1 − R1 ) virtual users, where R > 1 denotes the
+                                                                                                    d(ξ¯i , X̄j ) = Wdvec (X̄(t), ξ̄(t)). (5)
+                                                                                          X X
+ratio between total UAV capacity and total ground users. An              JX(t) (C, ξ) :=
+analogous argument with virtual UAVs and R < 0 allows for                                 i∈[N ] j∈Ci
+
+the case with less total UAV capacity than required by users.            Therefore, we need to minimize (5) over all drone locations
+   3) Quality of service (QoS): Lastly, in practice, another point     ξ and associated optimal transport plans C. For this purpose,
+of consideration is quality of service (QoS), e.g. the quality of      we apply an AM algorithm to minimize the optimal transport
+downlink or uplink communication. We may optimize e.g. the             coverage problem by iterating
+sum of both the number of covered users and their QoS, using
+                                                                                      C(n+1) = arg min JX(t) (C(n) , ξ (n) )             (6)
+                                                                                                        C
+  dQoS (X̄, ¯
+            ξ) = 1(r,∞) (∥X̄ − ¯
+                               ξ∥2 ) · 1{1} (X̄3 ) · 1{1} (ξ¯3 )
+                                                                                    ξ (n+1) = arg min JX(t) (C(n+1) , ξ (n) )            (7)
+                                   ¯ 2 · 1[0,r] (∥X̄ − ξ∥
+                          + ∥X̄ − ξ∥                    ¯ 2 ) (4)                               ξ∈X N
+
+where QoS cost increases linearly with distance, i.e. QoS decays over iterations n. The algorithm monotonically improves (5)
+                                                                 and is thus guaranteed to converge. In other words, our
+linearly. In practice, one could use e.g. a signal-to-noise ratio.
+                                                                 algorithm repeatedly computes optimal transport solutions in
+                   III. A LGORITHM DESIGN                        (6), and reassigns locations of UAVs in (7) to monotonically
+   Next, we discuss the approach used in our work to achieve improve the current assignment of locations, which gives us at
+scalable algorithms with decentralized deployment capability any time t a locally optimal set of UAV locations.
+for (i) maximizing cell coverage, and (ii) ferrying data between    In the first step (6), we compute optimal transport plans
+cell clusters in synchronous updates.                            C for fixed ξ via the POT library [15], which uses a linear
+                                                                 program formulation as in [16]. However, the exact computation
+A. Optimal cellular coverage                                     of minimal ξ (n+1) in the second step (7) is out of reach via
+   Our model provides a mathematical foundation to the cell a facility location problem [17], or a Wasserstein barycenter
+coverage problem where UAVs have a limited capacity of users. problem [18] even in the limiting relaxation of infinitely many
+What remains is to find optimal UAV locations ξ(t) at any UAVs (i.e. a large mean field UAV swarm). Hence, we instead
+time t. We propose an iterative assignment method which finds use the medoids approach of choosing cluster centroids from
+local optima with theoretical convergence guarantees of the a restricted set of user positions
+otherwise hard problem. More specifically, we apply alternating
+                                                                                  ξ (n+1) = arg min JX(t) (C, ξ)             (8)
+minimization (AM) on an optimal transport formulation of the                                 ξ⊆X(t)
+where we write ξ ⊆ X(t) whenever for all i = 1, . . . , N
+we have ξi ∈ {X1 (t), . . . , XM (t)}. The advantages of this
+approach are that we can easily compute the minimum by
+summing over distances and choosing the minimum
+                                N
+
+                               ×arg min            d(ξ¯i , X̄j ),
+                                             X
+      arg min JX(t) (C, ξ) =                                        (9)
+       ξ⊆X(t)                  i=1 ξi ∈X(t) j∈Ci
+                                                                          Fig. 3: Two optimization formulations of data ferrying among
+and that it ensures user-to-UAV connectivity also for DTN                 clusters 1 to 4, and the resulting 4 UAV routes. The blue lines
+purposes by tracking one ground user’s position via UAVs.                 (left) indicate TSP-based rotation with 3 jumps per UAV, and
+  As a side remark, in order to avoid oscillating assignment of           the orange lines (right) indicate binary-jumping rotation with
+users that are out of reach to different clusters, in the algorithm       2 jumps per UAV.
+we use a slightly adapted, "leaky" QoS distance measure
+
+  d(X̄, ¯
+   ˆ    ξ) = 1(r,∞) (∥X̄ − ¯
+                           ξ∥2 ) · 1{1} (X̄3 ) · 1{1} (ξ¯3 )                As a result, if users are static or slow in comparison to the
+  · (r + 0.01∥X̄ − ¯
+                   ξ∥2 ) + ∥X̄ − ¯ξ∥2 · 1[0,r] (∥X̄ − ¯  ξ∥2 ) (10)       update time Trot > 0, the total distance travelled by UAVs is
+
+that is not constant on ∥X̄ − ξ∥ ¯ 2 > r, to ensure cluster stability.       Dtot = (N − 1)⟨D, W⟩F = (N − 1) tr(DW),                  (11)
+   We assign UAVs to track the desired cluster locations. We assuming that any i-th and (i + 1)-th clusters are connected
+update clusters dynamically by rerunning the algorithm after on the cycle (see also Fig. 3), where D is the current distance
+each time interval of ∆T time units. Warm starting with the last matrix between cluster centroids Dij = d(ξi , ξj ), W is the
+centroid positions keeps the cluster locations stable over time weight matrix with entries wij = 1 whenever j = i + 1
+even if users are moving, allowing for UAVs to consistently mod N , and ⟨·, ·⟩F denotes the Frobenius inner product defined
+track a moving cluster. This is important, since the users on the by elementwise multiplication and summing of all entries.
+ground move over time (Fig. 2), and we would avoid clusters               By considering any possible permutation of cluster indices,
+to be bound to specific users or locations. Instead, clusters the TSP can then briefly be written as the QAP [19]
+dynamically readjust as underlying users move, allowing for
+certain users to switch from one cluster to another, or for the                                 min      tr(DPπ WPTπ )                (12)
+                                                                                             π∈Sym([N ])
+centroid to move with the users.
+                                                                       where π is any permutation of [N ] := {1, . . . , N } from
+B. Optimal inter-cluster DTN data ferrying                             the symmetry group Sym of [N ], and Pπ its corresponding
+   All that remains is to rotate UAVs over clusters to facilitate permutation matrix. The TSP can then be solved using any
+data ferrying between clusters. Assuming that DTN messages standard method, for which we use OR-Tools [20].
+are spread among users of any single cell cluster, the goal is to         An advantage of this method is that the distances travelled
+transport data between all clusters. We realize this diffusion of      by  UAVs during rotation are minimized, i.e. the method saves
+data by fixing an update interval Trot > 0 after which all UAVs        energy.   A disadvantage is its slow diffusion of information
+change from their current cluster to another. Here, sufficiently       between    clusters, as it takes up to N − 1 rotations to transport
+high Trot allows for good coverage during tracking of clusters         an  existing   message from one cluster to another. A variant of
+by UAVs, and each rotation of UAV-to-cluster assignments also          this method     is that we can even use less UAVs than required
+allows for a good spread of DTN messages. We introduce two             to cover   all  clusters by assigning each UAV to track a cluster,
+formulations for optimization of energy and DTN latency.               and  filling   the other  clusters with virtual UAVs. However, a
+   1) TSP-based rotation: Given Trot , a simple solution that disadvantage of using less UAVs than clusters is that full
+minimizes energy costs associated with the total distance coverage is no longer achieved, making this solution suitable
+travelled by UAVs, and still ensures that all UAVs eventually only if not enough UAVs are available to achieve full coverage
+reach all clusters, is given by the solution to a TSP. We find of users. The full algorithm is given in Algorithm 2.
+the shortest cycle in terms of distance travelled at the time             2) Binary-jumping rotation: As an alternative, one may
+of computation, and let all UAVs rotate through the cycle to consider a more delay-optimized ferrying behavior which
+eventually spread all messages between all clusters.                   ensures that any existing message takes at most ⌈log N ⌉
+                                                                       iterations to rotate from one cluster to another. The solution is
+                                                                       to rotate all UAVs by 2⌈log N ⌉−1 clusters, then by 2⌈log N ⌉−2
+Algorithm 1 AM for optimizing centroid positions
+                                                                       and so on. Assuming good intra-cluster connectivity, this
+  1: Input: Initial centroids ξ (0) .                                  ensures that in each rotation (except potentially the last), the
+  2: for iterations n = 1, . . . , NAM do                              messages cached in any cluster are duplicated from one cluster
+  3:    Compute C(n) = arg minC JX(t) (C(n−1) , ξ (n−1) ).             to another that does not have the messages yet, leading to
+  4:    Compute ξ (n) = arg minξ∈X N JX(t) (C(n) , ξ (n−1) ).          an optimal, exponentially fast spread of messages. The total
+  5: end for                                                           distance travelled is then given by
+  6: return Optimal centroid locations ξ (NAM )
+                                                                                           Dtot = ⟨D, Ŵ⟩F = tr(DŴ),                 (13)
+where Ŵ is now the weight matrix parametrizing all jumps            Proposition 2. In the static case, for any pcover > 0, there
+with entries wij = 1 whenever j ∈ {i + 2k mod N | k =                exists N > 0 and Trot > 0 such that a fraction pcover of
+1, . . . , ⌈log N ⌉}, resulting again in a QAP                       time-averaged coverage can be achieved.
+
+                     min        tr(DPπ ŴPTπ ).              (14)       We also note that in case of at least twice the capacity
+                  π∈Sym([N ])                                        necessary to cover all users, one could split UAVs into two
+   The problem is similar in structure to the TSP and is likely      equal sets, and rotate the locations of each set alternatingly
+hard, as its natural formulation is a QAP, which is known            such that one set of UAVs always provides coverage while
+for being NP-hard in general and having few tractable special        the other provides DTN coverage. However, in this work, we
+cases [19]. In particular, the matrix Ŵ is a circulant matrix,      focus on constrained scenarios where capacity is more limited.
+and D is symmetric. However, D is neither anti-Monge nor                  c) Bounds on data ferrying delivery time: In the con-
+Kalmanson, and hence does not fall into the few known, easy          nected cluster case assuming full and instantaneous intra-cluster
+cases [19]. Since an analytic or exact solution is difficult as in   connectivity (i.e. messages are shared fully among participants
+TSP, we propose an approximate algorithmic solution. Though          of each cluster), we can also show bounds on the DTN delivery
+the problem is similar in structure to TSP, we are not aware         time for the TSP-based and binary-jumping.
+of special algorithms for the considered QAP. We hence use           Proposition 3. In the static connected cluster case, for
+a genetic algorithm (GA) [21] with crossover operators used          any Trot > diam(X )
+                                                                                         , the maximum time-to-delivery of DTN
+                                                                                    v
+in TSP to solve for the optimal ordering of clusters. More           messages does not exceed 2Trot ⌈log N ⌉ for binary-jumping,
+precisely, we apply the well-known cycle crossover (CX) as           and 2Trot N for TSP-based rotation.
+e.g. found in [22]. The GA is given in Algorithm 3.
+                                                                          d) Time complexity: The solutions we provided are
+               IV. A LGORITHMIC PROPERTIES                           scalable not only to many users, but also to many UAVs.
+                                                                     For simplicity, with R = 1 we have a theoretical com-
+  We briefly state some properties of our algorithms, with
+                                                                     plexity of O(max(N, M )3 ) with an empirical complexity of
+proofs in the appendix for readability.
+                                                                     O(max(N, M )2 ) [16] for computation of optimal transport
+     a) Convergence of AM: We know that the AM algorithm
+                                                                     solutions in Algorithm 1, and complexity O(N 2 ) for computing
+always converges, consistently resulting in good coverage.
+                                                                     the medoids. Analogously, for data ferrying, though the TSP
+Proposition 1. Algorithm 1 monotonically converges in the            and binary-jumping QAP are hard in theory, in practice they
+cost (5).                                                            can be solved as long as one can evaluate the fitness of the QAP
+                                                                     formulation as a sum of N ⌈log N ⌉ ∈ O(N log N ) elements.
+     b) Impact of data ferrying on coverage: In the static or
+                                                                     Overall, our approach can be scaled up to large systems with
+quasi-static clustered regime, where UAVs are significantly
+                                                                     many users and UAVs, which we also verify experimentally.
+faster than users, v ≫ vuser , we can obtain
+                                       R ∞ bounds on the time-
+averaged (QoS-free) coverage c̄ = − 0 c(X(t), ξ(t)) dt.                                     V. E VALUATION
+                                                                       In this section, we evaluate our algorithm, comparing
+                                                                     between TSP-based rotation, binary-jumping, as well as some
+Algorithm 2 Joint data ferrying and cell coverage                    baselines. The evaluation parameters are found in Table I.
+ 1: Initialize cluster centroids ξ ∗ and UAV-cluster assignments
+                                                            A. Scenarios
+    α ∈ Sym([N ]).
+ 2: for each epoch n = 0, 1, . . . , Ttot /∆T do
+                                                              For evaluation, apart from illustrative examples of Gaussian
+ 3:                                              ∗
+      Run Algorithm 1 to obtain new centroids ξ (initialize user clusters, both on a circle (Fig. 3) and at city locations
+                      ∗
+      with current ξ ).                                     over a real city model (Fig. 5), we consider three advanced
+ 4:   if Rotation of UAVs has finished then
+ 5:      Compute new solution permutation π to QAP using
+                                                            Algorithm 3 GA for QAP minπ tr(DPπ ŴPTπ ).
+         OR-Tools [20] or Algorithm 3.
+                                                                                                      (0)        (0)
+ 6:   end if                                                 1: Initialize k random permutations π1 , . . . , πk .
+ 7:   if Rotation update time Trot has passed then           2: for iterations n = 1, . . . , NGA do
+                                                                                                           (n)
+ 8:      For TSP: Rotate UAVs by α = α + 1 mod N .           3:    Select the k/2 best permutations {πi }i=1,...,k/2 with
+ 9:      For binary-jumping: Rotate UAVs by α = α +                lowest cost F (πi
+                                                                                    (n−1)
+                                                                                            ) := tr(DPπ(n−1) ŴPT(n−1) ).
+          ⌈log N ⌉−(n mod ⌈log N ⌉)                                                                                  πi
+         2                            mod N .                                                            i
+                                                             4:    Crossover best permutations with prob. pc = 0.8 (CX
+10:   end if                                                                                         (n)
+                                                                   [22]) to obtain k/2 children {πi }i=k/2+1,...,k .
+11:   for each UAV i = 1, . . . , N do
+                                                   ∗         5:    Mutate children with prob. pm = 0.4 by exchanging a
+12:      Command to move UAV i towards cluster ξπ(α(i))  .
+                                                                   random pair of entries in the permutation.
+13:   end for
+                                                             6: end for
+14:   Pass ∆T time units.
+                                                             7: return Best permutation arg minπ∈{π (n) }                F (π)
+15: end for                                                                                                i   i=1,...,k
+                                                                  average time to delivery (TTD) for a message to reach its
+                                                                  recipient; probability of delivery (pdeliver ) for a message
+                                                                  successfully reaching its recipient by end of scenario; time-
+                                                                  averaged cell coverage (c̄); and total distance travelled by UAVs
+                                                                  (Dtot ). Since we are unaware of prior algorithms for joint cell
+                                                                  coverage and DTN ferrying, as baseline we compare against the
+                                                                  RWP heuristic, where UAVs repeatedly travel to a uniformly
+Fig. 4: Snapshot as in Fig. 2 for the SLAW model and binary-      random point in X , and the circular heuristic, where UAVs i
+jumping, at two times. UAVs (red triangles) rotate through        travel on a circle of radius ri = 4 km · (i/N ) around zero.
+clusters of users (dots color-coded by cluster assignment).              b) Quantitative evaluation: Overall, in Table II we see
+                                                                   that our approaches are effective at providing both DTN
+                                                                   message delivery and coverage, compared to the heuristics.
+mobility models with a simulated duration of 43 200 s (12 h). We find that binary jumping performs best. Due to mobility
+Scenarios contain 100 nodes moving in an area of 8 × 8 km. of nodes and possibly disconnected clusters, in contrast to
+All movement traces, 10 per mobility model, were generated Proposition 3 for the static connected case, TSP-based rotation
+using BonnMotion [23] and the following configurations:            improves over binary-jumping in TTD, though the confidence
+      a) RWP: As a simple baseline, we use a random waypoint interval does not allow a definitive conclusion. Meanwhile,
+model [24] where nodes move with speeds between 1 m s−1 binary-jumping excels in travelled distance since less overall
+and 5 m s−1 , with maximum pause time of 30 min.                   jumps mean less passing time between full rotations, for users
+      b) SMOOTH: For a more realistic representation of to move and change the optimal distances (11), (13) computed
+human mobility, SMOOTH [25] uses a power-law distribution at the beginning of each rotation in the QAP. In Fig. 6, we
+of statistics with node clusters. We use 40 clusters, an alpha for see that TTD is improved by using more UAVs, and distance
+the flight distribution of 1.45 (min: 1, max: 14000) and beta travelled scales inversely with rotation time as expected. Lastly,
+for the pause time distribution of 1.5 (min: 10, max: 1800).       in Fig. 7, as predicted by Proposition 2, high coverage is
+      c) SLAW: Another common model for simulating hu- achieved by tuning the number of UAVs or update interval.
+man mobility using a power-law distribution of statistics is Simultaneously, delivery probabilities remain high.
+SLAW [26]. Here, we use a pause time between 10 min and
+                                                                         c) Scalability of algorithms: Finally, we verify the scal-
+50 min, 500 waypoints, a distribution weight of 3.0, hurst of
+                                                                   ability of our proposed approach as discussed in Section IV:
+0.75 and a beta value of 1.0. A snapshot is seen in Fig. 4.
+                                                                   In Fig. 8, the time to run Algorithm 2 for 100 epochs n
+B. Numerical results                                               on a 2.4 GHz Quad-Core Intel Core i5 is shown for various
+                                                                   numbers of ground users M and UAVs N , and already remains
+   In the following, we demonstrate the results of our work on feasible for real online scenarios (significantly below 100∆T ).
+joint data ferrying and cell coverage by numerical simulations. Nonetheless, the algorithm is not parallel and uses NumPy
+Some qualitative examples are found in Fig. 4 and Fig. 5.          [28] and POT [15], the run time of the algorithms scales close-
+      a) Evaluation metrics: We present the results of proposed to-linearly with the considered N and M . Parallelization and
+approaches in comparison to reference schemes, considering: code optimization may further improve the run time.
+
+
+TABLE I: Default parameters for scenario, algorithm, DTN
+        Symbol            Name                 Value
+           X        Area of operation      [−4 km, 4 km]2
+           v          UAV velocity           20 m s−1
+          ∆T          Time interval             10 s
+          Trot       Rotation interval          6∆T
+          Ttot          Total time              12 h
+           N        Number of agents             10
+           M      Number of ground users         100
+           R          Capacity ratio             1.3
+           r       Cell coverage range          1 km
+         NAM          AM iterations              4
+         NGA          GA iterations             100               Fig. 5: Real-world illustrative example implementation with
+          k         GA generation size          100               four nano-quadrotors flying over a 1 : 1000 city model with
+        rDTN        DTN wireless range         100 m              color-coded clusters of users on the ground, using artificial
+        vDTN        DTN transmit speed      6570 kB s−1           potential fields (APF, [27]) for collision avoidance. The colored
+        bDTN         DTN buffer size           20 MB
+        TDTN       DTN message interval         10 s
+                                                                  dots mark previous positions of the UAVs, the dashed arrows
+        mDTN        DTN message size           25 kB              show the flight trajectories according to binary-jumping. The
+        tDTN           DTN TTL                300 min             UAVs spread messages between all clusters in 2 jumps.
+                                          TABLE II: Performance comparison of proposed approaches and reference schemes, with 95% confidence interval.
+                                                                      Algorithm                   Time to delivery TTD                                                               Delivery probability pdeliver                              Average coverage c̄           Distance travelled Dtot
+                                                                  TSP-based                                        4146 s ± 310 s                                                                   0.831 ± 0.003                                     0.77 ± 0.03                  3055 km ± 164 km
+                                                                Binary-jumping                                     4206 s ± 305 s                                                                   0.831 ± 0.003                                    0.781 ± 0.029                 2663 km ± 147 km
+                                                               Circular heuristic                                  5088 s ± 412 s                                                                   0.817 ± 0.006                                    0.495 ± 0.014                 7233 km ± 10.3 km
+                                                                RWP heuristic                                      4677 s ± 359 s                                                                   0.825 ± 0.005                                    0.505 ± 0.012                 8276 km ± 1.36 km
+                                                                   No UAVs                                         7124 s ± 770 s                                                                    0.747 ± 0.02                                          −                               −
+
+
+                                                                                                                                            ×106                                                                                    (a)                                                              (b)
+
+
+
+
+                                                                                                                 Travel distance Dtot
+                   6000                                                                                                                                                                                                        75
+
+
+
+ Average TTD [s]
+                                                                                                                                        5                                                                                                 M = 100                                                          M = 100
+
+
+
+                                                                                                                                                                                                             Time passed [s]                                                  Time passed [s]
+                                                                                                                                                                                                                                                                                                75
+                   5000                                                                                                                                                                                                                   M = 300                                                          M = 300
+                                                                                                                                        4                                                                                      50
+                                                                                                                                                                                                                                          M = 600                                               50         M = 600
+                   4000                                                                                                                                                                                                                   M = 1000                                                         M = 1000
+                                                                                                                                        3                                                                                      25                                                               25
+                   3000
+                                                         5         10          15            20                                                30             40         50        60         70       80                       0                                                                0
+                                                                                                                                                                                                                                          100    200      300     400   500                                100    200      300     400   500
+                                                               Number of UAVs N                                                                                    Rotation interval Trot [s]
+                                                                                                                                                                                                                                                 Number of UAVs N                                                 Number of UAVs N
+
+Fig. 6: The average TTD over number of UAVs and travelled                                                                                                                                                    Fig. 8: Time to run Algorithm 2 for 100 epochs n, for various
+distance over rotation interval for TSP-based rotation.                                                                                                                                                      numbers of ground users M and UAVs N . The run time scales
+                                                                                                                                                                                                             slowly with N and M . (a): TSP-based; (b): binary-jumping.
+
+                                                                              VI. R ELATED W ORK
+   Existing literature has considered UAVs either for data planning usually assumes knowledge of user locations, the
+ferrying using DTN or to provide flying base stations for impact of uncertain user locations was recently investigated in
+cellular communications. A vast literature have already been [34]. However, other than few exceptions [30], such literature
+devoted to addressing aerial base stations [7], [29]. More recent usually does not consider DTN-based data ferrying.
+results have considered on the one hand, advanced physical           DTNs and UAVs for data ferrying were considered by other
+layer communication techniques such as high-throughput researchers which propose various different flight patterns.
+relaying using buffer onboard UAVs [30], directive transmis- Common approaches include covering areas with a triangle
+sion using high-gain directional antenna and gimbal-assisted grid for a flight pattern, using genetic algorithms for path
+adaptive antenna steering [31], beamforming using aerial planning [35], distributed path planning algorithms mixed with
+reconfigurable intelligent surface (RIS) [32], and exploiting task division [4] or specially consider in-transit nodes besides
+multiple UAVs for cooperative multiple-input multiple-output large clusters [1]. Considering multiple UAVs for data ferrying,
+communications [6]. On the other hand, to fully exploit the Arafat et al. [3] propose a location-aided routing that exploits
+benefits of these physical layer techniques, joint optimization of predictions of UAV movements for data forwarding. Energy
+UAV deployment, trajectory planning and resource allocation consumption is a major factor not only for data transmissions
+have been considered for optimization of cell coverage [33], but also for the UAV flight time, thus, Zobel et al. [36] optimize
+throughput, energy [6], [31], and mission completion time inter-cluster data delivery based on communication performance
+[30], [34]. In addition to dynamic trajectory planning [6], [30], and energy consumption of the UAV itself. While Lieser et
+[34], optimal selection of waypoints has been considered in al. [37] presented a networked UAV simulation framework
+[31] to fulfill requirements of e.g. UAV-aided monitoring and with some basic flight patterns, similar to the other research
+inspection, or urban airspace regulation. While UAV trajectory lack a large scale comparison of baseline flight patterns as
+                                                                   well as advanced ones. Neither of the previously mentioned
+                                                                   works combine data ferrying flight planning with secondary
+            Average Coverage c̄          Average Coverage c̄
+      5                             5
+                                         1.0
+                                                                   objectives such as providing cell services to ground nodes.          1.0
+
+                                                                                                  0.85
+                                                                                                                                                                                                      0.85
+                                    10                                                                                          10
+                                    15                                                                                          15
+
+
+
+
+             Rotation interval Trot/10                                                                   Rotation interval Trot/10
+                                    0.8                                                           0.84                          0.8
+
+                                    20                                                                                          20
+                                                                                                                                                                                                      0.84
+                                                                                                                                                                                                                                                               VII. C ONCLUSION
+                                                                                                  0.83
+                                    25                                                                                          25                                                                    0.83
+
+                                    30                                                                                          30
+                                    0.6
+                                                                                                  0.82
+                                                                                                                                0.6
+
+                                                                                                                                                                                                      0.82
+                                                                                                                                                                                                                We have proposed and achieved usage of UAVs for joint
+                                                     2 4 6 8 10 12 14 16 18 20                                                                      2 4 6 8 10 12 14 16 18 20
+                                                       Delivery probability pdeliver              0.81
+                                                                                                                                                      Delivery probability pdeliver
+                                                                                                                                                                                                      0.81
+                                                                                                                                                                                                             DTN-based data ferrying and cellular coverage. Our approach
+                                     5
+                                    0.4                                                                                          5
+                                                                                                                                0.4
+
+                                    10                                                            0.80                          10                                                                    0.80
+                                                                                                                                                                                                             is based on alternating minimization for optimal-transport-
+                                    15
+                                    0.2                                                           0.79
+                                                                                                                                15
+                                                                                                                                0.2
+                                                                                                                                                                                                             based cell coverage, QAP-based optimal data ferrying, and a
+                                    20                                                                                          20                                                                    0.79
+
+                                    25                                                            0.78                          25                                                                           combination of both in a synchronous algorithm. The approach
+                                                                                                                                                                                                      0.78
+                                    30
+                                         0.0
+                                                                                                                                30
+                                                                                                                                        0.0
+                                                                                                                                                                                                             was verified numerically and against simpler baselines. For
+                                               0.0
+                                                     2 4 6 8 10 12 14 16 18 20
+                                                         0.2    0.4     0.6    0.8     1.0                                                    0.0
+                                                                                                                                                    2 4 6 8 10 12 14 16 18 20
+                                                                                                                                                        0.2         0.4      0.6      0.8     1.0
+
+                                                        Number of UAVs N                                                                               Number of UAVs N                                      future work, one could exploit the mobility of users, as the
+                                                          (a) TSP-based                                                                              (b) Binary-jumping                                      current approach remains agnostic to user behavior. Battery
+                                                                                                                                                                                                             levels could be considered, e.g. by adding another cluster for
+Fig. 7: Average coverage and delivery probabilities across                                                                                                                                                   recharging UAVs. Lastly, one could investigate the effects of
+number of UAVs and rotation interval.                                                                                                                                                                        unknown user locations, also by means of mean-field limits.
+                               A PPENDIX                                       [14] O. Kariv and S. L. Hakimi, “An algorithmic approach to network location
+                                                                                    problems. I: The p-centers,” SIAM J. Appl. Math., vol. 37, no. 3, pp.
+Proof of Proposition 1. Algorithm 1 induces a monotonically                         513–538, 1979.
+decreasing cost JX(t) (C(n) , ξ (n) ), since                                   [15] R. Flamary, N. Courty, A. Gramfort, M. Z. Alaya, A. Boisbunon,
+                                                                                    S. Chambon, L. Chapel, A. Corenflos, K. Fatras, N. Fournier et al.,
+         JX(t) (C(n+1) , ξ (n+1) ) ≤ JX(t) (C(n+1) , ξ (n) )                        “POT: Python Optimal Transport,” J. Mach. Learn. Res., vol. 22, no. 1,
+                                                                                    pp. 3571–3578, 2021.
+                                      ≤ JX(t) (C(n) , ξ (n) )         (15)     [16] N. Bonneel, M. van de Panne, S. Paris, and W. Heidrich, “Displacement
+                                                                                    interpolation using lagrangian mass transport,” ACM Trans. Graph. (TOG),
+by (6) and (7) or (8). By JX(t) (C, ξ) ≥ 0 and monotone                             vol. 30, no. 6, pp. 1–12, 2011.
+                                                                               [17] H. J. Carlo, F. Aldarondo, P. M. Saavedra, and S. N. Torres, “Capacitated
+convergence, (JX(t) (C(n) , ξ (n) ))n∈N converges.                                  continuous facility location problem with unknown number of facilities,”
+                                                                                    Eng. Manag. J., vol. 24, no. 3, pp. 24–31, 2012.
+Proof of Proposition 2. First, there trivially exists N > 0 such               [18] S. Borgwardt and S. Patterson, “On the computational complexity of
+that the achievable coverage is at least 1+p2cover , e.g. using                     finding a sparse wasserstein barycenter,” J. Comb. Optim., vol. 41, no. 3,
+N = M and singleton clusters (in practice, N may be lower).                         pp. 736–761, 2021.
+                                                                               [19] E. Cela, The quadratic assignment problem: theory and algorithms.
+As it takes at most diam(X
+                         v
+                             )
+                               time to reach a new cluster, choose                  Springer Science & Business Media, 2013, vol. 1.
+         diam(X )
+Trot =      v     ·k for any k > 1 to achieve a fraction 1+p2cover ·           [20] L. Perron and V. Furnon, “OR-Tools,” Google. [Online]. Available:
+ k−1                                                     diam(X )                   https://developers.google.com/optimization/
+  k of time-averaged coverage (as the fraction of time       v     ·           [21] M. Mitchell, “Genetic algorithms: An overview,” Complexity, vol. 1,
+(k − 1) is spent stationary). Choosing k sufficiently large gives                   no. 1, pp. 31–39, 1995.
+ 1+pcover k−1
+    2     · k > pcover as desired.                                             [22] A. J. Umbarkar and P. D. Sheth, “Crossover operators in genetic
+                                                                                    algorithms: a review.” ICTACT J. Soft Comput., vol. 6, no. 1, 2015.
+Proof of Proposition 3. For binary-jumping, it takes at most                   [23] N. Aschenbruck, R. Ernst, E. Gerhards-Padilla, and M. Schwamborn,
+                                                                                    “Bonnmotion: a mobility scenario generation and analysis tool,” in Proc.
+Trot ⌈log N ⌉ time until the next round of updates, after a                         SIMUTools, 2010.
+message spawns in cluster i. During the new round, the message                 [24] D. B. Johnson and D. A. Maltz, “Dynamic source routing in ad hoc
+spreads to all clusters, since for any cluster j, there exist                       wireless networks,” Mobile computing, pp. 153–181, 1996.
+                                    P⌈log N ⌉ kl                               [25] A. Munjal, T. Camp, and W. C. Navidi, “Smooth: A simple way to model
+k1 , . . . , k⌈log N ⌉ ∈ {0, 1} with l=1     2 = j − i mod N                        human mobility,” in Proc. ACM Int. J. Model. Simul. Sci. Comput., ser.
+by binary representation of j − i mod N , and hence there is                        MSWiM. New York, NY, USA: ACM, 2011, p. 351–360.
+a route of jumps performed by (possibly different) UAVs from                   [26] K. Lee, S. Hong, S. J. Kim, I. Rhee, and S. Chong, “Slaw: A new
+                                                                                    mobility model for human walks,” in IEEE INFOCOM 2009, 2009, pp.
+i to j. A similar argument holds for TSP-based rotation.                            855–863.
+                                                                               [27] O. Khatib, “Real-time obstacle avoidance for manipulators and mobile
+                             R EFERENCES                                            robots,” in Proc. IEEE ICRA, vol. 2, 1985, pp. 500–505.
+ [1] J. Zobel, B. Becker, R. Kundel, P. Lieser, and R. Steinmetz, “Topology-   [28] C. R. Harris, K. J. Millman, S. J. Van Der Walt, R. Gommers, P. Virtanen,
+     aware Path Planning for In-Transit Coverage of Aerial Post-Disaster            D. Cournapeau, E. Wieser, J. Taylor, S. Berg, N. J. Smith et al., “Array
+     Communication Assistance Systems,” in Proc. IEEE LCN Symposium,                programming with NumPy,” Nature, vol. 585, no. 7825, pp. 357–362,
+     Nov. 2020, pp. 88–98.                                                          2020.
+ [2] R. Udroiu, A. M. Deaconu, and C.-Ş. Nanau, “Data Delivery in a           [29] Y. Zeng, Q. Wu, and R. Zhang, “Accessing from the sky: A tutorial on
+     Disaster or Quarantined Area Divided into Triangles Using DTN-Based            UAV communications for 5g and beyond,” Proc. IEEE, vol. 107, no. 12,
+     Algorithms for Unmanned Aerial Vehicles,” Sensors, vol. 21, no. 11, p.         pp. 2327–2375, 2019.
+     3572, Jan. 2021.                                                          [30] Y. Wang, L. Xiang, and A. Klein, “Completion time minimization for
+ [3] M. Y. Arafat and S. Moh, “Location-Aided Delay Tolerant Routing                UAV-based communications with a finite buffer,” in Proc. IEEE ICC,
+     Protocol in UAV Networks for Post-Disaster Operation,” IEEE Access,            2023, pp. 1–7.
+     vol. 6, pp. 59 891–59 906, 2018.                                          [31] G. Lu, J. Zhang, L. Xiang, and X. Ge, “A global optimization method
+ [4] J. Yoon, Y. Jin, N. Batsoyol, and H. Lee, “Adaptive Path Planning of           for energy-minimal UAV-aided data collection over fixed flight path,” in
+     UAVs for Delivering Delay-Sensitive Information to Ad-Hoc Nodes,”              Proc. IEEE ICC, 2022, pp. 1220–1226.
+     in 2017 IEEE Wireless Communications and Networking Conference            [32] J. J. Quispe, T. F. Maciel, Y. C. Silva, and A. Klein, “Joint beamforming
+     (WCNC), Mar. 2017, pp. 1–6.                                                    and BS selection for energy-efficient communications via aerial-RIS,” in
+ [5] A. S. Abdalla and V. Marojevic, “Communications standards for                  Proc. IEEE GLOBECOM Workshops, 2021, pp. 1–6.
+     unmanned aircraft systems: The 3GPP perspective and research drivers,”    [33] C. Zhang, L. Zhang, L. Zhu, T. Zhang, Z. Xiao, and X.-G. Xia, “3D
+     IEEE Commun. Std. Mag., vol. 5, no. 1, pp. 70–77, 2021.                        deployment of multiple UAV-mounted base stations for uav communica-
+ [6] L. Xiang, L. Lei, S. Chatzinotas, B. Ottersten, and R. Schober, “To-           tions,” IEEE Trans. Commun., vol. 69, no. 4, pp. 2473–2488, 2021.
+     wards power-efficient aerial communications via dynamic multi-UAV         [34] M. B. Yilmaz, L. Xiang, and A. Klein, “UAV-assisted delay-sensitive
+     cooperation,” in Proc. IEEE WCNC, 2020, pp. 1–7.                               communications with uncertain user locations: A cost minimization
+ [7] M. Mozaffari, W. Saad, M. Bennis, and M. Debbah, “Optimal transport            approach,” in Proc. IEEE PIMRC, 2022, pp. 926–932.
+     theory for cell association in UAV-enabled cellular networks,” IEEE       [35] M. Harounabadi, M. Bocksberger, and A. Mitschele-Thiel, “Evolutionary
+     Commun. Lett., vol. 21, no. 9, pp. 2053–2056, 2017.                            Path Planning for Multiple UAVs in Message Ferry Networks Applying
+ [8] A. Lindgren, A. Doria, and O. Schelén, “Probabilistic routing in               Genetic Algorithm,” in Proc. IEEE PIMRC, Sep. 2018, pp. 1–7.
+     intermittently connected networks,” ACM SIGMOBILE Mob. Comput.            [36] J. Zobel, P. Lieser, B. Drescher, B. Freisleben, and R. Steinmetz,
+     Commun. Rev., vol. 7, no. 3, pp. 19–20, 2003.                                  “Optimizing Inter-Cluster Flights of Post-Disaster Communication Support
+ [9] S. Burleigh, K. Fall, E. Birrane, and III, “Bundle protocol version 7,”        UAVs,” in Proc. IEEE LCN, Oct. 2019, pp. 364–371.
+     Internet Requests for Comments, RFC Editor, RFC 9171, January 2022.       [37] P. Lieser, B. Richerzhagen, J. Zobel, and R. Steinmetz, “Simulation
+[10] A. Keränen, J. Ott, and T. Kärkkäinen, “The ONE simulator for DTN              Platform for Unmanned Aerial Systems in Emergency Ad Hoc Networks,”
+     protocol evaluation,” in Proc. SIMUTools, 2009, pp. 1–10.                      in Proc. ISCRAM, 2019, p. 15.
+[11] X. Lin, V. Yajnanarayana, S. D. Muruganathan, S. Gao, H. Asplund,
+     H.-L. Maattanen, M. Bergstrom, S. Euler, and Y.-P. E. Wang, “The sky is
+     not the limit: LTE for unmanned aerial vehicles,” IEEE Commun. Mag.,
+     vol. 56, no. 4, pp. 204–210, 2018.
+[12] C. Villani, Optimal transport: old and new. Springer, 2009, vol. 338.
+[13] J. A. Hartigan, Clustering algorithms. John Wiley & Sons, Inc., 1975.
+

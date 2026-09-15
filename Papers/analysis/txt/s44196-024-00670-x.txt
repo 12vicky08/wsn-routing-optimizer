@@ -1,0 +1,1020 @@
+International Journal of Computational Intelligence Systems   (2024) 17:274
+https://doi.org/10.1007/s44196-024-00670-x
+
+    RESEARCH ARTICLE
+
+
+
+ExAq‑MSPP: An Energy‑Efficient Mobile Sink Path Planning Using
+Extended Aquila Optimization Algorithm
+S. Sangeetha1 · T. Aruldoss Albert Victoire2 · Manoharan Premkumar3 · Ravichandran Sowmya4
+
+Received: 27 June 2024 / Accepted: 23 September 2024
+© The Author(s) 2024
+
+
+Abstract
+Wireless sensor networks play a crucial role in gathering data from remote or hard-to-reach locations, enabling real-time
+monitoring and decision-making in a wide range of industries and applications. The mobile sink path planning (MSPP)
+enables mobile sinks (e.g., drones or rovers) to navigate through the environment, collecting data from different sensor
+nodes, ensuring comprehensive coverage, and adaptively addressing changing conditions. Still, the energy-efficient routing
+with minimal delay is the challenging aspect. This research focuses on improving data gathering in wireless sensor networks
+by introducing an efficient routing protocol. In this proposed protocol, sensor nodes are initially deployed using Voronoi
+diagrams to ensure uniform network coverage. The network is then divided into clusters using the low-energy adaptive clus-
+tering hierarchy (LEACH) algorithm for energy-efficient routing. To optimize the path planning of a mobile sink for data
+collection, we introduce the extended Aquila (ExAq) optimization algorithm, which uses a multi-objective fitness function
+considering factors such as delay, residual energy, link quality, priority, and distance. Simulation results demonstrate the
+effectiveness of the proposed ExAq-MSPP protocol in terms of reduced delay, improved network lifetime, higher packet
+delivery ratio, enhanced residual energy, and increased throughput compared to existing protocols with the values of 1.169,
+99.857, 99.920, 0.997, and 255.306, respectively. Thus, the energy-efficient routing and optimizing path planning for mobile
+sinks, the proposed ExAq-MSPP protocol can extend network lifetime, increase data accuracy, and provide more robust
+performance under changing environmental conditions.
+
+Keywords Wireless sensor networks · Extended Aquila-based routing · Mobile sink path planning · Energy-efficient
+LEACH-based clustering · Network lifetime
+
+
+* S. Sangeetha                                                            1 Introduction
+  tsangeethaphd@gmail.com
+* Manoharan Premkumar                                                     Wireless sensor networks (WSNs) represent a revolution-
+  mprem.me@gmail.com                                                      ary technology, connecting a web of sensors with wireless
+* Ravichandran Sowmya                                                     communication capabilities across various sectors, includ-
+  Sowmya.pr@manipal.edu                                                   ing environmental monitoring, industrial automation, and
+     T. Aruldoss Albert Victoire                                          healthcare [1–4]. Within the realm of WSNs, one critical
+     t.aruldoss@gmail.com                                                 challenge that stands out is the coverage issue. Cover-
+1
+     Department of Computer Science and Engineering,                      age pertains to the effectiveness of monitoring within the
+     Karpagam College of Engineering, Coimbatore 641032,                  sensor-deployed area [5]. The presence of coverage gaps
+     India                                                                or overlaps can result in inefficiencies and missed data
+2
+     Department of Electrical and Electronics Engineering, Anna           events. To mitigate these concerns, Voronoi-based node
+     University Regional Campus, Coimbatore 641046, India                 deployment emerges as a key technique [6]. In Voronoi-
+3
+     Department of Electrical and Electronics Engineering,                based node deployment, strategic placement of sensor
+     Dayananda Sagar College of Engineering, Bengaluru,                   nodes is employed to optimize coverage. The foundation
+     Karnataka 560078, India                                              of this concept lies in Voronoi diagrams, which meticu-
+4
+     Department of Electrical and Electronics Engineering,                lously partition the sensing area into distinct regions, each
+     Manipal Institute of Technology, Manipal Academy                     assigned to a specific sensor node [7]. The benefit of this
+     of Higher Education, Manipal, Karnataka 576104, India
+
+
+                                                                                                                       Vol.:(0123456789)
+274     Page 2 of 21                                International Journal of Computational Intelligence Systems   (2024) 17:274
+
+
+approach is that it ensures that every point within the sens-      1.1 Motivation
+ing area is under the watchful eye of at least one sensor
+node [8, 9]. By adopting this methodology, we can effec-           The motivation for this research article stems from the
+tively minimize coverage issues such as gaps and overlaps.         critical role that WSNs play in collecting data from remote
+Thus, a more efficient and reliable data collection process        or difficult-to-access locations, which is essential for
+within the WSN [10, 11].                                           real-time monitoring and decision-making across vari-
+   Small sensor nodes make up WSNs, which are typi-                ous industries. Despite their potential, achieving energy-
+cally battery-powered and tasked with collecting data from         efficient routing with minimal delay remains a significant
+their allocated settings [12]. These nodes exchange infor-         challenge. This research aims to address these issues by
+mation wirelessly and send it to a centralized sink node           introducing an efficient routing protocol that leverages
+[13]. However, energy consumption is a serious problem,            Voronoi diagrams for uniform network coverage and the
+particularly in vast networks with a large number of sen-          low-energy adaptive clustering hierarchy (LEACH) algo-
+sor nodes [14, 15]. The key factor is battery life because         rithm for energy-efficient routing. In addition, the study
+charging is frequently impracticable, especially in danger-        proposes the extended Aquila (ExAq) optimization algo-
+ous or difficult-to-reach areas. Energy usage and network          rithm to optimize the path planning of mobile sinks, ensur-
+durability are now top research priorities as a result of          ing comprehensive coverage and adaptability to changing
+this scenario [16]. The clustering-based technique is a            conditions. The motivation is to enhance the effectiveness
+clever way to save energy on sensor nodes and prolong              of WSNs by reducing delays, extending network lifetimes,
+the life of the network [17]. According to this plan, the          and improving data accuracy, thereby contributing to more
+network is split into clusters, each of which is headed by         reliable and efficient real-time monitoring systems. The
+a cluster head (CH) [18]. These cluster heads are crucial          major contribution of the research is:
+because they gather and aggregate data from sensor nodes
+under their jurisdiction before sending it directly or indi-       • Design extended Aquila (ExAq) optimization algorithm:
+rectly through other cluster heads to the central sink node          the proposed ExAq algorithm is designed by incorpo-
+[19]. The researchers introduced a cluster-based routing             rating the Chebyshev mapping with the conventional
+method utilizing mobile sinks to enhance energy efficiency           Aquila optimization algorithm for obtaining the global
+in wireless sensor networks. By deploying mobile sinks,              best solution by eliminating the local solution trapping.
+the approach balances energy consumption across nodes,             • Design of ExAq-MSPP: the mobile sink path planning
+extending network lifespan and improving reliability [20].           (MSPP) is employed optimally using the ExAq algo-
+The researchers proposed a two-level clustering method               rithm by considering the multi-objective fitness func-
+for IoT networks, combining fuzzy logic and content-based            tion based on delay, residual energy, link quality, prior-
+routing. The approach optimizes data transmission by clus-           ity, and distance.
+tering devices based on content relevance, improving com-
+munication efficiency and reducing network traffic [21].              The organization of the research is as follows: Sect. 2
+   The use of sink nodes is one of the most popular ways           explains the literature review along with the problem state-
+to improve communication quality inside networks. Sink             ment. Section 3 details the ExAq-MSPP approach and its
+nodes, whether mobile or static, play a crucial role [22].         simulation outcome is detailed in Sect. 4. Finally, Sect. 5
+The problem with static sink nodes is that they remain             concludes the research.
+fixed in place, which requires surrounding nodes to use
+more energy owing to the continuous data flow. Mobile
+sinks provide a solution by effectively traversing the net-
+work and gathering data from each node [23, 24]. This              2 Literature Review
+investigation purposefully uses a mobile sink node for
+data gathering to make use of mobile sinks’ benefits [25].         The review of conventional MSPP-based techniques of
+Mobile sinks greatly lower the overall network’s energy            WSN is detailed in this section. A hybrid optimization-
+usage, but they also add some delay [4, 26]. Since the sink        based MSPP was designed by [1, 2] for the heterogeneous
+node is movable, data travel farther to it. The designed           WSN. In this, clustering-based routing was devised through
+method incorporates the idea of clustering to address this         the distribution density factor of neighboring nodes and
+latency concern [27]. In a single cluster that is headed by        average residual energy factor optimization of the stable
+a cluster head, all nodes are gathered. The cluster head,          election protocol (SEP) algorithm. Then, the MSPP was
+in turn, effectively connects with the mobile sink thanks          employed using the hybrid optimization algorithm that was
+to this setup, allowing for continuous communication               capable of determining the best path-planning strategy for
+between participating nodes and both [28].
+International Journal of Computational Intelligence Systems   (2024) 17:274                                          Page 3 of 21   274
+
+the mobile sink, taking into account the optimization of                  The WSA technique considered various factors to calculate
+edges and nodes in the minimum spanning tree. The result                  the most efficient paths for the MSs, taking into account
+was an optimal path for the sink, ensuring efficient data                 energy constraints and other parameters. Overall, the intro-
+collection in the heterogeneous WSNs. The SEP algorithm                   duced model aimed to enhance the performance of WSNs
+must balance energy efficiency with the need for certain                  by intelligently selecting CHs and guiding MSs along
+QoS parameters, such as low latency or high reliability.                  optimized paths. This approach contributed to improved
+Striking this balance is challenging, as optimizing for one               energy efficiency, reduced data transmission delays, and
+aspect may negatively impact another.                                     enhanced overall network performance.
+   Area priority-based MSPP was designed by Bagais et al.                    The framework introduced by El-Fouly et al. [32] uti-
+[29] to deliver urgent messages to the mobile sink without                lized a path-planning technique that takes into account
+latency and with minimal packet loss. In this, an optimiza-               several crucial factors, including the priority of differ-
+tion approach was utilized for the clustering of the nodes.               ent areas, environmental parameters, and the urgency of
+Then, the MSPP was employed to move towards zones with                    messages. As a part of this framework, a novel cluster-
+higher priority and shorter distances, guided by the opti-                ing algorithm was presented. This algorithm focused on
+mization approach. Finally, for urgent messages originating               optimizing energy efficiency and reliability within the
+from other zones that the mobie sink (MS) had traversed,                  network. It achieved this by considering critical factors
+the proposed approach employed a routing technique utiliz-                such as the remaining energy levels of sensor nodes, the
+ing multi-hop communication based on the MS’s current                     quality of wireless links, and the average intra-cluster
+position, with PSO aiding in the routing decisions. Simula-               distance. In addition, the research proposed a real-time,
+tion results demonstrated that the introduced method out-                 energy-efficient, and reliable routing algorithm that was
+performed other models based on different parameters, par-                also environmentally aware. This routing algorithm fac-
+ticularly in scenarios involving controlled MS movement in                tored in environmental data, link quality, communication
+large-scale environments with a focus on handling urgent                  delay, hop count, the residual energy of nodes, and load
+messages.                                                                 balancing to make informed routing decisions. The results
+   The introduced method involved the use of multiple port-               unequivocally demonstrated that the proposed framework
+able sinks for efficient information gathering and integrated             consistently outperformed the existing algorithms. Incor-
+energy-balanced clustering with an artificial bee colony-                 porating diverse factors into a cohesive and efficient path-
+based data-gathering strategy [30]. To determine the most                 planning strategy poses a significant challenge.
+suitable node to serve as the center of gravity for each clus-               An improved sparrow search algorithm (MISSA) with
+ter, the remaining energy of each sensor node was consid-                 the dynamic window approach (DWA) was designed by Hou
+ered. This approach ensured that clusters were formed in                  et al. [33] for dynamic path planning. The designed algo-
+an energy-efficient manner, enhancing the network’s over-                 rithm utilized logistic-tent chaotic mapping for a well-dis-
+all performance. Then, the MSPP, using the optimization                   tributed initial population. In addition, the escaping strategy
+algorithm, was capable of reducing data communication                     of the model was further enhanced through the refined eval-
+losses, extending the network’s lifetime, conserving energy,              uation function for improved safety and adaptive velocity
+maintaining system reliability, and enhancing network effi-               adjustment strategy. The designed model achieved smooth
+ciency. The method assumes a certain tolerance for data                   and safe path generation with dynamic obstacle avoidance
+delay, which may not be suitable for all applications. Some               in MISSA-DWA. The consideration of distance as the fitness
+real-time or critical applications may require lower latency.             parameter was the challenging aspect.
+   An optimization-based clustering and MSPP rout-                           Rendezvous points (RPs) and fuzzy logic (Fuzzy_RP)-
+ing was designed by Umamaheswari & Kumar [31] to                          based adaptive path construction to enhance data-gathering
+address the selection of CHs and determine optimal paths                  efficiency and prolong network lifetime by optimizing the
+for mobile sinks. In the first step, the technique utilized               path of a mobile sink was designed by Banimelhem et al.
+a method based on the optimization algorithm for clus-                    [34]. Initially, a set of RPs was selected using the k-means
+tering. This process aimed to efficiently organize sensor                 algorithm. Then, Fuzzy_RPs was employed with three
+nodes into clusters, with CHs strategically chosen within                 inputs (remaining energy, transmission distance, number of
+each cluster. The selection of CHs was based on energy-                   neighbors) and one output (weight value). Calculation of
+aware criteria and other relevant parameters to optimize                  weight values for each sensor node based on Fuzzy inputs
+the clustering process. The second major component of the                 and updated RP locations based on these weight values.
+technique involved weighted sum approach (WSA)-based                      The mobile sink moves sequentially between the updated
+path planning for MSs. This path-planning approach was                    RPs to collect data. The scalability issue of the model was
+designed to enable mobile sinks to navigate from their                    considered as a challenging aspect. The short description is
+current location to their destination in an optimal manner.               presented in Table 1.
+                                                                                                                                                                                                   274
+
+
+
+
+                                                                                                                                                                                                   Page 4 of 21
+
+
+
+Table 1  Short description
+References              Technique used                                           Advantages                                               Disadvantages
+
+[1, 2]                  Pigeon-inspired optimization algorithm                   Low latency and high reliability                         Demand for significant computational resources and
+                                                                                                                                           potentially results in increased processing time
+[30]                    Energy-efficient path planning of MS-based area          The prioritization approach enhances the system’s        Failure to handle significant parameters that minimize
+                         priority                                                 adaptability to different environmental conditions       the latency of the model
+                                                                                  and varying levels of importance for different zones
+[30]                    Artificial bee colony                                    The optimization algorithm is designed to reduce data Real-time or critical applications that require lower
+                                                                                  communication losses, leading to an extension of      latency may not be well-supported by this approach,
+                                                                                  the network’s lifetime                                posing a limitation in its applicability
+[31]                    Energy-aware metaheuristics-based path planning          Energy-efficient clustering and routing contribute to As the size of the network grows, scalability concerns
+                         with mobile sinks                                        reduced energy consumption, making the network        may arise, impacting the model’s effectiveness in
+                                                                                  more sustainable and resilient                        large-scale deployments
+[32]                    The energy-efficient and reliable clustering algorithm   Well-balanced clusters that enhance network perfor-   Consideration of multiple parameters poses challenges
+                                                                                  mance and sustainability                              in ensuring timely decision-making while maintaining
+                                                                                                                                        energy efficiency and reliability
+[33]                   Dynamic path planning using a hybrid metaheuristic        Robust path optimization capability                   Limited to considering only distance in path planning
+                        algorithm
+Banimelhem et al. [34] Adaptive path planning using fuzzy logic                  Improved data-gathering efficiency by adapting RPs       Potential communication overhead for updating RP
+                                                                                   to network conditions                                    locations
+Proposed                ExAq-MSPP                                                (i) Achieved a lower delay of 1.169 s, enhancing the     –
+                                                                                   real-time data-gathering capability
+                                                                                 (ii) Achieved a packet delivery ratio of 99.920%,
+                                                                                   indicating reliable data transmission
+                                                                                 (iii) Maintained a higher residual energy of 0.997
+                                                                                   Joules, ensuring longer operational periods for sen-
+                                                                                   sor nodes
+                                                                                                                                                                                                   International Journal of Computational Intelligence Systems
+
+
+
+
+                                                                                                                                                                                                   (2024) 17:274
+International Journal of Computational Intelligence Systems   (2024) 17:274                                         Page 5 of 21   274
+
+
+2.1 Problem Statement                                                    considering the multi-objective fitness function is required
+                                                                          for overcoming the challenges faced by the conventional
+Mobile sink path planning is a critical aspect of wireless                methods.
+sensor networks that involves determining the most effi-
+cient route or trajectory for a mobile sink device to trav-
+erse within the network while collecting data from sensor
+nodes. This process is fundamental to optimizing data col-                3 System Model
+lection in WSNs and plays a pivotal role in various appli-
+cation domains. Application domains for mobile sink path                  The WSN comprises various sensor nodes, wherein each
+planning encompass environmental monitoring, precision                    node is distributed randomly. Voronoi diagrams partition
+agriculture, healthcare, industrial automation, and disaster              the network area into regions, with each sensor node being
+response, among others. In these domains, mobile sinks are                the focal point of its region. This ensures that the deploy-
+employed to efficiently collect data from sensors scattered               ment provides uniform coverage of the entire area, reduc-
+across vast or dynamic environments.                                      ing the chances of coverage gaps or redundant nodes in
+   Existing methods for optimal mobile sink path planning                 certain areas. The sink gathers the data generated by the
+span various approaches, including greedy algorithms, heu-                nodes through the CH. Since the CH-based data collection
+ristic algorithms, and optimization techniques such as linear             minimizes the communication link between the nodes and
+and integer programming. However, despite the progress in                 the sink, network congestion can be minimized through CH-
+this field, significant challenges persist. These challenges              based data gathering. The data gathered from the CH by the
+include adapting to dynamic environments where path plan-                 sink node are employed dynamically using the mobile sink-
+ning strategies must respond to changing conditions, ensur-               based data collection. For this, the MSPP is introduced for
+ing energy-efficient data collection to extend the network’s              gathering the information from the CH using a novel opti-
+lifetime, meeting real-time data-collection requirements,                 mization technique. The proposed system model is depicted
+scaling path planning methods for large sensor networks,                  in Fig. 1.
+ensuring reliable data collection in the presence of com-                     Initially, the nodes in the WSN are deployed using the
+munication failures, balancing the data collection load                   Voronoi to solve the coverage issue. Then, the energy-effi-
+across sensor nodes, and accommodating path constraints                   cient LEACH-based clustering is devised for clustering and
+such as physical obstacles or restricted areas. Addressing                CH selection for energy-efficient routing. Then, the MSPP
+these challenges is crucial for advancing the efficiency and              is employed using the extended Aquila (ExAq) optimization
+effectiveness of mobile sink path planning in WSNs. Thus,                 algorithm. The multi-objective fitness factors such as delay,
+an energy-efficient clustering and optimal path planning by
+
+
+
+
+Fig. 1  Proposed ExAq-MSPP-based routing system model
+274      Page 6 of 21                                International Journal of Computational Intelligence Systems   (2024) 17:274
+
+residual energy, link quality, priority, and distance are con-      3.2 Clustering Using Energy‑Efficient LEACH
+sidered for identifying the optimal best path.
+                                                                   The LEACH algorithm is a powerful tool that enhances the
+                                                                   energy efficiency and overall performance of wireless sensor
+3.1 Node Deployment Using Voronoi                                 networks. By dynamically selecting CHs, optimizing energy
+                                                                   consumption, and strategically organizing data gathering and
+Voronoi-based deployment ensures that sensor nodes                 sharing, it significantly extends the network’s lifetime and
+evenly cover the entire deployment area. This helps mini-          ensures efficient operation. Initially, the network is divided
+mize coverage gaps and provides comprehensive data col-            into various groups or clusters. Each cluster functions as a
+lection. In this, nodes are strategically placed, reducing the     self-contained unit within the WSN. Within each cluster, one
+energy required for long-distance communication. This can          node is designated as the CH. The CH plays a central role in
+significantly extend the network's lifetime as sensor nodes        the cluster’s operations. The CH is responsible for gather-
+conserve energy. Besides, by assigning specific regions to         ing data from all the cluster members and sharing this col-
+nodes, interference and contention for the communication           lected information with the central sink node of the network.
+channel are minimized. This results in more efficient data         Unlike static assignments where a CH remains unchanged
+transmission and reduced packet collisions. Thus, in the pro-      for extended periods, the LEACH algorithm introduces a
+posed routing protocol, Voronoi-based node deployment is           dynamic CH selection process. During every communica-
+introduced. The Voronoi-based node deployment is depicted          tion round, a new CH is selected. This dynamic selection
+in Fig. 2.                                                         enhances the network’s lifetime. It is important to note that
+   The steps utilized for the Voronoi-based node deploy-           the node chosen as the CH consumes more energy compared
+ment are:                                                          to the other cluster members. This higher energy usage is
+                                                                   due to the CH’s active involvement in data gathering and
+• Utilize the Delaunay triangulation algorithm to calculate        sharing with the sink node. The cluster members, on the
+  the Delaunay triangulation of the selected node locations.       other hand, have a different role. Their primary responsibil-
+  Delaunay triangulation connects nodes in a way that min-         ity is to share data with the CH. They do not engage in the
+  imizes the occurrence of obtuse angles in triangles.             extensive data gathering and sharing activities performed
+• Transform the Delaunay triangulation into a Voronoi dia-         by the CH. The process of cluster formation and CH selec-
+  gram. You can achieve this by connecting the circum-             tion is initially dynamic and arbitrary, ensuring flexibility
+  centers of adjacent triangles in the Delaunay triangula-         and adaptability. After completing the first communication
+  tion, creating the edges of the Voronoi diagram.                 round, the LEACH algorithm employs a probability-based
+• For each sensor node, determine which Voronoi region             approach to select the CH for the next round. This selection
+  it belongs to. Each node should be associated with the           takes into account the energy levels of the nodes, ensuring
+  Voronoi region containing its initial location. These            a balanced distribution of energy usage across the network.
+  Voronoi regions represent the areas of responsibility for           Thus, for the energy-efficient LEACH-based clustering
+  the nodes.                                                       U represents the number of clusters, V signifies the total
+                                                                   number of nodes within the network, and Z denotes the
+   Thus, the Voronoi-based node deployment is employed,            probability of selecting a CH. When communication is ini-
+and then node clustering and CH selection are devised using        tiated, each node in the cluster generates a random number
+the LEACH approach for energy-efficient routing.                   between 0 and 1. This number is subsequently compared
+
+
+
+
+Fig. 2  Voronoi-based node deployment
+International Journal of Computational Intelligence Systems   (2024) 17:274                                           Page 7 of 21   274
+
+
+with a pre-established threshold. The formula for computing               compared to the static sink due to the benefits of enhanced
+this threshold is as follows:                                             energy efficiency and network lifetime. Static sinks may
+                                                                          require sensor nodes to transmit data over longer distances,
+         {         Z
+                (
+                   mod Z1
+                          ) for all V in cluster                          leading to higher energy consumption for data transmission.
+T(V) =      1−Z  p
+                                                        (1)               Mobile sinks can move closer to the CH, reducing the energy
+           0, Else
+                                                                          required for data transmission, which in turn enhances the net-
+where p stands for the selection round and T(V) stands for                work lifetime. In the proposed routing protocol, the ExAq opti-
+the threshold.                                                            mization algorithm is considered for mobile sink path plan-
+   Hence, in the network, all nodes have an equal oppor-                  ning. The ExAq is designed by hybridizing the conventional
+tunity to become the CH, regardless of their energy levels.               Aquila optimization with the chaotic Chebyshev mapping for
+This approach can pose challenges, as nodes with minimal                  enhancing the exploration criteria with a fast convergence rate.
+energy may become CHs and quickly deplete their energy,                   The multi-objective fitness function is considered for identify-
+limiting the network’s lifetime. To address this issue, the               ing the optimal best path for the mobile sink to gather infor-
+enhanced LEACH algorithm is incorporated into the pro-                    mation from the CH. Factors such as delay, residual energy,
+posed optimal mobile sink placement protocol, aiming to                   link quality, priority and distance are utilized for the multi-
+extend the network's lifetime. Consequently, in the second                objective fitness evaluation.
+communication round, the threshold value is recalibrated,
+taking into account the nodes’ residual energy, and is rep-               3.3.1 Multi‑objective Fitness Function
+resented as
+                                                                          The multi-objective fitness considered for the MSPP using the
+                  Z         X
+                                                                          ExAq algorithm is evaluated based on various factors such as
+        {
+                (        ) × Er D, for all V in cluster
+            1−Z p mod Z1                                (2)
+                            XEi
+T(V) =                                                                    delay, residual energy, link quality, priority and distance.
+            0, Else
+                                                                             Delay: The time taken by the CH to share information with
+where XEr stands for a node’s residual energy, XEi stands                 the mobile sink is defined as delay, which is evaluated based
+for energy at the beginning of the process, and D stands for              on transmission delay TD, queuing delay QD and processing
+the ideal cluster number. The following criteria are used to              delay PD. It is formulated as
+evaluate the selection of the ideal cluster:                              FD = TD + PD + QD                                            (4)
+     √ √
+         V                   XEfs                                         where the delay associated with the information sharing is
+D=                                             ×P        (3)
+                     4
+        2𝜋 XEamp e (2U − 1)XEi − U ⋅ XEagg                                defined as FD.
+                                                                             Residual energy: The available energy resources that can
+where P refers to the diameter of the network, and the energy             be utilized for communication and data transmission to the
+expended by the amplifier is indicated as XEamp. The energy               mobile sink are measured through the residual energy estima-
+associated with free space communication is represented as                tion. It is outlined as
+XEfs , and the energy consumed by the cluster head (CH)
+for aggregating information shared by cluster members is
+                                                                          FRE = EInitial − EConsumed                                   (5)
+denoted as XEagg.
+   Using the threshold value estimation, CHs are chosen to
+                                                                          Table 2  Simulation parameters
+facilitate energy-efficient information sharing. In addition,
+CHs exclusively communicate with the sink node, reduc-                    Parameters                                 Values
+ing communication links between cluster members and the
+                                                                          Nodes                                      50–150
+sink. This approach ensures minimal communication links,
+                                                                          Data rate                                  1 Kbps
+and consequently, the collected data are relayed to the sink
+                                                                          Transmission range                         200 m
+through the CHs, making them responsible for sharing infor-
+                                                                          Area                                       1000 × 1000 m
+mation with the mobile sink.
+                                                                          Initial energy                             1J
+                                                                          Traffic                                    CBR
+3.3 Extended Aquila Optimization Algorithm‑Based                         Population                                 20
+     MSPP                                                                 Iteration                                  1000
+                                                                          Rounds                                     2500
+After clustering the nodes in the network and CH selection,
+                                                                          Node distribution                          Randomly distributed
+the information gathered by the CH from the cluster nodes
+                                                                          Cluster head                               4
+is shared with the sink. The consideration of mobile sink is
+                                                                          Initial pause time                         0.5 s
+ 274      Page 8 of 21                  International Journal of Computational Intelligence Systems   (2024) 17:274
+
+
+   Techniques                50 Nodes               100 Nodes                                  150 Nodes
+   Network
+   Scenario
+
+
+
+
+   Clustering
+
+
+
+
+   Clustering
+   Head
+
+
+
+
+   ExAq-
+   MSPP
+   Routing
+
+
+
+
+Fig. 3  Simulation results
+International Journal of Computational Intelligence Systems   (2024) 17:274                                           Page 9 of 21   274
+
+
+
+
+Fig. 4  Delay-based assessment: a 50 nodes, b 100 nodes and c 150 nodes
+
+
+
+where the residual energy is defined as FRE, the initial energy           to the process of assessing the reliability and effectiveness of
+is defined as EInitial and the energy consumed is defined as              the communication links between CHs and the mobile sink.
+EConsumed.                                                                It helps in determining the quality of the paths through which
+   Link quality: Link quality estimation in the mobile sink               data are collected from CHs and transmitted to the mobile
+path planning for data gathering from CHs in a WSN refers                 sink:
+274     Page 10 of 21                                  International Journal of Computational Intelligence Systems         (2024) 17:274
+
+
+        RSSI
+                                                                                (       )
+FLQ =                                                        (6)      Hk,l = M × Gl − Al + Al, k = 1, 2, … B; l = 1, 2, … L
+        Noise                                                                                                                                (10)
+where the link quality is defined as FLQ , and the received               The upper and lower bounds are denoted as Gl and Al ,
+signal strength is denoted as RSSI.                                   respectively, and the random number is denoted as M .
+    Priority: Priority refers to the process of assigning pri-            Fitness estimation: The effectiveness or closeness of the
+orities to different CHs or data sources based on various             solution for the MSPP routing protocol is evaluated using a
+criteria. These priorities help in determining the order or           fitness estimation method. This fitness estimation is quanti-
+importance of collecting data from CHs and optimizing data            fied using the multi-objective fitness using Eq. (8).
+transmission in the network. It is denoted as FP.                         Four hunting tactics: Aquila employs four distinct hunt-
+    Distance: Distance estimation is a critical factor in path        ing tactics, encompassing both exploration and exploitation
+planning because it helps determine the optimal route for             phases, to capture prey. The solution obtained through a bal-
+the mobile sink to traverse the network and collect data effi-        anced approach yields the global best solution. In the diver-
+ciently. Distance refers to the process of determining the            sification phase, attributes within the sight area are explored,
+physical distance between the mobile sink and the CHs. It             resulting in the representation of the global best solution.
+is formulated as                                                      Subsequently, the intensification phase involves a deeper
+        √                                                             exploitation of attributes within the sight area, leading to the
+                                                           (7)        discovery of the local best solution. Consequently, a solution
+           (            )2 (             )2
+FDist =      xsink − xCH + ysink − yCH
+                                                                      achieved through a balanced combination of exploration and
+where the distance measure is denoted, the position of                exploitation aids in resolving the issue related to MSPP by
+the sink is defined as xsink , ysink , the position of the CH is      attaining the global best solution.
+denoted as xCH, yCH and the coordinates are defined as (x, y).
+   The formulation for the multi-objective fitness function              (i) Improved exploration: During this phase, Aquila inten-
+is outlined as follows:                                                      sively explores the sight area for prey capture, utilizing
+                                                                             a vertical stoop maneuver initiated from a high soar-
+                                                             (8)
+           {         }        {                }
+Fit = Min FD , FDist ; Max FRE , FLQ , FP                                    ing altitude. The mathematical expression of Aquila’s
+                                                                             position, enhanced by randomization, is as follows:
+                                                                                                    (             )
+                                                                                                            Q          (                         )
+3.3.2 ExAq Algorithm                                                     H1 (Q + 1) = Hbetter (Q) × 1 −              + HF (H) − Hbetter (Q) ∗ M
+                                                                                                           Qmax
+                                                                                                                                             (11)
+The proposed ExAq algorithm is designed by integrating the                     where Aquila’s location in the following iteration
+chaotic Chebyshev mapping within the conventional Aquila                       (Q + 1) is designated as H1 (Q + 1) and the best solu-
+optimization for enhancing the convergence rate by solving                     tion from the current iteration is denoted by
+the issue of local optimal solution trapping. The inclusion                               . Aquila uses a control element called
+of chaotic mapping assists in enhancing the exploration, and                  (Hbetter (Q))
+                                                                                1 − QQ        to investigate the surroundings in front of
+hence, the global best is accomplished.                                                max
+
+   Initialization: The population of the solution H is first                  it. The result of the current iteration’s solution acqui-
+established together with the issue’s lower bound A and                       sition is summed up, and the average is denoted by
+upper bound G . The following is an expression for the solu-                  the letter HF (Q) and a random number between 0 and
+tions represented in the search area:                                         1 is designated as M . The formulation for the average
+                                                                              solution is outlined as follows:
+  ⎡ h1,1 ⋯ h1,l h1,L−1 h1,L ⎤
+                                                                                                B
+  ⎢ h2,1 ⋯ h2,l     ⋯   h2,L ⎥                                                               1∑
+                                                                              HF (Q) =            H (Q), ∀l = 1, 2, … , L                    (12)
+     ⋯ ⋯ hk,l       ⋯     ⋯ ⎥                                                                B k=1 k
+  ⎢                            ⎥
+H=⎢                                                          (9)
+  ⎢ ⋮     ⋮ ⋮       ⋮     ⋮ ⎥
+  ⎢h      ⋯ h       ⋯  h       ⎥
+  ⎢ B−1,1     B−1,l      B−1,L
+                                                                        (ii) Targeted exploration: During this phase, Aquila
+                               ⎥
+  ⎣ hB,1 ⋯ hB,n hB,L−1 hB,L ⎦
+                                                                             conducts circular movements around the prey, tran-
+   The kth location of the Aquila is denoted as hk , the dimen-              sitioning from a high soaring position to a gliding
+sion of the search area is denoted as L , and B stands for the               contour flight approach. This phase is appropriately
+total number of solutions. Following that, the expression that               labeled as the preparatory stage for prey capture, and
+is used to represent the Aquila in the search area:                          the position of Aquila during this stage is mathemati-
+                                                                             cally expressed as
+International Journal of Computational Intelligence Systems    (2024) 17:274                                        Page 11 of 21   274
+
+
+         H2 (Q) = Hbetter (Q) × Levy(D)                                    		  In this case, 𝛽 has a fixed value of 1.5. The criteria
+                                                                 (13)         used to indicate the spiral search are then represented
+                    + HS (Q) + (c − d) ∗ M
+                                                                              as follows:
+		  The best Aquila location in the current itera-                                c = x × 𝑐𝑜𝑠(𝜆)                                     (16)
+   tion is marked as Hbetter (Q). The Aquila’s position
+   in the narrower diversification is denoted as H2 (Q)
+   and the spiral-shaped search is denoted by c and d ,
+                                                                                  d = x × 𝑠𝑖𝑛(𝜆)                                     (17)
+   respectively. The Aquila’s Levy flight is denoted as                           where
+   Levy(D). In addition, the Aquila’s arbitrary location
+   between [1, B] is denoted as HS (Q). Using these nota-                         x = x1 + W × D1                                    (18)
+   tions, we create the following expression for the Levy
+   flight:                                                                        𝜆 = −𝛾 × D1 + 𝜆1                                   (19)
+                           r×𝛼
+        Levy(D) = f ×                                            (14)                    3𝜋
+                           |s|1∕𝛽                                                 𝜆1 =                                               (20)
+                                                                                          2
+		  If r and s are random numbers, and [0,1] is their
+                                                                           		  The fixed values are assigned for some of the
+  range, and 0.01 is the value set for the constant f . 𝛽
+                                                                                 constants such as 𝛾 = 0.005, and W = 0.00565. The
+  is then stated as
+                                                                                 value of D1 ranges between [1, B] and x1 refers to the
+                            � �
+                              𝜋𝛽 ⎞
+                                                                                 search cycle and ranges between [1,20].
+            Γ(1 + 𝛽) × sinf                                                (iii) Combined exploitation: In this stage, Aquila gets
+          ⎛
+                               2
+                                                                 (15)
+          ⎜                         ⎟
+        𝛼=⎜ � �              �
+                               𝛽−1
+                                   �⎟
+                                                                                 ready to attack the prey using the slow descent and
+          ⎜ Γ 1+𝛽 × 𝛽 × 2 2 ⎟
+          ⎝     2                   ⎠                                            low flight criteria. The mathematical expression for
+                                                                                 the solution in this phase is expressed as
+                                                                                                (                   )
+                                                                                  H3 (Q + 1) = Hbetter (Q) − HF (Q) × 𝜔
+                                                                                                                                   (21)
+Table 3  Delay-based assessment                                                                 − M + ((G − A) × M + A) × 𝛿
+Rounds/methods             500      1000    1500      2000     2500
+                                                                                  where the parameters used to control the intensity are
+50 nodes                                                                          denoted as 𝜔 and 𝛿 , each having a value of 0.1. To
+ MISSA-DWA                 6.444    8.594    8.956     9.818   11.812             enhance the exploration criteria, the chaotic Cheby-
+ Fuzzy-RP                  3.332    4.794    8.196    12.070   12.355             shev mapping is devised and formulated as follows:
+ PSO-PIO                   5.684    7.494    9.496    11.941   14.068
+                                                                                  HQ+1 = 𝑐𝑜𝑠 n.cos−1 HQ                             (22)
+                                                                                             (           )
+ EEPP-BAP                  3.752    7.181    9.317    11.128   13.456
+ ABC                       3.590    6.691    8.904    10.727   12.707
+                                                                                  where HQ+1 denotes the solution reached in the cur-
+ EAM-PPMS                  3.440    5.925    7.687     9.022   12.821
+                                                                                  rent iteration and HQ denotes the solution reached
+Proposed ExAq MSPP         3.066    4.819    6.162     8.074   10.742
+                                                                                  in the previous iteration Q . The control parameter
+ 100 nodes
+                                                                                  used to choose the most suitable candidates is n, and
+ MISSA-DWA                 6.471    7.787    8.315    10.061   11.488
+                                                                                  it has a value between 0 and 1. Thus, the position
+ Fuzzy-RP                  5.637    8.468    9.013    11.137   12.663
+                                                                                  updation in this phase using the ExAq algorithm is
+ PSO-PIO                   6.133    6.228    6.570     8.543   10.025
+                                                                                  expressed as
+ EEPP-BAP                  3.785    5.041    5.559     6.058    7.353
+                                                                                                   {(                    )
+ ABC                       3.217    3.510    4.720     4.825    5.781              W3 (T + 1) = 0.5 Hbetter (Q) − HF (Q)
+ EAM-PPMS                  2.855    2.858    2.962     4.004    5.303
+                                                                                                ×𝜔 − M + ((G − A) × M + A) × 𝛿}
+ Proposed ExAq MSPP        1.641    2.430    2.803     3.304    4.297                                { (              )}
+150 nodes                                                                                       + 0.5 cos n. cos−1 HQ
+ MISSA-DWA                 4.117    6.032    6.788     7.157    9.723                                                          (23)
+ Fuzzy-RP                  6.310    6.448    7.843    12.232   12.344      		  Thus, using the proposed solution updation helps
+ PSO-PIO                   8.122    9.818   13.009    13.819   14.529            to acquire the local best solution from the global best
+ EEPP-BAP                  7.733    7.954    8.753    10.103   11.013            solution to obtain the balanced phases.
+ ABC                       5.145    6.956    7.465     9.211    9.603       (iv) Acquisition of target: In this stage, Aquila captures
+ EAM-PPMS                  3.860    4.501    7.064     8.143    8.853            the prey by walking, and the expression for the solu-
+ Proposed ExAq MSPP        1.169    3.649    5.625     6.737    7.421            tion is represented as
+274      Page 12 of 21                                    International Journal of Computational Intelligence Systems   (2024) 17:274
+
+
+
+
+Fig. 5  Network lifetime-based assessment: a 50 nodes, b 100 nodes and c 150 nodes
+International Journal of Computational Intelligence Systems   (2024) 17:274                                        Page 13 of 21   274
+
+                                       (              )
+         H4 (Q + 1) = J × Hbetter (Q) − T1 × H(q) × M
+                                                                                         (         )
+                                                                                               Q
+                                                                                 T2 = 2 × 1 −                                       (27)
+                            − T2 × Levy(D) + M × T1                                           Qmax
+                                                                (24)
+                                                                          		  If the value of the random number M spans from
+        where the quality function, Aquila’s movement to                     [0,1], the current iteration is denoted by Q , and the
+        catch its prey, and the slope of flight are each denoted             maximum iteration is denoted by Qmax.
+        by T2 , T1 , and J , and the formula for determining
+        these parameters is written as                                       Re-evaluating the fitness: Following the adjustment of
+                    (
+                        2×M()−1
+                                  )                                       Aquila’s positions, the fitness is re-assessed to verify the
+        J(Q) = Q         (1−Q)2                                 (25)      solution’s feasibility of MSPP, employing Eq. (8).
+                                                                             Termination: After the accomplishment of Qmax or the
+                        (
+                             Q
+                                      )                                   acquisition of the global best solution, the iteration termi-
+        T1 = 2 × M                        −1                    (26)      nates and the solution is utilized for routing the request.
+                            Qmax
+                                                                          The pseudo-code is presented in Algorithm 1.
+
+
+
+
+   Algorithm 1  Pseudocode for ExAq algorithm
+
+
+
+
+                                               >
+274      Page 14 of 21                                         International Journal of Computational Intelligence Systems   (2024) 17:274
+
+Table 4  Network lifetime-based assessment                                    4.1 Simulation Results
+Rounds/methods           500      1000       1500     2000      2500
+                                                                              Figure 3 serves as a detailed visual representation of the
+50 nodes                                                                      ExAq-MSPP algorithm’s experimental outcomes, illus-
+ MISSA-DWA               94.321   85.946     76.013   60.105    52.421        trating its performance across varying network configura-
+ Fuzzy-RP                93.545   82.127     73.890   58.070    50.595        tions with node densities of 50, 100, and 150. Figure 3
+ PSO-PIO                 94.259   87.109     79.025   60.924    52.455        encapsulates the core processes of the algorithm, includ-
+ EEPP-BAP                95.146   89.020     82.202   71.348    65.460        ing network scenarios, clustering procedures, cluster head
+ ABC                     95.754   93.659     88.226   79.724    70.512
+                                                                              selection, and routing strategies. The network scenarios
+ EAM-PPMS                97.640   96.795     93.164   86.452    79.404
+                                                                              depicted in the figure provide a comparative overview of
+ Proposed ExAq-MSPP      98.240   97.379     96.991   94.672    87.640
+                                                                              how the algorithm operates under different conditions,
+100 nodes
+                                                                              showcasing its adaptability to various topologies and
+ MISSA-DWA               90.211   71.380     64.270   51.769    38.577
+                                                                              node distributions. The clustering process is intensely
+ Fuzzy-RP                91.029   84.913     59.446   38.345    37.521
+                                                                              represented, with each cluster clearly defined, allowing
+ PSO-PIO                 96.875   83.972     67.679   50.448    35.337
+                                                                              us to observe how nodes are organized within the network.
+ EEPP-BAP                98.792   87.182     80.449   76.101    68.079
+                                                                              Special attention is given to the selection of cluster heads,
+ ABC                     98.966   93.000     84.160   80.428    73.221
+                                                                              which are highlighted with distinct symbols to underscore
+ EAM-PPMS                98.233   97.628     96.699   93.175    89.179
+                                                                              their importance in managing data aggregation and com-
+ Proposed ExAq-MSPP      99.544   99.396     98.251   97.888    90.609
+                                                                              munication within each cluster. Figure 3 also defines the
+150 nodes
+                                                                              routing paths, using arrows to visualize the flow of data
+ MISSA-DWA               95.506   82.208     54.261   50.240    44.632
+                                                                              from cluster heads to the mobile sink, emphasizing the
+ Fuzzy-RP                93.876   66.252     55.337   48.918    39.118
+                                                                              algorithm’s efficiency in minimizing energy consumption
+ PSO-PIO                 91.301   77.675     65.773   47.006    34.720
+                                                                              and latency during transmission. By presenting the simula-
+ EEPP-BAP                93.152   86.937     72.592   57.252    40.687
+                                                                              tion results for different node densities side by side, Fig. 3
+ ABC                     98.694   94.256     80.623   65.446    53.606
+                                                                              provides a clear comparison of the algorithm’s scalabil-
+ EAM-PPMS                97.435   96.865     91.658   75.127    65.683
+                                                                              ity and effectiveness as the network size increases. This
+ Proposed ExAq-MSPP      99.857   98.408     96.580   89.085    77.207
+                                                                              visual summary not only demonstrates the ExAq-MSPP
+                                                                              algorithm’s robustness but also its potential application
+                                                                              in large-scale, energy-constrained environments such as
+   Thus, using the solution accomplished using the ExAq                       wireless sensor networks, making it an essential compo-
+algorithm, MSPP is employed optimally for enhancing the                       nent of the research findings.
+network lifetime through the multi-objective fitness evalua-
+tion and chaotic Chebyshev mapping.
+                                                                              4.2 Comparative Assessment
+
+4 Results and Discussion                                                     The proposed ExAq-MSPP routing protocol is assessed
+                                                                              based on various measures such as delay, network lifetime,
+The proposed MSPP approach based on ExAq is imple-                            packet delivery ratio, residual energy and throughput for
+mented in MATLAB and is assessed based on various                             various nodes are detailed in this section.
+assessment measures such as delay, network lifetime, packet
+delivery ratio, residual energy and throughput. To indicate                   4.2.1 Delay‑Based Assessment
+the superiority of the proposed ExAq-MSPP technique,
+the conventional MSPP-based routing protocols such as                         Delay in MSPP for a wireless sensor network refers to the
+PSO-PIO [1, 2] EEPP-BAP [29] ABC [30], EAM-PPMS                               time it takes for a mobile sink to traverse a particular path
+[31], MISSA-DWA [33], and Fuzzy-RP [34]. The simula-                          while collecting data from CH in the network. This delay
+tion parameters of the proposed ExAq-MSPP technique are                       is a crucial metric in such networks, as minimizing it helps
+depicted in Table 2.                                                          ensure timely data retrieval and efficient network operation.
+International Journal of Computational Intelligence Systems   (2024) 17:274               Page 15 of 21   274
+
+
+
+
+Fig. 6  Packet delivery ratio-based assessment: a 50 nodes, b 100 nodes and c 150 nodes
+274      Page 16 of 21                                        International Journal of Computational Intelligence Systems   (2024) 17:274
+
+Table 5  Packet delivery ratio-based assessment                              transmitted from the CHs to the mobile sink. PDR is a
+Rounds/methods            500      1000     1500     2000      2500
+                                                                             crucial metric to assess the reliability and efficiency of
+                                                                             data transmission in the network. A higher PDR indicates
+50 nodes                                                                     a more reliable network with fewer packet losses during
+ MISSA-DWA                98.814   77.529   76.637   68.429    54.543        data collection. The PDR-based assessment is depicted
+ Fuzzy-RP                 97.114   84.665   84.032   83.144    74.891        in Fig. 6, and a detailed analysis is presented in Table 5.
+ PSO-PIO                  99.112   87.539   68.739   54.583    42.765
+ EEPP-BAP                 99.032   92.783   77.746   64.308    51.548        4.2.4 Residual Energy‑Based Assessment
+ ABC                      99.429   94.697   85.332   76.649    72.584
+ EAM-PPMS                 98.490   96.787   93.137   90.459    79.046        Residual energy in MSPP for information gathering from
+ Proposed ExAq-MSPP       99.920   99.572   98.089   94.258    89.964        CHs refers to the amount of energy that remains in the net-
+100 nodes                                                                    work’s sensor nodes after a certain period of operation. This
+ MISSA-DWA                87.350   86.794   67.669   63.133    50.269        metric is important for assessing the energy status of the
+ Fuzzy-RP                 88.820   86.897   85.388   75.965    75.367        network, which can impact the network’s sustainability and
+ PSO-PIO                  95.049   85.993   73.257   60.323    47.191        performance. It helps in making decisions related to routing,
+ EEPP-BAP                 96.717   88.882   83.261   71.949    52.607        data collection, and mobile sink path planning to prolong the
+ ABC                      99.828   89.736   86.983   82.791    68.782        network’s lifetime and ensure efficient information gathering
+ EAM-PPMS                 98.562   96.636   92.238   89.268    78.645        from CHs in the wireless sensor network. Figure 7 portrays
+ Proposed ExAq-MSPP       99.697   98.979   97.270   94.727    91.113        the residual energy-based analysis and its detail is presented
+150 nodes                                                                    in Table 6.
+ MISSA-DWA                96.950   92.796   88.404   74.799    71.479
+ Fuzzy-RP                 86.643   85.007   81.083   76.782    76.357        4.2.5 Throughput‑Based Assessment
+ PSO-PIO                  96.852   92.559   89.365   77.596    67.232
+ EEPP-BAP                 96.849   94.314   91.960   81.461    69.245        Throughput in MSPP for information gathering from CHs
+ ABC                      97.212   96.727   95.571   90.878    82.825        refers to the rate at which data are successfully transmit-
+ EAM-PPMS                 98.792   98.216   96.574   95.492    92.939        ted from the CHs to the mobile sink over the network. It
+ Proposed ExAq-MSPP       99.134   98.390   97.920   97.279    96.210        measures the efficiency of data transfer and reflects the net-
+                                                                             work’s capacity for handling data. Throughput is a critical
+                                                                             performance metric because it indicates how efficiently the
+                                                                             network can transfer data to the mobile sink while consider-
+                                                                             ing factors such as network congestion, packet losses, and
+The delay-based assessment is depicted in Fig. 4, and its
+                                                                             the speed of the mobile sink. A higher throughput implies
+detailed analysis is presented in Table 3.
+                                                                             that data is being transmitted more quickly and efficiently
+                                                                             from the CHs to the mobile sink, which can be essential
+4.2.2 Network Lifetime‑Based Assessment
+                                                                             for timely and reliable information gathering in a wireless
+                                                                             sensor network. Throughput-based analysis is illustrated in
+Network lifetime in MSPP for information gathering from
+                                                                             Fig. 8 and its detailed analysis is presented in Table 7.
+CHs in a WSN refers to the duration for which the network
+can operate efficiently before the depletion of its energy
+                                                                             4.2.6 Convergence Analysis
+resources. This is a critical metric, as extending the net-
+work lifetime is often a primary goal in such systems. The
+                                                                             The convergence analysis of the proposed ExAq algorithm
+network lifetime-based analysis for various nodes is depicted
+                                                                             and the existing Aquila optimization algorithm is presented
+in Fig. 5, and the detailed analysis is presented in Table 4.
+                                                                             in Fig. 9. The analysis portrays that the convergence rate of
+                                                                             the proposed ExAq algorithm is faster compared to the exist-
+4.2.3 Packet Delivery Ratio‑Based Assessment
+                                                                             ing approach due to the incorporation of chaotic Chebyshev
+                                                                             mapping.
+Packet delivery ratio (PDR) in MSPP for informa-
+tion gathering from CHs refers to the ratio of success-
+fully delivered packets to the total number of packets
+International Journal of Computational Intelligence Systems   (2024) 17:274         Page 17 of 21   274
+
+
+
+
+Fig. 7  Residual energy-based assessment: a 50 nodes, b 100 nodes and c 150 nodes
+274      Page 18 of 21                                      International Journal of Computational Intelligence Systems   (2024) 17:274
+
+Table 6  Residual energy-based assessment                                      The proposed ExAq-MSPP approach accomplished supe-
+Rounds/methods            500     1000      1500    2000      2500         rior outcomes compared to the existing methods due to the
+                                                                           novel routing protocol. The proposed ExAq addresses these
+50 nodes                                                                   challenges faced by the static sink by intelligently moving
+ MISSA-DWA                0.905   0.815     0.731   0.659     0.364        sinks through the network to optimize data collection. It
+ Fuzzy-RP                 0.871   0.778     0.761   0.716     0.615        offers benefits such as improved coverage, energy efficiency,
+ PSO-PIO                  0.918   0.800     0.706   0.547     0.336        reduced data latency, enhanced scalability, and adaptability
+ EEPP-BAP                 0.937   0.834     0.714   0.578     0.477        to dynamic scenarios. MSPP ensures that data are collected
+ ABC                      0.973   0.847     0.773   0.679     0.539        efficiently, leading to more accurate and timely results in
+ EAM-PPMS                 0.985   0.888     0.837   0.771     0.704        various WSN applications. The analysis of the proposed
+ Proposed ExAq-MSPP       0.997   0.928     0.866   0.823     0.795        routing protocol with various numbers of nodes such as 50,
+100 nodes                                                                  100 and 150 are evaluated to depict the scalability of the
+ MISSA-DWA                0.834   0.682     0.645   0.534     0.518        model. With the increase in the number of nodes, the perfor-
+ Fuzzy-RP                 0.842   0.729     0.720   0.694     0.621        mance of the proposed ExAq-MSPP is superior compared to
+ PSO-PIO                  0.915   0.746     0.626   0.517     0.462        existing methods. Thus, the proposed ExAq-MSPP protocol
+ EEPP-BAP                 0.924   0.837     0.747   0.630     0.556        is scalable to various network sizes.
+ ABC                      0.930   0.866     0.768   0.751     0.650
+ EAM-PPMS                 0.978   0.893     0.871   0.787     0.737
+ Proposed ExAq-MSPP       0.997   0.935     0.914   0.845     0.776        5 Conclusion
+150 nodes
+ MISSA-DWA                0.608   0.476     0.459   0.379     0.333        A new approach to enhance data gathering in WSNs
+ Fuzzy-RP                 0.889   0.848     0.801   0.702     0.553        through the ExAq-MSPP routing protocol is introduced
+ PSO-PIO                  0.799   0.712     0.532   0.398     0.191        in this research. In this, the Voronoi diagrams to strate-
+ EEPP-BAP                 0.929   0.831     0.683   0.496     0.410        gically deploy sensor nodes, ensuring uniform coverage,
+ ABC                      0.937   0.860     0.796   0.620     0.479        reducing energy consumption, and minimizing interfer-
+ EAM-PPMS                 0.982   0.938     0.849   0.803     0.654        ence. The proposed protocol uses the LEACH algorithm
+ Proposed ExAq-MSPP       0.993   0.975     0.954   0.952     0.775        for dynamic cluster formation and CH selection, which
+                                                                           extends the network’s lifetime by optimizing energy usage.
+                                                                           The ExAq Optimization algorithm employs a multi-objec-
+4.3 Comparative Discussion                                                tive fitness function considering delay, residual energy,
+                                                                           link quality, priority, and distance that ensures efficient
+Table 8 depicts the comparative discussion based on the                    data collection by the mobile sink through the optimal
+best outcome. The minimal delay evaluated by the ExAq-                     path. Simulation results demonstrate that the ExAq-MSPP
+MSPP is 1.1169, which is 71.61%, 81.48%, 85.61%, 84.88%,                   protocol outperforms existing protocols in terms of lower
+77.28%, and 69.72% elevated outcome compared to the                        delay of 1.169 s, extended network lifetime of 99.857%,
+MISSA-DWA, Fuzzy-RP, PSO-PIO, EEPP-BAP, ABC, and                           higher packet delivery ratio of 99.920%, enhanced residual
+EAM-PPMS. The higher network lifetime evaluated by the                     energy of 0.997 J, and increased throughput of 255.306.
+ExAq-MSPP is 99.857%, which is 4.36%, 5.99%, 8.57%,                        This research contributes to the development of efficient
+6.71%, 1.16%, and 2.43% elevated outcome compared to the                   routing protocols for WSNs, which are crucial for various
+MISSA-DWA, Fuzzy-RP, PSO-PIO, EEPP-BAP, ABC, and                           applications in monitoring and data collection.
+EAM-PPMS. The higher packet delivery ratio evaluated by                       Future research could focus on integrating machine
+the ExAq-MSPP is 99.920%, which is 1.11%, 2.81%, 0.81%,                    learning techniques into the ExAq-MSPP protocol to
+0.89%, 0.49%, and 1.43% elevated outcome compared to                       dynamically adjust the multi-objective fitness function
+the MISSA-DWA, Fuzzy-RP, PSO-PIO, EEPP-BAP, ABC,                           based on real-time network conditions, further optimiz-
+and EAM-PPMS. The higher residual energy evaluated by                      ing energy consumption and improving overall network
+the ExAq-MSPP is 0.997, which is 9.23%, 12.60%, 7.88%,                     performance. In addition, exploring the application of
+6.01%, 2.42%, and 1.13% elevated outcome compared to                       ExAq-MSPP in heterogeneous WSN environments with
+the MISSA-DWA, Fuzzy-RP, PSO-PIO, EEPP-BAP, ABC,                           varying node capabilities could test the protocol’s robust-
+and EAM-PPMS. The higher throughput evaluated by the                       ness and adaptability. Another path could involve scal-
+ExAq-MSPP is 255.306, which is 68.12%, 68.20%, 39.02%,                     ing the protocol for large-scale urban or industrial WSNs,
+28.22%, 26.11%, and 9.83% elevated outcome compared to
+the MISSA-DWA, Fuzzy-RP, PSO-PIO, EEPP-BAP, ABC,
+and EAM-PPMS.
+International Journal of Computational Intelligence Systems   (2024) 17:274    Page 19 of 21   274
+
+
+
+
+Fig. 8  Throughput-based assessment: a 50 nodes, b 100 nodes and c 150 nodes
+274      Page 20 of 21                                International Journal of Computational Intelligence Systems      (2024) 17:274
+
+Table 7  Throughput-based assessment                                 Table 8  Comparative discussion
+Rounds/methods      500        1000    1500    2000    2500          Methods/ Delay          Network     Packet       Residual    Through-
+                                                                     metrics                 lifetime    delivery     energy      put
+50 nodes                                                                                                 ratio
+ MISSA-DWA           38.881     46.422 54.399 58.814 77.970
+                                                                     MISSA-      4.117       95.506       98.814      0.905        81.400
+ Fuzzy-RP            43.829     49.431 56.363 68.086 79.857
+                                                                      DWA
+ PSO-PIO             17.490     24.727 42.964 52.497 80.612
+                                                                     Fuzzy-      6.310       93.876       97.114      0.871        81.179
+ EEPP-BAP            29.153     42.633 53.645 67.571 95.435           RP
+ ABC                 32.186     46.467 64.155 81.173 97.283          PSO-PIO     8.122       91.301       99.112      0.918       155.696
+ EAM-PPMS            41.862     63.461 81.281 97.081 108.736         EEPP-       7.733       93.152       99.032      0.937       183.256
+ Proposed ExAq-      48.138     87.590 106.754 116.102 130.652        BAP
+   MSPP                                                              ABC         5.145       98.694       99.429      0.973       188.655
+100 nodes                                                            EAM-        3.860       97.435       98.490      0.985       230.219
+ MISSA-DWA           40.313 48.973 52.502 71.683 80.633               PPMS
+ Fuzzy-RP            31.049 40.962 43.543 72.216 84.134              Proposed    1.169       99.857       99.920      0.997       255.306
+ PSO-PIO             16.109 35.233 53.485 72.001 87.331               ExAq-
+                                                                      MSPP
+ EEPP-BAP            43.727 59.858 73.257 84.505 95.833
+ ABC                 56.529 61.844 75.599 98.183 104.579
+ EAM-PPMS            73.868 87.228 90.610 109.730 134.351
+                                                                     cities and environmental monitoring, making ExAq-MSPP
+ Proposed ExAq-      88.175 116.684 135.164 147.469 157.512
+   MSPP
+                                                                     a versatile tool for future wireless sensor networks.
+150 nodes
+ MISSA-DWA           32.910 51.263 52.850 64.150        81.400       Author Contributions S. Sangeetha: Conceptualization, Methodology,
+ Fuzzy-RP            25.593 27.289 35.808 36.877        81.179       Software, Data curation, Validation, Formal analysis, writing—original
+ PSO-PIO             57.940 70.094 75.569 91.402       155.696       draft, Resources, Visualization, Writing—original draft; T. Aruldoss
+                                                                     Albert Victoire: Methodology, Software, Validation, Formal analysis,
+ EEPP-BAP            86.613 89.403 96.510 133.998      183.256
+                                                                     Investigation, Supervision, Writing—review & editing; Manoharan
+ ABC                 97.848 114.208 130.918 155.794    188.655       Premkumar: Formal analysis, Software, Data Curation, Project admin-
+ EAM-PPMS           108.502 153.945 187.984 202.559    230.219       istration, Validation, Visualization, Writing—review & editing; Ravi-
+ Proposed ExAq-     123.805 185.675 220.081 239.279    255.306       chandran Sowmya: Software, Data Curation, Formal analysis, Project
+   MSPP                                                              administration, Funding, Writing—review & editing.
+
+                                                                     Funding Open access funding provided by Manipal Academy of
+addressing challenges such as interference and node den-             Higher Education, Manipal. Funding for open access publication was
+sity, and enhancing security measures to protect against             provided by Manipal Academy of Higher Education, Manipal, Kar-
+potential cyber-attacks. Finally, extending the protocol             nataka, India.
+to handle complex data types, such as multimedia, could
+                                                                     Data Availability No datasets were generated or analyzed during the
+broaden its applicability to advanced fields such as smart           current study.
+
+                                                                     Declarations
+                                                                     Conflict of interest The authors declare no competing interests.
+
+                                                                     Open Access This article is licensed under a Creative Commons Attri-
+                                                                     bution 4.0 International License, which permits use, sharing, adapta-
+                                                                     tion, distribution and reproduction in any medium or format, as long
+                                                                     as you give appropriate credit to the original author(s) and the source,
+                                                                     provide a link to the Creative Commons licence, and indicate if changes
+                                                                     were made. The images or other third party material in this article are
+                                                                     included in the article’s Creative Commons licence, unless indicated
+                                                                     otherwise in a credit line to the material. If material is not included in
+                                                                     the article’s Creative Commons licence and your intended use is not
+                                                                     permitted by statutory regulation or exceeds the permitted use, you will
+                                                                     need to obtain permission directly from the copyright holder. To view a
+                                                                     copy of this licence, visit http://creativecommons.org/licenses/by/4.0/.
+
+
+
+
+Fig. 9  Convergence analysis
+International Journal of Computational Intelligence Systems      (2024) 17:274                                                  Page 21 of 21    274
+
+
+References                                                                         controller for wireless sensor networks. Radioengineering 25(1),
+                                                                                   114–123 (2016)
+                                                                             18.   Benhamaid, S., Lakhlef, H., Bouabdallah, A.: Energy-efficient and
+ 1. Wang, X., Liu, X., Wu, J., Ju, W., Chen, X., Shen, L.: Joint
+                                                                                   context-aware trajectory planning for mobile data collection in IoT
+    user scheduling, power configuration and trajectory planning
+                                                                                   using deep reinforcement learning. In: 2022 International Confer-
+    strategy for UAV-aided WSNs. ACM Trans. Sens. Netw. 19(1),
+                                                                                   ence on Software, Telecommunications and Computer Networks
+    1–27 (2022)
+                                                                                   (SoftCOM; pp. 1–6). IEEE. (2022)
+ 2. Wang, Z., Yue, Y., Cao, L.: Mobile sink-based path optimization
+                                                                             19.   Senthil Kumaran, R., Nagarajan, G.: Mobile sink and fuzzy based
+    strategy in heterogeneous WSNs for IoT using pigeon-inspired
+                                                                                   relay node routing protocol for network lifetime enhancement in
+    optimization algorithm. Wirel. Commun. Mob. Comput. 2022,
+                                                                                   wireless sensor networks. Wirel. Netw. 28(5), 1963–1975 (2022)
+    1–18 (2022)
+                                                                             20.   Ghorbani Dehkordi, E., Barati, H.: Cluster based routing method
+ 3. Yalçın, S., Erdem, E.: BTA-MM: burst traffic awareness-based
+                                                                                   using mobile sinks in wireless sensor network. Int. J. Electron.
+    adaptive mobility model with mobile sinks for heterogeneous
+                                                                                   110(2), 360–372 (2023)
+    wireless sensor networks. ISA Trans. 125, 338–359 (2022)
+                                                                             21.   Kiamansouri, E., Barati, H., Barati, A.: A two-level clustering based
+ 4. Yalçın, S., Erdem, E.: TEO-MCRP: thermal exchange optimi-
+                                                                                   on fuzzy logic and content-based routing method in the internet of
+    zation-based clustering routing protocol with a mobile sink for
+                                                                                   things. Peer-to-Peer Netw. Appl. 15(4), 2142–2159 (2022)
+    wireless sensor networks. J King Saud Univ.-Comput. Inf. Sci.
+                                                                             22.   Abu, N.S., Bukhari, W.M., Adli, M.H., Ma’arif, A.: Optimization
+    34(8), 5333–5348 (2022)
+                                                                                   of an autonomous mobile robot path planning based on improved
+ 5. Cui, Y., Zhu, P., Lei, G., Chen, P., Yang, G.: Energy-efficient
+                                                                                   genetic algorithms. J. Robot. Control (JRC) 4(4), 557–571 (2023)
+    multiple autonomous underwater vehicle path planning scheme
+                                                                             23.   Kurian, N.S., Sujatha, M.: Mobile sink data gathering and path
+    in underwater sensor networks. Electronics 12(15), 3321 (2023)
+                                                                                   determination in wireless sensor networks: a review. In: 2022
+ 6. Mousa, M.H., Hussein, M.K.: Efficient UAV-based MEC using
+                                                                                   International Conference on Wireless Communications Signal
+    GPU-based PSO and voronoi diagrams. CMES-Comput. Model.
+                                                                                   Processing and Networking (WiSPNET; pp. 306–310). IEEE.
+    Eng. Sci. 133(2), 414–434 (2022)
+                                                                                   (2022)
+ 7. Srivastava, A.K., Gupta, S.K., Khan, R.: Enhancement of energy
+                                                                             24.   Yalçin, S., Erdem, E.: Performance analysis of burst traffic aware-
+    efficiency in wireless sensor network with mobile sink: a survey.
+                                                                                   ness based mobile sink routing technique for wireless sensor net-
+    In: Proceedings of Third International Conference on Comput-
+                                                                                   works. Gazi Univ. J. Sci. 35(2), 506–522 (2022)
+    ing, Communications, and Cyber-Security: IC4S 2021 (pp.
+                                                                             25.   Khan, W., Hua, W., Anwar, M.S., Alharbi, A., Imran, M., Khan,
+    3–19). Singapore: Springer Nature Singapore (2022)
+                                                                                   J.A.: An effective data-collection scheme with AUV path planning
+ 8. Kaur, C., Hassen, S.M., Boush, M.S.A., Anandaram, H.: Energy
+                                                                                   in underwater wireless sensor networks. Wireless Communica-
+    prediction for mobile sink placement by deep maxout network
+                                                                                   tions and Mobile Computing. 2022, 8154573 (2022)
+    in WSN. J. Adv. Inf. Technol. (2023). https://​doi.​org/​10.​12720/​
+                                                                             26.   Sulakshana, G., Kamatam, G.R.: Data acquisition through mobile
+    jait.​14.1.​112-​121
+                                                                                   sink for WSNs with obstacles using support vector machine. J.
+ 9. Hatamian, M., Barati, H., Movaghar, A., Naghizadeh, A.: CGC:
+                                                                                   Sens. (2022). https://​doi.​org/​10.​1155/​2022/​42427​40
+    centralized genetic-based clustering protocol for wireless sen-
+                                                                             27.   Wu, X., Chen, Z., Zhong, Y., Zhu, H., Chen, X., Zhang, P.: Mul-
+    sor networks using onion approach. Telecommun. Syst. 62,
+                                                                                   tiwinner voting for energy-efficient mobile sink rendezvous selec-
+    657–674 (2016)
+                                                                                   tion in wireless sensor network. Wirel. Commun. Mob. Comput.
+10. Akbari, M.R., Barati, H., Barati, A.: An efficient gray system
+                                                                                   2022, 1–15 (2022)
+    theory-based routing protocol for energy consumption manage-
+                                                                             28.   Abu Taleb, A., Abu Al-Haija, Q., Odeh, A.: Efficient mobile sink
+    ment in the internet of things using fog and cloud computing.
+                                                                                   routing in wireless sensor networks using bipartite graphs. Fut.
+    Computing 104(6), 1307–1335 (2022)
+                                                                                   Internet 15(5), 182 (2023)
+11. Akbari, M.R., Barati, H., Barati, A.: An overlapping routing
+                                                                             29.   Bagais, N., Fadel, E., Al-Mansour, A.: An efficient path planning
+    approach for sending data from things to the cloud inspired by
+                                                                                   strategy in mobile sink wireless sensor networks. Comput. Mater.
+    fog technology in the large-scale IoT ecosystem. Wirel. Netw.
+                                                                                   Continua 73(1), 1237 (2022)
+    28(2), 521–538 (2022)
+                                                                             30.   Senthil Kumar, S., Naveeth Babu, C., Arthi, B., Aruna, M., Char-
+12. Ergunsah, S., Tümen, V., Kosunalp, S., Demir, K.: Energy-effi-
+                                                                                   lyn Pushpa Latha, G.: Energy efficient data accumulation scheme
+    cient animal tracking with multi-unmanned aerial vehicle path
+                                                                                   based on ABC algorithm with mobile sink for IWSN. In Expert
+    planning using reinforcement learning and wireless sensor net-
+                                                                                   Clouds and Applications: Proceedings of ICOECA 2022 (pp.
+    works. Concurr. Comput. : Pract. Exp. 35(4), e7527 (2023)
+                                                                                   143–155). Singapore: Springer Nature Singapore. (2022)
+13. Maryam, N., Hamid, B.: EGRPM: energy efficient geographic
+                                                                             31.   Umamaheswari, K., Kumar, A.K.: Energy aware metaheuristics
+    routing protocol based on mobile sink in wireless sensor networks.
+                                                                                   based path planning technique with mobile sinks for wireless sen-
+    Sustain. Comput.: Inform. Syst. 25, 100377 (2020)
+                                                                                   sor networks. Math. Stat. Eng. Appl. 71(3), 1111–1127 (2022)
+14. Betalo, M.L., Leng, S., Zhou, L., Fakirah, M.: Multi-UAV data
+                                                                             32.   El-Fouly, F.H., Altamimi, A.B., Ramadan, R.A.: Energy and envi-
+    collection optimization for sink node and trajectory planning in
+                                                                                   ronment-aware path planning in wireless sensor networks with
+    WSN. In: 2022 IEEE 2nd International Conference on Computer
+                                                                                   mobile sink. Sensors 22(24), 9789 (2022)
+    Communication and Artificial Intelligence (CCAI; pp. 1–7).
+                                                                             33.   Hou, J., Jiang, W., Luo, Z., Yang, L., Hu, X., Guo, B.: Dynamic
+    IEEE. (2022)
+                                                                                   path planning for mobile robots by integrating improved sparrow
+15. Keshari, A.K., Nitesh, K., Karn, B.: A novel multi-objective opti-
+                                                                                   search algorithm and dynamic window approach. Actuators 13(1),
+    mization-based path formulation for mobile sink in wireless sen-
+                                                                                   24 (2024)
+    sor networks. Arab. J. Sci. Eng. (2023). https://​doi.​org/​10.​1007/​
+                                                                             34.   Banimelhem, O., Al-Quran, F.: Rendezvous based adaptive path
+    s13369-​023-​07636-9
+                                                                                   construction for Mobile sink in WSNs using fuzzy logic. Comput-
+16. Dash, D.: A novel two-phase energy efficient load balancing
+                                                                                   ers 12(3), 66 (2023)
+    scheme for efficient data collection for energy harvesting WSNs
+    using mobile sink. Ad Hoc Netw. 144, 103136 (2023)
+                                                                             Publisher's Note Springer Nature remains neutral with regard to
+17. Hatamian, M., Bardmily, M.A., Asadboland, M., Hatamian,
+                                                                             jurisdictional claims in published maps and institutional affiliations.
+    M., Barati, H.: Congestion-aware routing and fuzzy-based rate
+

@@ -1,0 +1,58 @@
+source_file: IJAIP180101IDREES_168164.pdf
+title: Distributed genetic algorithm for lifetime coverage optimisation in wireless sensor networks
+authors: Ali Kadhum Idrees; Wathiq Laftah Al-Yaseen
+venue_year: Int. J. Advanced Intelligence Paradigms, 2021
+problem: In dense WSNs it is unnecessary and wasteful to keep all sensors active at once, so a scheduling scheme is needed to activate only a subset of sensors that still ensures area coverage while extending network lifetime.
+approach: >
+  DiGALCO (distributed genetic algorithm for lifetime coverage optimisation) -- a protocol built on the DiLCO framework that
+  virtually subdivides the sensing field into subregions, elects a cluster head in each subregion in a distributed/asynchronous
+  way, and has that cluster head run a genetic algorithm (GA) each round to select the minimal set of active sensor nodes
+  (based on node centres, not primary/perimeter points) needed to maintain coverage, replacing the GLPK optimisation solver
+  used by DiLCO/PeCO.
+sink_mobility: unknown
+routing_clustering_scheme: >
+  Virtual subdivision of sensing field into 16 regular subregions; distributed, independent, asynchronous cluster head
+  election per subregion using a weight function (equation 1) based on residual energy and distance to neighbours; cluster
+  head runs GA-based activity scheduling (chromosome = SA-length binary vector of active/inactive sensors, best-individual
+  selection, two-point crossover, mutation, triple tournament replacement) each round (rounds have 3 phases: discovery,
+  cluster head election, GA decision and sensing).
+simulator: OMNeT++ discrete event simulator (Varga, 2003)
+node_count: 100, 150, 200, 250, and 300 nodes (five network sizes); 50 executions averaged per result
+area: (50 x 25) m^2 sensing field, partitioned into 16 regular subregions
+energy_model: >
+  Same energy model as used in Idrees et al. (2015) DiLCO protocol (not detailed further in this text); initial energy
+  randomly set within 500-700 Joules per node; Ethr (minimum energy to remain active for one round) = 36 Joules.
+metrics_reported:
+  - coverage ratio (CR, %)
+  - active sensors ratio (ASR, %)
+  - network lifetime (Lifetime95 and Lifetime50, in rounds/time)
+  - energy consumption (Joules)
+  - execution time (seconds)
+  - space/memory complexity (bytes/KB)
+key_numeric_results:
+  - "For 200 nodes, first-round coverage ratio: DESK 99.99%, GAF 99.91%, DiLCO 99.02%, PeCO 98.76%, DiGALCO 97.88%."
+  - "DiGALCO maintains coverage above 80% for a larger number of rounds after round 33, outperforming other protocols from that point on."
+  - "For 200 nodes, first 14 rounds active sensor ratio: DESK 30.36%, GAF 34.96%, DiLCO 17.92%, PeCO 20.16%, DiGALCO 19.64%."
+  - "Network lifetime (Lifetime95): DiGALCO improves lifetime up to 4.7% vs DiLCO, 32.6% vs DESK, 24.4% vs GAF, 14% vs PeCO."
+  - "Network lifetime (Lifetime50): DiGALCO improves lifetime up to 17.2% vs DiLCO, 46% vs DESK, 25.4% vs GAF; PeCO improves lifetime up to 2.4% over DiGALCO."
+  - "Simulation parameters: Pc (crossover probability) = 0.95, Pm (mutation probability) = 0.5, MaxIter = 1000, Spop (population size) = 50, Rs (sensing range) = 5 m, Rc (communication range) = 10 m, sensing period = 60 minutes."
+  - "Space complexity O(SA*Spop); for a 300-node WSN, ~18.5 nodes per subregion (max ~19), variable memory ~1.9 KB (19*2 bytes*50 = 1900 bytes), well within the 128 KB memory of a Medusa II sensor node (Atmel AVR ATmega103L)."
+  - "Execution time estimated on target sensor hardware by scaling DELL laptop (Intel Core i3 2370M, 2.4GHz, 2 cores, MIPS=35330) timings to Atmel AVR ATmega103L (6MHz, MIPS=6) via factor (35330/2)*(1/6); DiGALCO shows lower execution time than other methods (exact seconds given only in Figure 10, not in text)."
+stated_limitations: >
+  Authors note DiGALCO activates a higher number of nodes as rounds increase compared with PeCO to sustain coverage, and that
+  PeCO gives better Lifetime50 (up to 2.4% better) and lower energy consumption than DiGALCO for WSN sizes greater than 200
+  nodes. Full centralised approaches give optimal solutions but consume high energy from execution time/communication and
+  are unsuitable for large WSNs; full distributed approaches cannot give optimal solutions since they use only local
+  neighbour information. Future work: extend the optimisation algorithm to provide multiple sensing-round schedules, and
+  improve the model to account for node heterogeneity (current model assumes homogeneous static nodes).
+citation_fields:
+  bibkey: idrees2021digalco
+  authors_bibtex: Idrees, Ali Kadhum and Al-Yaseen, Wathiq Laftah
+  title: Distributed genetic algorithm for lifetime coverage optimisation in wireless sensor networks
+  year: 2021
+  journal_or_booktitle: International Journal of Advanced Intelligence Paradigms
+  volume: 18
+  number: 1
+  pages: 3-24
+  doi: unknown
+  publisher: Inderscience Enterprises Ltd.

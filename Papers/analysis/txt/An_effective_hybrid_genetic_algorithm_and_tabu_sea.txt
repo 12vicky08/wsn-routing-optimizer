@@ -1,0 +1,1179 @@
+ The Journal of Supercomputing (2023) 79:3277–3297
+ https://doi.org/10.1007/s11227-022-04710-1
+
+
+
+
+ An effective hybrid genetic algorithm and tabu search
+ for maximizing network lifetime using coverage sets
+ scheduling in wireless sensor networks
+
+ Nemat allah Mottaki1 · Homayun Motameni1 · Hosein Mohamadi2
+
+ Accepted: 6 July 2022 / Published online: 1 September 2022
+ © The Author(s), under exclusive licence to Springer Science+Business Media, LLC, part of Springer Nature
+ 2022
+
+
+
+ Abstract
+ Two important issues in Wireless Sensor Networks (WSNs) are coverage and net-
+ work lifetime. Network operation in an environment can be divided into two phases,
+ first, making coverage sets and then scheduling them. The preliminary reviews have
+ provided a number of solutions for problem-solving in the first phase, but there is
+ no enough solution provided for the second one. Once the number of sensors in the
+ environment increases, the number of coverage sets as well as the number of order
+ sequences (in which the coverage sets can be scheduled) will also increase. The
+ present study aims to detect a near-optimal scheduling for coverage sets to prolong
+ the network lifetime. This problem was previously introduced as MCSS (Maximum
+ Coverage Sets Scheduling) and it was proved to be an NP-hard problem. This paper
+ presents two algorithms, a Genetic Algorithm (GA) and a Hybrid Algorithm (HA)
+ integrating GA and Tabu Search (TS) to solve the MCSS problem. To reveal its effi-
+ ciency, the algorithms were compared with a recently proposed algorithm in terms
+ of scheduling the coverage sets. The simulations performed in this study showed
+ that the proposed algorithms were more successful in finding near-optimal schedul-
+ ing coverage sets.
+
+ Keywords Directional sensor networks · Genetic algorithm · Tabu search · Coverage
+ set scheduling
+
+
+
+
+ * Homayun Motameni
+   motameni@iausari.ac.ir
+ 1
+     Department of Computer Engineering, Sari Branch, Islamic Azad University, Sari, Iran
+ 2
+     Department of Computer Engineering, Azadshar Branch, Islamic Azad University, Azadshar,
+     Iran
+
+
+                                                                                                 1  3
+                                                                                         Vol.:(0123456789)
+
+Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+ 3278                                                                   N. a. Mottaki et al.
+
+
+ 1 Introduction
+
+ Wireless sensor network (WSN) is one of the most important technologies
+ employed extensively during the last two decades. WSNs have been applied
+ recently to other applications such as internet of things and home automation [1].
+ A WSN is composed of a large number of multi functional sensors that are small
+ in size, each of which equipped with a small radio controller, a transmitter, and
+ a receiver. WSNs are applied to battlefield security monitoring, wildlife habitat
+ monitoring, etc. [2]. Sensors are generally divided into two categories according
+ to their application, omnidirectional and directional sensors. In omnidirectional,
+ sensors are able to sense a full 360-degree view of their surroundings and can
+ cover targets simultaneously in all directions. A directional sensor can perform its
+ monitoring task in several directions; however, it can only be active in one direc-
+ tion and at a given angle within a defined time unit. Directional sensors basically
+ involve the ultrasonic, infrared, and video sensors [3].
+    Coverage is considered a major problem in directional sensor networks (DSNs)
+ and is a criterion for quality of service, which means that how any point or area
+ in a network is monitored by a sensor [4]. Based on sensor networks, coverage is
+ categorized into three groups: target coverage, area coverage, and barrier cover-
+ age [5]. In cases where the sensors monitor some targets or points defined in an
+ area, it is called target coverage [6]. While, area coverage refers to the situations
+ where sensors cover an entire area regardless of a definite point [7]. Barrier cov-
+ erage, on the other hand, creates a barrier using a chain of sensors and minimizes
+ the possibility of intrusion into the environment in which the sensor network is
+ active [8].
+    Another major problem in sensor networks is to prolong the network life-
+ time [9]. Energy consumption management in sensors is of great importance
+ because it is almost impossible to recharge or replace the sensors batteries [10].
+ The lifetime of a DSN is the time period during which the network can operate
+ properly, from the time the network is set up until the time it fails to meet certain
+ coverage requirements [11]. Sensor scheduling is one of the techniques proposed
+ in the literature for energy consumption management [12]. This technique divides
+ the sensors into a number of coverage sets each of which can meet the network
+ coverage requirement. Two types of coverage sets can be formed: disjoint and
+ non-disjoint. In the former, each sensor is a member of only one coverage set that
+ do not share the sensors. On the other hand, the latter contains sensors that can
+ participate in several coverage sets sharing a number of sensors with each other.
+ When a coverage set is implemented within a given time period, the rest switch
+ to inactive mode. When a coverage set is inactive, its associated sensors also
+ switch to inactive mode. The activity time of each sensor can be scheduled so
+ efficiently and practically that the network lifetime could be prolonged as much as
+ possible [6].
+    The current paper presents a GA-based algorithm and a hybrid GA-TS algo-
+ rithm to achieve a near optimal scheduling for coverage sets. GA is a search
+ algorithm based on natural selection and natural genetics. In GA, instead of a
+
+
+ 13
+Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+ An effective hybrid genetic algorithm and tabu search for…                                            3279
+
+
+ point, a population of points is searched. The solution to a problem in the GA is
+ encoded with a chromosome. Several operations such as reproduction, crossover
+ and mutation, the chromosome which is fitter than the others get better chance to
+ reproduce. Tabu Search (TS) is a neighborhood-based local exploration approach,
+ which examines solution space by continuously replacing the recent solution with
+ the best unvisited neighbor solution. As mentioned earlier, the algorithm uses the
+ global search ability of GA as well as the local search ability of TS to achieve the
+ optimal or near-optimal solution. The algorithms proposed in this paper can be
+ applied to both WSNs‌and DSNs, but here the DSNs is considered.
+
+ 1.1 Necessity of coverage set scheduling in sensor networks
+
+ To provide better understanding of the effectiveness of sensor scheduling technique
+ in prolonging the DSNs lifetime, an example is illustrated in Fig. 1.
+
+
+
+
+ Fig. 1  Directional sensors and targets distributed in environment, and 3 coverage sets that can be created
+ through them
+
+
+                                                                                               13
+Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+ 3280                                                                                        N. a. Mottaki et al.
+
+
+     Suppose an environment in which 5 sensors (s1 , s2 , s3 , s4 , s5) with 4 targets
+ (t1 , t2 , t3 , t4) are randomly distributed and each sensor’s lifetime is equal to h. Each
+ sensor covers a number of targets in this environment (for example, si,j indicates that
+ sensor i covers a target using sector j). When all sensors simultaneously switch to
+ active mode, the maximum lifetime of the network will be equal to the lifetime of
+ one sensor (in this example, it is equal to h).
+     To achieve the advantages of the sensor scheduling method, it is assumed that
+ the sensors are categorized into three non-disjoint coverage sets (See Fig. 1). The
+ coverage sets c1 = (s1,1 , s4,3 , s2,3 , s3,1), c2 = (s1,2 , s2,3 , s5,2) and c3 = (s2,1 , s1,3 , s4,3 , s5,2),
+ can be created, each of which is allowed to be active for 0.5 h. By activating each
+ coverage set, the energy of its sensors will decrease. Coverage sets also have some
+ sensors in common. As illustrated by this example, the network lifetime is increased
+ to 1.5 h by activating the coverage sets constantly, assuming that the sensor’s energy
+ consumption is insignificant in inactive mode.
+     As mentioned before, inside an environment, the activity of network is combined
+ of two phases: creation of covering sets and their scheduling [11]. The initial exami-
+ nation have provisioned numerous solutions for the phase 1, however, not conveni-
+ ently enough results for the phase 2. It must be noted that as the sensors’ number
+ increases, so do the quantities of the covering sets and order sequences, wherein the
+ volume of the scheduled covering sets will be enlarged, too. The number of strate-
+ gies based on which the coverage sets can be scheduled successively is characterized
+ as a permutation. The permutation of a set is to arrange its members into a sequence
+ or linear order, or just to rearrange them if the members are already in a sequence.
+ Consequently, the number of permutations of a set with n elements is n! [13]. For
+ example, if there is a network with three coverage sets (a, b, c); then, six different
+ sequences, namely (a, b, c), (a, c, b), (b, a, c), (b, c, a), (c, a, b), and(c, b, a) can be
+ regarded for scheduling them. The problem of optimizing the coverage sets schedul-
+ ing, called Maximum Coverage Sets Scheduling (MCSS), was first raised in [11],
+ which aimed to prolong the network lifetime.
+
+
+ 1.2 Our contribution and organization of the paper
+
+ In a sensor network with a large number of sensors, more coverage sets could be
+ built. How to schedule coverage sets and the order of execution can have a great
+ impact on the network lifetime. In this paper, the main objective is to find near-opti-
+ mal scheduling coverage sets. The present study proposes two algorithms to find the
+ scheduling strategy of coverage sets. In the first, a GA-based algorithm is proposed
+ to find coverage set scheduling. In the second algorithm, a hybrid GA-TS algorithm
+ is developed. In this algorithm, the high global search ability of GA and the local
+ search ability of TS are used to provide a high search capacity. Several simulations
+ are performed on the algorithms, and the results are compared with those of an algo-
+ rithm presented previously in the literature.
+    The remainder of this paper is organized as follows: Sect. 2 briefly reviews the
+ studies conducted on making coverage sets. Network model and problem definition
+ are given in the Sect. 3. Section presents the algorithms. Section 5 provides the
+
+ 13
+Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+ An effective hybrid genetic algorithm and tabu search for…                         3281
+
+
+ simulation results of the algorithm. Finally, Sect. 6 presents the research conclusion
+ and further work.
+
+
+ 2 Related work
+
+ A major technique for energy consumption management is to schedule the sensor
+ activity into two states: sleep and active. This technique is intended to maximize
+ coverage and the network lifetime. The problem is defined as the maximum cover-
+ age with minimum sensors and it is an NP-Complete problem [14].
+    The literature consists of some methods proposed to solve the scheduling sensors
+ problem in directional networks. In [15], the directional cover and transmission in
+ DSNs was introduced, which was intended to prolong the network lifetime, transmit
+ the information, and solve the targets overlapping problem.
+    In [16, 17], many attempts were made to solve the coverage problem in directional
+ sensors. Two techniques, i.e., sensors scheduling and adjusting sensing range, were
+ used to prolong the network lifetime. In [16], for the first time, the adjustable sens-
+ ing ranges in DSNs were investigated. In this respect, two greedy algorithms were
+ proposed to solve the problem. In [17], the problem of Maximum Network Life-
+ time with Adjustable Ranges (MNLAR) was addressed and a target-oriented GA-
+ based algorithm was presented to solve it. In [14], the coverage in the visual sensor
+ networks was examined, in which the targets have different predetermined coverage
+ requirement. In [3], an energy-aware method was proposed to cover all the targets
+ in the network and also to extend the network lifetime. The authors used the multi-
+ objective evolutionary algorithm method, recognizing that the scheduling of the sen-
+ sors to solve the coverage problem is inherently a multi-objective problem. To solve
+ a multi-objective problem, two parameters, i.e., the minimum number of sensors and
+ the maximum target coverage, are defined. In [5], a method was proposed to solve
+ the coverage problem in DSNs. The authors used GA and repair operator to select a
+ set of sensors and solve the priority-based target coverage problem. In this method,
+ each target initially has a different predetermined coverage requirement.
+    In [18] the cuckoo search algorithm has been developed to find the maximum
+ number of coverage sensors. In [19] a cuckoo search algorithm is developed to iden-
+ tify the sensor coverage set by optimizing the sensing range to reduce the redun-
+ dancy sensors in the network. The algorithm creates non-disjoint cover sets with
+ variable sensing range so that each cover set provide k-coverage. In [20], the prob-
+ lem of prolonging network lifetime was investigated as a bi-objective optimization
+ problem. The authors consider the first objective to find the maximum coverage sets
+ and the second objective to solve the problem of energy loss. Authors in [21] pro-
+ pose a novel and energy efficient target coverage algorithm to identify disjoint and
+ non-disjoint coverage sets. the developed algorithm identifies coverage sets to cover
+ the targets and gives the optimal minimum energy paths from the cover set to the
+ sink and the sink to the sensor node.
+    In [11] the authors proved that coverage set scheduling is an NP-hard problem,
+ and also they formulated the MCSS problem by ILP. In addition, the Greedy-MCSS
+ was proposed to solve the coverage sets scheduling problem and an approximation
+
+                                                                             13
+Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+ 3282                                                                            N. a. Mottaki et al.
+
+
+ algorithm, called MCSSA, was proposed based on this method. After simulation,
+ the superiority of MCSSA method over Greedy-MCSS was proved, and the MCSSA
+ algorithm was ultimately implemented under different conditions. Although the
+ methods proposed in [11] will result in achieving some solutions, such solutions
+ are inherently problematic. A lot of computational complexities can be found in the
+ Integer Linear Programming (ILP) method used for solving large-scale problems,
+ and it is not an efficient solution to such problems. Due to the fact that the greedy-
+ based solution methods are used in solving many optimization problems, they may
+ be caught into the local minimum depending on the problem conditions, and conse-
+ quently, they will not achieve the global optima [22, 23].
+
+
+ 3 Network model and problem definition
+
+ This paper follows the scenario presented below. The directional sensors and tar-
+ gets are distributed randomly and uniformly at given spots in an Euclidean envi-
+ ronment. Targets and sensors are aware of their locations. The energy level of each
+ sensor is equal to bi , and a negligible amount of energy is consumed to change the
+ sector. Each sensor is in one of the two modes: active or sleep. It is supposed that
+ a group of coverage sets (C) is made for the scheduling sensors, C=(c1 , c2 , ..., ck ).
+ In this group, each ck is a non-disjoint coverage set and it can meet the network
+ requirements during a given period by itself. If the period in which the ck coverage
+ set can be activated in a sequence regarding the energy of its sensors is equal to tk ,
+ and T=(t1 , t2 , ..., tk ), a coverage set scheduling strategy should be found in a way to
+ satisfy Eq. (1):
+                                                          k
+                                                          ∑
+                            Maximize(Tnetworklifetime =         ti )                              (1)
+                                                          i=1
+
+ Table 1 gives the parameters used in this paper.
+   Problem : How to find the optimal or near-optimal schedule of coverage sets in a
+ way to maximize the network lifetime by activating it.
+
+
+
+ Table 1  Notations             Notations                              Definition
+
+                                n                                      Number of sensors
+                                m                                      Number of targets
+                                C                                      Set of coverage sets
+                               si                                      The ith sensor 1 ≤ i ≤ n
+                                S                                      Set of sensors {s1 , s2 ,...sn}
+                                T                                      Set of targets {t, t2 ,...tm }
+                               d i, j                                  jth direction of ith sensor
+                               ck                                      kth coverage set
+                               bi                                      Energy level of ith sensor
+
+
+
+ 13
+Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+ An effective hybrid genetic algorithm and tabu search for…                                   3283
+
+
+      In the following, an example is presented to illustrate the problem: There are
+ seven sensors S = ( s1 , s2 , ..., s7 ) with energy levels of b = (4, 3, 5, 5, 5, 2, 3) in an
+ environment. It is assumed that three non-disjoint coverage sets are created as
+ c1 = (s1 , s2 , s5 ), c2 = (s3 , s4 , s5 ), c3 = (s6 , s7 , s3 , s1 ). According to the definition
+ of permutation, it is possible to obtain six different implementation sequences
+ through these three coverage sets. Moreover, the assumption is that the activity
+ time of each sensor is equal to the energy level of the sensor. Accordingly, Table 2
+ presents the total network lifetime while scheduling the six possible strategies.
+      In Table 2, each of the two coverage schedules of c3 , c2 , c1 andc3 , c1 , c2 can
+ be accepted as the final answer. For a better understanding, consider schedule
+ c3 , c2 , c1. The first coverage set consists of sensors s6 , s7 , s3, and s1. When this cov-
+ erage set is used to cover the targets in the network, it can cover the targets up
+ to 2 (energy level of s6 ). After this, because the energy of sensor s6 is exhausted,
+ this coverage set is no longer able to cover all the targets, the energy of all the
+ sensors in this coverage set is reduced and the remaining energy of the sensors in
+ this coverage set is updated. the new energy levels of the sensors in the coverage
+ set becomes (0, 1, 3, 2). The next coverage set to run in this schedule is c2 . In this
+ coverage set, there are sensors s3 , s3, and s5. This coverage set runs as long as the
+ energy level of s3, and when the sensor runs out of power, the coverage set no
+ longer covers all the targets in the network. After destroying sensor s3, the new
+ energy levels of the sensors is updated, and the new energy levels of the sensors
+ in coverage set becomes (0, 2, 2). Finally, coverage set c1 is running with sensors
+ s1 , s2 , and s5. The new energy level of the sensors becomes (0, 1, 0). The sum of
+ the lifetime that all 3 coverage sets in the network could be executed is 7. The
+ way of calculating the scheduling lifetime of ( c3 c2 c1) is illustrated in Fig. 2.
+
+
+
+ 4 Proposed algorithms
+
+ The section starts with a general review of the GA; after that, it introduces two
+ scheduling solutions proposed in this study to solve the coverage scheduling
+ problem in DSNs.
+
+
+
+ Table 2  Cover sets scheduling      Coverage sets scheduling                           Total
+ strategy                                                                               network
+                                                                                        lifetime
+
+                                     𝐜1 𝐜2 𝐜3                                           6
+                                     𝐜1 𝐜3 𝐜2                                           6
+                                     𝐜2 𝐜1 𝐜3                                           5
+                                     𝐜2 𝐜3 𝐜1                                           5
+                                     𝐜3 𝐜1 𝐜2                                           7
+                                     𝐜3 𝐜2 𝐜1                                           7
+
+
+
+                                                                                       13
+Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+ 3284                                                                   N. a. Mottaki et al.
+
+
+
+
+ Fig. 2  Method of calculating the lifetime of the coverage sets
+
+
+
+
+ 4.1 Overview of the genetic algorithm
+
+ GA is able to solve optimization problems through modelling the natural evolu-
+ tion principles. At the initial step, the algorithm generates a population of pos-
+ sible solutions each of which is denoted by a set of genes (also known as chro-
+ mosome or individuals). A fitness function is defined for each certain problem,
+ which aims to examine each chromosome’s performance. A chromosome fitness
+ is dependent on how well the chromosome performs the task defined in the pro-
+ cess of solving the problem of interest. Following the generation of the initial
+ population, the algorithm starts the execution of three key operators, i.e., selec-
+ tion, crossover, and mutation. Through the selection operator, a set of possible
+ solutions are selected by the algorithm from among the initial population. After-
+ wards, two selected chromosomes, which are known as parents, are applied to the
+ creation of two child chromosomes through the crossover operator. This opera-
+ tor exchanges the genetic information between the parent chromosomes. Then,
+ it is the time for the child chromosomes to execute the mutation operator, which
+ is expected to result in the generation of a better solution. After the completion
+ of his operation, the fitness function is implemented again in order to assess the
+ child chromosomes. To do this, the chromosome’s values are compared to values
+ of all the chromosomes belonging to previous generation. Finally, from among
+ the initial population and the population produced by the crossover and mutation
+ operators, the individuals that hold greater fitness values are selected to be trans-
+ ferred to the next generation [24].
+
+
+ 13
+Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+ An effective hybrid genetic algorithm and tabu search for…                      3285
+
+
+ 4.2 GA‑base algorithm
+
+ In this section, the details of GA-based algorithm is explained.
+    Representation and the initial population The way of modeling the chro-
+ mosome to solve the problem is considered as a major part of the problem solv-
+ ing process in GA. The present study uses an order representation to model a
+ chromosome as a solution to the problem space. Each gene on the chromosome
+ represents a coverage set, and each chromosome in this model is an indicative of
+ a scheduling of coverage sets. Each chromosome is a solution to a problem. The
+ assumption is that there are n coverage sets, according to the permutation defini-
+ tion, there will be n! different orders. The initial population in this problem is a
+ subset of all possible coverage sets sequence orders (n!). For example, if 5 cover-
+ age sets with labels 1–5 are considered, one chromosome of this model is shown
+ in Fig. 3.
+    Fitness function: The fitness value obtained by the fitness function is applied
+ to evaluating the quality of a chromosome. Each sensor si in a coverage set has
+ an energy level denoted by bi . Due to the fact that if even one sensor in cover-
+ age set runs out of power, it cannot meet the network requirements, the lifetime
+ of a coverage set is measured based on the activity time of the sensor with the
+ least energy in the coverage set. In this study, the value of the objective function
+ is equal to the sum of the lifetime of the coverage sets that can be implemented
+ spatially on a chromosome. It is worth mentioning that after activating each cov-
+ erage set, a number of sensors are destroyed due to the discharge of batteries in
+ the network, and the energy levels of a number of sensors change as well. Once a
+ coverage set is activated in a chromosome, the lifetime of the remaining coverage
+ sets of the chromosome changes with a new level of sensor energy; thus, it must
+ be recalculated.
+    Selection: This operator is used to detect two parents and generate the off-
+ springs. This study uses the binary tournament selection method, based on which
+ two chromosomes are randomly and uniformly selected from among the current
+ population. The most appropriate chromosome is selected as a parent with regard
+ to the fitness value. The same process is repeated to select the second parent.
+    Crossover: Crossover is the main operator of GA and, similar to its coun-
+ terpart in nature, it generates new members whose genes are formed from their
+ parents. Depending on the problem nature, there are various methods proposed
+ for crossover in GA. This study uses the order-based chromosomes; it is not
+ suitable to use classical crossover operators such as one-point, two-point, and
+ uniform crossovers. For order-based chromosomes, there are some crossover
+
+
+ Fig. 3  Method of calculating the
+ lifetime of the coverage sets
+
+
+
+
+                                                                          13
+Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+ 3286                                                                    N. a. Mottaki et al.
+
+
+ operators as follow: Partially-Mapped Crossover Operator(PMX), Order Cross-
+ over Operator(OX), Cycle Crossover Operator(CX) [25]. This research uses the
+ CX2 method recently presented in [25]; its superiority over the methods PMX,
+ OX and CX has been proven.
+    Mutation: It is a random process through which a gene content is replaced by
+ another to produce a new chromosome. In this study, the contents of two genes in a
+ chromosome are randomly selected; then, their contents are replaced to perform the
+ mutation operation.
+    Stopping criterion: The stopping criterion of the proposed algorithm is met
+ when it reaches a predetermined number of maximum iterations. In this case, an
+ appropriate solution (a sequential order of coverage sets) is returned as the output of
+ the algorithm. The proposed GA algorithm is described in algorithm 1.
+
+  Algorithm 1 : A GA-based algorithm for coverage set scheduling
+  01.   Input: Non-disjoint coverage sets in sensor network
+  02.   Output: Near optimal coverage sets scheduling
+  03.   SOL ← ∅
+  04.   Initialize population (pop)
+  05.   Fitness (pop)
+  06.        k←0
+  07.   While k ≤ M AX do
+  08.     ps = Select (pop)
+  09.     pc = Crossover (ps )
+  10.     pm = M utation (pc )
+  11.     pop = Survival (pc , pm , pop)
+  12.     Fitness (pop)
+  13.     k++
+  14.   End While
+  15.     SOL ← BEST (pop)
+  16.   return SOL
+
+
+
+
+ 4.3 Hybrid GA‑TS algorithm
+
+ The second algorithm presented in this paper is hybrid algorithm (HA), combining
+ the GA and TS. Pure evolutionary algorithms are not suitable for precise search in
+ complex hybrid spaces, and hybridization along with other techniques improve the
+ efficiency of the search process. In general, GA detects the optimal region and then
+ a local optimizer is performed to find the optimal solution. The combination of an
+ evolutionary algorithm with a local search approach is referred to as HA [26]. To
+ achieve the advantages of this approach, we develop a HA-based algorithm to solve
+ the problem. The algorithm provides higher capacity in search by combining GA
+ and TS, and it can effectively balance the intensification and diversification [27].
+    Tabu Search (TS) is an optimization algorithm first introduced by Glover in
+ 1986 [28]. TS is based on a fundamental idea: the algorithm makes a list of move-
+ ments or Tabu points, called tabu list, to prevent from doing those movements in
+ the subsequent searches. This way, the algorithm desires to go beyond the local
+ optimization and moves toward the global optimization. TS consists of two major
+
+ 13
+Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+ An effective hybrid genetic algorithm and tabu search for…                           3287
+
+
+ elements: tabu list and aspiration criterion. The tabu list keeps a few recent move-
+ ments and avoids selecting those movements as many times as possible. The time
+ period during which the movements are on the tabu list is determined by a param-
+ eter called tabu tenure. If a movement in the tabu list results in a better solution, it
+ is selected based on a criterion called aspiration criterion, even though it is on the
+ tabu list. After making a new selection and including in the tabu list, a number of
+ movements that were previously on the tabu list are removed from the list [28].
+    In proposed algorithm to improve the quality of chromosomes, a new func-
+ tion is included in GA, which is applicable to all chromosomes in the current
+ population. The TS optimization for all chromosomes is computationally expen-
+ sive; therefore, it is not possible to apply it extensively. The method effectively
+ regulates the GA convergence since TS usually improves the chromosomes in an
+ effective way. Once the operation is done, if the stop criterion is not met, from
+ among the initial population, the chromosomes that are more suitable are selected
+ as the next offspring, and the population is generated through the operations of
+ crossover, mutation and improvement. As evaluation progresses, GA seeks to
+ drive the search toward the desired global value. The flowchart of proposed algo-
+ rithm is described in Fig. 4. The steps of performing the TS algorithm are as
+ follow:
+
+ 1. Generating an initial solution, evaluating it, and considering it as the best solution.
+ 2. Making a list of authorized operations (based on the adjacent generating meth-
+    ods).
+ 3. Performing authorized and non-tabu operations (all or part of the operations) and
+    obtaining solutions based on the objective function.
+
+
+
+
+ Fig. 4  Flowchart of the proposed hybrid GA-TS algorithm
+
+
+                                                                                13
+Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+ 3288                                                                         N. a. Mottaki et al.
+
+
+ 4. Selecting the best solution from among those obtained in the previous step (if
+    there is an operation in the tabu list that has obtained the best solution so far, the
+    action will be selected by ignoring the tabu).
+ 5. Updating the tabu list (adding the selected operations to the tabu list and removing
+    one or more operations from the tabu list), Updating the best solution found.
+ 6. If the stopping criterion is not met, returning to step 4.
+
+
+ 5 Simulation results
+
+ To have an highly accurate evaluation, the effects of both the network parameters
+ and the algorithm parameters over the network lifetime were examined. Each experi-
+ ment was developed to examine the effect of a certain parameter on the network
+ lifetime. The obtained results were compared with those of the MCSSA algorithm
+ presented in [11]. In experiments, N sensors and T targets were randomly distributed
+ within a 1000m ∗ 1000m square area. The sensing radius of all sensors was equal to
+ R. Each sensor had an energy level equal to bi , which disappeared when the power
+ is exhausted. A number of C coverage sets were randomly constructed to perform
+ the experiments. The activity time of each coverage set depends on the energy of
+ the sensors available in the coverage set. Given that a coverage set should meet the
+ network requirement by itself, the network targets are not completely covered if even
+ one sensor is lost in the coverage set. In such conditions, the coverage set can no
+ longer be activated and its lifetime will expire. The proposed algorithm measures
+ the network lifetime by scheduling coverage sets and calculates their activating time.
+ In this paper, the result of each experiment is an average of 20 runs. The simulation
+ parameters are listed in Table 3.
+     The experiments were divided into two general categories. In the first category
+ (Experiments 1–4), the impacts of network parameters on the proposed algorithms
+ and MCSSA were investigated to evaluate their efficiency in prolonging the network
+ lifetime. On the other hand, the second category (Experiments 5–8) examined the
+ impacts of network parameters on the proposed algorithm, and coverage set sched-
+ uling was evaluated under different conditions. The network parameters used in all
+
+
+
+ Table 3  Simulation table     Simulation parameters
+
+                               Monitored region                          1000m × 1000m
+                               Number of directional sensors (S)         200–1200
+                               Number of targets (T)                      5–30
+                               Deployment                                 Random
+                               Sensing radius (R)                         100–300
+                               Comm. radius                               2 × Sensing radius
+                               Working directions                         4
+                               Active time slots of sensors               [0, 80]
+                               Number of coverage sets (M)                10–80, 100–800
+
+
+
+ 13
+Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+ An effective hybrid genetic algorithm and tabu search for…                             3289
+
+
+ experiments were the sensor activity time, number of coverage sets, number of tar-
+ gets, number of sensors, and sensors’ sensing range.
+    Experiment 1. This experiment was aimed at proving the hypothesis that the net-
+ work lifetime will extend by increasing the active time slots of the sensors. As the
+ coverage sets are made up of sensors, it is expected that increasing the activity time
+ of the sensors will lead to increasing the coverage sets lifetime and the targets are
+ covered longer by a coverage set. This experiment determined the impact of increas-
+ ing the activity time of the sensors on the three algorithms. To perform the experi-
+ ment, the sensors activity time during different performances was determined from
+ [0, 10] to [50, 60] (note that [0, 10] is a random value within the range of 1–10), and
+ the network parameters were set as T = 20, N = 100, M = 100, and R = 200. As
+ indicated in Fig. 5, the proposed algorithms has a longer lifetime than the MCSSA
+ algorithm for the same amount of activity time. The hybrid of GA and TS algo-
+ rithms has better results than GA.
+    Experiment 2. The second experiment was designed to prove the hypothesis
+ that the network lifetime will prolong by increasing the number of coverage sets.
+ In this regard, the number of coverage sets was uniformly increased from 10 to
+ 60 with incremental step of 10, the values of T = 10 , N = 300 , and R = 200 were
+ set, and the activity time of the sensors was randomly selected within the range
+ of 10–30. The results indicated that the network lifetime was not prolonged sig-
+ nificantly by increasing the number of coverage sets. It can be explained by the
+ fact that coverage sets have many sensors in common and consuming the sensors’
+ energy will decrease the coverage sets lifetime, which also results in limiting the
+ network lifetime. As it can be seen in Fig. 6, the proposed algorithms performed
+
+                                     180
+                                           MCSSA
+                                     160   GA
+                                           hybrid GA-TS
+                                     140
+
+                                     120
+
+
+
+
+                  Network lifetime
+                                     100
+
+                                      80
+
+                                      60
+
+                                      40
+
+                                      20
+
+                                       0
+                                           1       2       3       4        5      6
+                                                The active time slots of sensors
+
+ Fig. 5  Effect of the active time slots on the network lifetime
+
+
+                                                                                       13
+Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+ 3290                                                                               N. a. Mottaki et al.
+
+
+                                     140
+                                           MCSSA
+                                           GA
+                                     120   Hybrid GA-TS
+
+
+                                     100
+
+
+
+
+                  Network lifetime
+                                      80
+
+
+                                      60
+
+
+                                      40
+
+
+                                      20
+
+
+                                       0
+                                           10     20      30     40      50    60
+                                                 The number of coverage sets
+
+ Fig. 6  Effect of the number of coverage sets on the network lifetime
+
+
+
+ better than the MCSSA algorithm in this regard. The results of the two proposed
+ algorithms showed that the hybrid of the TS and GA algorithms contributed to
+ finding better chromosomes and prolonging the network lifetime.
+    Experiment 3. This experiment was carried out to compare the impacts of
+ increasing the number of targets on three algorithms. To do this, the number
+ of targets was increased from 5 to 30 units with incremental step of 5. To per-
+ form the experiment, the values of N = 100 , M = 100 , and R = 200 were deter-
+ mined and the energy value of each sensor was set to 10. More sensors should
+ be included in a coverage set in order to cover new targets. Once each cover-
+ age set was implemented, more sensors lost their energy and the network lifetime
+ slowly decreased as the number of targets increased. As reported by the diagrams
+ in Fig. 7, the proposed algorithms performed better than the MCSSA algorithm in
+ terms of prolonging the network lifetime. The reason can be stated as follows: TS
+ is able to overcome local minima by guiding the optimisation to new areas, and
+ also it can reach the global optimum.
+    Experiment 4. This experiment was aimed at determining the impact of
+ increasing the number of sensors on the network lifetime. In this regard, the
+ parameters of T = 20 , M = 100 , and R = 200 were determined, and the active
+ time of each sensor was set to 10. Therefore, the number of sensors increased
+ from 200 to 1200 with incremental step of 200. The network lifetime prolonged
+ by increasing the number of sensors. Accordingly, the result is acceptable
+ because each target was covered by more sensors and the number of shared sen-
+ sors among different coverage sets decreased. The results of the implementation
+
+ 13
+Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+ An effective hybrid genetic algorithm and tabu search for…                                     3291
+
+
+                                     100
+                                                                                MCSSA
+                                      90                                        GA
+                                                                                Hybrid GA-TS
+                                      80
+
+                                      70
+
+
+
+
+                  Network lifetime
+                                      60
+
+                                      50
+
+                                      40
+
+                                      30
+
+                                      20
+
+                                      10
+
+                                       0
+                                           5       10        15     20      25          30
+                                                        The number of targets
+
+ Fig. 7  Effect of the number of targets on the network lifetime
+
+
+
+
+                                      40
+                                           MCSSA
+                                      35   GA
+                                           Hybrid GA-TS
+
+                                      30
+
+
+
+
+                  Network lifetime
+                                      25
+
+
+                                      20
+
+
+                                      15
+
+
+                                      10
+
+
+                                       5
+
+
+                                       0
+                                           200     400      600     800    1000       1200
+                                                        The number of sensors
+
+ Fig. 8  Effect of the number of sensors on the network lifetime
+
+
+                                                                                               13
+Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+ 3292                                                                                          N. a. Mottaki et al.
+
+
+                                     200
+                                             N=200
+                                     180     N=400
+                                             N=600
+                                     160
+
+                                     140
+
+
+
+
+                  Network lifetime
+                                     120
+
+                                     100
+
+                                      80
+
+                                      60
+
+                                      40
+
+                                      20
+                                        10   20       30     40     50      60       70   80
+                                                  The active time slots of sensors
+
+ Fig. 9  Effect of different values of active time slots and different values of sensors on the network life-
+ time
+
+
+
+ of the three algorithms are shown in Fig. 8. The two proposed algorithms showed
+ better results than those of the MCSSA algorithm.
+    Experiment 5. This is the first experiment of the second group. As mentioned
+ earlier, experiments 5–8 examine the impacts of the network parameters on the pro-
+ posed scheduling algorithm. The fifth experiment was aimed at investigating how
+ the network lifetime in the proposed algorithm will change with different values of
+ sensor activity time. Network parameters were determined as T = 20, M = 100, and
+ R = 200, and the numbers of sensors were set into three values of N = 200, 400,
+ and 600 in three different implementations, respectively, as shown in Fig. 9. The
+ active time slots of the sensors in all three runs vary from 10 to 80 with incremen-
+ tal step of 10. As it was expected, the results indicated that as the sensors’ activ-
+ ity time increased, the coverage sets’ lifetime and consequently the network lifetime
+ prolonged. Moreover, the network lifetime prolonged by increasing the number of
+ sensors for fixed points of active time slots. When the active time slots of the sen-
+ sors remain unchanged and the number of sensors increases, the number of common
+ sensors among different coverage sets decreases, and they can perform their tasks
+ longer, hence increasing the network lifetime.
+    Experiment 6. This experiment was also designed to investigate the impact of
+ changing the active time slots of the sensors on the network lifetime. However, the
+ difference is that the number of coverage sets was set to M = 100, 200, and 300 in
+ three separate performances, and the values of T = 20 and N = 1000 and the active
+ time slots of the sensors were changed from [0, 10] to [70, 80]. For each distinct
+ implementation, it was observed that the network lifetime extended by increasing
+
+ 13
+Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+ An effective hybrid genetic algorithm and tabu search for…                                              3293
+
+
+                                     300
+                                                M=100
+                                                M=200
+                                     250        M=300
+
+
+
+                                     200
+
+
+
+
+                  Network lifetime
+                                     150
+
+
+
+                                     100
+
+
+
+                                      50
+
+
+
+                                       0
+                                      [0,10] [10,20] [20,30] [30,40] [40,50] [50,60] [60,70] [70,80]
+                                                  The active time slots of sensors
+
+ Fig. 10  Effect of different values of active time slots and different values of targets on the network life-
+ time
+
+
+ the active time slots of the sensors. After comparing all three runs, the diagrams
+ indicated that the network lifetime extended slightly as the number of coverage sets
+ increased at the fixed points during the sensors’ activity time. sensors in Accord-
+ ingly, it can be said that as the number of coverage sets increases, the number of
+ common among the coverage sets increases, and the lifetime of the coverage sets
+ will run out by discharging the sensors energy, as shown in Fig. 10.
+    Experiment 7. This experiment was performed to evaluate the impact of the num-
+ ber of coverage sets under different conditions of the proposed algorithm. In this
+ experiment, we set the active time slots of all sensors equal to 10 (a fixed value) and
+ the values of N = 100 and R = 200; then, the number of coverage sets was increased
+ from 10 to 80 with incremental step of 10. This experiment was performed in three
+ runs with values of T = 10, 20, and 30. As indicated by the diagrams in Fig. 11, as
+ the number of coverage sets increased, the lifetime of the network increased. Based
+ on the diagram, it can be concluded that the number of sensors shared among the
+ coverage sets will increase and therefore the network lifetime will be limited by fix-
+ ing the number of sensors and at the same time increasing the number of coverage
+ sets.
+    Experiment 8. This experiment was aimed at evaluating the effect of the num-
+ ber of coverage sets under different conditions (as in Experiment 7) of the proposed
+ algorithm,. The difference is that the values of sensing radius was set to R = 100,
+ 200, and 300 in three different runs. The other parameters were set as follow: the
+ active time slots of the sensors were randomly selected within the range of [0, 10]
+ and the values of N = 1000 and T = 20. According to these three runs, it is obvious
+
+                                                                                                       13
+Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+ 3294                                                                                           N. a. Mottaki et al.
+
+
+                                     60
+                                                  T=10
+                                     55           T=20
+                                                  T=30
+                                     50
+
+                                     45
+
+
+
+
+                  Network lifetime
+                                     40
+
+                                     35
+
+                                     30
+
+                                     25
+
+                                     20
+
+                                     15
+
+                                     10
+                                       10    20          30     40     50    60     70    80
+                                                         The number of cover sets
+ Fig. 11  Effect of the number of coverage sets and different values of T on the network lifetime
+
+
+                                     14
+                                              R=100
+                                     13       R=200
+                                              R=300
+
+                                     12
+
+
+
+
+                  Network lifetime
+                                     11
+
+
+                                     10
+
+
+                                     9
+
+
+                                     8
+
+
+                                     7
+
+
+                                     6
+                                     100    200          300   400    500    600    700   800
+                                                     The number of cover sets
+ Fig. 12  Effect of the number of coverage sets and different values of R on the network lifetime
+
+
+
+
+ 13
+Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+ An effective hybrid genetic algorithm and tabu search for…                        3295
+
+
+ that for a fixed number of coverage sets, the longer the sensing radius, the loner
+ the network lifetime will be. The reason is that, in such condition, more targets are
+ covered by each sensor and the number of shared sensors decreases as the sensing
+ radius increases. Consequently, the sensor energy is not discharged quickly; thus,
+ the coverage sets can run longer, hence increasing the network lifetime (see Fig. 12).
+
+
+ 5.1 Discussion on simulation results
+
+ Greedy-based algorithms can nd schedule coverage sets in a way to maximize the
+ network lifetime in real time. Remember that the initial candidates closeness to the
+ optimal solution greatly affects the greedy-based algorithms performance, and the
+ scheme may lead to a local minimum because of its heuristic search. Many scholars
+ have applied GA to the solution of optimization problems, especially in association
+ with scheduling algorithms.
+     When using GA, different outcomes may be achieved in independent operations,
+ and there is not any guarantee to obtain an optimal result. Acceptable results could
+ be achieved in cases where the “global” search space is tested globally. The use of
+ evolutionary algorithms and high iterations in the global search space would result
+ in higher computational cost in comparison with to the greedy algorithm. When
+ dealing with optimization problems with large search space, to achieve a global (or
+ a near global) optimization, a high computational cost is predictable, which is worth
+ it. GA is often capable of identifying the promising areas for global optima within
+ a certain search space; however, in some cases, it may face difficulty in locating the
+ exact minimum of these optima [10]. Particularly, for scheduling coverage set, the
+ search space is extremely large; for that reason, designs found by GA could still
+ have room for further improvement. The current study uses a novel process based
+ on TS to refine the designs. GA is an algorithm inspired by the evolution process
+ and works on a group of solutions at each unit of time, whereas TS works based on
+ concepts from artificial intelligence and operates on only a single solution at each
+ unit of time [16]. TS applies basic, problem-specific operators to the exploration
+ of a search space and memory, called the tabu list, with the aim of keeping track of
+ the parts already visited. TS guides the optimization to new areas; this way, it could
+ overcome local minima, and also it could achieve the global optimum.
+
+
+
+ 6 Conclusion and further work
+
+ The target coverage and prolonged network lifetime are regarded as two major prob-
+ lems in DSNs. To solve the coverage problem by using the sensor scheduling tech-
+ nique, the network sensors can be divided into a number of coverage sets. Making
+ use of the GA and TS algorithms, this article presented a hybrid GA-TS algorithm to
+ achieve the optimal or near-optimal coverage set scheduling. With the aim of prov-
+ ing the superiority of the proposed algorithms, its results were compared with those
+ of one of the recently presented algorithm (MCSSA). The results indicated that the
+ proposed algorithms had a better performance than the MCSSA algorithm and it
+
+                                                                            13
+Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+ 3296                                                                                         N. a. Mottaki et al.
+
+
+ successfully increased the network lifetime by finding the optimal scheduling cov-
+ erage sets in the network. Coverage management in sensor networks is an impor-
+ tant issue and more research is needed in this area. Existing studies have shown that
+ multi objective evolutionary algorithms (MOEAs) leads to better coverage manage-
+ ment in sensor networks, conservation of sensor energy, and thus extended the net-
+ work lifetime. A part of our future work is to use MOEAs for coverage set schedul-
+ ing in sensor networks and will study its efficiency in regard to this problem.
+
+
+ Data Availability The following information was supplied regarding data availability: Data will be made
+ available on reasonable request.
+
+ Declarations
+
+ Conflict of interest All authors declare that they have no conflict of interest that are relevant to the content
+ of this article.
+
+
+
+
+ References
+  1. Gulati K et al (2022) A review paper on wireless sensor network techniques in internet of things
+     (IoT). Mater Today Proc 51:161–165. https://​doi.​org/​10.​1016/j.​matpr.​2021.​05.​067
+  2. Mohammed SB et. al (2020) Wireless sensor network design methodologies: a Survey. In: Journal
+     of Sensors. 2020, https://​doi.​org/​10.​1155/​2020/​95928​36
+  3. Mottaki NA et al (2021) Multi-objective optimization for coverage aware sensor node scheduling in
+     directional sensor networks. In J Appl Dyn Syst Control 4(1):43–52
+  4. Sangwan A, Singh RP (2015) Survey on coverage problems in wireless sensor networks. Wirel Pers
+     Commun 80(4):1475–1500
+  5. Ajam L, Nodehi A, Mohamadi H (2021) A Genetic-based algorithm to solve priority-based target
+     coverage problem in directional sensor networks. In: Journal of Applied Dynamic Systems and Con-
+     trol, 4(1):89-96
+  6. Mottaki NA, Motameni H, Mohamadi H (2022) A genetic algorithm-based approach for solving the
+     target Q-coverage problem in over and under provisioned directional sensor networks. Phys Com-
+     mun 54:101719. https://​doi.​org/​10.​1016/j.​phycom.​2022.​101719
+  7. Hanh NT et al (2019) An efficient genetic algorithm for maximizing area coverage in wireless sen-
+     sor networks. Inf Sci 488:58–75
+  8. Tao D, Wu T (2015) A survey on barrier coverage problem in directional sensor networks. In: IEEE
+     Sensors Journal. 15(2):876-885
+  9. Singh j, Kaur R, Singh D (2020) A survey and taxonomy on energy management schemes in wire-
+     less sensor networks. In: Journal of Systems Architecture 111:101782
+ 10. Boukerche A, Sun P (2018) Connectivity and coverage based protocols for wireless sensor net-
+     works. Ad Hoc Netw 80:54–69. https://​doi.​org/​10.​1016/j.​adhoc.​2018.​07.​003
+ 11. Luo C et al (2020) Maximizing network lifetime using coverage sets scheduling in wireless sensor
+     networks. In: Ad Hoc Networks. 98:102037
+ 12. Chowdhury SM, Hossain A (2020) Different energy saving schemes in wireless sensor networks: a
+     survey. Wirel Pers Commun 114:2043–2062. https://​doi.​org/​10.​1007/​s11277-​020-​07461-5
+ 13. SPermutations (2022) ByDarrell whitley book evolutionary computation 1 Edition1st Edition first
+     published2000 ImprintCRC Press Pages12 eBook ISBN9781315274638, https://​doi.​org/​10.​1016/j.​
+     jksuci.​2019.​05.​006
+ 14. Zishan AA et al (2018) Maximizing heterogeneous coverage in over and under provisioned visual
+     sensor networks. J Netw Comput Appl 124:44–62
+ 15. Kim Y et al (2013) Lifetime maximization considering target coverage and connectivity in direc-
+     tional image/video sensor networks. In: The Journal of Supercomputing. 65(1): 365-382
+
+
+ 13
+Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+ An effective hybrid genetic algorithm and tabu search for…                                               3297
+
+
+ 16. Mohamadi H, Salleh S, Razali MN (2014) Heuristic methods to maximize network lifetime in direc-
+     tional sensor networks with adjustable sensing ranges. In: Journal of Network and Computer Appli-
+     cations. 26-35
+ 17. Alibeiki A, Motameni H, Mohamadi H (2019) A new genetic-based approach for maximizing
+     network lifetime in directional sensor networks with adjustable sensing ranges. In: Pervasive and
+     Mobile Computing. 52:1-12
+ 18. Balaji S et al (2020) Energy efficient target coverage for a wireless sensor network. Measurement
+     165:108167. https://​doi.​org/​10.​1016/j.​measu​rement.​2020.​108167
+ 19. Arivudainambi D et al (2021) Cuckoo search algorithm for target coverage and sensor scheduling
+     with adjustable sensing range in wireless sensor network. J Discret Math Sci Cryptogr. https://​doi.​
+     org/​10.​1080/​09720​529.​2020.​17533​01
+ 20. El-Sherif M et al (2018) Lifetime maximisation of disjoint wireless sensor networks using multiob-
+     jective genetic algorithm. IET Wirel Sens Syst 8(5):200–207. https://​doi.​org/​10.​1049/​iet-​wss.​2017.​
+     0069
+ 21. Mohamadi H, Salleh S, Ismail AS (2014) A learning automata-based solution to the priority-based
+     target coverage problem in directional sensor networks. Wirel Pers Commun 79(3):2323–2338
+ 22. Gil JM, Han YH (2011) A target coverage scheduling scheme based on genetic algorithms in direc-
+     tional sensor networks. In: Sensors. 1888-1906
+ 23. Katti A (2019) Target coverage in random wireless sensor networks using cover sets. J King Saud
+     Univ Comput Inf Sci 34:734–746
+ 24. Katoch S et al (2021) A review on genetic algorithm: past, present, and future. Multimed Tools
+     Appl 80:8091–8126
+ 25. Hussain A et al (2017) Genetic algorithm for traveling salesman problem with modified cycle cross-
+     over operator. Comput Intell Neurosci 2017:1–7
+ 26. Garai G, Chaudhurii BB (2013) A novel hybrid genetic algorithm with Tabu search for optimizing
+     multi-dimensional functions and point pattern recognition. Inf Sci 221:28–48
+ 27. Li X, Gao L (2016) An effective hybrid genetic algorithm and tabu search for flexible job shop
+     scheduling problem. Int J Prod Econ 174:93–110
+ 28. Prajapati V, p et al Tabu Search Algorithm (TSA): A Comprehensive Survey. In:2020 3rd Interna-
+     tional Conference on emerging technologies in computer engineering: Machine Learning and Inter-
+     net of Things (ICETCE), https://​doi.​org/​10.​1109/​ICETC​E48199.​2020.​90917​43.
+
+ Publisher’s Note Springer Nature remains neutral with regard to jurisdictional claims in published maps
+ and institutional affiliations.
+
+ Springer Nature or its licensor holds exclusive rights to this article under a publishing agreement with the
+ author(s) or other rightsholder(s); author self-archiving of the accepted manuscript version of this article
+ is solely governed by the terms of such publishing agreement and applicable law.
+
+
+
+
+                                                                                                 13
+Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+Terms and Conditions
+Springer Nature journal content, brought to you courtesy of Springer Nature Customer Service Center
+GmbH (“Springer Nature”).
+Springer Nature supports a reasonable amount of sharing of research papers by authors, subscribers
+and authorised users (“Users”), for small-scale personal, non-commercial use provided that all
+copyright, trade and service marks and other proprietary notices are maintained. By accessing,
+sharing, receiving or otherwise using the Springer Nature journal content you agree to these terms of
+use (“Terms”). For these purposes, Springer Nature considers academic use (by researchers and
+students) to be non-commercial.
+These Terms are supplementary and will apply in addition to any applicable website terms and
+conditions, a relevant site licence or a personal subscription. These Terms will prevail over any
+conflict or ambiguity with regards to the relevant terms, a site licence or a personal subscription (to
+the extent of the conflict or ambiguity only). For Creative Commons-licensed articles, the terms of
+the Creative Commons license used will apply.
+We collect and use personal data to provide access to the Springer Nature journal content. We may
+also use these personal data internally within ResearchGate and Springer Nature and as agreed share
+it, in an anonymised way, for purposes of tracking, analysis and reporting. We will not otherwise
+disclose your personal data outside the ResearchGate or the Springer Nature group of companies
+unless we have your permission as detailed in the Privacy Policy.
+While Users may use the Springer Nature journal content for small scale, personal non-commercial
+use, it is important to note that Users may not:
+
+ 1. use such content for the purpose of providing other users with access on a regular or large scale
+    basis or as a means to circumvent access control;
+ 2. use such content where to do so would be considered a criminal or statutory offence in any
+    jurisdiction, or gives rise to civil liability, or is otherwise unlawful;
+ 3. falsely or misleadingly imply or suggest endorsement, approval , sponsorship, or association
+    unless explicitly agreed to by Springer Nature in writing;
+ 4. use bots or other automated methods to access the content or redirect messages
+ 5. override any security feature or exclusionary protocol; or
+ 6. share the content in order to create substitute for Springer Nature products or services or a
+    systematic database of Springer Nature journal content.
+In line with the restriction against commercial use, Springer Nature does not permit the creation of a
+product or service that creates revenue, royalties, rent or income from our content or its inclusion as
+part of a paid for service or for other commercial gain. Springer Nature journal content cannot be
+used for inter-library loans and librarians may not upload Springer Nature journal content on a large
+scale into their, or any other, institutional repository.
+These terms of use are reviewed regularly and may be amended at any time. Springer Nature is not
+obligated to publish any information or content on this website and may remove it or features or
+functionality at our sole discretion, at any time with or without notice. Springer Nature may revoke
+this licence to you at any time and remove access to any copies of the Springer Nature journal content
+which have been saved.
+To the fullest extent permitted by law, Springer Nature makes no warranties, representations or
+guarantees to Users, either express or implied with respect to the Springer nature journal content and
+all parties disclaim and waive any implied warranties or warranties imposed by law, including
+merchantability or fitness for any particular purpose.
+Please note that these rights do not automatically extend to content, data or other material published
+by Springer Nature that may be licensed from third parties.
+If you would like to use or distribute our Springer Nature journal content to a wider audience or on a
+regular basis or in any other manner not expressly permitted by these Terms, please contact Springer
+Nature at
+
+onlineservice@springernature.com
+

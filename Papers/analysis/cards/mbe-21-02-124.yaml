@@ -1,0 +1,76 @@
+source_file: mbe-21-02-124.pdf
+title: "An optimization method for wireless sensor networks coverage based on genetic algorithm and reinforced whale algorithm"
+authors: "Shuming Sun; Yijun Chen; Ligang Dong"
+venue_year: "Mathematical Biosciences and Engineering (MBE), 2024"
+problem: >
+  Random deployment of nodes in wireless sensor networks (WSN) causes coverage redundancy
+  and coverage holes, degrading network service quality; existing intelligent optimization
+  algorithms (GWO, WOA, GA, and their variants) face issues such as premature convergence,
+  low convergence accuracy/speed, and getting stuck in local optima when used for WSN
+  coverage optimization.
+approach: >
+  GARWOA (Genetic Algorithm and Reinforced Whale Optimization Algorithm): a hybrid
+  two-stage optimization method. Stage 1 uses GA (roulette wheel selection, real-number
+  crossover, mutation) to perform a global search and produce an initial best solution
+  Cbest. Stage 2 refines Cbest using RWOA, a reinforced version of the Whale Optimization
+  Algorithm (WOA) that (a) initializes the population with sine map and piecewise linear
+  chaotic map (SPM) for more uniform distribution, (b) applies a non-linear improvement to
+  the linear control factor 'a' to balance exploration/exploitation, and (c) incorporates a
+  Levy flight perturbation mechanism to escape local optima and premature convergence. The
+  combined algorithm is applied to WSN node deployment to maximize coverage ratio.
+sink_mobility: unknown
+routing_clustering_scheme: >
+  Not the main focus; paper only presents an energy consumption/radio model referencing
+  cluster heads and a base station (Section 2.2) for context (S-bit data rounds, k clusters,
+  distances lCB/lCH per Eqs 8-9), citing a separate SDWSN clustering routing algorithm
+  (ref [28]) as the source of this energy model. No clustering/routing protocol is proposed
+  or evaluated in this paper; node positions/deployment are assumed static (no node mobility
+  or failure considered, per assumption 3 in Section 2.1).
+simulator: "MATLAB 2021b"
+node_count: "40 (Experiment 1); 80 (Experiment 2); 50 (Experiment 3)"
+area: >
+  50 m x 50 m (Experiment 1); 100 m x 100 m (Experiment 2); 200 m x 200 m (Experiment 3)
+energy_model: >
+  Standard radio energy consumption model (first-order radio model) per Eqs (5)-(9):
+  ETx(n,l) = n*Eelec + n*epsilon_fs*l^2 (l < l0, free space) or n*Eelec + n*epsilon_mp*l^4
+  (l >= l0, multi-path fading); ERx(n) = n*Eelec; threshold distance l0 = sqrt(epsilon_fs/epsilon_mp).
+  Total round energy ERound = S*(2*N*Eelec + N*EDA + k*epsilon_mp*lCB^4 + k*epsilon_fs*lCH^2).
+  Specific numeric parameter values (Eelec, epsilon_fs, epsilon_mp, EDA) are not stated in the
+  text (model is presented but not tied to explicit constants in this excerpt).
+metrics_reported:
+  - "Network coverage ratio (Cov), % (Eq. 4)"
+  - "Standard test function fitness statistics: Mean, Std, Mid (median), Max, Min over 50 independent runs (10 benchmark functions f1-f10, dimension 30)"
+  - "Convergence curves (fitness value vs. iterations) for standard functions (500 iterations) and for WSN coverage (300 iterations)"
+  - "Time complexity (Big-O) analysis of GA, WOA, RWOA, and GARWOA"
+key_numeric_results:
+  - "Coverage ratio (mean of 30 runs): Experiment 1 = 95.73% (GARWOA) vs 92.46% (MuGWO), 87.43% (IWHO), 89.31% (PSO), 76.28% (WOA)"
+  - "Coverage ratio: Experiment 2 = 98.15% (GARWOA) vs 95.83% (MuGWO), 89.70% (IWHO), 85.89% (PSO), 81.59% (WOA)"
+  - "Coverage ratio: Experiment 3 = 99.34% (GARWOA) vs 98.47% (MuGWO), 95.39% (IWHO), 88.60% (PSO), 88.38% (WOA)"
+  - "GARWOA improvement over MuGWO (best competitor): 3.27% (Exp.1), 2.32% (Exp.2), 0.87% (Exp.3)"
+  - "GARWOA improvement over WOA (least effective): 19.45% (Exp.1), 16.56% (Exp.2), 10.96% (Exp.3)"
+  - "Standard test functions: population size 100, 500 iterations, 50 independent runs each, dimension 30"
+  - "GARWOA achieves best mean on functions f1, f2, f7, f9, f10, and f5 (e.g., f1 mean = 1.67e-111 vs IWHO 6.37e-49, WOA 1.30e-71, MuGWO 1.53e-37, PSO 1.09)"
+  - "IWHO performs best on f3, f4, f6"
+  - "Time complexity: GA = O(N*logN*D*T); WOA = O(N*D*T); GARWOA = O(N*logN*D*T) (same order as GA, higher than WOA alone)"
+  - "Network coverage experiments: each algorithm run independently 30 times per experiment, results averaged; 300 iterations per run"
+  - "Sensing radius Rp / communication radius Rc: 5m/10m (Exp.1), 7.5m/15m (Exp.2), 20m/40m (Exp.3), satisfying Rc >= 2*Rp"
+stated_limitations: >
+  Authors state combining GA with RWOA adds computational complexity compared to WOA alone
+  (time complexity O(N*logN*D*T) vs O(N*D*T)), though they claim the coverage ratio gain
+  offsets this cost. As future work, they state that the next stage will integrate
+  artificial intelligence with WSN (intelligent sensor/node technologies) to enable
+  autonomous learning and adaptation of nodes to environmental changes, implying the
+  current work does not address adaptive/learning-based node behavior. No other
+  limitations (e.g., scalability beyond tested node counts, real-world/hardware validation,
+  energy-lifetime results) are explicitly discussed in the text.
+citation_fields:
+  bibkey: sun2024garwoa
+  authors_bibtex: "Sun, Shuming and Chen, Yijun and Dong, Ligang"
+  title: "An optimization method for wireless sensor networks coverage based on genetic algorithm and reinforced whale algorithm"
+  year: 2024
+  journal_or_booktitle: "Mathematical Biosciences and Engineering"
+  volume: 21
+  number: 2
+  pages: "2787-2812"
+  doi: "10.3934/mbe.2024124"
+  publisher: "AIMS Press"

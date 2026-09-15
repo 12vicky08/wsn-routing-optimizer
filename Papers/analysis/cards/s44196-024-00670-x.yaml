@@ -1,0 +1,69 @@
+source_file: s44196-024-00670-x.pdf
+title: "ExAq-MSPP: An Energy-Efficient Mobile Sink Path Planning Using Extended Aquila Optimization Algorithm"
+authors: S. Sangeetha; T. Aruldoss Albert Victoire; Manoharan Premkumar; Ravichandran Sowmya
+venue_year: International Journal of Computational Intelligence Systems, 2024
+problem: >
+  Mobile sink path planning (MSPP) in WSNs must determine efficient routes for a mobile sink
+  to traverse the network and collect data while achieving energy-efficient routing with
+  minimal delay; existing MSPP methods (greedy, heuristic, optimization-based) struggle with
+  dynamic environments, energy-efficient data collection, real-time requirements, scalability,
+  reliability, load balancing, and path constraints simultaneously.
+approach: >
+  ExAq-MSPP protocol: (1) Voronoi-diagram-based sensor node deployment for uniform coverage,
+  (2) energy-efficient LEACH-based clustering for cluster head (CH) selection and routing,
+  (3) mobile sink path planning optimized via a proposed Extended Aquila (ExAq) optimization
+  algorithm, which hybridizes the conventional Aquila Optimization Algorithm with chaotic
+  Chebyshev mapping (to avoid local optima and speed convergence) and uses a multi-objective
+  fitness function combining delay, residual energy, link quality, priority, and distance.
+sink_mobility: controlled/optimized-trajectory
+routing_clustering_scheme: "LEACH-based clustering (dynamic, probability/threshold-based CH selection using residual energy) with Voronoi-based node deployment"
+simulator: MATLAB (version not specified)
+node_count: 50, 100, 150
+area: 1000 x 1000 m
+energy_model: >
+  Initial energy 1 J per node; residual energy fitness FRE = EInitial - EConsumed; LEACH-style
+  energy terms used in ideal cluster number calculation include free-space communication
+  energy (XEfs), amplifier energy (XEamp), and CH aggregation energy (XEagg) (Eq. 3); no
+  first-order radio model parameters (e.g., specific amplifier/transmit constants in nJ or pJ)
+  are given in the extracted text.
+metrics_reported:
+  - "Delay (s)"
+  - "Network lifetime (%)"
+  - "Packet delivery ratio (PDR, %)"
+  - "Residual energy (J)"
+  - "Throughput"
+  - "Convergence rate (iterations, qualitative comparison vs. base Aquila)"
+key_numeric_results:
+  - "Simulation parameters: nodes 50-150, data rate 1 Kbps, transmission range 200 m, area 1000x1000 m, initial energy 1 J, traffic CBR, population 20, iterations 1000, rounds 2500, cluster heads 4, initial pause time 0.5 s (Table 2)."
+  - "Abstract-reported best/summary values for proposed ExAq-MSPP vs existing protocols: delay 1.169 (s), network lifetime 99.857 (%), PDR 99.920 (%), residual energy 0.997 (J), throughput 255.306."
+  - "At 150 nodes, round 500: delay = 1.169 s for ExAq-MSPP vs 4.117 (MISSA-DWA), 6.310 (Fuzzy-RP), 8.122 (PSO-PIO), 7.733 (EEPP-BAP), 5.145 (ABC), 3.860 (EAM-PPMS) (Table 3)."
+  - "At 150 nodes, round 500: network lifetime = 99.857% for ExAq-MSPP vs 95.506 (MISSA-DWA), 93.876 (Fuzzy-RP), 91.301 (PSO-PIO), 93.152 (EEPP-BAP), 98.694 (ABC), 97.435 (EAM-PPMS) (Table 4)."
+  - "At 50 nodes, round 500: PDR = 99.920% for ExAq-MSPP vs 98.814 (MISSA-DWA), 97.114 (Fuzzy-RP), 99.112 (PSO-PIO), 99.032 (EEPP-BAP), 99.429 (ABC), 98.490 (EAM-PPMS) (Table 5)."
+  - "At 50/100 nodes, round 500: residual energy = 0.997 J for ExAq-MSPP (both densities) vs competitors ranging 0.834-0.985 J (Table 6)."
+  - "At 150 nodes, round 2500: throughput = 255.306 for ExAq-MSPP vs 81.400 (MISSA-DWA), 81.179 (Fuzzy-RP), 155.696 (PSO-PIO), 183.256 (EEPP-BAP), 188.655 (ABC), 230.219 (EAM-PPMS) (Table 7, Table 8)."
+  - "Comparative discussion (Table 8, best-outcome basis): ExAq-MSPP delay 1.169 s is 71.61%, 81.48%, 85.61%, 84.88%, 77.28%, 69.72% better than MISSA-DWA, Fuzzy-RP, PSO-PIO, EEPP-BAP, ABC, EAM-PPMS respectively."
+  - "Network lifetime 99.857% is 4.36%, 5.99%, 8.57%, 6.71%, 1.16%, 2.43% higher than the same six baselines respectively."
+  - "PDR 99.920% is 1.11%, 2.81%, 0.81%, 0.89%, 0.49%, 1.43% higher than the same six baselines respectively."
+  - "Residual energy 0.997 J is 9.23%, 12.60%, 7.88%, 6.01%, 2.42%, 1.13% higher than the same six baselines respectively."
+  - "Throughput 255.306 is 68.12%, 68.20%, 39.02%, 28.22%, 26.11%, 9.83% higher than the same six baselines respectively."
+  - "Convergence analysis (Fig. 9, qualitative): ExAq converges faster than the conventional Aquila Optimization Algorithm due to chaotic Chebyshev mapping (no numeric iteration count given in extracted text)."
+stated_limitations: >
+  No explicit author-stated limitations section for the proposed method itself; the paper does
+  note limitations of prior/related works (e.g., SEP-based hybrid method must balance energy
+  efficiency vs QoS; ABC-based method assumes tolerance for data delay unsuitable for some
+  real-time apps; Fuzzy_RP method has scalability issues). For future work, the authors propose
+  integrating machine learning for dynamic fitness adjustment, testing in heterogeneous WSNs,
+  scaling to large urban/industrial WSNs, addressing interference/node density and security
+  against cyber-attacks, and extending to multimedia data types -- implying these are current
+  gaps/limitations of the proposed protocol.
+citation_fields:
+  bibkey: sangeetha2024exaqmspp
+  authors_bibtex: "Sangeetha, S. and Victoire, T. Aruldoss Albert and Premkumar, Manoharan and Sowmya, Ravichandran"
+  title: "ExAq-MSPP: An Energy-Efficient Mobile Sink Path Planning Using Extended Aquila Optimization Algorithm"
+  year: 2024
+  journal_or_booktitle: International Journal of Computational Intelligence Systems
+  volume: "17"
+  number: unknown
+  pages: unknown
+  doi: 10.1007/s44196-024-00670-x
+  publisher: Springer Nature

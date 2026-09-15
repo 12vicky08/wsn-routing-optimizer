@@ -1,0 +1,1390 @@
+                                       A genetic algorithm-based energy-aware
+                                       multi-hop clustering scheme for
+                                       heterogeneous wireless sensor networks
+                                       R. Muthukkumar1, Lalit Garg2, K. Maharajan3, M. Jayalakshmi3, Nz
+                                       Jhanjhi4, S. Parthiban5 and G. Saritha6
+                                   1
+                                     Department of Information Technology, National Engineering College, Kovilpatti, Thoothukudi,
+                                     Tamil Nadu, India
+                                   2
+                                     Department of Computer information Systems, Faculty of Information and Communication
+                                     Technology, University of Malta, Msida, Malta, Malta
+                                   3
+                                     Department of Computer Science and Engineering, School of Computing, Kalasalingam
+                                     Academy of Research and Education, Krishnankoil, India
+                                   4
+                                     School of Computer Science, Taylor’s University, Subang Jaya, Selangor, Malaysia
+                                   5
+                                     Saveetha School of Engineering, Saveetha Institute of Medical and Technical Sciences, Chennai,
+                                     Tamilnadu, India
+                                   6
+                                     Sri Sairam Institute of Technology,, Chennai, Tamilnadu, India
+
+
+                                           ABSTRACT
+                                           Background: The energy-constrained heterogeneous nodes are the most challenging
+                                           wireless sensor networks (WSNs) for developing energy-aware clustering schemes.
+                                           Although various clustering approaches are proven to minimise energy consumption
+                                           and delay and extend the network lifetime by selecting optimum cluster heads (CHs),
+                                           it is still a crucial challenge.
+                                           Methods: This article proposes a genetic algorithm-based energy-aware multi-hop
+                                           clustering (GA-EMC) scheme for heterogeneous WSNs (HWSNs). In HWSNs, all
+                                           the nodes have varying initial energy and typically have an energy consumption
+                                           restriction. A genetic algorithm determines the optimal CHs and their positions in
+                                           the network. The ﬁtness of chromosomes is calculated in terms of distance,
+                                           optimal CHs, and the node's residual energy. Multi-hop communication improves
+                                           energy efﬁciency in HWSNs. The areas near the sink are deployed with more
+Submitted 6 October 2021                   supernodes far away from the sink to solve the hot spot problem in WSNs near the
+Accepted 15 June 2022                      sink node.
+Published 15 August 2022                   Results: Simulation results proclaim that the GA-EMC scheme achieves a more
+Corresponding authors                      extended network lifetime network stability and minimises delay than existing
+Lalit Garg, lalit.garg@um.edu.mt
+                                           approaches in heterogeneous nature.
+Nz Jhanjhi,
+NoorZaman.Jhanjhi@taylors.edu.my
+Academic editor                        Subjects Algorithms and Analysis of Algorithms, Artiﬁcial Intelligence, Computer Networks and
+Biju Issac                             Communications, Emerging Technologies, Internet of Things
+Additional Information and             Keywords Heterogeneous wireless sensor networks, Multi-hop routing, Genetic algorithm,
+Declarations can be found on           Clustering, Network lifetime, Throughput, End-to-end delay
+page 22
+DOI 10.7717/peerj-cs.1029              INTRODUCTION
+   Copyright                           The latest technology development in wireless communication, sensing devices, and
+2022 Muthukumar et al.
+                                       microelectronics have opened new frontiers in wireless sensor networks (WSNs). Critical
+Distributed under
+Creative Commons CC-BY 4.0             WSNs applications include environmental monitoring (Lanzolla & Spadavecchia, 2021;
+
+
+
+
+                                       How to cite this article Muthukkumar R, Garg L, Maharajan K, Jayalakshmi M, Jhanjhi N, Parthiban S, Saritha G. 2022. A genetic
+                                       algorithm-based energy-aware multi-hop clustering scheme for heterogeneous wireless sensor networks. PeerJ Comput. Sci. 8:e1029
+                                       DOI 10.7717/peerj-cs.1029
+                                   Sampathkumar et al., 2020), transport (Sant et al., 2021; Kumar et al., 2020; Andrushia
+                                   et al., 2021), surveillance systems (Garg et al., 2020a; Chukwu, Garg & Zahra, 2021),
+                                   healthcare (Chakraborty et al., 2020b, 2020a; Agrawal et al., 2019; Bonello et al., 2018; Audu
+                                   et al., 2017b, 2017a; Bugeja, Garg & Audu, 2016; Bugeja & Garg, 2015; Agrawal, Garg &
+                                   Dauwels, 2013), emotions recognition and monitoring (Salankar, Mishra & Garg, 2021;
+                                   Jayalakshmi et al., 2021; Bhattacharyya et al., 2021; Mangion et al., 2020), home
+                                   automation (Garg et al., 2020b), battleﬁeld monitoring, and industrial automation and
+                                   control (Smaragdakis, Matta & Bestavros, 2004). WSNs contain more sensor nodes
+                                   capable of sensing the physical phenomenon, packet forwarding, and communicating the
+                                   packets to the destination. However, each sensor node has limitations, such as limited
+                                   memory, restricted processing capability, short-range transmission, ﬁnite energy
+                                   resources, and low storage capability. WSNs are becoming a good network for protecting,
+                                   controlling, and facilitating real-time applications (Qing, Zhu & Wang, 2006). The primary
+                                   constraint of the WSNs is the limited, non-rechargeable battery-powered sensor nodes,
+                                   and these nodes have used their energy for sensing, sending, and receiving the data. When
+                                   the sensor battery is drained, several areas in the sensor ﬁeld will lack coverage, and
+                                   valuable data from these areas will not reach the sink. Using energy among the nodes and
+                                   prolonging the network’s lifetime are considered the primary challenge for HWSNs.
+                                      Various routing and clustering algorithms have been addressed to minimise average
+                                   energy consumption in WSNs (Akyildiz et al., 2002; Tyagi & Kumar, 2013; Heinzelman,
+                                   Chandrakasan & Balakrishnan, 2000; Younis & Fahmy, 2004; Shang, 2013; Yu et al., 2012;
+                                   Amgoth & Jana, 2015; Jin et al., 2013; Mahajan, Malhotra & Sharma, 2014; Kumar, Aseri
+                                   & Patel, 2009). CHs in WSNs allocate the energy to their member nodes to maintain the
+                                   load-balancing of a cluster (Saini & Sharma, 2010). This protocol utilises local
+                                   coordination to enhance scalability and reduce the large number of data packets
+                                   communicated to the sink. The clustering protocol splits up the network structure into
+                                   many clusters, and every cluster contains CH and cluster members (CMs). The CM node
+                                   collects and sends information to the respective CH in each cluster. Each CH gathers the
+                                   data packets from the CMs and carries out the data aggregation process. Eventually, the
+                                   aggregated data is communicated to the sink. The protocol in Capone et al. (2019) selects
+                                   CHs periodically using residual energy and the degree of the nodes. This approach has a
+                                   low overhead and performs CH selection uniformly across the network. In Wei et al.
+                                   (2011), the proposed algorithm analyses the routing algorithms in WSNs to extend the
+                                   network lifetime, save power, and maintain load-balancing. In Tanwar, Kumar &
+                                   Rodrigues (2015), the energy consumption and nonuniform node distribution in WSNs
+                                   have been discussed. An energy-aware routing algorithm is presented for cluster-based
+                                   WSNs to stabilise the energy consumption of the CHs (Shang, 2013). Quality of service
+                                   (QoS) and energy-efﬁciency requirements are satisﬁed in practical WSNs (Yu et al., 2012).
+                                   Amgoth & Jana (2015) highlights the optimal CH selection cluster formation and
+                                   maintains the load-balanced network. For a given distance, energy efﬁciency improves if
+                                   the data is transmitted through multi-hop. By properly selecting the CHs and the next-hop
+                                   nodes for multi-hop routing, energy spent by the sensor nodes can be reduced.
+
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                    2/30
+                                      Jin et al. (2013) analysed the impact of heterogeneity in WSNs, energy level, and
+                                   hierarchical cluster structures. Smaragdakis, Matta & Bestavros (2004) proposed a protocol
+                                   that prolongs the stability period of sensor nodes in heterogeneous WSNs (HWSNs). In
+                                   Qing, Zhu & Wang (2006), Saini & Sharma (2010), average network energy and the nodes’
+                                   residual energy select the optimal CHs. In Capone et al. (2019), the proposed algorithm
+                                   minimises delay based on signal-to-interference-and-noise-ratio (SINR) in WSNs. Wei
+                                   et al. (2011) found optimal cluster sizes based on the hop count to the sink node. It is
+                                   also used to extend the network lifetime and minimise energy consumption. Several
+                                   heterogeneous routing protocols in WSNs (Tanwar, Kumar & Rodrigues, 2015) are
+                                   reviewed and analysed with performance metrics. The algorithm in Bandyopadhyay &
+                                   Coyle (2003) organises the nodes into several clusters in WSNs and generates a hierarchy of
+                                   CHs. A genetic algorithm (GA) is a meta-heuristic algorithm used to solve optimisation
+                                   problems (Pantazis, Nikolidakis & Vergados, 2013; Pal & Saraswat, 2017). GA is an
+                                   appropriate scheme for solving any clustering problems in WSNs. It is also used to resolve
+                                   persistent optimisation problems (Mehta & Pal, 2017). In this article, HWSNs use GA for
+                                   solving the multi-hop clustering based on the newly deﬁned ﬁtness function
+                                   (Kachitvichyanukul, 2012).
+                                      Existing solutions have the advantage of cluster formation done through the residual
+                                   energy and prolonging the lifetime of WSNs. However, re-clustering consumes more
+                                   energy while the end-to-end delay is not minimised. This motivates us to devise an
+                                   approach for designing energy-aware multi-hop clustering for HWSNs. WSNs with
+                                   heterogeneous nodes result in better network stability and extend the network lifetime.
+                                   Energy consumption has been minimised using GA by selecting the optimal CHs during
+                                   the re-clustering. The main contributions of this article are speciﬁed as follows:
+
+                                    A GA-based energy-aware multi-hop clustering algorithm (GA-EMC) is proposed for
+                                     selecting the optimal number of CHs dynamically during the re-clustering.
+                                    A framework for optimised transmission scheduling and routing is formulated to reduce
+                                     the delay under the SINR model for HWSNs.
+                                    A combination of weak and robust sensor nodes using their residual energy mitigates
+                                     the re-clustering issues.
+                                    For optimising cluster construction, the GA maintains the stability of the nodes in a
+                                     network.
+                                    A dynamic power allocation scheme for sensor nodes is proposed to have a guaranteed
+                                     QoS for nodes.
+
+                                      The structure of this article starts with the introduction related to the wireless sensor
+                                   network, genetic algorithm, and multi-hop clustering paradigms. The following section
+                                   describes the existing multi-hop clustering algorithms and their issues. In the next section,
+                                   we present the GA-EMC algorithm, followed by the section which addresses the
+                                   experimental results and analyses the performance of GA-EMC. The following section is a
+                                   discussion, and ﬁnally, the last section discusses the conclusion.
+
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                   3/30
+                                   RELATED WORKS
+                                   This section presents the various modern and advanced multi-hop clustering schemes in
+                                   WSNs. Many researchers have done some work in multi-hop clustering algorithms based
+                                   on GA, and an overview of that work is given here. Saini & Sharma (2010) developed the
+                                   probability-based CH selection and decreased the average CHs energy consumption. In
+                                   Capone et al. (2019), Wei et al. (2011), the spatial distribution of CHs in WSNs by
+                                   constructing a multi-hop table. It is also used to decrease the CHs when directly
+                                   transmitted to the sink or base station (BS). The algorithm of Tanwar, Kumar & Rodrigues
+                                   (2015) selects the CHs with higher residual energy and achieves better load-balancing
+                                   among CHs. In Bandyopadhyay & Coyle (2003), CHs energy consumption was minimised
+                                   during the data routing process and achieved better time complexity. The procotol of
+                                   Pantazis, Nikolidakis & Vergados (2013) satisﬁes the QoS requirements in WSNs, and
+                                   (Amgoth & Jana, 2015) addresses the cluster formation and CH selection using weight
+                                   metrics in HWSNs.
+                                      In general, sensor networks can be heterogeneous regarding the initial energy,
+                                   computational ability of the WSN nodes, and the bandwidth of the links (Jin et al., 2013).
+                                   Designing WSNs with heterogeneous nodes increases the reliability and network lifetime.
+                                   Computational and link heterogeneity reduces the latency in data transmission
+                                   (Smaragdakis, Matta & Bestavros, 2004; Qing, Zhu & Wang, 2006). Various parameters are
+                                   used to classify the nodes in HWSNs (Saini & Sharma, 2010). Capone et al. (2019) studied
+                                   transmission scheduling and multi-hop routing to minimise delay using SINR. The initial
+                                   energy varies according to the node’s distance from the sink to overcome the energy hole
+                                   problem in multi-hop networks (Wei et al., 2011). Tanwar, Kumar & Rodrigues (2015)
+                                   categorised several heterogeneous routing protocols with predeﬁned parameters by
+                                   enhancing network lifetime and node heterogeneity in WSNs.
+                                      GA has been used for the CHs’ optimal selection in recent research. The main focus of
+                                   the GA-based clustering algorithms is the ﬁtness function. The ﬁtness function determines
+                                   the goodness of an individual to be selected for the next generation (Bandyopadhyay &
+                                   Coyle, 2003). Pantazis, Nikolidakis & Vergados (2013) critically analysed the energy-
+                                   efﬁcient routing protocols for WSNs. The method in Pal & Saraswat (2017) is based on
+                                   biogeography-based optimisation in HWSNs. The ﬁtness value is modiﬁed further by
+                                   incorporating the residual energy of the remaining nodes that enhances the performance.
+                                   It prolongs the network lifetime (Mehta & Pal, 2017). Meta-heuristics techniques are
+                                   widely applied to solve several clustering problems in WSNs (Kachitvichyanukul, 2012;
+                                   Bhushan, Pal & Antoshchuk, 2018). Fanian & Rafsanjani (2019) reviewed the various
+                                   protocols and their properties in WSNs. Afsar, Mohammad & Tayarani (2014)
+                                   investigated and presented more clustering approaches.
+                                      Bari, Jaekel & Bandyopadhyay’s (2008) approach formulates clusters and considers the
+                                   relay nodes as CHs in two-tiered sensor networks that prolong the relay node lifetime. The
+                                   method in Younis, Youssef & Arisha (2003) extends the network lifetime dynamic route
+                                   selection and reduces energy consumption. Liu & Lin (2005) critically investigated and
+                                   addressed the power-conserving issues in WSNs, and the algorithm in Zhang et al. (2017)
+
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                 4/30
+                                   solves the energy balance problem in WSNs. Gupta & Pandey (2016) have considered the
+                                   location of BS and residual energy as clustering parameters to solve an energy hole
+                                   problem in HWSNs. Darabkh, Zomot & Al-qudah’s (2019) scheme minimises the average
+                                   energy consumption and prolongs the lifetime of WSNs.
+                                       Javaid et al.’s (2013a) technique for HWSNs dynamically elects the CH. It extends the
+                                   network lifetime. Pal et al. (2015a) analyses the heterogeneous node locations and
+                                   selects optimal CH based on the distance between the clusters. The algorithm in Sarkar &
+                                   Senthil Murugan (2019) improves the energy and lifetime of both nodes and networks by
+                                   choosing the optimal CHs. Kumar & Kumar (2016), Mann & Singh (2017) maximise
+                                   the network energy and extend nodes’ network lifetime by selecting optimal CH in WSNs.
+                                   Fan’s (2013) method investigates several issues such as energy consumption, coverage, and data
+                                   routing in WSNs. This method improves the coverage ratio and prolongs network lifetime.
+                                   Javaid et al.’s (2013b) scheme increases the node stability period and sends more packets to BS.
+                                   Singh & Lobiyal (2012a) designs an energy-aware cluster by selecting optimal CHs in WSNs.
+                                       Ali, Shahzad & Khan’s (2012) algorithm optimises the clusters in a network and
+                                   minimises the data trafﬁc and energy dissipation among nodes. Rakhee & Srinivas (2016)
+                                   continuously monitors patients’ data by selecting an optimal path in the body area
+                                   network. It also enhances network lifetime, load balancing, and energy on the overall
+                                   network. Pal et al.’s (2015b) method achieves a load-balanced network. It prolongs the
+                                   lifetime of WSNs by optimising CH selection approach (Hoang et al., 2014) that reduces
+                                   the distance between the CH and CMs in WSNs to improve energy conservation. Lin
+                                   et al.’s (2012) approach maximises the lifetime of heterogeneous nodes based on sensing
+                                   coverage and network connectivity. The approach in Singh & Lobiyal (2012b) selects
+                                   energy-aware clusters and optimal CH based on hop count and locations. Pal et al. (2020)
+                                   considers the GA parameters for enhancing the CH performance in WSNs. Mhemed et al.’s
+                                   (2012) approach investigates the cluster formation that reduces energy consumption.
+                                   Haseeb et al.’s (2019) method increases energy efﬁciency and data security against malicious
+                                   activities. Zhang et al. (2019), Abo-Zahhad et al.’s (2014) algorithms prolong the network
+                                   lifetime by selecting the optimal CHs and reducing average energy consumption.
+                                       Delavar & Baradaran (2012) algorithm reduced energy consumption by selecting
+                                   chromosomes in different states. Bayrakli & Erdogan (2012), Liu & Ravishankar (2011), Yu
+                                   et al. (2011), Zhou et al. (2010) studied the optimal selection of clusters to extend the
+                                   WSNs’ lifetime. Bencan et al. (2013) analyses the spatial distribution of heterogeneous
+                                   nodes in WSNs and effectively avoids the energy hole problem. Jin et al.’s (2005) algorithm
+                                   enhances the reported sensitivity of the nodes and optimises the solution quality in
+                                   HWSNs management. Attea & Khalil (2012) compares the various evolutionary
+                                   algorithms with network lifetime, node stability period, and energy efﬁciency. Elhoseny
+                                   et al.’s (2015) method optimises heterogeneous sensor node clustering. It dramatically
+                                   extends the network lifetime. Huang et al.’s (2021) method was used to minimise the delay
+                                   and collision and reduce the energy consumption in WSNs. The protocol in Deng et al.
+                                   (2021) improves energy utilisation and minimises the delay in sensor networks. Chauhan
+                                   & Soni (2021) minimises the energy holes and prolongs the network’s lifetime in WSNs. In
+                                   this approach, the network is divided into unequal clusters, and it considers the node’s
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                      5/30
+                                   residual energy and distance to the base station for cluster formation in WSNs. Nodes with
+                                   the highest energy are considered CH for WSNs (Toor & Jain, 2019). Kamil, Naji & Turki’s
+                                   (2020) techniques change the WSNs’ sink node position dynamically to increase residual
+                                   energy and prolong the network lifetime.
+                                       The method in Prabaharan & Jayashri (2019) selects the smart CH in WSNs to prolong
+                                   the network lifetime. Optimal CH selection is performed for extending the network
+                                   lifetime of WSN by using various attributes of sensor nodes (Kalaimani, Zah & Vashist,
+                                   2020; Rajpoot & Dwivedi, 2019). Kashyap et al.’s (2019) algorithm performs load-balancing
+                                   among sensor nodes for WSNs. Also, it balances the optimal number of CHs and evenly
+                                   distributes the load among nodes. The technique of Zhang et al. (2016) performs that
+                                   the sensors are scheduled into several disjoint complete cover sets in WSNs and activates
+                                   them in batch for energy conservation. The algorithm in Chang et al. (2018) is suitable for
+                                   small-scale WSNs and suffers from high network latency due to multiple forwarding
+                                   operations. Chang et al. (2019), Wang et al. (2018b), Wang et al. (2020), Wang et al.
+                                   (2018a), Wang et al. (2022), Tabatabaei (2020) and Vijayalakshmi & Anandan (2020)
+                                   discussed the various energy management challenges for WSNs.
+                                       Many research proposals exist in the related works addressing the energy-efﬁcient
+                                   hierarchical clustering issues, but node heterogeneity of WSN nodes has not been exploited
+                                   to its full potential.
+                                       Energy efﬁciency is the essential component in extending the life of WSN systems that
+                                   are resource-constrained, particularly in terms of energy. The energy-aware clustering
+                                   algorithms become a signiﬁcant factor in WSNs since multi-hop clustering methods relate
+                                   to the network’s communication operations. The energy, computation, and link are the
+                                   three broadly divided basic types of heterogeneity of WSN. Another vital factor to consider
+                                   is the heterogeneity of data creation rates, which considers nodes with varying data
+                                   transmission requirements. As a result, distinct performance evaluation parameters must
+                                   be used to categorise sensor nodes. So there is a necessity to categorise sensor nodes based
+                                   on different performance evaluation metrics. Motivated by the above facts, in this article,
+                                   we provide a genetic algorithm-based energy-aware multi-hop clustering scheme for
+                                   heterogeneous WSNs. Table 1 shows the Summarisation of Related Works.
+                                       The proposed method is similar to Capone et al. (2019) and Pal et al. (2020). Compared
+                                   to existing works (Capone et al., 2019; Zhang et al., 2017; Darabkh, Zomot & Al-qudah,
+                                   2019; Javaid et al., 2013a; Sarkar & Senthil Murugan, 2019; Kumar & Kumar, 2016; Mann
+                                   & Singh, 2017; Ali, Shahzad & Khan, 2012; Pal et al., 2020), our study is distinguished by
+                                   the type of algorithm. In this approach, two methods are investigated in HWSNs. The ﬁrst
+                                   method uses GA to enhance performance by selecting the optimal CHs during the
+                                   clustering and re-clustering phases. The second method extends the ﬁrst method by
+                                   featuring optimal transmission scheduling. In this method, we carefully analyse the
+                                   transmission scheduling and communication among CHs. As a result, we address various
+                                   properties and analyses of node strategies to minimise the end-to-end delay, extend the
+                                   network lifetime, and improve energy efﬁciency. However, this is the ﬁrst article presenting
+                                   a GA-based energy-aware multi-hop clustering to minimise end-to-end delay, expand the
+                                   network lifetime, and enhance energy efﬁciency in HWSNs.
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                  6/30
+  Table 1 The summarisation of related work.
+ Name of the           Functionality                                 Advantages                         Disadvantages
+ proposed solutions
+ HEED (Kumar et al., Cluster heads (CH) have been selected      Surely guarantee connectivity of        It works only on two-level hierarchy, not to
+  2020)               according to a hybrid of the node residual clustered networks                       multilevel hierarchies
+                      energy
+ CATD (Andrushia       It is improved in the cluster data            It reduces the network energy,     Hot-spot problems are created
+  et al., 2021)          transmission phase after the CHs are          network overhead, and cost.
+                         selected
+ EADC (Garg et al.,    It uses competition range to construct        Achieves load balance among CHs Uneven clustering strategy
+  2020a)                 clusters of even sizes.
+ ERA (Chukwu, Garg The clever strategy of CH selection,      Achieves constant message and              High message complexity for building
+  & Zahra, 2021)    residual energy of the CHs and the intra- linear time complexity.                    backbone network of CHs.
+                    cluster distance for cluster formation.
+ S-MDSP (Bugeja,       Delay-minimization scheduling for multi- Minimising the end-to-end delay         The delay is signiﬁcantly reduced by
+   Garg & Audu,         hop networks.                                                                    combining cooperative forwarding (CF)
+   2016)                                                                                                 and forward interference cancellation
+                                                                                                         (FIC).
+ E2HRC (Shang,         Messaging structure for clustering and        Balancing average energy       Delay occurred
+  2013)                 routing                                       consumption, network load and
+                                                                      improving network performance
+ EDB-CHS-BOF           A tight closed-form expression for the        Balancing energy consumption      It is more sensitive to any changes in the
+  (Amgoth & Jana,       optimal number of CHs in the network          amongst all sensor nodes and       network size.
+  2015)                                                               prolonging the network lifetime.
+ EDDEEC (Jin et al.,   Probabilities for CH selection based on       Achieves longer network lifetime   Dynamic random channel selection
+  2013)                 initial, the remaining energy level of the    and stability period
+                        nodes and average energy of network
+ FABC (Saini &         optimally selecting cluster-head based on     Maximise the network energy and –
+  Sharma, 2010)         ﬁtness function value of nodes                lifetime of nodes
+ iABC (Capone et al., Obtain optimal cluster heads                   Improves energy efﬁciency in       –
+   2019)                                                              WSNs
+ MOPSO (Pantazis,      optimise the number of clusters in an ad Provide an energy-efﬁcient        –
+  Nikolidakis &         hoc network as well as energy dissipation solution and reduce the network
+  Vergados, 2013)       in nodes                                  trafﬁc
+ EEWC (Afsar,          Solve the clustering problem in a wireless    Improve the performance of         –
+  Mohammad &            sensor network                                WSNs
+  Tayarani, 2014)
+
+
+
+                                         MATERIALS AND METHODS
+                                         In HWSNs, clusters are formed based on GA. GA ﬁnds optimal CHs by considering the
+                                         network coverage and its energy level. The CHs perform data aggregation and transmit the
+                                         combined data packets to the sink. A multi-hop network is used to send packets from
+                                         CHs to the sink. Neighbouring sink nodes consider regular, advanced, and supernodes.
+                                         These nodes have different initial energy. Regions near the sink have a more signiﬁcant
+                                         number of supernodes than other regions. The next-hop CH is selected with the distance
+                                         between the CHs, the residual energy, the number of CMs, and the neighbouring CHs
+                                         associated with the given CH in routing. Various symbols and notations used in the
+                                         proposed work are mentioned in Table 2.
+
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                                         7/30
+                                      Table 2 The list of symbols and notations in this article.
+                                     Symbol                                                    Description
+                                     G                                                         Bi-directed Graph
+                                     V                                                         Network size
+                                     E                                                         Two-way communication links
+                                     C                                                         Direct links
+                                     c                                                         Noise power
+                                     g                                                         SINR value
+                                     r                                                         Energy at node
+                                     M                                                         Data packet set
+                                     d                                                         Distance between the nodes
+                                     q                                                         The energy dissipated in the source and sink
+                                     a, b                                                      Space and multipath fading coefﬁcients
+                                     $                                                         Size of optimal CHs
+                                     #                                                         The distance among CHs and CMs
+                                     s                                                         Two CHs distance
+
+
+                                   Multi-hop network model
+                                   A WSNs is assumed to be a bidirected graph G ¼ ðV; E; CÞ; where V denotes the network
+                                   size, E  V  V is two-way communication links, and C ¼ fði; jÞ; ðj; iÞ : fi; jg 2 Eg is the
+                                                                                                                rði; jÞ
+                                   direct links. We consider that fi; jg 2 E iff, the SINR is convinced, i.e.,           g and
+                                                                                                                  c
+                                   rðj; iÞ
+                                            g; where rði; jÞ and rðj; iÞ be the energy at node j when node i is sending and
+                                      c
+                                   receiving data packets, respectively. It can be represented as rði; jÞ :¼ PðiÞuði; jÞ; rðj; iÞ :¼
+                                   PðjÞuðj; iÞ; where PðiÞ and PðjÞ be the transmitted energy of nodes i and j. Here,
+                                   uði; jÞ ¼ uðj; iÞ is to obtain the communication link fi; jg; c is the noise power and g
+                                   is the SINR value. The network size occurrence to i 2 V is deﬁned by ðiÞ; i.e.,
+                                   ðiÞ ¼ fj 2 V : fi; jg 2 Eg:
+                                       Assume that the order of time T :¼ f1; 2; :::;sg and x is the group of nodes in a time.
+                                   The direct link ði; jÞ 2 C is very dynamic, only if i 2 x; j 2
+                                                                                                = x and the resulting SINR is
+                                   convinced:
+                                            rði; jÞ
+                                            P              g                                                                            (1)
+                                   cþ              rðk; jÞ
+                                         j2x=fig
+
+                                      A node can either send, receive, or be inactive at a particular time. A group c  C of
+                                   communication links will be simultaneously very active for the compatible set ðcÞ
+                                   situations. The group of active sensor node c is represented by xðcÞ :¼ fi : 9j; ði; jÞ 2 cg:
+                                   The SINR is applied to communication links ði; jÞ 2 c :
+                                             rði; jÞ
+                                             P                   g                                                                      (2)
+                                   cþ                  rðk; jÞ
+                                         j2xðcÞ=fig
+
+
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                                8/30
+                                      Consider the data packet set M, and each data packet m 2 M needs a time for a
+                                   particular transmission and is sent from source SðmÞ to sink DðmÞ: The data packets are
+                                   available in the respective sources on time s ¼ 1. The time s ¼ T occurs in transmitting
+                                   the packets and computes the total network delay.
+
+                                   Optimised energy model
+                                   The proposed GA-EMC is adopted an optimised energy model (Abo-Zahhad et al., 2015)
+                                   that minimises energy consumption. The nodes’ energy is needed to communicate a data
+                                   packet consisting of l bits of a packet is denoted by Eq. (3).
+                                             
+                                               lq þ lad 2 ; d , d0
+                                   rðl; dÞ ¼                                                                        (3)
+                                               lq þ lbd4 ; d  d0
+                                   where, d represents the distance between the nodes involved in the communication, q is
+                                   the energy dissipated in the source and sink. It considers the factors like modulation and
+                                   digital coding. The variables a and b represent space and multipath fading coefﬁcients, and
+                                   the threshold d0 decide whether to use a multipath fading model.
+                                      Equation (4) gives the energy spent by the sink receiving l bit of packets.
+                                   rR ðlÞ ¼ l  q                                                                          (4)
+
+                                      The CM node spends the energy to send a packet to its CH. The power spent by the CM
+                                   to transmit l bits of a packet to its CH is determined by Eq. (5).
+                                   rCMi ¼ rT ðl; di;CHi Þ                                                                  (5)
+                                   where, di;CHi represents the Euclidean distance between the ith CM and its CH. A CH
+                                   spends its power to receive a packet from its CMs, aggregate all the packets, and send it to
+                                   other CHs. In addition to forwarding the local cluster data, CHs may also forward the
+                                   trafﬁc received from other CHs. Equation (6) shows the energy required by CHs.
+
+                                   rCHj ¼ NCM
+                                           j rR ðlÞ þ Nj lrA þ rT ðl; dj;Pj Þ þ rCHj
+                                                       CM                        F
+                                                                                                                           (6)
+
+                                            j rR ðlÞ denotes the energy spent by CH to accept data packets from the CMs.
+                                   where, NCM
+                                   The second gives the energy spent in aggregation, the third term gives the energy spent for
+                                   data transmission to the next-hop CH, and the last term rFCHj represents the energy spent
+                                   in forwarding the relay trafﬁc. rFCHj is the sum of energy required to receive k bits of the
+                                   packet from all the low-level CHs and communicate the packets to the parent CH as shown
+                                   by Eq. (7),
+
+                                   rFCHj ¼ NCH
+                                            CHj ðrR ðlÞ þ rT ðl; dj;Pj ÞÞ                                                  (7)
+
+
+                                   Phases in the proposed GA-EMC protocol
+                                   The proposed GA-EMC contains four phases: Heterogeneous Nodes Deployment,
+                                   Clustering Formulation, Selection of Next-hop Neighbor, and Packet Transmission. The
+                                   proposed GA-EMC scheme’s main idea is to optimise energy management of the WSNs by
+                                   minimising the intra-cluster distance between a CH and a CM. Using Euclidean distance,
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                  9/30
+                                   the distance between the CM and the CH is calculated for WSNs. The CM is placed in the
+                                   cluster with the least space between it and the others.
+                                      The nodes interact directly with the sink if the distance between the sink and the sensor
+                                   node is smaller than the distance between CH and CM. When a node joins a cluster, it
+                                   sends a JOIN message to the other nodes and the CH to let them know it’s there. The CH
+                                   assigns each node a time slot for data collection. After the data has been acquired, the CH
+                                   aggregates it before sending it to the sink. The nodes may sleep during this entire process,
+                                   but CH must be awake at all times. This lowers CH's energy, and few nodes die over time
+                                   due to living in a sparse network. In each cycle, the clusters are reconstructed, and CHs are
+                                   chosen.
+                                      The ﬁtness function is used in the proposed GA-EMC technique to reduce the intra-
+                                   cluster distance between the sensor nodes and the cluster head (CH). The function
+                                   optimised the CH’s placement, which impacts the estimated number of packet
+                                   retransmissions along the path and hence on the network’s overall energy usage. Because
+                                   GA-EMC works with the ﬁtness function, the proposed technique is preferable in terms of
+                                   performance measurement in terms of energy consumption.
+                                      Minimising the distance between CMs and their CHs examines the sink distance, intra-
+                                   cluster distance, and residual energy of CMs to determine their ideal positions. These
+                                   phases are described below.
+
+                                   Heterogeneous nodes deployment phase
+                                   In multi-hop communication, the CHs are situated very close to the sink node and have to
+                                   forward more packets received from other nodes, and their power is exhausted quicker
+                                   than the CHs far away from the sink. This creates a hot spot in the regions near the sink.
+                                   To solve this issue, sensor nodes are classiﬁed into regular nodes with initial energy r0 ,
+                                   advanced nodes with initial energy r0 ð1 þ aÞ, and supernodes with initial energy
+                                   r0 ð1 þ bÞ joules. The value of energy heterogeneity constants a and b are greater than 1.
+                                   The WSNs consist of N nodes in total with ma  N advanced nodes, ms  N supernodes,
+                                   and ð1  ma  ms Þ  N regular nodes. The areas near the sink node have more
+                                   supernodes than the areas away from the sink.
+
+                                   Clustering formulation phase
+                                   In this phase, more clusters are formed in HWSNs. It also contains two other sub-phases,
+                                   namely CHs Selection and CM Association phases. The CHs selection phase selects an
+                                   optimal CH. Each CM is associated with any one of the nearest energy-efﬁcient CH in the
+                                   CM association phase.
+
+                                   CH selection phase
+                                   This phase uses the GA for selecting optimal CHs and their location. GA is working on
+                                   natural genetics and natural selection principles and is used to optimise various
+                                   parameters. GA is applied in multiple ﬁelds for solving constrained and unconstrained
+                                   optimisation problems (Bandyopadhyay & Coyle, 2003).
+
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                  10/30
+                                   CM association phase
+                                   Each CH sends a CH advertisement ðCHADV Þ message containing its identiﬁer, location,
+                                   initial and residual energies and starts a clustering timer with a predeﬁned value in the CM
+                                   association phase. When a CM receives CHADV , it stores the information in the cluster
+                                   table (CT). A CM may receive CHADV from one or more CHs. For each CH entry stored in
+                                   the CT, CM calculates the cost as given by Eq. (8). CM selects their respective CH with low
+                                   cost and sends JOIN message to the optimal CH.
+                                   Cost ¼ c1  f1 þ ð1  c1 Þ  f2                                                             (8)
+
+                                      Here c1 is a constant 0  c1  1. By setting proper value for c1 , we can decide how much
+                                   importance to give to distance and energy in the CH selection. The terms f1 and f2 are
+                                   calculated as provided by Eqs. (9) and (10).
+                                                     j
+                                          dðCMi ; CHi Þ
+                                   f1 ¼                                                                                        (9)
+                                             dmax
+                                           j
+                                          ki
+                                   f2 ¼    j                                                                                  (10)
+                                          ui
+                                               j     j                                                 j                  j
+                                   where, ki and ui represents the initial and residual energies of CHi respectively. CHi is a
+                                   CH present in the cluster table of CMi and dmax is the distance among the CH and its CMs,
+                                   and it is calculated by Eq. (11),
+                                                 n             o
+                                                             j
+                                   dmax ¼ max dðCMi ; CHi Þ                                                              (11)
+
+                                      The CHs collect the JOIN message from the CMs until the clustering timer expires.
+                                   Upon the expiry of the timer, CHs create a dynamic time division multiple access (TDMA)
+                                   scheduling for the packet transmission and send it to the CMs. The GA-based clustering
+                                   algorithm shows the various steps involved in forming clusters and optimal CH selection.
+
+                                   Next-hop neighbour selection phase
+                                   Each CH broadcasts a neighbour advertisement message that contains information like
+                                   identiﬁer, location, initial and residual energies, distance to sink, and the size of CMs
+                                   associated with it. When a CH receives a neighbour advertisement message, it adds the
+                                   information contained in the packet to the neighbour. As shown in Fig. 1, CHs use multi-
+                                   hop paths to communicate the data packets to the sink. The next-hop CHs are chosen
+                                   based on the distance, residual energy, and the size of CMs associated with the next-hop
+                                   CH, the number of CHs that have reached via the next-hop CH. When more CHs can be
+                                   reached via a CH, the CH will help forward the packet reliably. CH with more residual
+                                   energy, less distance, smaller CMs, and more neighbouring CHs prefer the next-hop CH.
+                                      For each CH node in the neighbour table, a merit value (MV) is calculated based on the
+                                   above factors. Equation (12) shows the calculation of MV.
+                                   MV ¼ h1  d1 þ h2  d2 þ h3  d3 þ h4  d4                                                 (12)
+                                   h1 þ h2 þ h3 þ h4 ¼ 1                                                                      (13)
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                 11/30
+                                     Figure 1 Multi-hop communication from CH to sink. The red dots represent the cluster member
+                                     (CM). The green dots represent the cluster head (CH). Solid line arrows represent the intra-cluster
+                                     routing. Dotted lines represent the inter-cluster routing. Full-size  DOI: 10.7717/peerj-cs.1029/ﬁg-1
+
+
+                                         ðdðCHi ; CHj Þ þ ðCHj ; SÞ
+                                   d1 ¼                                                                                                 (14)
+                                                   dmaxi
+                                   dmaxi ¼ max fdðCHi ; CHj Þ þ ðCHj ; SÞg; j 2 h                                                       (15)
+
+                                      Here h represents the neighbouring CHs of CHi .
+                                          qj
+                                   d2 ¼                                                                                                 (16)
+                                          uj
+                                   d3 ¼ NCM
+                                         CHj ; j 2 h                                                                                    (17)
+                                           1
+                                   d4 ¼        j2h                                                                                      (18)
+                                          NCM
+                                           CHj
+
+
+                                      In Eq. (13), h1 ; h2 ; h3 ; and h4 represents weights associated with different factors.
+
+                                   Data transmission phase
+                                   It involves communication within the cluster and communication between sink and CH. In
+                                   intra-cluster communication, the CH receives packets from their CMs per the dynamic
+                                   TDMA scheduling. CM also senses the data from the surroundings and sends them to the
+                                   concerned CHs during a particular time. The CMs turn off their radio in the remaining time
+                                   to save the energy wasted during idle listening. Each CH has many next-hop CH neighbours,
+                                   and the best neighbour node is selected in the next-hop neighbour selection phase.
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                               12/30
+                                   Genetic algorithm
+                                   In GA, each result to a speciﬁc problem is denoted by a chromosome using a binary coding
+                                   scheme. A group of chromosomes constitutes the population. The initial population
+                                   consists of randomly selected chromosomes, and each bit in the chromosome is called a
+                                   gene. For each chromosome, a ﬁtness value is calculated, and it evaluates the effectiveness
+                                   of the chromosome. Chromosomes with high ﬁtness values will get more chances to create
+                                   new chromosomes. The GA involves three basic operations: selection, crossover, and
+                                   mutation to select the best chromosome. The selection process duplicates good
+                                   chromosomes and eliminates the poor ones, and there are many selection methods like
+                                   tournament selection, ranking selection, and roulette wheel selection. The crossover
+                                   operation selects two parents, recombines them, and creates two children. Crossover can
+                                   be either single-point crossover or multi-point crossover. Crossover does not introduce
+                                   any new genetic properties. Mutation operation introduces new genetic properties. These
+                                   operations are repeated for a given number of generations (Bandyopadhyay & Coyle, 2003;
+                                   Pantazis, Nikolidakis & Vergados, 2013). The implementation of various GA operations is
+                                   explained below.
+
+                                   i. Binary Coding: Binary coding scheme represents each chromosome for the given sensor
+                                   scenario as a string of 0s and 1s . a chromosome of length N bits signiﬁes HWSNs with N
+                                   nodes. The chromosome size is the same as the size of the network. In the chromosome set,
+                                   value 1 and 0 represents the CH and CM, respectively. Figure 2 shows the chromosome
+                                   representation of a network with 20 sensor nodes. Nodes S2 ; S3 ; S11 are CHs, and the
+                                   remaining nodes are CMs.
+                                   ii. Objective Function: The objective function (d) is used for selecting optimal CHs. In
+                                   designing d, the following facts are considered. The optimal CH consumes more energy
+                                   than the CM, so the number of CHs must be minimised. The power required for intra-
+                                   cluster communication depends on the distance between CHs and CMs, and the power
+                                   required for inter-cluster communication depends on the distance between two CHs. To
+                                   save power, we have to reduce the size of optimal CHs ($), the distance between CHs and
+                                   CMs (#), and the two CHs distance (s). By selecting CHs with higher residual energy, we
+                                   can deliver packets reliably. The d selects the CHs by considering the above factors, and it
+                                   is a minimisation function as given in Eq. (19).
+                                         
+                                          1
+                                   d¼         þ#þsþ$                                                                      (19)
+                                          u
+                                   where, u represents the sum of the residual energy associated with the CHs.
+                                        X
+                                        $
+                                   u¼          ui                                                                         (20)
+                                         i¼1
+
+
+                                      Eq. (21) determines the sum of the distance between CMs from their respective CHs.
+                                        XX
+                                        $
+                                                          j
+                                   #¼               dðCMi ; CHi Þ                                                         (21)
+                                         i¼1 i2Ci
+
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                 13/30
+                                     Figure 2 Binary coding representation of a chromosome. The ﬁrst row represents sensor nodes and
+                                     the second row represent their corresponding binary coding. The chromosome size is the same as the size
+                                     of the network. In the chromosome set, value 1 and 0 represents the CH and CM, respectively.
+                                                                                              Full-size  DOI: 10.7717/peerj-cs.1029/ﬁg-2
+
+
+                                   where, CHi represents the ith CH, Ci denotes the set of CMs associated with CHi and CMj
+                                   represents jth CM node associated with CHi .
+                                      In Eq. (22), s represents the total distance between all the CHs in the ith level to the
+                                   parent CH nodes in the i  1th level. The node level is considered to ﬁnd out the parent CH
+                                   nodes. All the CHs in level 1 send packets to the destination directly. CHs in the remaining
+                                   level send packets to their parent CHs in a multi-hop fashion to the sink, and CHs in
+                                   i  1th level is the parent of CHs in the ith level.
+                                            X
+                                            $
+                                   s¼                 dðCHi ; CHj Þ                                                                      (22)
+                                          i¼1;j¼i1
+
+                                   where j 2 Pi and Pi represents the set of parent CHs associated with CHi .
+
+                                   iii. Fitness Function: GA is generally suitable for solving the maximisation problem. Since
+                                   our aim is minimising d, this problem is transformed into maximising the ﬁtness value fv .
+                                   For each chromosome in the population d is used to calculate the fv as given by Eq. (23).
+                                           1
+                                   fv ¼                                                                                                  (23)
+                                          1þd
+                                   iv. Selection: It is used to select chromosomes with higher fv to join the mating pool to
+                                   form a new population for the subsequent generations. The proposed method uses the
+                                   Roulette wheel selection method.
+                                   v. Crossover: The proposed GA-EMC scheme uses a single-point crossover. A random
+                                   value (0 to 1) and two chromosomes have been selected for this operation. The crossover
+                                   operation is performed only if the selected random value is less than the crossover
+                                   probability pc . Otherwise, no crossover is done. If it is decided to perform crossover, an
+                                   arbitrary crossover point is selected. After the crossover point, the two-parent
+                                   chromosomes exchange their packet to generate two child chromosomes. Table 3 shows
+                                   the crossover operation.
+                                   vi. Mutation: In bit-level mutation, a random value is chosen for every bit in a
+                                   chromosome. Suppose this random value is less than Pm , then the mutation is performed
+                                   to invert the bit. Otherwise, the bit is kept as such.
+
+                                      As shown in Table 4, in the ﬁrst chromosome, no mutation is performed, whereas in the
+                                   second chromosome, six bits are mutated.
+                                      Selection, mutation, and crossover operations are repeated for given generations.
+                                   The better chromosome is selected at the end of the last generation. In the best
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                                14/30
+                                   chromosome selection, if the genome value is 1, the node becomes CH, and otherwise, it
+                                   becomes CM.
+
+                                   GA-based clustering algorithm
+                                     Begin
+                                            Choose binary coding to represent chromosome
+                                            Set values for population size
+                                            Set values for cross over and mutation probability
+                                            Set the maximum number of generations gmax
+                                            Initialise generation counter g0
+                                            Generate initial population
+                                     while ðg < gmax Þ do
+                                            Fitness function used for evaluating chromosomes in the population
+                                            Perform reproduction
+                                            Perform crossover
+                                            Perform mutation
+                                            Increment the generation counter by 1
+                                     end while
+                                            Get the best chromosome
+                                     for i ¼ 1 to N
+                                     if (chromosome ½i ¼ ¼ 1) then
+                                            Get the position of the CH nodes
+                                     for each CH do
+                                            send CHADV message
+                                            while the clustering timer has not expired
+                                                 Receive JOIN message
+                                     end while
+                                     create and send TDMA schedule to CMs
+                                     end for
+                                     else
+                                            While the clustering timer has not expired
+                                                 Receive CHADV message
+                                            add information about CHs in the CT
+                                            end while
+                                     for every record in the CT do
+                                            Find cost
+                                            JOIN the CH with minimum cost
+                                            receive TDMA schedule from the CH and
+                                                 transmit data according to it
+                                     end for
+                                     end if
+                                     end for
+                                     end
+
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                            15/30
+                                      Table 3 A single-point crossover.
+                                     Parent chromosome                        Cross over point                 Child chromosome
+                                     00010001110000000101                     16                               00010001110000001101
+                                     00001001010000101101                     16                               00001001010000100101
+
+
+
+                                      Table 4 Bit-level mutation.
+                                     Chromosome before mutation                                          Chromosome after mutation
+                                     00010001110000001101                                                00010001110000001101
+                                     00001001010000100101                                                00001100010010100010
+
+
+                                   Minimising end-to-end delay with packet forwarding mechanism
+                                   Let s represent an upper limit on the delay with T ¼ f1; 2; :::;sg: A mathematical model is
+                                   designed to analyse the number of data packets sent and received between CH and CMs for
+                                   a particular time. We use the binary variables: wt ¼ 1 if time t 2 T; Zti;s ¼ 1 if node i 2 m is
+                                   transmitting s 2 S in t 2 T; Yi;st ¼ 1 if node i 2 m is receiving s 2 S in t 2 T; jti;s ¼ 1 if s 2 S
+                                   is present at i 2 m by t 2 T.
+                                      GA-EMC is specially formulated to minimise the delay required to send packets from
+                                   source to destination. The constraint wtþ1  wt ; t 2 Tnfsg has been forced all the time
+                                                                        P t           
+                                   after the ﬁrst round. The constraint    Zi;s þ Yi;s
+                                                                                   t
+                                                                                          wt ; i 2 v; t 2 T ensures that a node
+                                                                             s2S
+                                   can either send and receive data packets at a particular time or nothing to be done. The
+                                              P t          P t
+                                   constraint    Zi;s  1;   Yi;s  1; s 2 S; t 2 T ensures that, in time t, the data is
+                                                  i2v          i2v
+                                   transmitted by one node and received by another node in HWSNs. The constraint
+                                    P t
+                                        Zi;s  Yj;s
+                                                t
+                                                    ; j 2 V; s 2 S; t 2 T ensures that the node j receives a packet s in the current
+                                   i2vðjÞ
+                                                        P                P
+                                   time. Inequality         Zti;s  1;
+                                                                    t
+                                                                   Yi;s  1; i 2 V; s 2 S allows a node to communicate data
+                                                   i2T         t2T          P t           P t
+                                   packets during the time. The constraint      Zi;s  1;    Yi;s  1; s 2 S; t 2 T is fully
+                                                                                   i2v           i2v
+                                   justiﬁed in transmitting packets through multi-hop routing. The constraints
+                                           P
+                                           t
+                                   ati;s      T
+                                             Yi;s ; s 2 S; i 2 VnfOðsÞg; t 2 T and a1OðsÞs ¼ 1; aTDðsÞs ¼ 1; s 2 S deﬁnes variable
+                                            T¼1
+                                   a and set the conditions for the starting and ending of the dynamic TDMA scheduling.
+                                   Finally, the constraint Zti;s  ati;s ; i 2 V; s 2 S; t 2 T expresses the SINR state for sending
+                                   data packets s on link ði; jÞ at a time t. Subsequently, the SINR state is stable when
+                                   Zti;s ¼ Yj;s
+                                            t
+                                                ¼ 1 agreeing to the case when all nodes besides only node i is sending packets
+                                                                                                                          P t
+                                   in a network. Although, node j receives a data packets s from node i in a time t, then     w
+                                                                                                                          t2T
+                                   becomes equivalent to
+
+
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                         16/30
+                                      Table 5 The parameters and values for simulation.
+                                     Parameters                                                                        Value
+                                     Network area                                                                      800  800 m2
+                                     Network size                                                                      400
+                                     The initial energy of the normal node                                             0:5 Joule
+                                     Packet size                                                                       4 KB
+                                     g                                                                                 10 pJ=bit=m2
+                                     c                                                                                 0:0013 pJ=bit
+                                     q                                                                                 50 nJ=bit
+                                     a and b                                                                           1 and 2
+                                     Pm                                                                                0:6
+                                     pc                                                                                0:03
+                                     Population size                                                                   20
+                                     Maximum generations                                                               20
+
+
+                                                            X       X
+                                   pði; jÞ  @ðb þ                            pðk; jgZtks Þ;                                       (24)
+                                                          i2Vnfi;jg s2Snfsg
+                                                                                                           P
+                                   which accurately conﬁrms that the SINR value is met. In Eq. (24),                pðk; jgZtks Þ; is
+                                                                                                          s2Snfsg
+                                   valid since when Zti;s ¼ 1 then all the nodes besides i are illegal to send s in t since
+                                   P t          P t
+                                      Zi;s  1;   Yi;s  1; s 2 S; t 2 T.
+                                   i2v              i2v
+                                      We observe that the packet forwarding mechanism is used to increase the transmissions
+                                   in HWSNs. In GA-EMC, the packet forwarding mechanism increases the transmissions at
+                                   a particular time, and more data packets are transmitted to the CMs through adjacent
+                                   clusters. This is possible for increasing the use of packet forwarding and forward
+                                   interference cancellation mechanisms among CMs in all clusters in the ensuing time,
+                                   which is more cooperative for minimising delay in HWSNs.
+
+                                   RESULTS
+                                   In this section, the performance of GA-EMC is analysed and compared with E-MDSP
+                                   (Capone et al., 2019) and EEWC (Pal et al., 2020). Simulations are performed using the
+                                   Network Simulator (NS2) (Issariyakul & Hossain, 2012). An HWSN consists of 400 nodes
+                                   in a simulation area. To evaluate the GA-EMC performance, we have considered the
+                                   metrics such as network lifetime, throughput, network stability, the number of data
+                                   packets sent to the sink, and the average energy consumption in the whole network. The
+                                   various parameters for simulation are presented in Table 5.
+
+                                   Network lifetime
+                                   To extend the HWSNs’ lifetime, we have considered the alive nodes in each round.
+                                   Figure 3 illustrates that the proposed GA-EMC scheme extends the lifetime of alive nodes
+                                   in every round than EEWC and E-MDSP. The proposed GA-EMC provides a better
+                                   network lifetime than existing schemes.
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                           17/30
+                                     Figure 3 Number of rounds vs number of alive nodes. The X-axis represents the number of rounds,
+                                     and Y-axis represents the number of alive sensor nodes. Green-line, red-line and blue-line represent
+                                     proposed GA-EMC, E-MDSP and EEWC, respectively. Full-size  DOI: 10.7717/peerj-cs.1029/ﬁg-3
+
+
+
+
+                                     Figure 4 Number of rounds vs throughput. The X-axis represents the number of rounds and Y-axis
+                                     represents throughput. Green-line, red-line and blue-line represent proposed GA-EMC, E-MDSP and
+                                     EEWC respectively. The EEWC performs poorly with less data packet communication. Similarly, the E-
+                                     MDSP gives the best behaviour than EEWC and also provides poor performance than GA-EMC.
+                                                                                               Full-size  DOI: 10.7717/peerj-cs.1029/ﬁg-4
+
+
+                                      The proposed GA-EMC uses multi-hop communication for packet delivery to extend
+                                   the network lifetime. Compared to the existing schemes, the ﬁrst node dies after 1,800
+                                   rounds in GA-EMC. Later, the last node remains alive for 2,100 rounds. In EEWC and E-
+                                   MDSP schemes, the nodes have died after 1,000 and 1,600 rounds, respectively. Figure 3
+                                   shows that the proposed GA-EMC scheme prolongs the network lifetime and stability, and
+                                   the last alive node can still respond to the network in this approach.
+
+                                   Throughput
+                                   In HWSNs, the proposed GA-EMC algorithm analysed the number of data packets sent,
+                                   each CH sends data packets to the sink, and the CMs send data packets to their respective
+                                   CHs. As shown in Fig. 4, the EEWC performs poorly with less data packet communication.
+                                   Similarly, the E-MDSP gives the best behaviour than EEWC and also provides poor
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                              18/30
+                                     Figure 5 Number of rounds vs number of dead nodes. The X-axis represents the number of rounds,
+                                     and Y-axis represents the number of dead nodes. Green-line, red-line and blue-line represent proposed
+                                     GA-EMC, E-MDSP and EEWC, respectively. It shows the regular time interval from the beginning of the
+                                     network process until the death of the ﬁrst node in HWSNs. The GA-EMC has a better stability period
+                                     than the other schemes. The ﬁrst dead node starts at 1,800 rounds in the GA-EMC scheme, whereas the
+                                     ﬁrst dead node starts nearly 1,000 and 1,600 rounds under the EEWC, E-MDSP approaches. The stability
+                                     duration of GA-EMC compared with the EEWC scheme increases from 1,000 to 2,500 rounds, and the E-
+                                     MDSP increases from 1,600 to 2,500 rounds. So, GA-EMC provides better stability duration and prolongs
+                                     the network lifetime.                                      Full-size  DOI: 10.7717/peerj-cs.1029/ﬁg-5
+
+
+                                   performance than GA-EMC. The number of data packets sent from CHs is increased
+                                   signiﬁcantly by the EMC-GA and achieves better throughput when compared to the other
+                                   schemes.
+
+                                   Stability period
+                                   Figure 5 illustrates the regular time interval from the beginning of the network process
+                                   until the death of the ﬁrst node in HWSNs. As shown in Fig. 5, the GA-EMC has a better
+                                   stability period than the other schemes. The ﬁrst dead node starts at 1,800 rounds in the
+                                   GA-EMC scheme, whereas the ﬁrst dead node starts at nearly 1,000 and 1,600 rounds
+                                   under the EEWC, E-MDSP approaches. The stability duration of GA-EMC compared with
+                                   the EEWC scheme increases from 1,000 to 2,500 rounds, and the E-MDSP increases from
+                                   1,600 to 2,500 rounds. So, GA-EMC provides better stability duration and prolongs the
+                                   network lifetime.
+
+                                   Minimising the end-to-end delay
+                                   Figure 6 displays the analysis of various approaches in terms of delay. It shows that the
+                                   EEWC acquires the extreme delay of 0.04 s in 2,500 rounds. However, the delay is low
+                                   compared to EEWC, and it is maximum than the GA-EMC. At the same time, E-MDSP
+                                   achieves a minimum delay than EEWC, but it fails to outperform GA-EMC. GA-EMC
+                                   approach achieves a low delay of only 0.02 s at the 2,500 rounds.
+
+                                   The average energy consumption
+                                   Figure 7 displays the average energy consumption under variable simulation rounds.
+                                      Even though more packets are transmitted in the proposed protocol than in EEWC and
+                                   E-MDSP, the average energy consumption till a particular round is less in the proposed
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                               19/30
+                                     Figure 6 Number of rounds vs delay. The X-axis represents the number of rounds, and Y-axis
+                                     represents the End-to-end Delay (in seconds). Green-line, red-line and blue-line represent proposed GA-
+                                     EMC, E-MDSP and EEWC, respectively. The EEWC acquires the extreme delay of 0.04 s in 2,500 rounds.
+                                     However, the delay is low when compared to EEWC, and it is maximum than the GA-EMC. At the same
+                                     time, E-MDSP achieves a minimum delay than EEWC, but it fails to outperform GA-EMC. GA-EMC
+                                     approach achieves a low delay of only 0.02 s at the 2,500 rounds.
+                                                                                                Full-size  DOI: 10.7717/peerj-cs.1029/ﬁg-6
+
+
+
+
+                                     Figure 7 Number of rounds vs average energy consumption. The X-axis represents the number of
+                                     rounds, and Y-axis represents the average energy consumption under variable simulation rounds. Green-
+                                     line, red-line and blue-line represent proposed GA-EMC, E-MDSP and EEWC, respectively. Even though
+                                     more packets are transmitted in the proposed protocol than EEWC and E-MDSP, the average energy
+                                     consumption till a particular round is less in the proposed GA-EMC.
+                                                                                                Full-size  DOI: 10.7717/peerj-cs.1029/ﬁg-7
+
+
+                                   GA-EMC, as shown in Figure 7. This energy-saving aims to use multi-hop communication
+                                   and associate the CMs with the optimum CHs.
+
+                                   Impact of sink node location on the HWSNs lifetime and stability
+                                   Network stability is measured by the round when the ﬁrst node died. To study the impact
+                                   of sink location on the network stability and lifetime, we have considered three scenarios.
+                                   In scenarios 1, 2, and 3, the sink is situated at various places such as the middle, top right
+                                   corner, and outside the ﬁeld, respectively. Table 6 showed the comparison of the round
+                                   when a given percentage of nodes died for different sink positions. On average, the
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                                20/30
+  Table 6 Comparison of percentage of nodes died for different sink node locations.
+ % of nodes    Number of rounds
+ died
+               Sink located at center 100, 100        Sink located at top right corner 200, 200          Sink located outside the ﬁeld 100, 300
+
+               GA-EMC       E-MDSP        EEWC        GA-EMC            E-MDSP            EEWC           GA-EMC           E-MDSP          EEWC
+ 10            1,049        1,019         717         710               680               401            312              282             123
+ 20            1,192        11,62         922         824               794               564            534              504             256
+ 30            1,412        1,382         1,028       978               948               621            678              648             384
+ 40            1,554        1,524         1,087       1,126             1,096             789            756              726             490
+ 50            1,693        1,663         1,157       1,267             1,237             854            869              839             587
+ 60            1,765        1,735         1,245       1,398             1,368             981            1,023            993             712
+ 70            1,958        1,928         1,353       1,501             1,471             1,102          1,265            1,235           891
+ 80            2,196        2,166         1,521       1,689             1,659             1,256          1,412            1,382           1,038
+ 90            2,458        2,428         1,702       1,876             1,846             1,411          1,623            1,593           1,214
+ 100           2,641        2,611         1,813       2,123             2,093             1,714          1,831            1,801           1,485
+
+
+
+
+                                          Figure 8 Comparing GA-EMC with EEWC and E-MDSP based on network lifetime. The X-axis
+                                          represents each of three scenarios: i.e., the ﬁrst node died, the middle node died and the last node died.
+                                          The Y-axis represents the rounds when the ﬁrst node died in the three scenarios. Green-bar, red-bars and
+                                          blue-bars represent proposed GA-EMC, E-MDSP and EEWC, respectively.
+                                                                                                        Full-size  DOI: 10.7717/peerj-cs.1029/ﬁg-8
+
+
+                                       proposed protocol extends the round when the last node died by 30.94% by considering
+                                       different sink positions. GA-EMC extends the network lifetime and better stability in all
+                                       three cases, and it provides more signiﬁcant improvement when the sink is at the corner
+                                       and outside the ﬁeld due to multi-hop routing.
+                                          Figure 8 shows the rounds when the ﬁrst node died in the three scenarios. As shown in
+                                       Fig. 8, the round when the ﬁrst node died is postponed by 10.98%, 23.47% and 46.94% in
+                                       scenarios 1, 2 and 3, respectively. This shows that the proposed protocol performs better
+                                       for longer distance transmission. Compared to EEWC and E-MDSP, the GA-EMC
+
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                                          21/30
+                                   provides a 27.13% improvement in the round when the ﬁrst node died, considering the
+                                   average of different sink positions.
+
+                                   DISCUSSION
+                                   The proposed GA-EMC scheme outperforms the existing methods, especially EEWC and
+                                   E-MDSP, in almost all aspects. It extends the lifetime of alive nodes in every round and
+                                   prolongs the network lifetime and stability. Also, it signiﬁcantly increases the number of
+                                   data packets sent from CHs and achieves better throughput. It provides better stability
+                                   duration and prolongs the network lifetime.
+                                      Furthermore, it achieves a lower delay and reduces the average energy consumption till
+                                   a particular round. It extends the network lifetime and better stability in all three cases.
+                                   Due to multi-hop routing, it improves when the sink is at the corner and outside the ﬁeld
+                                   and performs better for longer distance transmission.
+
+                                   CONCLUSIONS
+                                   In this article, a GA-EMC scheme is presented for extending the lifetime and minimising
+                                   the delay in HWSNs. In selecting the optimal CHs, the ﬁtness value is calculated based on
+                                   cluster distances, the number of CHs, and their initial and residual energies. Each cluster
+                                   selects a CH with minimum distance, higher residual energy, minimum CMs, and
+                                   maximum neighbours as its next hop in inter-cluster routing. The energy hole problem
+                                   created due to multipath routing is solved by deploying more higher energy supernodes in
+                                   the areas closer to the sink. The mathematical model for energy consumption for clustering
+                                   with multi-hop data transmission is explained. The experimental results proclaim that
+                                   GA-EMC prolongs the HWSNs lifetime, minimises the delay, and maximises stability
+                                   compared to EEWC and E-MDSP for various positions of the BS, primarily when the BS is
+                                   situated in the network corner and outer area. The death of the ﬁrst and last nodes is
+                                   prolonged by 27.13% and 30.94%, respectively, compared with EEWC and E-MDSP. In the
+                                   future, the simulation can be repeated to see the impact of the number of nodes in HWSNs.
+                                   Also, the performance of GA_EMC can be analysed in actual (not simulated) HWSNs in
+                                   some practical scenarios.
+
+                                   ACKNOWLEDGEMENTS
+                                   We thank reviewers, editors and publishers for providing valuable feedback to improve the
+                                   manuscript. We also appreciate Vija Prakash for helping us with formatting.
+
+                                    ADDITIONAL INFORMATION AND DECLARATIONS
+
+                                   Funding
+                                   The work was funded by NICE-Healthcare, Research Excellence Funds by The University
+                                   of Malta. There was no additional external funding received for this study. The funders had
+                                   no role in study design, data collection and analysis, decision to publish, or preparation of
+                                   the manuscript.
+
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                  22/30
+                                   Grant Disclosures
+                                   The following grant information was disclosed by the authors:
+                                   NICE-Healthcare.
+                                   Research Excellence Funds by the University of Malta.
+
+                                   Competing Interests
+                                   Lalit Garg & NZ Jhanjhi are Academic Editors for PeerJ.
+
+                                   Author Contributions
+                                    R. Muthukkumar conceived and designed the experiments, performed the experiments,
+                                     prepared ﬁgures and/or tables, authored or reviewed drafts of the article, and approved
+                                     the ﬁnal draft.
+                                    Lalit Garg analyzed the data, prepared ﬁgures and/or tables, authored or reviewed drafts
+                                     of the article, and approved the ﬁnal draft.
+                                    K. Maharajan performed the experiments, analyzed the data, performed the
+                                     computation work, prepared ﬁgures and/or tables, and approved the ﬁnal draft.
+                                    M. Jayalakshmi performed the experiments, analyzed the data, performed the
+                                     computation work, prepared ﬁgures and/or tables, and approved the ﬁnal draft.
+                                    Nz Jhanjhi performed the computation work, prepared ﬁgures and/or tables, authored or
+                                     reviewed drafts of the article, and approved the ﬁnal draft.
+                                    S. Parthiban analyzed the data, prepared ﬁgures and/or tables, authored or reviewed
+                                     drafts of the article, and approved the ﬁnal draft.
+                                    G. Saritha analyzed the data, prepared ﬁgures and/or tables, authored or reviewed drafts
+                                     of the article, and approved the ﬁnal draft.
+
+                                   Data Availability
+                                   The following information was supplied regarding data availability:
+                                     The code is available in the Supplemental File.
+
+                                   Supplemental Information
+                                   Supplemental information for this article can be found online at http://dx.doi.org/10.7717/
+                                   peerj-cs.1029#supplemental-information.
+
+
+                                   REFERENCES
+                                   Abo-Zahhad M, Ahmed SM, Sabor N, Sasaki S. 2014. A new energy-efﬁcient adaptive clustering
+                                     protocol based on genetic algorithm for improving the lifetime and the stable period of wireless
+                                     sensor networks. International Journal of Energy, Information and Communications 5(3):47–72
+                                     DOI 10.14257/ijeic.2014.5.3.05.
+                                   Abo-Zahhad M, Farrag M, Ali A, Amin O. 2015. An energy consumption model for wireless
+                                     sensor networks. In: 5th International Conference on Energy Aware Computing Systems &
+                                     Applications. Cairo, Egypt. 1–4.
+                                   Afsar MM, Mohammad H, Tayarani N. 2014. Clustering in sensor networks: a literature survey.
+                                     Journal of Network and Computer Applications 46(4):198–226 DOI 10.1016/j.jnca.2014.09.005.
+
+
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                       23/30
+                                   Agrawal A, Garg L, Audu EE, Pachori RB, Dauwels J. 2019. Early detection of epileptic seizures
+                                     based on scalp EEG signals. In: Hegadi RS, Santosh KC, eds. Medical Imaging: Use of AI, Image
+                                     Recognition and Machine Learning Techniques. Boca Raton: CRC Press.
+                                   Agrawal A, Garg L, Dauwels J. 2013. Application of empirical mode decomposition algorithm for
+                                      epileptic seizure detection from scalp EEG. Transactions of Japanese Society for Medical and
+                                      Biological Engineering 51:R-207 DOI 10.11239/jsmbe.51.R-207.
+                                   Akyildiz IF, Su W, Sankarasubramaniam Y, Cayirci E. 2002. Wireless sensor networks: a survey.
+                                      Computer Networks 38(4):393–422 DOI 10.1016/S1389-1286(01)00302-4.
+                                   Ali H, Shahzad W, Khan FA. 2012. Energy-efﬁcient clustering in mobile ad-hoc networks using
+                                      multi-objective particle swarm optimisation. Applied Soft Computing 12(7):1913–1928
+                                      DOI 10.1016/j.asoc.2011.05.036.
+                                   Amgoth T, Jana PK. 2015. Energy-aware routing algorithm for wireless sensor networks.
+                                     Computers & Electrical Engineering 41:357–367 DOI 10.1016/j.compeleceng.2014.07.010.
+                                   Andrushia AD, Paul JJ, Sagayam KM, Grace SR, Garg L. 2021. Spy-Bot: controlling and
+                                     monitoring a Wi-Fi-controlled surveillance robotic car using windows 10 IoT and cloud
+                                     computing. In: Blockchain Technology for Data Privacy Management. Boca Raton: CRC Press,
+                                     37–59.
+                                   Attea BA, Khalil EA. 2012. A new evolutionary based routing protocol for clustered heterogeneous
+                                      wireless sensor networks. Applied Soft Computing 12(7):1950–1957
+                                      DOI 10.1016/j.asoc.2011.04.007.
+                                   Audu EE, Garg L, Falzon O, Di Giovanni G. 2017a. EEG feature extraction using common spatial
+                                      pattern with spectral graph decomposition. In: Proceedings of the IEEE International Conference
+                                      on Computing, Networking and Informatics (ICCNI 2017). Canaanland, Ota, Ogun State,
+                                      Nigeria: Covenant University. Piscataway: IEEE.
+                                   Audu EE, Garg L, Falzon O, Giovanni GD. 2017b. Applications of machine learning in energy
+                                     efﬁcient, real-time, monitoring, prediction, detection and management of seizure. In:
+                                     Localization Localisation of Abnormal (Seizure) EEG Source, Mediterranean Neuroscience
+                                     Society – 6th Conference 2017. St Julian’s, Malta.
+                                   Bandyopadhyay S, Coyle EJ. 2003. An energy efﬁcient hierarchical clustering algorithm for
+                                     wireless sensor networks. In: IEEE INFOCOM 2003. Twenty-Second Annual Joint Conference of
+                                     the IEEE Computer and Communications Societies. Vol. 3. San Francisco. Piscataway: IEEE,
+                                     1713–1723.
+                                   Bari A, Jaekel A, Bandyopadhyay S. 2008. Clustering strategies for improving the lifetime of two-
+                                     tiered sensor networks. Computer Communications 31(14):3451–3459
+                                     DOI 10.1016/j.comcom.2008.05.038.
+                                   Bayrakli S, Erdogan SN. 2012. Genetic algorithm based energy efﬁcient clusters (GABEEC) in
+                                     wireless sensor networks. Procedia Computer Science 10:247–254
+                                     DOI 10.1016/j.procs.2012.06.034.
+                                   Bencan G, Tingyao J, X.Shouzhi X, Peng C. 2013. An energy-heterogeneous clustering scheme to
+                                     avoid energy holes in wireless sensor networks. International Journal of Distributed Sensor
+                                     Networks 9(10):796549 DOI 10.1155/2013/796549.
+                                   Bhattacharyya A, Tripathy RK, Garg L, Pachori RB. 2021. A novel multivariate-multiscale
+                                     approach for computing EEG spectral and temporal complexity for human emotion recognition.
+                                     IEEE Sensors Journal 21(3):3579–3591 DOI 10.1109/JSEN.2020.3027181.
+                                   Bhushan S, Pal R, Antoshchuk SG. 2018. Energy efﬁcient clustering protocol for heterogeneous
+                                     wireless sensor network: a hybrid approach using GA and K-means. In: Proceedings of the IEEE
+
+
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                       24/30
+                                     International Conference on Data Stream Mining and Processing, DSMP. Ukraine. Piscataway:
+                                     IEEE, 381–385.
+                                   Bonello J, Garg L, Garg G, Audu EE. 2018. Effective data acquisition for machine learning
+                                     algorithm in EEG signal processing. In: Soft Computing: Theories and Applications. Singapore:
+                                     Springer, 233–244.
+                                   Bugeja S, Garg L. 2015. Application of machine learning techniques for the modelling of eeg data
+                                     for diagnosis of Epileptic Seizures. In: The 3rd Workshop on Recognition and Action for Scene
+                                     Understanding (REACTS 2015). Valletta, Malta.
+                                   Bugeja S, Garg L, Audu EE. 2016. A novel method of EEG data acquisition, feature extraction and
+                                     feature space creation for Early Detection of Epileptic Seizures. In: 38th Annual International
+                                     Conference of the IEEE Engineering in Medicine and Biology Society (EMBC-2016). Orlando,
+                                     Florida USA. Piscataway: IEEE.
+                                   Capone A, Li Y, Pioro M, Yuan D. 2019. Minimizing end-to-end delay in multi-hop wireless
+                                     networks with optimized transmission scheduling. Ad Hoc Networks 89(6):236–248
+                                     DOI 10.1016/j.adhoc.2019.01.004.
+                                   Chakraborty C, Banerjee A, Garg L, Coelho Rodrigues JJP. 2020a. Internet of medical things for
+                                     smart healthcare: COVID-19 pandemic, book series: studies in big data. Singapore: Springer.
+                                   Chakraborty C, Banerjee A, Kolekar MH, Garg L. 2020b. Internet of things for healthcare
+                                     technologies, studies in big data. Vol. 73. Singapore: Springer.
+                                   Chang Y, Yuan X, Li B, Niyato D, Al-Dhahir N. 2018. A joint unsupervised learning and genetic
+                                     algorithm approach for topology control in energy-efﬁcient ultra-dense wireless sensor
+                                     networks. IEEE Communications Letters 22(11):2370–2373
+                                     DOI 10.1109/LCOMM.2018.2870886.
+                                   Chang Y, Yuan X, Li B, Niyato D, Al-Dhahir N. 2019. Machine-learning-based parallel genetic
+                                     algorithms for multi-objective optimisation in ultra-reliable low-latency WSNs. IEEE Access
+                                     7:4913–4926 DOI 10.1109/ACCESS.2018.2885934.
+                                   Chauhan V, Soni S. 2021. Energy aware unequal clustering algorithm with multi-hop routing via
+                                     low degree relay nodes for wireless sensor networks. Journal of Ambient Intelligence and
+                                     Humanized Computing 12(2):2469–2482 DOI 10.1007/s12652-020-02385-1.
+                                   Chukwu E, Garg L, Zahra R. 2021. Internet of health things: opportunities and challenges. In:
+                                     Chakraborty U, Banerjee A, Saha JK, Sarkar N, Chakraborty C, eds. Artiﬁcial Intelligence and the
+                                     Fourth Industrial Revolution. Singapore: Jenny Stanford Publishing.
+                                   Darabkh KA, Zomot JN, Al-qudah Z. 2019. EDB-CHS-BOF: energy and distance-based cluster
+                                     head selection with balanced objective function protocol. IET Communications 13(19):3168–
+                                     3180 DOI 10.1049/iet-com.2019.0092.
+                                   Delavar AG, Baradaran AA. 2012. CRCWSN: presenting a routing algorithm by using re-
+                                     clustering to reduce energy consumption in WSN. International Journal of Computers
+                                     Communications & Control 8(1):61–69 DOI 10.15837/ijccc.2013.1.169.
+                                   Deng L, Gui J, Wang T, Tan J, Li X. 2021. An intelligent hybrid MAC protocol for a sensor-based
+                                     personalised healthcare system. Digital Communications and Networks 8(2):174–185
+                                     DOI 10.1016/j.dcan.2021.08.004.
+                                   Elhoseny M, Yuan X, Yu Z, Mao C, El-Minir HK, Riad AM. 2015. Balancing energy consumption
+                                      in heterogeneous wireless sensor networks using genetic algorithm. IEEE Communications
+                                      Letters 19(12):2194–2197 DOI 10.1109/LCOMM.2014.2381226.
+                                   Fan C-S. 2013. Rich: region-based intelligent cluster-head selection and node deployment strategy
+                                     in concentric-based WSNs. Advances in Electrical and Computer Engineering 13(4):3–8
+                                     DOI 10.4316/aece.
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                       25/30
+                                   Fanian F, Rafsanjani MK. 2019. Cluster-based routing protocols in wireless sensor networks: a
+                                     survey based on methodology. Journal of Network and Computer Applications 142(14):111–142
+                                     DOI 10.1016/j.jnca.2019.04.021.
+                                   Garg L, Chukwu E, Nidal N, Chakraborty C, Garg G. 2020a. Anonymity preserving IoT-based
+                                     COVID-19 and other infectious disease contact tracing model. IEEE Access 8:159402–159414
+                                     DOI 10.1109/ACCESS.2020.3020513.
+                                   Garg L, Ramesh K, Garg G, Portelli A, Jamal A. 2020b. Kitchen genie: an intelligent internet of
+                                     things system for household inventory management. In: Singh P, Panigrahi B, Suryadevara N,
+                                     Sharma S, Singh A, eds. Proceedings of ICETIT 2019. Lecture Notes in Electrical Engineering. Vol.
+                                     605. Cham: Springer.
+                                   Gupta V, Pandey R. 2016. An improved energy aware distributed unequal clustering protocol for
+                                     heterogeneous wireless sensor networks. Engineering Science and Technology, An International
+                                     Journal 19(2):1050–1058 DOI 10.1016/j.jestch.2015.12.015.
+                                   Haseeb K, Islam N, Almogren A, Din IUd, Almajed HN, Guizani N. 2019. Secret sharing-based
+                                     energy-aware and multi-hop routing protocol for IoT based WSNs. IEEE Access 7:79980–79988
+                                     DOI 10.1109/ACCESS.2019.2922971.
+                                   Heinzelman WR, Chandrakasan A, Balakrishnan H. 2000. Energy-efﬁcient communication
+                                     protocol for wireless microsensor networks. In: Proceedings of the 33rd Annual Hawaii
+                                     International Conference on System Sciences. 10.
+                                   Hoang DC, Yadav P, Kumar R, Panda SK. 2014. Real-time implementation of a harmony search
+                                     algorithm-based clustering protocol for energy-efﬁcient wireless sensor networks. IEEE
+                                     Transactions on Industrial Informatics 10(1):774–783 DOI 10.1109/TII.2013.2273739.
+                                   Huang C, Huang G, Liu W, Wang R, Xie M. 2021. A parallel joint optimised relay selection
+                                     protocol for wake-up radio enabled WSNs. Physical Communication 47(3):101320
+                                     DOI 10.1016/j.phycom.2021.101320.
+                                   Issariyakul T, Hossain E. 2012. Introduction to network simulator 2 (NS2). 2nd Edition. Boston,
+                                      MA: Springer.
+                                   Javaid N, Qureshi TN, Khan AH, Iqbal A, Akhtar E, Ishfaq M. 2013a. EDDEEC: enhanced
+                                      developed distributed energy-efﬁcient clustering for heterogeneous wireless sensor networks.
+                                      Procedia Computer Science 19:914–919 DOI 10.1016/j.procs.2013.06.125.
+                                   Javaid N, Waseem M, Khan ZA, Qasim U, Latif K, Javaid A. 2013b. ACH: away cluster heads
+                                      scheme for energy efﬁcient clustering protocols in WSNs. Saudi International Electronics,
+                                      Communications and Photonics Conference, Fira 29:1–4 DOI 10.1109/SIECPC.2013.6550972.
+                                   Jayalakshmi M, Garg L, Maharajan K, Srinivasan K, Jayakumar K, Bashir AK, Ramesh K. 2021.
+                                      Fuzzy logic-based health monitoring system for COVID’19 patients. Computers, Materials &
+                                      Continua 67(2):2431–2447 DOI 10.32604/cmc.2021.015352.
+                                   Jin R-C, Gao T, Song J-Y, Zou J-Y, Wang L-D. 2013. Passive cluster-based multipath routing
+                                      protocol for wireless sensor networks. Wireless Networks 19(8):1851–1866
+                                      DOI 10.1007/s11276-013-0570-4.
+                                   Jin M-H, Liu W-Z, Hsu DF, Kao C-Y. 2005. Compact genetic algorithm for performance
+                                      improvement in hierarchical sensor networks management. In: 8th International Symposium on
+                                      Parallel Architectures, Algorithms and Networks (ISPAN’05). Las Vegas, USA.
+                                   Kachitvichyanukul V. 2012. Comparison of three evolutionary algorithms: GA, PSO, and DE.
+                                     Industrial Engineering & Management Systems 11(3):215–223
+                                     DOI 10.7232/IEMS.2012.11.3.215.
+
+
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                        26/30
+                                   Kalaimani D, Zah Z, Vashist S. 2020. Energy-efﬁcient density-based fuzzy C-means clustering in
+                                     WSN for smart grids. Australian Journal of Multi-Disciplinary Engineering 4(5):1–16
+                                     DOI 10.1080/14488388.2020.1811454.
+                                   Kamil AA, Naji MK, Turki HA. 2020. Design and implementation of grid based clustering in
+                                     WSN using dynamic sink node. Bulletin of Electrical Engineering and Informatics 9(5):2055–
+                                     2064 DOI 10.11591/eei.v9i5.1875.
+                                   Kashyap PK, Kumar S, Dohare U, Kumar V, Kharel R. 2019. Green computing in sensors-
+                                     enabled internet of things: neuro fuzzy logic-based load balancing. Electronics 8(4):1–22
+                                     DOI 10.3390/electronics8040384.
+                                   Kumar D, Aseri TC, Patel RB. 2009. EEHC: energy efﬁcient heterogeneous clustered scheme for
+                                     wireless sensor networks. Computer Communications 32(4):662–667
+                                     DOI 10.1016/j.comcom.2008.11.025.
+                                   Kumar R, Goel S, Sharma V, Garg L, Srinivasan K, Julka N. 2020. A multifaceted vigilare system
+                                     for intelligent transportation services in smart cities. IEEE Internet of Things Magazine 3(4):76–
+                                     80 DOI 10.1109/IOTM.0001.2000041.
+                                   Kumar R, Kumar D. 2016. Multi-objective fractional artiﬁcial bee colony algorithm to energy
+                                     aware routing protocol in wireless sensor network. Wireless Networks 22(5):1461–1474
+                                     DOI 10.1007/s11276-015-1039-4.
+                                   Lanzolla A, Spadavecchia M. 2021. Wireless sensor networks for environmental monitoring.
+                                      Sensors 21(4):1172 DOI 10.3390/s21041172.
+                                   Lin Y, Zhang J, Chung HS-H, Ip WH, Li Y, Shi Y-H. 2012. An ant colony optimization approach
+                                      for maximising the lifetime of heterogeneous wireless sensor networks. IEEE Transactions on
+                                      Systems, Man, and Cybernetics, Part C (Applications and Reviews) 42(3):408–420
+                                      DOI 10.1109/TSMCC.2011.2129570.
+                                   Liu JS, Lin CHR. 2005. Energy-efﬁciency clustering protocol in wireless sensor networks. Ad Hoc
+                                      Networks 3(3):371–388 DOI 10.1016/j.adhoc.2003.09.012.
+                                   Liu J, Ravishankar CV. 2011. LEACH-GA: genetic algorithm-based energy-efﬁcient adaptive
+                                      clustering protocol for wireless sensor networks. International Journal of Machine Learning and
+                                      Computing 1(1):79–85 DOI 10.7763/IJMLC.2011.V1.12.
+                                   Mahajan S, Malhotra J, Sharma S. 2014. An energy balanced QoS based cluster head selection
+                                     strategy for WSN. Egyptian Informatics Journal 15(3):189–199 DOI 10.1016/j.eij.2014.09.001.
+                                   Mangion RS, Garg L, Garg G, Falzon O. 2020. Emotional testing on facebook’s user experience.
+                                     IEEE Access 8:58250–58259 DOI 10.1109/ACCESS.2020.2981418.
+                                   Mann PS, Singh S. 2017. Improved metaheuristic based energy-efﬁcient clustering protocol for
+                                     wireless sensor networks. Engineering Applications of Artiﬁcial Intelligence 57(4):142–152
+                                     DOI 10.1016/j.engappai.2016.10.014.
+                                   Mehta K, Pal R. 2017. Biogeography based optimisation protocol for energy efﬁcient evolutionary
+                                     algorithm: (BBO: EEEA). In: Proceedings of International Conference on Computing and
+                                     Communication Technologies for Smart Nation (IC3TSN). Gurgaon, India, 281–286.
+                                   Mhemed R, Aslam N, Phillips W, Comeau F. 2012. An energy efﬁcient fuzzy logic cluster
+                                      formation protocol in wireless sensor networks. Procedia Computer Science 10:255–262
+                                      DOI 10.1016/j.procs.2012.06.035.
+                                   Pal R, Saraswat M. 2017. Data clustering using enhanced biogeography-based optimisation. In:
+                                      Proceedings of Tenth International Conference on Contemporary Computing (IC3). Noida, 1–6.
+                                   Pal R, Yadav S, Karnwal R, Aarti. 2020. EEWC: energy-efﬁcient weighted clustering method
+                                      based on genetic algorithm for HWSNs. Complex & Intelligent Systems 6(2):391–400
+                                      DOI 10.1007/s40747-020-00137-4.
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                         27/30
+                                   Pal V, Yogita, Singh G, Yadav RP. 2015a. Effect of heterogeneous nodes location on the
+                                      performance of clustering algorithms for wireless sensor networks. Procedia Computer Science
+                                      57:1042–1048 DOI 10.1016/j.procs.2015.07.376.
+                                   Pal V, Yogita, Singh G, Yadav RP. 2015b. Cluster head selection optimization based on genetic
+                                      algorithm to prolong lifetime of wireless sensor networks. Procedia Computer Science 57:1417–
+                                      1423 DOI 10.1016/j.procs.2015.07.461.
+                                   Pantazis NA, Nikolidakis SA, Vergados DD. 2013. Energy-efﬁcient routing protocols in wireless
+                                      sensor networks: a survey. IEEE Communications Surveys & Tutorials 15(2):551–591
+                                      DOI 10.1109/SURV.2012.062612.00084.
+                                   Prabaharan G, Jayashri S. 2019. Mobile cluster head selection using soft computing technique in
+                                     wireless sensor network. Soft Computing 23(18):8525–8538 DOI 10.1007/s00500-019-04133-w.
+                                   Qing L, Zhu Q, Wang M. 2006. Design of a distributed energy-efﬁcient clustering algorithm for
+                                     heterogeneous wireless sensor networks. Computer Communications 29(12):2230–2237
+                                     DOI 10.1016/j.comcom.2006.02.017.
+                                   Rajpoot P, Dwivedi P. 2019. Multiple parameter based energy balanced and optimised clustering
+                                     for WSN to enhance the lifetime using MADM approaches. Wireless Personal Communications
+                                     106(2):829–877 DOI 10.1007/s11277-019-06192-6.
+                                   Rakhee, Srinivas MB. 2016. Cluster based energy efﬁcient routing protocol using ANT colony
+                                      optimization and breadth ﬁrst search. Procedia Computer Science 89(1):124–133
+                                      DOI 10.1016/j.procs.2016.06.019.
+                                   Saini P, Sharma AK. 2010. E-DEEC- enhanced distributed energy efﬁcient clustering scheme for
+                                      heterogeneous WSN. In: First International Conference on Parallel, Distributed and Grid
+                                      Computing (PDGC 2010). Solan, 205–210.
+                                   Salankar N, Mishra P, Garg L. 2021. Emotion recognition from EEG signals using empirical mode
+                                      decomposition and second-order difference plot. Biomedical Signal Processing and Control
+                                      65(8):102389 DOI 10.1016/j.bspc.2020.102389.
+                                   Sampathkumar A, Murugan S, Elngar AA, Garg L, Kanmani R, Malar ACJ. 2020. A novel
+                                      scheme for an IoT-based weather monitoring system using a wireless sensor network. In: Rani S,
+                                      Maheswar R, Kanagachidambaresan G, Jayarajan P, eds. Integration of WSN and IoT for Smart
+                                      Cities. EAI/Springer Innovations in Communication and Computing. Cham: Springer.
+                                   Sant A, Garg L, Xuereb PA, Chakraborty C. 2021. A novel green IoT-based pay-as-you-go smart
+                                     parking system. Computers, Materials & Continua 67(3):3523–3544
+                                     DOI 10.32604/cmc.2021.015265.
+                                   Sarkar A, Senthil Murugan T. 2019. Cluster head selection for energy efﬁcient and delay-less
+                                      routing in wireless sensor network. Wireless Networks 25(1):303–320
+                                      DOI 10.1007/s11276-017-1558-2.
+                                   Shang F. 2013. A multi-hop routing algorithm based on integrated metrics for wireless sensor
+                                     networks. Applied Mathematics & Information Sciences 7(3):1021–1034
+                                     DOI 10.12785/amis/070321.
+                                   Singh B, Lobiyal DK. 2012a. A novel energy-aware cluster head selection based on particle swarm
+                                      optimisation for wireless sensor networks. Human-centric Computing and Information Sciences
+                                      2(1):1–18 DOI 10.1186/2192-1962-2-13.
+                                   Singh B, Lobiyal DK. 2012b. Energy-aware cluster head selection using particle swarm
+                                      optimization and analysis of packet retransmissions in WSN. Procedia Technology 4(4):171–176
+                                      DOI 10.1016/j.protcy.2012.05.025.
+                                   Smaragdakis G, Matta I, Bestavros A. 2004. SEP: a stable election protocol for clustered
+                                     heterogeneous wireless sensor networks. In: SANPA.
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                      28/30
+                                   Tabatabaei S. 2020. A novel fault tolerance energy-aware clustering method via social spider
+                                     optimization (SSO) and fuzzy logic and mobile sink in wireless sensor networks (WSNs).
+                                     Computer Systems Science and Engineering 35(6):477–494 DOI 10.32604/csse.2020.35.477.
+                                   Tanwar S, Kumar N, Rodrigues JJPC. 2015. A systematic review on heterogeneous routing
+                                     protocols for wireless sensor network. Journal of Network and Computer Applications 53(8):39–
+                                     56 DOI 10.1016/j.jnca.2015.03.004.
+                                   Toor AS, Jain AK. 2019. Energy aware cluster based multi-hop energy efﬁcient routing protocol
+                                     using multiple mobile nodes (MEACBM) in wireless sensor networks. AEU - International
+                                     Journal of Electronics and Communications 102(5):41–53 DOI 10.1016/j.aeue.2019.02.006.
+                                   Tyagi S, Kumar N. 2013. A systematic review on clustering and routing techniques based upon
+                                     LEACH protocol for wireless sensor networks. Journal of Network and Computer Applications
+                                     36(2):623–645 DOI 10.1016/j.jnca.2012.12.001.
+                                   Vijayalakshmi K, Anandan P. 2020. Global levy ﬂight of cuckoo search with particle swarm
+                                      optimization for effective cluster head selection in wireless sensor network. Intelligent
+                                      Automation & Soft Computing 26(2):303–311 DOI 10.31209/2020.100000165.
+                                   Wang J, Gao Y, Yin X, Li F, Kim H-J. 2018a. An enhanced PEGASIS algorithm with mobile sink
+                                    support for wireless sensor networks. Wireless Communications & Mobile Computing
+                                    2018:9472075 DOI 10.1155/2018/9472075.
+                                   Wang J, Gao Y, Zhou C, Simon Sherratt R, Wang L. 2020. Optimal coverage multi-path
+                                    scheduling scheme with multiple mobile sinks for WSNs. Computers, Materials & Continua
+                                    62(2):695–711 DOI 10.32604/cmc.2020.08674.
+                                   Wang J, Han H, Li H, He S, Kumar Sharma P, Chen L. 2022. Multiple strategies differential
+                                    privacy on sparse tensor factorization for network trafﬁc analysis in 5G. IEEE Transactions on
+                                    Industrial Informatics 18(3):1939–1948 DOI 10.1109/TII.2021.3082576.
+                                   Wang J, Ju C, Gao Y, Sangaiah AK, Kim G. 2018b. A PSO based energy efﬁcient coverage control
+                                    algorithm for wireless sensor networks. Computers, Materials & Continua 56(3):433–446
+                                    DOI 10.3970/cmc.2018.04132.
+                                   Wei D, Jin Y, Vural S, Moessner K, Tafazolli R. 2011. An energy-efﬁcient clustering solution for
+                                     wireless sensor networks. IEEE Transactions on Wireless Communications 10(11):3973–3983
+                                     DOI 10.1109/TWC.2011.092011.110717.
+                                   Younis O, Fahmy S. 2004. HEED: a hybrid, energy-efﬁcient, distributed clustering approach for ad
+                                     hoc sensor networks. IEEE Transactions on Mobile Computing 3(4):366–379
+                                     DOI 10.1109/TMC.2004.41.
+                                   Younis M, Youssef M, Arisha K. 2003. Energy-aware management for cluster-based sensor
+                                     networks. Computer Networks 43(5):649–668 DOI 10.1016/S1389-1286(03)00305-0.
+                                   Yu J, Qi Y, Wang G, Gu X. 2012. A cluster-based routing protocol for wireless sensor networks
+                                     with nonuniform node distribution. AEU - International Journal of Electronics and
+                                     Communications 66(1):54–61 DOI 10.1016/j.aeue.2011.05.002.
+                                   Yu J, Qi Y, Wang G, Guo Q, Gu X. 2011. An energy-aware distributed unequal clustering protocol
+                                     for wireless sensor networks. International Journal of Distributed Sensor Networks 7(1):202145
+                                     DOI 10.1155/2011/202145.
+                                   Zhang W, Li L, Han G, Zhang L. 2017. E2HRC: an energy-efﬁcient heterogeneous ring clustering
+                                     routing protocol for wireless sensor networks. IEEE Access 5:1702–1713
+                                     DOI 10.1109/ACCESS.2017.2666818.
+                                   Zhang X, Zhang J, Gong Y, Zhan Z, Chen W, Li Y. 2016. Kuhn-Munkres parallel genetic
+                                     algorithm for the set cover problem and its application to large-scale wireless sensor networks.
+
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                       29/30
+                                     IEEE Transactions on Evolutionary Computation 20(5):695–710
+                                     DOI 10.1109/TEVC.2015.2511142.
+                                   Zhang Y, Zhang X, Ning S, Gao J, Liu Y. 2019. Energy-efﬁcient multilevel heterogeneous routing
+                                     protocol for wireless sensor networks. IEEE Access 7:55873–55884
+                                     DOI 10.1109/ACCESS.2019.2900742.
+                                   Zhou H, Wu Y, Hu Y, Xie G. 2010. A novel stable selection and reliable transmission protocol for
+                                     clustered heterogeneous wireless sensor networks. Computer Communications 33(15):1843–
+                                     1849 DOI 10.1016/j.comcom.2010.06.001.
+
+
+
+
+Muthukkumar et al. (2022), PeerJ Comput. Sci., DOI 10.7717/peerj-cs.1029                                                     30/30
+

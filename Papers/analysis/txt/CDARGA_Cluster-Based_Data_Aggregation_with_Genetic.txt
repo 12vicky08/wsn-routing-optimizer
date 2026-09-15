@@ -1,0 +1,516 @@
+                                                             International Journal of Recent Technology and Engineering (IJRTE)
+                                                                         ISSN: 2277-3878 (Online), Volume-8 Issue-6, March 2020
+
+
+
+
+           CDARGA: Cluster-Based Data Aggregation
+           with Genetic Routing Algorithm in Wireless
+                        Sensor Networks
+                                                      R. Kowsalya, B. Rosiline Jeetha
+                                                                            nodes. The elongated distance among sensor nodes, need the
+   Abstract: In the wireless sensor networks (WSNs), the                     extra energy to utilize it. Consequently to expand the duration
+upholding the energy and routing formation at every sensor node              of WSN, there are numerous research studies on
+is the major issues. The distance from base station and internal
+                                                                             communication distance of the sensor nodes.
+node mainly has imbalanced in the energy consumption during
+transformation of the data. To reduce the energy upholding and                  The more advance that is cluster-based networks are an
+the data aggregation routing issues in Centralized                           important for atmosphere monitoring. To utilize each sensor
+Clustering-Task Scheduling for wireless sensor networks (WSNs),              nodes in cluster based network, it decreases communication
+this paper focuses on a Cluster-Based Data Aggregation Routing               distance for huge amount of sensor nodes, challenging only
+with Genetic search Algorithm (CDARGA) , which reduces the                   little nodes to broadcast long distances, e.g., Base Station
+energy consumption in a hyper round model. The proposed data
+                                                                             (BS). A cluster-based procedure splits the network into a
+aggregation routing protocol using the Genetic Algorithm (GA)
+estimates the fitness function using the three key parameters                quantity of clusters. Every cluster has a Cluster Heads (CHs)
+distance, energy, and Hyper round policy. The proposed methods               with the intention of gathers data as of all associate nodes in
+were compared with RP-MAC and the experimental result shows                  its cluster.
+that the proposed protocol is superior to RP-MAC protocol and the               These CHs aggregate the accumulated data and transmit it
+proposed algorithm improves the network lifetime which can used              to the BS. This approach strongly decreases the message rate
+in real time application.
+                                                                             of the sensor nodes so that the duration of the network really
+                                                                             expands. The major issues with WSN are that is needed to
+  Keywords: Centralized Clustering, Data Aggregation, Genetic
+Algorithm, Hyper round policy.                                               boost the duration of network. Commonly, duration of
+                                                                             network is distinct as the time when the primary node is
+                       I. INTRODUCTION                                       unsuccessful to transmit the packets or messages to the base
+                                                                             station. This problem can be determined by executing data
+  A Wireless Sensor Network (WSN) is a cluster of sensor                     aggregation method as it reduces data traffic and additional
+with small, lightweight, low computational capacity sensor                   saves energy by merging numerous incoming packets into a
+nodes [1]. WSNs can be installed in uphold of a selection of                 particular packet whenever the sensed information are
+different applications such as examining environmental                       extremely correlated [2]. Many researchers have been
+occurrence (e.g., the stage of air pollution, weather                        accepted out to additional level network lifetime.
+monitoring). The information gathered from every sensor                         In data aggregation the sensor network is frequently
+nodes is forwarded to a base-station for additional processing.              supposed as repeal multicast tree. During this process, sink
+The power conservation is significant measure for WSN                        request the sensor nodes to details ambient provision of
+design, as WSNs are classically positioned to isolated                       occurrence. In this procedure, normally the information that
+locations or more huge regions. In any case, restoring                       is coming from numerous sensor nodes are aggregated, in
+exhausted batteries for huge amount of nodes or still an                     such that the similar attribute of occurrence once it attain the
+incomplete rest of hard-to-access nodes is typically not a                   equivalent routing node on mode back to sink.
+feasible option.
+  WSN nodes are little, battery controlled and low-cost. The
+essential problems in WSN are energy utilization among all                                                           4
+                                                                                       1                    2
+                                                                                                                              5
+                                                                                                                     6
+Manuscript received on February 10, 2020.                                                        3
+Revised Manuscript received on February 20, 2020.
+Manuscript published on March 30, 2020.                                                                                       7
+* Correspondence Author                                                                                         8
+     R. Kowsalya*, Department of Computer Science (PG), PSGR                               Aggregate Node
+Krishnammal College for Women, Coimbatore, India. Email:
+2017ngpphd@gmail.com                                                                       Normal Node
+     Dr. B. Rosiline Jeetha, Department of Computer Science, Dr. N.G.P
+Arts     and     Science    College,   Coimbatore,    India.    Email:                      Base Station
+drrosilinejeetha@drngpasc.ac.in.
+
+    © The Authors. Published by Blue Eyes Intelligence Engineering and                 Fig. 1: An example of data aggregation
+Sciences Publication (BEIESP). This is an open access article under the CC
+BY-NC-ND license (http://creativecommons.org/licenses/by-nc-nd/4.0/)
+
+
+
+    Retrieval Number: F8443038620/2020©BEIESP
+                                                                                Published By:
+    DOI:10.35940/ijrte.F8443.038620
+                                                                                Blue Eyes Intelligence Engineering
+    Journal Website: www.ijrte.org
+                                                                         2976   & Sciences Publication
+CDARGA: Cluster-Based Data Aggregation with Genetic Routing Algorithm in Wireless Sensor Networks
+
+     II.   PROCEDURE FOR PAPER SUBMISSION                          (S. Mottaghi and M. R. Zahabi, 2015 [10]) discussed a
+                                                                   wireless sensor networks are collected of a huge amount of
+   In figure 1. illustrates 8 sensor nodes and one Base station
+                                                                   not reusable wireless sensors that gather packets about
+is deployed in a centralized WSN. At first, sensor node ‘3’
+                                                                   neighboring position and broadcast them to the last client.
+combined the message from both ‘1’ and ‘2’ sensor nodes. In
+                                                                   Since these sensors not having a rechargeable batteries,
+the similar approach node ‘6’ aggregates data as of ‘4’ and ‘5’
+                                                                   amplifying the duration is significant and different
+sensor nodes. According to [3], data aggregation is perceived
+                                                                   techniques have been projected to boost the duration of the
+as the rest of computerized techniques of joining the packet
+                                                                   sensor nodes in the network. Mainly these techniques are
+information’s which arrives from a number of sensor nodes
+                                                                   projected on routing or clustering algorithms. The Low
+into rest of significant data. In other manner this procedure is
+                                                                   Energy Adaptive Clustering Hierarchy (LEACH) algorithm
+also called as data synthesis. Based on this point, 8th node
+                                                                   is a proficient clustering technique where nodes inside a
+collects messages from 3rd and 6th nodes and lastly transmits
+                                                                   cluster transmit the packets to a local CH. Several researchers
+the message (data) to Base Station node.
+                                                                   suggested a Mobile Sink (MS) as a system to decrease energy
+   Most of the researchers discussed about an energy efficient
+                                                                   utilization and a Rendezvous Node (RN) to perform as a
+routing protocols with data aggregation, geographic
+                                                                   accumulate point for the MS. The authors proposed method
+information, clustering approach etc and many research
+                                                                   that joins the exploit of the LEACH clustering algorithm, MS
+papers shows the effectiveness of a Genetic Algorithm (GA)
+                                                                   and RP.
+based approach in sensor networks [4 – 7]. Here, this paper
+                                                                   (Shivkumaret.al., 2016 [11]) discussed an optimized battery
+present an enhanced hierarchical based routing is an element
+                                                                   control, energy efficient routing procedures should be
+of the cluster-based data aggregation routing using genetic
+                                                                   employed such as General Self-Organized Tree-Based
+algorithm evaluates the fitness function schedules
+                                                                   Energy-Balance routing protocol (GSTEB), Hybrid
+clustering-task to extend the network lifetime and reduce
+                                                                   Energy-Efficient, Distributed clustering approach (HEED)
+energy consumption.
+                                                                   and Power Efficient Gathering in Sensor Information
+Section I contains the introduction of clustering, data
+                                                                   Systems (PEGASIS). GSTEB can be utilized to decrease
+aggregation and Genetic algorithm. Section II contains the
+                                                                   energy utilization. It builds a routing tree for every round. BS
+brief review on previous work on data aggregation and
+                                                                   distributes a root node and distributes message about position
+genetic algorithm. Section III contains the proposed
+                                                                      responsiveness to every sensor nodes and it routinely
+methodology. Section IV contains the Performance
+                                                                   classifies nodes when any node in tree has small battery
+Evaluation Section using NS2 Simulator. Section V contains
+                                                                   influence. This procedure extend network lifetime. Between
+the Result. Section VI concludes the paper.
+                                                                   these procedures GSTEB presented packet delivery ratio,
+                                                                   high throughput, and having longer battery utilization
+                  II.   RELATED WORK
+                                                                   compared to PEGASIS and HEED. The drawback of GSTEB
+(Maraiya et.al., 2011 [8]) discussed about a WSN is a source       is that the average packet drop is slightly high with value of
+restriction network, in which every sensor nodes have              time. So GSTEB is customized with clustering mechanism to
+incomplete resources. To arrange an accumulate resources           decrease packet dropping.
+and data, energy should be cumulative, and evade quantity of       (S. Ghosh, W. Bengal, 2016 [12]) presented an enhanced
+traffic in the network. The objective of data aggregation is       version of PEGASIS (E-PEGASIS) which conquers the
+that removes unnecessary data communication and improved           disadvantages and is energy efficient. The model
+the life occasion of energy in WSN. Data aggregation               consequences specified that E-PEGASIS expands the WSN
+procedure has to be completed with the assist of effective         duration (lifetime) in evaluation to PEGASIS, Binary
+clustering method connected to clustering for data                 PEGASIS and LBEERA alongside with significant decrease
+aggregation called “Efficient cluster head selection scheme        in packet delay. The outcomes are showed to be statistically
+for data aggregation in wireless sensor network”                   considerable.
+(ECHSSDA), also they evaluated the system to the LEACH             (N. R. Roy and P. Chandra, 2019 [13]) presented an Energy
+clustering algorithm.                                              Efficient Data Aggregation method for Clustered Wireless
+(Babie. S, Ad Khadim, 2012 [9]) discussed a routing                Sensor Network (EEDAC-WSN). It decreases intra-cluster
+protocols in Wireless Sensor Networks (WSN) have been              connections through permitting cluster member nodes to
+considerably examined by researchers. The majority                 transmit tiny scaled control messages pursued by
+reviewed subject have focused on examining the special             comparatively complete messages from nodes chosen by the
+routing methods that have been projected for WSN and               CH node. They proposed work can united with several
+categorizing them based on the network’s and protocol’s            clustering method, they had used it with LEACH for the
+function also a essential problem in the aim of WSN is to          function of simulation. The outcomes attained are
+exploit the lifetimes typically when they contain an               considerable in terms of network constancy phase and
+incomplete and non-replacement energy supply. The authors          duration.
+developed the network duration, calculating of power                   (Kowsalya. R, and B. Rosiline Jeetha, 2019 [14]) stated
+utilization and energy-efficient communication methods by          that “Wireless sensor networks (WSN) consist of massive
+every sensor are essential. The authors proposed a novel           amount of sensor nodes. These little and tiny cost sensor
+technique for the routing problem by using genetic method          nodes are prearranged in observing area of interest.
+for WSNs. Their idea is to exploit the network lifetime by
+progressing proficient routing methods.
+
+
+Retrieval Number: F8443038620/2020©BEIESP
+DOI:10.35940/ijrte.F8443.038620                                       Published By:
+Journal Website: www.ijrte.org                                        Blue Eyes Intelligence Engineering
+                                                               2977   & Sciences Publication
+                                                   International Journal of Recent Technology and Engineering (IJRTE)
+                                                               ISSN: 2277-3878 (Online), Volume-8 Issue-6, March 2020
+
+   Because sensors performed numerous functions such as          A. Network Model Formation
+data gathering and data broadcast cost in energy reduction,        In network model formation procedure is assessed in graph
+these effects the network lifetime. The authors presented a      based neighbor distance method was already presented by
+brief survey on minimizing energy dissipation and exploiting
+                                                                 (Kowsalya. R, and B. Rosiline Jeetha, 2019). In this model,
+a network lifetime is with the essential concerns when
+intending applications and procedures for sensor networks.       the system will described a network with the following
+Clustering has been recognized to be energy-efficient in         assumptions:
+sensor networks because data routing and relaying are only               In network model, sensor nodes are located within a
+functioned by cluster heads. The authors presented a different            simulation area with corresponding radius R.
+distributed clustering algorithms based on Dynamic Hyper
+round policy (DHRP) methods of new Distributed Clustering                This model is defined where every sensor nodes are
+Algorithm, HEF clustering, DERC, LCM, EDIT, I-LEACH                       controlled by CH node.
+and DHRP for large-scale WSNs to optimally establish the                 The networks comprise the intra and inter cluster
+Energy-efficiency and Scheduling”.                                        communication.
+   (Kowsalya. R, and B. Rosiline Jeetha, 2019 [15]) proposed
+                                                                         The packet communication is executed through CH.
+centralized cluster based cluster-head selection is a major
+issue in presented representative clustering process such as             All sensor nodes positions and directions are
+M-LEACH and SEDC, cluster heads are chosen with a                         dynamic but CH is stable.
+optional likelihood in a distributed approach. So, there are     B. Centralized Cluster Head Selection (CCHS)
+huge deviations of the amount of clusters and size for each         The cluster head selection based on Simple
+cluster at each round throughout network lifetime. In order to   Energy-efficient     Data     Collecting      in   centralized
+overcome issues of difficult cluster-head selection and great    clustering-task scheduling in WSN technique was already
+energy consumption in Centralized Clustering-Task                presented by (Kowsalya. R, and B. Rosiline Jeetha, 2019). In
+Scheduling for wireless sensor networks (WSNs) they              this procedure, centralized CH selection technique involves
+presented a Modified Centralized Cluster-Head Selection          pursued by basic of BS. The BS decides the CH on the source
+(MCCHS) algorithm based on Simple Energy-efficient Data          of unstable parameters such as node type, hop count, residual
+Collecting (SEDC) protocol was projected. The authors            energy, and least distance from the BS, etc. In centralized
+presented a MCCHS algorithm in static manner selection           manner, CH is static for the entire network lifetime. In figure.
+algorithm for cluster head selection technique using NS          3 shows the simulation result of CH formation.
+(Network Simulator) 2.34 Framework. This technique leads to
+improved CH strength, reduction in the quantity of clusters in
+the network, and improving the energy efficiency.
+
+          III. PROPOSED METHODOLOGY
+   The proposed method of cluster-based data aggregation
+routing using genetic algorithm (CDARGA) is executed
+through a clustering framework which aims to gathering data
+energy efficiently to enhance network life. The figure 2
+describes the proposed method flow process.
+     NS 2.34                     Network model
+     Simulator                   formation
+                                                                                Fig. 3: Cluster Head Assignment
+                                                                 C. Cluster-Based Based Data Aggregation Algorithm
+                            Centralized Cluster Head
+      Network                                                      Cluster based data aggregation is distinct as the procedure
+                            Selection (CCHS)
+      parameters                                                 of shortening and joining sensor data in order to decrease the
+                                                                 quantity of data or message communication in the sensor
+                                                                 network. With the plan of decreasing power utilization, data
+                          CDARGA                                 aggregation is the inclusive procedure of collecting and
+                             Cluster Fitness function            routing information during a multi-hop network and
+                                                                 developing a data at middle nodes. It efforts to gather the
+                                                                 most significant data from the sensors nodes and make it
+                             Cross over and Mutation
+                                                                 obtainable to the Base Station in an energy efficient method
+                                                                 with minimum data latency and least possible bandwidth.
+                             Energy utilization
+                                                                   The proposed Centralized approach with cluster based data
+                                                                 aggregation method of sensor nodes send data to a suitable
+                                                                 Cluster Head. These data are combined by the central node
+                               Results                           (Cluster header) to decrease the redundancy.
+
+               Fig. 2: Proposed Flow Diagram
+
+ Retrieval Number: F8443038620/2020©BEIESP
+                                                                    Published By:
+ DOI:10.35940/ijrte.F8443.038620
+                                                                    Blue Eyes Intelligence Engineering
+ Journal Website: www.ijrte.org
+                                                             2978   & Sciences Publication
+CDARGA: Cluster-Based Data Aggregation with Genetic Routing Algorithm in Wireless Sensor Networks
+
+   A Cluster Head is chosen in every cluster among different           In normal energy controlled wireless sensor networks is
+sensor nodes or Cluster Members (CMs). The nodes chosen             huge dimension, it is extremely hard for the sensors to
+as a Cluster Heads are dependable for the aggregation method        transmit data directly to the BS. In these conditions the
+of data received from CM and then broadcast the result to the       sensors can broadcast the packets to neighboring aggregator
+Base Station. Lastly base station is acknowledged the data          or cluster and then to BS. So in this network, all sensor nodes
+from cluster heads, in order to decrease the communication          are structured in the form of clusters. At this time cluster
+time here the proposed technique is eliminate the redundant         members (CM) sensors broadcast the packets or messages to
+data from the overall data and then send to the base station.       CH and there by this CH combined all the data received from
+                                                                    CM and then broadcast the concise data to BS. The CH can
+                                                                    correspond with the BS either through stretched range
+                                                                    communications or multi-hoping throughout further CH’s.
+                                                                    Thus this procedure outcomes are saving the energy and
+                                                                    primarily useful for energy-constrained sensors.
+                                                                       In this proposed method, the data routing process in cluster
+                                                                    based centralized hyper round policy is done with genetic
+                                                                    search technique has been proposed to discover an
+                                                                    appropriate pathway for a sensor node to transmit the packets
+                                                                    to the BS. In general, Genetic Algorithm (GA) has been
+                Fig. 4: Data Aggregation                            demonstrated tentatively and empirically to be a strong
+Algorithm 1: Cluster based Data Aggregation                         search method. Particularly, cluster based routing
+                                                                    optimization system plans that every sensor node must
+Initialize: Network Size N, Preferred Node P, Single hop            discover a promising path to transmit the data to the BS. The
+neighbor Np, Action node A, Connected Nodes m, Cluster              main objective of GA is to exploration the inclusive
+                                                                    near-finest resolutions by frequently manipulative the fitness
+Weight WCH, WDCH denotes dynamic threshold of WCH.                  function using examination and utilization techniques. GA is
+Process                                                             stimulated by the bio-inspired procedures of initialization,
+Step 1: Initialize W0; set0;                                      assessment, selection, crossover, mutation, and replacement
+Step 2: do                                                          as depicted in Figure. 5.
+         set  set + Pi;
+         Ne_set  Ne_set + Pi + Npi // Neighbor Set                                          Initialize
+         //Pi preferred single of its actions and denoted as P                               Routing Process
+         //Automatically Pj is actived, set Pi to Pj
+          until ( Ne_    ≠ N && P                         )
+                                                                                         Initialize Search Space
+ Step 3: set  set + Pi; // Updated Initial and Neighbor set
+          Ne_set  Ne_set + Pi + Npi
+ Step 4: if (Ne_     = N) then                                                     Calculate Fitness Function of
+              CH gathered information                                              Candidate Solution
+          Else if (Ne_     < N) then
+          Exploring on set and in order to discover the node                       Choosing highest Fitness value
+that has 2 hop neighbor which are not covered in Ne_set
+          End if
+                                                                                    Perform Crossover
+ Step 5: Repeat process step 2.
+ Step 6: Calculate the average weight of connected CH and
+denote it CH.                                                                       Perform Mutation
+ Step 7: If ( CH < DCH) Then
+         Return the selected actions of the activated                               Candidate highest fitness value
+
+automatically along the CH.
+         Else
+                                                                                                   Results
+         Remove      selected   actions     of   the   activated
+                                                                                                   meeting
+automatically along the CH.                                                                        stopping
+                                                                                                   condition
+         End if
+Step 8: m m+1,CH ⟵[(m-1)          DCH+     CH] / m
+
+Step 9: until (m >= MaxIteration || stopping criteria
+                                                                                     Output
+threshold)
+                                                                           Fig. 5. Genetic Algorithm process flow diagram
+Step 10: end
+D. Cluster-Based Routing using Genetic Algorithm
+
+Retrieval Number: F8443038620/2020©BEIESP
+DOI:10.35940/ijrte.F8443.038620                                         Published By:
+Journal Website: www.ijrte.org                                          Blue Eyes Intelligence Engineering
+                                                                 2979   & Sciences Publication
+                                                        International Journal of Recent Technology and Engineering (IJRTE)
+                                                                    ISSN: 2277-3878 (Online), Volume-8 Issue-6, March 2020
+
+  The proposed CDARGA performs the following steps,                            Select path to Source (origin) to BS
+       Population: Signifies that a route from origin node                    Perform mutation probability
+        to target node
+                                                                               End
+     Child: involves a neighbouring sensor node
+        equivalent to a CM                                            Step 6: Discover the possible path otherwise go to Step 1
+     Chromosome: involves a absolute route from                      Step 7: end
+        origin to BS
+     Gene: Correspond to a neighbouring nodes
+     Chromosome configuration: Be inclined to the                               IV. PERFORMANCE EVALUTION
+        whole promising route from origin node to target                 The performance evaluation illustrates the different
+        node.                                                         constraints and new set up of the proposed algorithm. The
+     Crossover: It is a genetic operator that creates 2              proposed method is performed in NS2.34 framework using
+        novel child chromosomes from 2 parent                         Fedora operating system based PC with 3.20 GHz, Intel Core
+        chromosome.
+                                                                      i5 processor and 8 GB RAM. The parameter surroundings of
+     Mutation: It is to stop diminishing every solution in
+                                                                      the wireless sensor network are as illustrated in Table 1.
+        population into a narrow optimum of resolved issue.
+                                                                                     Table 1: Simulation Parameters
+        This modifies every path of the novel child
+        chromosome with a possibility called alteration rate.         PARAMETER                               VALUE
+Algorithm 2: CDARGA
+Initialize: Number of Sensor nodes; Current residual energy           Number of Sensor Nodes                  2-50 in steps of 10
+
+Eg; Distance Dt; CHcur  0; HR Hyper round;
+                                                                      Simulation Area                         1000  1000 m
+Process
+Step 1: Calculate fitness function using initial energy and
+                                                                      Number of Cluster Head                  8
+distance method by,
+                                                                      Initial Energy                          100 Joules
+
+
+                                                                      Node Energy                             100 Joules
+
+
+                                                                      Number of Packets                       400
+
+
+                                                                        The energy of a node is inspired due to Energy
+Where, Dt is the distance, Eg is the rate of the energy, dsh is the
+                                                                      Transmission (ET), Energy Reception (ER), and Event
+distance of origin sensor node to CH and dchbs is the distance
+                                                                      Sensing (ES). Thus common Energy Utilization (EU) of a
+of CH to BS, ESN is the energy of every sensor node and ETE is        network is expressed as follows,
+the whole remaining energy of all sensor nodes within the
+cluster, CSP Clustering-task Scheduling Packer .
+Step 2: Apply the routing process of the network to generate            Here [ET+ ER+ ES] represents energy utilization of ‘jth’ node
+the primary gene population                                           (Ni) in the network with ‘n’ number of nodes.
+Step 3: In every iteration calculate the fitness value. The
+                                                                                                V. RESULT
+amount the paths or links in rising categorize based on the
+                                                                      The Figure.6 shows that the proposed CDARGA algorithm
+rate of fitness function.                                             along with hyper round policy performs low energy
+Step 4: If F ≤ 0.8 then                                               consumption when compared with existing Ring partitioned
+                                                                      based MAC (RP-MAC) protocol (Movva Pavani and
+            Stop                                                      Polipalli Trinatha Rao, 2019) methods. The X axis represents
+          Else                                                        number of nodes and Y axis represents the energy
+                                                                      consumption.
+          Utilize Lower amount links to create novel
+neighboring CM nodes
+          End
+Step 5: For 1: M times Do
+          Choose CH
+
+ Retrieval Number: F8443038620/2020©BEIESP
+                                                                         Published By:
+ DOI:10.35940/ijrte.F8443.038620
+                                                                         Blue Eyes Intelligence Engineering
+ Journal Website: www.ijrte.org
+                                                                  2980   & Sciences Publication
+CDARGA: Cluster-Based Data Aggregation with Genetic Routing Algorithm in Wireless Sensor Networks
+
+                                                              pathway to achieve at the Base Station as well as internal
+                                                              clustering of cluster members. The cluster overhead reduction
+                                                              was achieved by the data aggregation which could prolong the
+                                                              energy of the sensor. The simulation model results confirm
+                                                              that the proposed CDARGA algorithm executes better than
+                                                              RP-MAC protocol and continues as longer network lifetime.
+
+                                                              REFERENCES
+                                                              1.     Akyildiz IF, W. Su, Y. Sankarasubramaniam, Cayirci E. “Wireless
+                                                                     sensor networks: A survey”, Computer Networks, vol. 38, no. 4, pp.
+                                                                     393–422, March 2002.
+                                                              2.     Vijay Erramilli, Ibrahim Matta and AzerBestavros, “On the Interaction
+                                                                     between Data Aggregation and Topology Control in Wireless Sensor
+                                                                     Networks”, NSF grants ANI-0095988, 2004.
+                                                              3.     Heinzelman, W., Chandrakasan, A. and Balakrishnan, H, “An
+                                                                     Energy-Efficient Communication Protocol for Wireless Microsensor
+                                                                     Networks”. Proceedings of the 33rd Hawaii International Conference
+                                                                     on System Sciences. IEEE, 2000.
+                                                              4.     Atail. Bari, ShamsulWazed, Arunita Jackle, Subir Bandyopadhyay, “A
+                                                                     Genetic Algorithm based approach for energy efficient routing in two
+                 Fig. 6: Energy consumption.                         tired Sensor Networks”, Ad hoc Networks, Vol. 17., 2009, 665-676.
+                                                              5.     Navrati Saxsena, Abhisek Roy, Jitai Shen, “A QoS based Energy
+The throughput of the network is given in the figure 7. It           Efficient Sensor Routing Protocol”, Wireless Communication and
+                                                                     Mobile Computing Journal, 2009, Vol. 9,No.3, 417-426.
+shows that the proposed CDARGA algorithm performance is       6.       Y. Pan, X. Liu, “Energy Efficient lifetime maximization and sleeping
+High than the existing RP-MAC (Movva Pavani and Polipalli            schedule data fusion and QoS Multi SensorNet”, Signal Processing,
+Trinatha Rao, 2019) method.                                          2007, Vol. 87 (12), 2949-2964.
+                                                              7.      Q.Qiu, et. al, “Lifetime aware and Resource Management for sensor
+The graph represents the performance of network, the Y axis          Network using distributed Genetic Algorithm”, ACM Press, New
+contains the average throughput and the X axis contains the          York, 2006, 191-196.
+number of nodes in network experimentations.                  8.      Maraiya K, Kant K, Gupta N., “Efficient Cluster Head Selection
+                                                                     Scheme for Data Aggregation in Wireless Sensor Network”,
+                                                                     International Journal of Computer Applications, vol. 23, no. 9, June
+                                                                     2011.
+                                                              9.      Babie. S, Ad Khadim, “A new method for improving lifetime in WSN
+                                                                     by using Genetic Algorithm”, Advances in Intelligent and Soft
+                                                                     Computing, Vol. 30, No. 8, 2012, pp. 177-184.
+                                                              10.      S. Mottaghi and M. R. Zahabi, “Optimizing leach clustering
+                                                                     algorithm with mobile sink and rendezvous nodes”, AEU International
+                                                                     Journal of Electronics and Communications, vol. 69, no. 2, pp.
+                                                                     507–514, 2015.
+                                                              11.      S.Shivkumar,      A.    Kavitha,     J.   Swaminathan,     and    R.
+                                                                     Navaneethakrishnan, “General self-organizing tree-based energy
+                                                                     balance routing protocol with clustering for wireless sensor network,”
+                                                                     Asian Journal of Information Technology, vol. 15, no. 24, pp.
+                                                                     5067–5074, 2016.
+                                                              12.      S.Ghosh, W. Bengal, Enhanced PEGASIS using Ant Colony
+                                                                     Optimization for data gathering in WSN, in: 2016 International
+                                                                     Conference on Information Communication and Embedded Systems
+                                                                     (ICICES), 2016, pp. 1–6.
+                                                              13.      N. R. Roy and P. Chandra, “Analysis of data aggregation techniques
+                                                                     in wsn,” in International Conference on Innovative Computing and
+                                                                     Communication, ICICC-2019, Springer, 2019.
+                                                              14.      Movva Pavani and Polipalli Trinatha Rao, “Novel Two-Fold Data
+                                                                     Aggregation and MAC Scheduling to Support Energy Efficient
+                                                                     Routing in Wireless Sensor Network”, IEEE Access, VOLUME 7,
+                                                                     2019.
+                                                              15.      Kowsalya. R, and B. Rosiline Jeetha, “A Survey on Distributed
+                                                                     Clustering Techniques for Wireless Sensor Networks”, International
+                                                                     Journal of Computer Sciences and Engineering, Vol.-7, Issue-3, March
+                                                                     2019.
+                                                              16.      Kowsalya. R, and B. Rosiline Jeetha, “CCHS: An Improved
+                Fig. 7: Analysis on Throughput                       Centralized Cluster Head Selection in Wireless Sensor Networks”,
+                                                                     Jourual of Advanced Research in Dynamical & Control Systems, Vol.
+                                                                     11, 06-Special Issue, 2019.
+                    VI. CONCLUSION
+  In the proposed paper analyzed the Cluster-Based Data
+Aggregation Routing with Genetic Algorithm (CDARGA)
+with Energy Consumption in a hyper round concept. The
+Genetic Algorithm is a heuristic routing algorithm resolves
+several optimization issues in transferring the data. With
+choosing an appropriate fitness function, CH is selected in
+every round. Every CH transmits a packet to the nearest
+Cluster Head in a sequence method to calculate a proper
+
+Retrieval Number: F8443038620/2020©BEIESP
+DOI:10.35940/ijrte.F8443.038620                                     Published By:
+Journal Website: www.ijrte.org                                      Blue Eyes Intelligence Engineering
+                                                          2981      & Sciences Publication
+                                                                  International Journal of Recent Technology and Engineering (IJRTE)
+                                                                              ISSN: 2277-3878 (Online), Volume-8 Issue-6, March 2020
+
+                        AUTHORS PROFILE
+
+                           Ms. R. Kowsalya, MCA, M.Phil. She is
+                           currently working as a Assistant Professor in
+                           PSGR Krishnsmmal College for Women,
+                           Coimbatore affliated to Bharathiar University,
+                           Coimbatore and pursuing her P.hd (Part Time)
+                           from Dr N.G.P Arts and Science College ,which is
+                           affiliated     to    Bharathiar      University,
+                          Coimbatore.She has 11 years of collegiate
+teaching. Her research interest includes the Computer Networks, Network
+Security and Internet Of Things. She has 11 years of collegiate teaching
+experience.
+
+
+                          Dr. B. Rosiline Jeetha Dr. B. Rosiline Jeetha
+                          graduated B. Sc. (Comp. Sci.), MCA and M. Phil.,
+                          and Ph. D. from Bharathiar University, Coimbatore.
+                          At present she is working as Professor in the PG and
+                          Research Department of Computer Science at Dr.
+                          N.G.P. Arts and Science College, Coimbatore. Her
+                          research interest lies in the area of Data Mining and
+                         Networks. She has 16 years of collegiate teaching
+and 14 years of research experience.
+
+
+
+
+   Retrieval Number: F8443038620/2020©BEIESP
+                                                                                     Published By:
+   DOI:10.35940/ijrte.F8443.038620
+                                                                                     Blue Eyes Intelligence Engineering
+   Journal Website: www.ijrte.org
+                                                                              2982   & Sciences Publication
+

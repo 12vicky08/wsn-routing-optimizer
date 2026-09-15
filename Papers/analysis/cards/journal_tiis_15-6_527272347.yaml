@@ -1,0 +1,71 @@
+source_file: journal_tiis_15-6_527272347.pdf
+title: "Mobile Sink Path Planning in Heterogeneous IoT Sensors: a Salp Swarm Algorithm Scheme"
+authors: "Ranida Hamidouche; Zibouda Aliouat; Ado Adamou Abba Ari; Abdelhak Gueroui"
+venue_year: "KSII Transactions on Internet and Information Systems (TIIS), 2021"
+problem: >
+  Mobile sink data collection in heterogeneous WSNs/IoT suffers from high data delivery
+  latency and packet drops due to limited sensor node buffer/storage capacity, leading to
+  buffer overflow and network congestion; finding an optimal mobile sink trajectory that
+  minimizes data gathering latency and buffer overflow while improving energy efficiency
+  is difficult.
+approach: >
+  Mobile Sink based on Modified Salp Swarm Algorithm (MSSA): a modified version of the
+  Salp Swarm Algorithm (SSA) that introduces a new parameter alpha (in [0.5, 1.5]) to the
+  leader salp's position-update equation to adapt convergence speed and balance
+  exploration/exploitation. The single mobile sink acts as the salp leader and moves toward
+  the cluster head (CH) with the largest number of members (smallest remaining buffer
+  space), using a fitness function based on "DegreeCH" (number of cluster members) to
+  reduce buffer overflow and delivery latency. Clustering is performed using a Grey Wolf
+  Optimizer (GWO) from prior work [16].
+sink_mobility: controlled/optimized-trajectory
+routing_clustering_scheme: "Grey Wolf Optimizer (GWO)-based clustering (from prior work [16]); mobile sink visits CHs directly (no multi-hop routing)"
+simulator: "NS2 (version unknown)"
+node_count: 100
+area: "100 x 100 m^2"
+energy_model: >
+  Radio energy model with parameters: Initial Energy of node = 2J or 4J; Transmitter/Receiver
+  Electronics (Eelec) = 50nJ/bit; Transmitter amplifier free space (epsilon_fs) = 100pJ/bit/m^2;
+  Transmitter amplifier multipath (epsilon_mp) = 0.013pJ/bit/m^4; Data Aggregation Energy
+  cost (EDA) = 50nJ/bit; Packet Size = 8000 bits
+metrics_reported:
+  - "Number of data packets delivered to sink (throughput)"
+  - "Network lifespan / lifetime (s)"
+  - "First Node Dead (FND) (s)"
+  - "Middle Node Dead (MND) (s)"
+  - "Last Node Dead (LND) (s)"
+  - "Number of alive nodes over time"
+  - "Distance between sink and CHs (m, implied)"
+  - "Energy consumed by nodes"
+key_numeric_results:
+  - "Sink data collection period tested at 20s, 30s, 40s; 20s gives best (least) packet loss and energy consumption / longest lifespan"
+  - "Number of iterations tested at 20, 50, 100; more iterations increase MSSA complexity and decrease packet count and network lifespan"
+  - "With alpha=1.1 (red curve), first node died at t=80s; with alpha=0.6, first node death delayed to t=140s"
+  - "With alpha=0.9 (yellow curve), half of nodes dead at t=1000s; with alpha=0.6, half dead at t=1800s"
+  - "With alpha=1.3 (green curve), last node died at t=2450s; with alpha=0.6, network operational until t=2850s"
+  - "Best network lifetime obtained when alpha = 0.5, 0.6, or 1.1"
+  - "Best packet delivery rate obtained when alpha = 1.1"
+  - "Sink is closer to 3/5 of CHs using MSSA (alpha=0.6) vs only 2/5 of CHs closer using alpha=1.1"
+  - "3/5 of CHs closer to sink using MSSA vs only 2/5 of CHs closer using SMBFOA"
+  - "Only 1 CH farther from sink using MSSA vs 4/5 CHs farthest using original SSA"
+  - "Network lifetime increased by ~600s using MSSA vs SMBFOA/SSA comparators"
+  - "Using alpha=0.6 vs alpha=1.1, network lifetime increased by 100s"
+  - "MSSA received 1/3 more packets than SMBFOA and SSA comparators"
+  - "Using alpha=1.1 vs alpha=0.6, amount of data received by sink increases by 1/5"
+  - "Time complexity of MSSA algorithm proven to be O(n), where n is number of iterations"
+stated_limitations: >
+  For future work, the proposed approach can be compared with other optimization
+  algorithms (i.e., authors acknowledge comparison was limited to SSA and SMBFOA only).
+  The current design uses only a single mobile sink (salp leader); the paper notes that if
+  multiple data collectors were used, integration of follower salps would be mandatory,
+  implying the present scheme does not address multi-sink scenarios.
+citation_fields:
+  bibkey: hamidouche2021mssa
+  authors_bibtex: "Hamidouche, Ranida and Aliouat, Zibouda and Abba Ari, Ado Adamou and Gueroui, Abdelhak"
+  title: "Mobile Sink Path Planning in Heterogeneous IoT Sensors: a Salp Swarm Algorithm Scheme"
+  year: 2021
+  journal_or_booktitle: "KSII Transactions on Internet and Information Systems"
+  volume: "15"
+  number: "6"
+  pages: "2225-2239"
+  doi: "10.3837/tiis.2021.06.016"
+  publisher: unknown

@@ -1,0 +1,459 @@
+                                          Journal of Telecommunication, Electronic and Computer Engineering
+                                          ISSN: 2180 – 1843 e-ISSN: 2289-8131 Vol. 17 No. 3 (2025) 1-6
+                                          jtec.utem.edu.my
+                                          DOI: https://doi.org/10.54554/jtec.2025.17.03.001
+
+
+
+
+                      A Hybrid Genetic Algorithm and Tabu Search for
+                        Construction Site Layout Planning Problem
+                                                        Trieu Xuan Hoa1, Tranh Thanh Thuong2*
+                                              1Thai Nguyen University of Agriculture and Forestry, Vietnam
+                                                     2International School, Thai Nguyen University, Vietnam
+
+
+
+ Article Info                               Abstract
+ Article history:                           The construction site layout is widely acknowledged as a complex challenge in the field of
+ Received Dec 18th, 2024                    construction management. However, it is crucial for nearly all construction projects, as the layout
+ Revised June 23rd, 2025                    of site facilities can significantly impact on the project costs. This issue can be formulated as a
+ Accepted Sep 24th, 2025                    Quadratic Assignment Problem, which is widely recognized to be NP-hard problem. While
+ Published Sep 30th, 2025                   numerous methods have been proposed, most existing approaches either lack sufficient global
+                                            search capabilities or struggle to escape local optima, leading to suboptimal solutions. To address
+ Index Terms:                               these limitations, this study proposes a hybrid GA-Tabu algorithm that integrates the exploration
+ CSLP problem                               strength of Genetic Algorithms with the exploitation efficiency of Tabu Search. This integration aims
+ GA                                         to achieve a better balance between global and local search processes, thereby enhancing the
+ Tabu Search                                overall solution quality for the CSLP problem. The proposed algorithm has been subsequently
+ GA-Tabu                                    tested with three case studies previously utilized in related research, effectively demonstrating its
+                                            performance and applicability.
+                                                                                         This is an open access article under the CC BY-NC-ND 4.0 license.
+
+
+
+ *Corresponding Author: tranthanhthuong@tnu.edu.vn
+
+
+                                                                                  [5]. CSLP can be formulated as a Quadratic Assignment
+                     I.       INTRODUCTION                                        Problem (QAP) when the cost of interactions between
+                                                                                  different facilities is considered to be directly proportional to
+The problem of site layout planning is considered as one of                       both the distance traveled and the volume of flow between
+the most complex and challenging issues in the field of                           facilities, as described by Tate and Smith [6], [7]. QAPs are
+construction management. Construction site layout planning                        classified as NP-hard due to their computational intensity,
+(CSLP) involves the optimal allocation of a given set of n                        making it impractical to obtain exact solutions for realistic
+predefined facilities to a set of m predetermined vacant                          layout sizes [5]. The combinatorial nature of the problem
+locations, where 𝑚𝑚 ≥ 𝑛𝑛 [1]. This optimization process aims to                   leads to factorial growth in potential configurations, where n
+enhance spatial efficiency, minimize operational conflicts,                       facilities yield n! possible arrangements, which increases at
+and improve overall site functionality.                                           a rate exceeding eⁿ. This exponential growth leads to an
+   Lam et al. emphasized that the optimizing material                             immense number of potential solutions, even for relatively
+handling costs by 20-60% depends on the adoption of a                             small values of n, posing significant computational
+suitable facility layout [2]. Consequently, meticulous                            challenges [8]. An example is illustrated below.
+construction site layout planning is a critical factor in the
+success of construction projects [3]. A well-designed                                                                Table 1
+construction site layout not only enhances operational                                             Facilities’ number and possible alternatives
+efficiency and effectiveness but must also navigate various
+                                                                                          # Facilities (n)          # Feasible Configurations (n!)
+constraints, including spatial limitations, neighboring                                          9                             362,880
+structures, site access, and specific positioning alignment                                     10                             3,628,800
+requirements of the forthcoming edifice [2]. Due to the                                         11                            39,916,800
+complexity of layout planning, construction managers                                            12                            479,001,600
+frequently rely on past experiences, heuristic guidelines, or a                                 15                         1,307,674,368,000
+first-come-first-serve approach: methods that frequently lead
+to inefficiencies [1], [4].                                                          As shown above, the number of feasible configurations
+   The primary objective of CSLP is to strategically position                     increases significantly. Specifically, with just 15 facilities,
+temporary facilities such as job offices, labor residences,                       the number of feasible configurations reaches the order of
+warehouses and batch plants [1] in a way that fulfills design                     10^13. Notably, a project involving 15 facilities (n = 15) is
+requirements while optimizing layout preferences, such as                         still considered relatively small in scale [9].
+minimizing the total interaction cost between these facilities                       Solving CSLP remains challenging due to its combinatorial
+
+
+                                                                                                                                                             1
+Journal of Telecommunication, Electronic and Computer Engineering Vol. 17 No. 3 (2025)
+
+
+complexity, spatial and operational constraints, and the need              spatial constraints and cost efficiency using Pareto-based
+for real-time responsiveness in dynamic site conditions.                   optimization. Moreover, Monteiro et al. proposed a hybrid
+Balancing solution quality with computational feasibility is a             framework for multi-objective CSLP, which improved spatial
+key concern addressed in this study.                                       efficiency and productivity [20]. These developments
+  Several methods have been proposed to solve CSLP                         highlight the growing relevance of hybrid models like GA-
+problem; however, many struggle with premature                             Tabu in solving complex layout optimization problems.
+convergence or inadequate exploration of the solution space.                  Despite these advancements, most prior studies rely on
+Techniques such as Ant Colony Optimization (ACO) and                       standalone metaheuristics, which either lack diversity in the
+Particle Swarm Optimization (PSO) show promise but are                     population or face challenges with local refinement. To our
+often sensitive to initial parameters. To overcome these                   knowledge, few studies have combined GA with Tabu Search
+limitations, this study proposes a hybrid GA-Tabu algorithm                for CSLP. Our proposed hybrid method uniquely combines
+that combines the global search capabilities of Genetic                    global and local search capabilities, aiming to reduce the risk
+Algorithms with the local refinement and cycle avoidance                   of premature convergence while maintaining solution
+features of Tabu Search.                                                   diversity.
+  This research seek to answer the following questions: (1)
+Can the proposed GA-Tabu hybrid algorithm improve layout                                          III.         METHODOLOGY
+optimization compared to existing state-of-the-art methods?
+(2) How does GA-Tabu perform across varying CSLP                                         Problem Formulation
+scenarios with different spatial and constraint configurations?
+(3) What are the practical implications of applying GA-Tabu
+to real-world construction planning?
+  To address these questions, the proposed algorithm was
+tested on three representative case studies. Results
+demonstrated its effectiveness, with performance comparable
+to or better than benchmark methods such as lopt-aiNet.
+These findings highlight GA-Tabu's potential as a practical
+and efficient tool for optimizing construction site layouts.
+
+               II.      LITERATURE REVIEW
+
+  Several approaches have been developed to address the site
+layout planning problem, among which approximate
+algorithms are the most widely used methods.
+  Ant Colony Optimization (ACO) algorithms have been
+utilized to address site layout issues in construction projects
+[10], [11]. This approach has been enhanced by incorporating
+a Genetic Algorithm that integrates the Max-Min Ant System
+into the initialization phase of the GA [12]. Calis and Yuksel                           Figure 1. Location representation of the construction site
+also employed ACO for the layout planning of temporary
+construction facilities [13]. In a subsequent development,                    This study adopts a formulation for the CSLP problem that
+they introduced a meta-heuristic algorithm named ACO-PA,                   aims to minimize transportation costs between facilities. The
+which combines ACO with Parametric Analysis [14].                          formulation follows the approach described in [17] as below:
+  Particle Swarm Optimization (PSO) is another popular                       Assuming the number of predefined facilities and available
+method for addressing the CSLP problem. Zhang et al.                       locations is equal to 𝑛𝑛, if the number of locations exceeds the
+introduced a PSO-based approach to tackle this issue [15].                 number of facilities, additional "dummy" facilities with zero
+Lien and Cheng presented the particle-bee algorithm (PBA),                 distance and frequency can be introduced to maintain
+which integrates the advantageous behaviors of honey bee                   numerical consistency. Facilities are interconnected to reflect
+and bird swarms to enhance search capabilities.                            realistic movement patterns—for example, frequent travel
+   Adrian introduced a method that employs three                           typically occurs between the site office and the concrete batch
+metaheuristics: Genetic Algorithm, Ant Colony and Particle                 workshop, while trips from the site office to the storeroom are
+Swarm Optimizations, to address the CLS problem, aiming to                 less common. Therefore, facility locations are strategically
+minimize total construction and interaction costs arising from             selected to minimize transportation costs, which constitutes
+layout constraints [16]. Initially, the author intended to                 the primary objective of this problem. The total transportation
+develop a hybrid local search-based aiNet algorithm, but later             distance is formulated in Equations (1) and (2).
+found that Vu had already developed a similar approach
+named lopt-aiNet [17], which demonstrated efficiency
+compared to previous methods.                                                            Min F = ∑𝑛𝑛𝑖𝑖=1 ∑𝑛𝑛𝑥𝑥=1 ∑𝑛𝑛𝑗𝑗=1 𝛿𝛿𝑥𝑥𝑥𝑥 𝑓𝑓𝑥𝑥𝑥𝑥 𝑑𝑑𝑖𝑖𝑖𝑖         (1)
+   Recent advancements in metaheuristics have led to the
+development of hybrid algorithms that combine classical
+                                                                              Subject to
+search strategies with learning components. For instance,
+Wang [18] used deep-learning-enhanced genetic algorithms
+for complex scheduling tasks, while Xu and Li [19] applied                                    ∑𝑛𝑛𝑖𝑖=1 𝛿𝛿𝑥𝑥𝑥𝑥 = 1, {i=1, 2, ., n}                      (2)
+an improved NSGA-II to address multi-objective
+construction site layout planning, effectively balancing
+
+
+2
+                                                           Journal of Telecommunication, Electronic and Computer Engineering Vol. 17 No. 3 (2025)
+
+
+   Where 𝑛𝑛 is the number of facilities; 𝛿𝛿𝛿𝛿𝛿𝛿 is the permutation                    Mutation;
+matrix variable. Coefficient 𝑓𝑓𝑓𝑓𝑓𝑓 is the frequency of trips made                  Evaluate P(t);
+by construction personnel between facilities 𝑥𝑥 and 𝑖𝑖. From the                  Until a stopping criteria has been met;
+definition, it can be observed that 𝑓𝑓𝑓𝑓𝑓𝑓 equals to 𝑓𝑓𝑓𝑓𝑓𝑓. Frequency            End.
+is defined as the number of trips within a given time period,
+specifically defined in this study as the number of trips per               In each cycle, GA begins with a randomly generated
+day. Coefficient 𝑑𝑑𝑑𝑑𝑑𝑑 is the distance between locations 𝑖𝑖 and 𝑗𝑗.     population and produces the next generation using three basic
+Therefore, the objective function, F, represents the total               operators :
+travel distance covered by construction personnel [14].                     Selection: Poor-performing individuals from the
+Figure 1 presents a representative example with n=11.                    population are removed. The population is sorted in
+   One challenge in the dataset is the assumption of fixed and           descending order based on fitness score, and the good n
+symmetric flow and distance values, which may not fully                  individuals are retained.
+capture dynamic or asymmetric real-world conditions.                        Crossover: Selected individuals are represented as binary
+Additionally, variations in facility size must be carefully              strings. A crossover point is randomly selected, and two new
+encoding as constraints to avoid infeasible assignments.                 offspring are formed by exchanging segments of the parents’
+                                                                         genetic material at the crossover.
+           Genetic Algorithm                                                - Mutation: A newly formed individual may undergo
+    Genetic algorithms (GAs) are modeling techniques based               mutation at a randomly selected bit, changing a 0 to 1 or vice
+on biological behavior. This approach mimics natural                     versa, with a small probability.
+selection and genetic inheritance [21]. In nature, individuals              The evolutionary approach is repeated until a satisfactory
+that are healthy and well-adapted to their environment are               solution is found. It enables efficient exploration of the
+more likely to reproduce and pass on their traits to the next            solution space while maintaining diversity within the
+generation. Each individual has a unique genetic structure               population.
+that determines its characteristics. During reproduction,
+offspring may inherit traits from both parents, and occasional                     Tabu search
+mutations may introduce new genes not present in either                    Tabu search, created and formalized by Fred W. Glover
+parent.                                                                  [23], [24], [25] is a metaheuristic optimization approach that
+    GA operates on a population of individuals, where each               incorporates local search techniques for solving mathematical
+population represents a generation. From the initially                   problem. Starting from an initial solution, TABU Search
+generated generation, GA applies natural selection and                   repeatedly explores the solution space to gradually improve
+genetic processes to evolve the population. The main                     the best available solution (referred to as a record).
+processes involved in designing and implementing GA                        At each iteration, the algorithm traverses the neighborhood
+include selection, crossover and mutation operations [22] as             (or the entire neighborhood) of the current solution to choose
+described below:                                                         the best neighboring solution, which replaces the current
+    Selection                                                            solution in the next iteration. Each neighboring solution is
+    Good individuals are selected for the next generation based          generated by applying a modification known as a move. The
+on their adaptability to the environment. The adaptability of            set of all such solutions is called the neighborhood of the
+each individual is measured using a fitness function.                    current solution.
+    Crossover                                                              The general Tabu Search procedure is as follows:
+    This process simulates genetic recombination. A father and
+                                                                               Procedure TABUSEARCH;
+mother exchange segments of their genetic code to produce
+                                                                               Begin
+two new offspring. Crossover is applied with a probability of
+                                                                                 Create the initial solution;
+𝑝𝑝𝑐𝑐. This probability determines the number of individuals                      Tabulist = ∅;
+selected for this operation, calculated as 𝑝𝑝𝑐𝑐.𝑛𝑛 , where 𝑛𝑛 is the             While (A stopping criteria hasn't been met) do
+population size.                                                                   begin
+    Mutation                                                                         M = ∅;
+    This introduces variation by randomly altering one or more                       For each s' ∈ Nₛ
+genes in an individual’s chromosome. After the crossover                                 begin
+step, mutation is applied with a low probability of 𝑝𝑝𝑚𝑚 to                                  p = move(s, s'); // Create set neighborhood
+prevent premature convergence and maintain diversity.                                        solutions of M
+    After these steps, a new generation is formed. These                                     if (p ∉ Tabulist and p meets the requirement)
+operations are repeated until the termination condition is                                      M = M ∪ p;
+satisfied. The general structure of the GA algorithm is as                               end;
+follows:                                                                             Select the best p in M;
+        Procedure Genetic_Algorithm;                                                 Create s' from p of s;
+        Begin                                                                        s = s';
+          t ← 0;                                                                     if (s' is better than sbest) sbest = s';
+          Initialize the first-generation P(t);                                      Update Tabulist;
+          Evaluate P(t) (using fitness function)                                     Diversify the solution;
+        Repeat                                                                       Strengthen the solution;
+          t ← t + 1;                                                               end;
+          Create new generation P(t) from P(t−1) by:                             Return sbest;
+             Selection;                                                        End;
+             Crossover;
+
+
+
+                                                                                                                                               3
+Journal of Telecommunication, Electronic and Computer Engineering Vol. 17 No. 3 (2025)
+
+
+           GA-Tabu - A Hybrid Algorihm of GA and Tabu                            Repeat
+Search                                                                              t ← t + 1;
+   To improve the efficiency of GA, Tabu Search is                                  Create new generation P(t) from P(t−1) by:
+incorporated to efficiently identify local optima. This hybrid                        Selection: Select n₁ best individuals in P(t−1);
+approach, referred to as GA-Tabu (GATA), leverages the                                Crossover(n₁): The father and mother exchange genes
+exploration ability of GA and the exploitation strength of                       to create two off-spring;
+Tabu Search, ultimately enhancing the convergence speed                               Mutation(n₁): The mutation rate is inversely
+and solution quality for the CSLP problem.                                       proportional to the adaptability, selecting a number of high
+                                                                                 adaptability individuals to put into a memory set;
+   In this study, a chromosome represents a complete layout
+                                                                                      TabuSearch(n₁);
+of facilities on a construction site. Each gene in the
+                                                                                      Insert randomly individuals into P(t);
+chromosome corresponds to a specific facility, and its value                        Evaluate P(t);
+indicates the assigned location. For a problem with n facilities                 Until a stopping criteria has been met;
+and n available locations, the chromosome is encoded as a                        End;
+permutation of n integers. This encoding ensures that each                    Where the Tabu Search is implemented as follows:
+facility is assigned a unique position, maintaining feasibility.                Procedure TabuSearch(M);
+    Parent chromosomes are selected using roulette wheel                        Begin
+selection based on their fitness values. This probabilistic                       Repeat
+method favors individuals with better fitness while                                  1) Create set neighborhood solutions of M;
+maintaining diversity in the population. The crossover                               2) Determine objective function for                each
+operation utilizes the Partially Mapped Crossover (PMX)                         neighborhood;
+technique, suitable for permutation-based representations.                           3) Choose best neighborhood;
+PMX ensures that offspring are also valid permutations (i.e.,                        4) Update Tabu list;
+no duplicate or missing locations). The crossover probability                     Until A stopping criteria has been met;
+(pₙ) is set to 0.8, meaning 80% of the selected pairs undergo                   end;
+crossover to produce new offspring. The mutation operator
+employs swap mutation, in which two random positions in the                   In the experimental setup, the hybrid GA-Tabu algorithm
+chromosome are swapped to introduce variability and prevent                was configured with a population size of 100 individuals
+premature convergence. The mutation probability (pₘ) is set                evolved over 20 generations, resulting in a total of 2,000
+to 0.1.                                                                    candidate solutions evaluated. The crossover and mutation
+   The objective is to minimize the total cost of the                      probabilities were set to 0.8 and 0.1, respectively, following
+construction site layout, which consists of the material                   common practices in genetic algorithm design. For the Tabu
+handling cost and travel cost between facilities. The objective            Search component, a neighborhood size of 10 was used per
+function is defined as follows:                                            iteration, with a tabu list size of 7 to prevent cycling. The
+                                                                           algorithm terminated after reaching 2,000 iterations or when
+           Minimize 𝑍𝑍 = ∑𝑛𝑛𝑖𝑖=1 ∑𝑛𝑛𝑗𝑗=1 𝑓𝑓𝑖𝑖𝑖𝑖 𝑑𝑑𝑖𝑖𝑖𝑖            (3)      no further improvement was observed.
+
+                                                                                         IV.   RESULTS AND DISCUSSION
+Where:
+          𝑓𝑓𝑖𝑖𝑖𝑖 = the flow of materials or interactions between              A computer with a Core i5 2.7 Ghz CPU and 8GB RAM
+          facilities i and j                                               was used for testing. Three case studies from the literature
+          𝑑𝑑𝑖𝑖𝑖𝑖 = the distance between the locations assigned to          were selected to evaluate the hybrid algorithm. These case
+                                                                           studies were chosen because they address the same CSLP
+          facilities i and j
+                                                                           problem, making them suitable benchmarks for comparison.
+                                                                           The dataset used in each case study comprised 11 facilities
+   To improve solution quality and avoid premature
+                                                                           and 11 locations. The interaction frequency matrix and
+convergence, Tabu Search is applied as a local search
+                                                                           distance matrix are both symmetric 11×11 matrices. Case
+enhancement within the GA process. After each generation is
+                                                                           Studies 2 and 3 reuse the base dataset of Case Study 1, with
+produced through selection, crossover, and mutation, a small
+                                                                           additional spatial or assignment constraints to simulate
+number of top-performing individuals (elites) are selected for
+                                                                           different practical limitations.
+refinement. Each elite solution undergoes Tabu Search for a
+                                                                              Case 1 assumes that any predefined location is available to
+fixed number of iterations, exploring neighboring solutions
+                                                                           accommodate any facility [10]. Tables 2 and 3 provide details
+by swapping facility positions. Moves recently performed are
+                                                                           on the facilities assigned within the site boundaries. The site
+stored in a tabu list to prevent cycling, unless they meet
+                                                                           layout does not include alternative routes between locations,
+aspiration criteria. If a better solution is found during this
+                                                                           and distances are measured in meters. Additionally, Table 3
+search, it replaces the original in the population. This hybrid
+                                                                           outlines the daily trip frequencies between facilities. As
+approach allows GA to perform global exploration while
+                                                                           shown in the table, the trip frequency between any two
+Tabu Search intensifies the search locally, achieving better
+                                                                           facilities is identical in both directions, resulting in a
+balance and faster convergence. The proposed GATA
+                                                                           symmetric matrix. For instance, Table 3 shows that the daily
+solution is described as below:
+                                                                           trips between the Labor Residence and the Carpentry
+                                                                           Workshop are 4. Case Studies 2 and 3 were created based on
+      Procedure GA_Tabu
+      Begin                                                                Case Study 1.
+        t ← 0;                                                                Case 2 assumes that the Side gate is designated to location
+        Initialize the first generation P(t) with n individuals;           1 and the main gate is designated to location 10 [26]. This
+        Evaluate P(t) (using fitness function);                            setup reflects a practical approach commonly used in
+
+
+4
+                                                                Journal of Telecommunication, Electronic and Computer Engineering Vol. 17 No. 3 (2025)
+
+
+construction projects, where gate locations are determined                      SG      1       8       4        1    1     8    7       0      9      4       8
+                                                                                UR      2       2       5        8    3     4    6       9      0      5       3
+before the start of construction. Since gates play a crucial role
+                                                                                BW      9       3       6        5    3     7    3       4      5      0       5
+in site access and transportation, their placement must be                      W       1       8       5        1    6     5    2       8      3      5       0
+fixed at predefined locations.
+   Case 3 assumes that Site Office, Labor Residence Concrete                                                         Table 3
+Batch Shop cannot be assigned to the comparatively smaller                                          The distances between available locations
+locations 7 and 8 [27]. This scenario highlights a constraint
+where larger facilities cannot be placed in every available                             1       2       3        4    5     6    7       8      9      10     11
+location due to size limitations. To address this, an unequal                    1      0      15       25       33   40   42    47      5      35     30     20
+area constraint is applied to prevent the allocation of larger                   2      15      0       10       18   25   27    32     42      50     45     35
+facilities to undersized locations.                                              3      25     10       0        8    15   17    22     32      52     55     45
+   The three case studies represent diverse real-world
+                                                                                 4      33     18       8        0    7    9     14     24      44     49     53
+scenarios: unconstrained allocation (Case 1), fixed gate
+                                                                                 5      40     25       15       7    0    2     7      17      37     42     52
+constraints (Case 2), and size-restricted placement (Case 3).                    6      42     27       17       9    2    0     5      15      35     40     50
+The GA-Tabu algorithm maintained high performance across                         7      47     32       22       14   7    5     0      10      30     35     40
+all scenarios, demonstrating its adaptability. It consistently                   8      5      42       32       24   17   15    10     0       20     25     35
+found optimal or near-optimal layouts while respecting each                      9      35     50       52       44   37   35    30     20      0      5      15
+                                                                                 10     30     45       55       49   42   40    35     25      5      0      10
+case’s unique constraints, showcasing robustness across                          11     20     35       45       53   52   50    40     35      15     10     0
+varying construction project conditions.
+   The experiment results are shown in Table 4 and are                                                              Table 4
+compared with those of some previous approaches in Figure                                             Experimental results of 3 case studies
+. Table 4 presents the total transportation costs calculated
+using Equation (1), which quantified the objective function                                         Case 1                 Case 2                    Case 3
+value for each candidate site layout. These values are                         Test          Result          Time      Result    Time        Result         Time
+expressed in arbitrary cost units based on actual distances and                  1           12232           3003      12232     3843          12404        4516
+frequencies of travel between facilities. Each case was
+                                                                                 2           12150           3371      12150     3910          12404        3043
+executed 10 times to account for the stochastic nature of the
+                                                                                 3           12150           3166      12202     3216          12404        3139
+algorithm, and both the best and average results were
+reported. Additionally, the total CPU time in milliseconds for                   4           12150           2939      12345     2956          12404        2899
+each run was included in the table                                               5           12150           2831      12150     2811          12404        2999
+   Figure 2 shows a comparison among GA-Tabu and the                             6           12150           3003      12280     2780          12404        3132
+results of GA [26], PSO [15], ACO [10], ACO-PA [13], opt-                        7           12150           3281      12232     2769          12404        2952
+aiNEt and lopt-aiNet [17]. It could be observed that the value                   8           12150           3349      12150     2918          12404        3081
+of GA-Tabu is identical to that of lopt-aiNet and surpasses the                  9           12232           3003      12246     3122          12404        3155
+other methods mentioned. In Case 2 and Case 3, the outcome                      10           12150           4195      12202     2852          12404        3407
+achieved by GA-Tabu is superior to the others by 3.1% and
+                                                                               Best          12150           2831      12150     2769          12404        2899
+1.6%, respectively, as compared to the results in [17]. This
+                                                                              Average       12166.4          3214.1   12218.9   3117.7         12404        3232.2
+highlights the efficiency of the GA-Tabu algorithm.
+   Although the GA-Tabu algorithm has demonstrated strong
+performance, several promising directions remain for future
+work. These include adaptive parameter tuning (e.g., dynamic
+crossover and mutation rates), hybridization with
+reinforcement learning for enhanced decision-making, and
+integration of real-time Building Information Modeling
+(BIM) data to enable dynamic layout adjustments during
+project execution. Furthermore, applying GA-Tabu to larger-
+scale construction site layouts, incorporating time-dependent
+facility interactions, and extending the algorithm to support
+3D spatial planning would further enhance its applicability.
+To address scalability challenges in real-world scenarios,
+future research may also explore parallel or cloud-based
+implementations.
+                                                                                            Figure 2. Comparison of GA-Tabu to exisisting methods
+                                 Table 2
+            The frequency of trips between facilities one day                                               V.        CONCLUSION
+
+                                                                                 The study presents a novel algorithm that combines
+       SO    FS    LR    S1     S2   CW RW        SG    UR BW        W
+                                                                              Genetic Algorithms and Tabu Search to address the NP-hard
+  SO    0     5     2     2     1      1     4     1     2      9     1       Construction Site Layout Planning (CSLP) problem. Across
+  FS    5     0     2     5     1      2     7     8     2      3     8       three case studies, the algorithm exhibited commendable
+ LR     2     2     0     7     4      4     9     4     5      6     5       performance. Notably, the effectiveness of the GA-Tabu
+ S1     2     5     7     0     8      7     8     1     8      5     1       algorithm was highlighted by its comparable performance to
+ S2     1     1     4     8     0      3     4     1     3      3     6       lopt-aiNet's performance and its superior outcomes compared
+ CW     1     2     4     7     3      0     5     8     4      7     5       to other existing models. In particularly, for Case 2 and Case
+ RW     4     7     9     8     4      5     0     7     6      3     2       3, GA-Tabu achieved significant improvements, with
+
+
+                                                                                                                                                                     5
+Journal of Telecommunication, Electronic and Computer Engineering Vol. 17 No. 3 (2025)
+
+
+reductions of 3.1% and 1.6%, respectively, compared to                                metaheuristic algorithms,” Iranian Journal of Science and Technology,
+                                                                                      Transactions of Civil Engineering, vol. 40, pp. 263-275, 2016.
+previous works. These results confirm the algorithm's
+                                                                                 [9] I. Yeh, “Construction-site layout using annealed neural,” Journal of
+efficiency and suggest its potential for solving larger and                           Computing in Civil Engineering, vol. 9, no. 3, pp. 201-208, 1995.
+more complex CSLP problems. While GA-Tabu has shown                              [10] E. Gharaie, A. Afshar, and M. R. Jalali, “Site layout optimization with
+strong performance, future work will focus on adaptive                                ACO algorithm,” in Proc. of the 5th WSEAS International Conference
+                                                                                      on Artificial Intelligence, Knowledge Engineering and Data Bases,
+parameter tuning, integration with reinforcement learning,                            2006, pp. 90-94.
+and incorporation of real-time BIM data to support dynamic                       [11] K. Lam, X. Ning, and T. Ng, “The application of the ant colony
+layout adjustments. Additionally, expanding the algorithm to                          optimization algorithm to the construction site layout planning
+handle larger-scale and 3D site layouts, as well as exploring                         problem,” Construction Management and Economics, vol. 25, no. 4,
+                                                                                      pp. 359-374, 2007.
+parallel or cloud-based implementations, will be considered                      [12] K. C. Lam, X. Ning, and M. C. Lam, “Conjoining MMAS to GA to
+to improve scalability and practical applicability.                                   solve construction site layout planning problem,” Journal of
+                                                                                      Construction Engineering and Management, vol. 135, no. 10, pp. 1049-
+                   CONFLICT OF INTEREST                                               1057, 2009.
+                                                                                 [13] G. Calis, and O. Yuksel, “A comparative study for layout planning of
+  Authors declare that there is no conflict of interests                              temporary construction facilities: optimization by using ant colony
+                                                                                      algorithm,” in Proc. of 13th International Conference on Computing in
+regarding the publication of the paper.                                               Civil and Building Engineering, 2010.
+                                                                                 [14] G. Calis and O. Yuksel, “An improved ant colony optimization
+                   AUTHOR CONTRIBUTION                                                algorithm for construction site layout problems,” Journal of Building
+                                                                                      Construction and Planning Research, vol. 3, no. 4, 2015.
+  The author contribution to the paper as follows: study                         [15] H. Zhang, and J. Y. Wang, “Particle swarm optimization for
+                                                                                      construction site unequal-area layout,” Journal of Construction
+conception and design: Trieu Xuan Hoa; data collection:                               Engineering and Management, vol. 134, no. 9, pp. 739-748, 2008.
+Trieu Xuan Hoa; analysis and interpretation of findings:                         [16] A. M. Adrian, A. Utamima, and K. Wang, “A comparative study of
+Trieu Xuan Hoa, Tran Thanh Thuong; draft manuscript                                   GA, PSO and ACO for solving construction site layout optimization,”
+preparation: Trieu Xuan Hoa, Tran Thanh Thuong. All                                   KSCE Journal of Civil Engineering, vol. 19, no. 3, p. 520–527, 2015.
+                                                                                 [17] D. Vu, T. N. Van, and H. H. Xuan, “An improved artificial immune
+authors had reviewed the findings and approved the final                              network for solving construction site layout optimization,” in Proc. of
+manuscript.                                                                           2016 IEEE RIVF International Conference on Computing &
+                                                                                      Communication Technologies, Research, Innovation, and Vision for
+                                                                                      the Future (RIVF), 2016.
+                            REFERENCES                                           [18] H. W. a. H. Z. C. Ma, “A hybrid particle swarm optimization for
+                                                                                      construction site layout planning with safety considerations,”
+                                                                                      Automation in Construction, vol. 124, 2021.
+                                                                                 [19] X. Xu and H. Li, “Multi-objective construction site layout planning
+[1]   I. N. Papadaki, and A. P. Chassiakos, “Multi-objective construction site        using improved NSGA-II,” Engineering Applications of Artificial
+      layout planning using genetic algorithms,” Procedia Engineering, vol.           Intelligence, vol. 110, 2022.
+      164, pp. 20-27, 2016.                                                      [20] M. L. A. E. Borges, and A. D. Granja, and A. Monteiro, “A hybrid
+[2]   K.C. Lam, C. M. Tang, and W. C. Lee, “Application of the entropy                framework for multi-objective construction site layout optimization,”
+      technique and genetic algorithms to construction site layout planning           Buildings, vol. 14, no. 12, 2024.
+      of medium‐size projects,” Construction Management and Economics,           [21] P. C. Chu, and J. E. Beasley, “A genetic algorithm for the generalised
+      vol. 23, no. 2, pp. 127-145, 2005.                                              assignment problem,” Computers & Operations Research, vol. 24, no.
+[3]   X. Ning, K. Lam, and M. C. Lam, “Dynamic construction site layout               1, pp. 17-23, 1997.
+      planning using max-min ant system,” Automation in Construction, vol.       [22] M. J. Mawdesley, S. H. Al-jibouri, and H. Yang, “Genetic algorithms
+      19, no. 1, pp. 55-65, 2010.                                                     for construction site layout in project planning,” Journal of
+[4]   H. Said, and K. El-Rayes, “Performance of global optimization models            Construction Engineering and Management, vol. 128, no. 5, pp. 418-
+      for dynamic site layout planning of construction,” Automation in                426, 2002.
+      Construction, vol. 36, pp. 71-78, 2013.                                    [23] F. Glover, “Future paths for integer programming and links to artificial
+[5]   I. Yeh, “Architectural layout optimization using annealed neural                intelligence,” Computers & Operations Research, vol. 13, no. 5, pp.
+      network,” Automation in Construction, vol. 15, no. 4, pp. 531-539,              533-549, 1986.
+      2006.                                                                      [24] F. Glover, “Tabu search—part I,” ORSA Journal on Computing, vol.
+[6]   D. M. Tate, and A. E. Smith, “Unequal-area facility layout by genetic           1, no. 3, pp. 190-206, 1989.
+      search,” IIE Transactions, vol. 27, no. 4, pp. 465-472, 1995.              [25] F. Glover, “Tabu search—part II,” ORSA Journal on Computing, vol.
+[7]   A. Azarbonyad, and R. Babazadeh, “A genetic algorithm for solving               2, no. 1, pp. 4-32, 1990.
+      quadratic assignment problem (QAP),” in Proc. of 5th International         [26] L. P. E. Love, “Comparing genetic algorithms and non-linear
+      Conference of Iranian Operations Research Society (ICIORS), 2012,               optimisation for labor and equipment assignment,” Computing in Civil
+      https://doi.org/10.48550/arXiv.1405.5050                                        Engineering, vol. 12, pp. 227-231, 1998.
+[8]   A. Kaveh, M. Khanzadi, M. Alipour, and M. R. Moghaddam,                    [27] H. Li, and P. E. D. Love, “Genetic search for solving construction site-
+      “Construction site layout planning problem using two new                        level unequal-area facility layout problems,” Automation in
+                                                                                      Construction, vol. 9, no. 2, pp. 217-226, 2000.
+
+
+
+
+6
+

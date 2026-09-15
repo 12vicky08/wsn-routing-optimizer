@@ -1,0 +1,58 @@
+source_file: ijrte.pdf
+title: Hybrid TABU-GA Search For Energy Efficient Routing In WSN
+authors: Varsha; Manju Bala; Manoj Kumar; Neeraj Kumar
+venue_year: International Journal of Recent Technology and Engineering (IJRTE), 2019
+problem: >
+  Wireless sensor networks are heterogeneous in hardware terms (battery, memory,
+  MAC layer, communication protocol, computing architecture), and existing
+  multilevel stable and energy-efficient clustering (M-SEEC) protocols need
+  improved routing to maximize network lifetime, stability period, and throughput.
+approach: >
+  TABU-GA MSEEC: a multilevel stable and energy-efficient clustering (M-SEEC)
+  routing protocol enhanced with a hybrid multi-starting TABU search and Genetic
+  Algorithm (GA) mechanism. The protocol uses three node heterogeneity levels
+  (normal nodes, advance nodes, supernodes) and applies TABU-GA's two
+  neighborhood-generating operations to find optimal cluster-head/routing paths
+  that maximize network lifetime; compared against baseline MSEEC and TABU MSEEC.
+sink_mobility: static
+routing_clustering_scheme: >
+  Multilevel stable and energy-efficient clustering (M-SEEC) with three node
+  types (normal, advance, supernodes); cluster-head selection/route optimization
+  performed via hybrid TABU search + Genetic Algorithm (TABU-GA)
+simulator: MATLAB (version unspecified)
+node_count: "200 and 400 (8 advance nodes and 8 supernodes fixed, rest normal nodes randomly deployed); Table I setup uses 200 nodes"
+area: 200m x 200m (200x200 m^2)
+energy_model: >
+  Radio energy model with parameters: Eelec (transmit/receive) = 50 nJ/bit,
+  free space (efs) = 10 nJ/bit/m^2, multipath (emp) = 0.0013 pJ/bit/m^4,
+  initial energy E0 = 0.5 J, probability of cluster head p = 0.1,
+  base station at (100,100); heterogeneity levels via alpha/beta energy
+  multipliers for advance nodes and supernodes; optimal number of advance
+  nodes mAN_opt = 0.7668*n1
+metrics_reported:
+  - "Number of alive nodes vs. rounds"
+  - "Number of advance alive nodes vs. rounds"
+  - "Number of super alive nodes vs. rounds"
+  - "Number of dead nodes vs. rounds"
+  - "Number of advance dead nodes vs. rounds"
+  - "Number of super dead nodes vs. rounds"
+  - "Packets transferred (throughput) vs. rounds"
+  - "Average remaining energy (Joules) vs. rounds"
+key_numeric_results:
+  - "MSEEC nodes start dying at round 1000; TABU-MSEEC nodes start dying at round 2000; TABU-GA MSEEC nodes start dying at round 2500"
+  - "All MSEEC nodes dead by round 1000; TABU-MSEEC nodes dead by round 2000; TABU-GA MSEEC nodes dead by round 2500"
+  - "Packets sent to base station: MSEEC at 1200 rounds, TABU MSEEC after 2500 rounds, TABU-GA MSEEC at 2600 rounds"
+  - "Average remaining energy: TABU-GA MSEEC = 0.502 J, TABU MSEEC = 0.495 J, MSEEC = 0.49 J"
+  - "Optimal number of advance nodes formula: mAN_opt = 0.7668 * n1"
+stated_limitations: unknown
+citation_fields:
+  bibkey: varsha2019hybridtabuga
+  authors_bibtex: "Varsha and Bala, Manju and Kumar, Manoj and Kumar, Neeraj"
+  title: Hybrid TABU-GA Search For Energy Efficient Routing In WSN
+  year: 2019
+  journal_or_booktitle: International Journal of Recent Technology and Engineering (IJRTE)
+  volume: "8"
+  number: "4"
+  pages: "3250-3256"
+  doi: 10.35940/ijrte.D8046.118419
+  publisher: Blue Eyes Intelligence Engineering & Sciences Publication

@@ -1,0 +1,33 @@
+source_file: ELE0722_CR.pdf
+title: "Energy-Efficient Clustering in Wireless Sensor Network: A Comparison between Genetic Algorithm and Bacteria Conjugation"
+authors: B. D Bala; H. M Hassan; S. M Lawan
+venue_year: Journal of Sustainable Engineering and Technology, 2024
+problem: WSNs are resource-constrained in energy consumption, lifetime, and processing speed; designing an efficient clustering protocol is needed to reduce energy consumption among sensor nodes and improve network lifetime.
+approach: "Mobile LEACH (LEACH-M) clustering optimized with two different meta-heuristic algorithms - Genetic Algorithm (GA) and Bacteria Conjugation Operator (BCO) - where GA/BCO select the optimal CH-to-BS transmission path using a fitness function based on average distance from CH to BS, percentage of participating CHs, and total number of participations."
+sink_mobility: unknown
+routing_clustering_scheme: "LEACH-M (Mobile LEACH) hierarchical clustering optimized with GA and separately with BCO; CH selection via fitness function F(c) = d(CHs,BS) + (Npar/N) + No_of_Part"
+simulator: MATLAB (version unknown)
+node_count: "50 nodes (LEACH-M optimized with GA experiment); 200 nodes (LEACH-M optimized with BCO experiment); 100 nodes (LEACH comparison in Table 1)"
+area: 100m x 100m
+energy_model: "Radio energy model with transmit/receive energy equations: E_T(l,d) = E_elec*L + eps_amp*L*d^2 ; E_R(l,d) = E_elec*L (specific parameter values for E_elec and eps_amp not stated in text)"
+metrics_reported: [number of dead nodes per round, number of alive nodes per round, network stability period, energy consumption (% decrease), maximum simulation rounds]
+key_numeric_results:
+  - "GA-optimized LEACH-M (50 nodes, 100m x 100m): at round 200, zero dead nodes vs. LEACH where nodes already had no energy; at round 2000, about 120 nodes exhausted energy (out of 50 nodes per experiment description, discrepancy present in source text)"
+  - "Introduction of mobility and GA optimization of LEACH increases stability period; accounts for about a 25% decrease in energy consumed by nodes"
+  - "BCO-optimized LEACH-M (200 nodes, 100m x 100m): first dead node observed at round 1218; more than 20 dead nodes at round 2000; about 125 dead nodes at round 3000"
+  - "Table 1: LEACH (100 nodes) - round 20: 20 dead/80 alive; round 50: 70 dead/30 alive; round 140: 0 dead/100 alive"
+  - "Table 1: LEACH-M optimized with GA (50 nodes) - round 950: 1 dead/49 alive; round 1200: 25 dead/25 alive; round 2000: 45 dead/5 alive"
+  - "Table 1: LEACH-M optimized with BCO (200 nodes) - round 1218: 1 dead/99 alive; round 2000: 20 dead/180 alive; round 3000: 125 dead/75 alive"
+  - "Conclusion: LEACH-M optimized with BCO outperformed LEACH-M optimized with GA in adaptive clustering, with less than 25% decrease in energy consumed by network nodes"
+stated_limitations: "Authors note that GA optimization successful for one problem/algorithm does not guarantee effectiveness elsewhere, motivating comparison with other optimization techniques (BCO); no other explicit limitations stated."
+citation_fields:
+  bibkey: bala2024energyefficient
+  authors_bibtex: "Bala, B. D. and Hassan, H. M. and Lawan, S. M."
+  title: "Energy-Efficient Clustering in Wireless Sensor Network: A Comparison between Genetic Algorithm and Bacteria Conjugation"
+  year: 2024
+  journal_or_booktitle: Journal of Sustainable Engineering and Technology
+  volume: "1"
+  number: "1"
+  pages: 75-81
+  doi: unknown
+  publisher: Aliko Dangote University of Science and Technology

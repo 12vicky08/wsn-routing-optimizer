@@ -1,0 +1,1466 @@
+Journal of Ambient Intelligence and Humanized Computing (2023) 14:8531–8550
+https://doi.org/10.1007/s12652-021-03616-9
+
+    ORIGINAL RESEARCH
+
+
+
+Multi‑criteria itinerary planning for the mobile sink in heterogeneous
+wireless sensor networks
+Mohammad Khalily‑Dermany1
+
+Received: 29 March 2021 / Accepted: 24 November 2021 / Published online: 6 January 2022
+© The Author(s), under exclusive licence to Springer-Verlag GmbH Germany, part of Springer Nature 2021
+
+
+Abstract
+The mobile sink is usually applied to improving the performance of wireless sensor networks (WSNs). This improve-
+ment is subject to the itinerary plan, through which the sojourn times and settlement locations are determined. This paper
+simultaneously considers multiple criteria like data merit, latency, deadline, used memory, and travel time, then presents a
+multi-objective Integer Quadratically Constrained Quadratic Programming (IQCQP) for planning itinerary of mobile sink
+in WSNs. In practice, this programming should be solved in a centralized node and it is computationally NP-hard, but the
+mathematical formulation can help estimate the problem characteristic and figure out the optimal path for the mobile sink.
+In addition, this paper proposes a multi-attribute algorithm where the sink gathers attributes of possible sites and compares
+them by applying fuzzy Technique for Order of Preference by Similarity to Ideal Solution (TOPSIS). Therefore, the neigh-
+boring adjacent sites are ranked by TOPSIS, then the best site is selected and the mobile sink moves there. The proposed
+algorithm has lower complexity and utilizes local information to make a decision, therefore it is can handle dynamic features
+of WSNs. The proposed methods are assessed through rigorous simulations, the results reveal that the proposed distributed
+algorithm outperforms counterparts in terms of performance metrics (total merit, latency, gathered, expired, and lost data)
+in a heterogeneous WSN.
+
+Keywords Heterogeneous wireless sensor networks · Multi criteria decision making · Mobile sink · Fuzzy TOPSIS
+
+
+1 Introduction                                                              sink; (2) energy consumption is balanced, so the energy-
+                                                                            holes are reduced and the network lifetime is prolonged; (3)
+Wireless sensor networks (WSNs) have been applied in                        sparse and disconnected networks can be handled better;
+monitoring the environment. In terms of both computation                    (4) the operational cost of WSNs is reduced because fewer
+and energy capacity, these networks are characterized by low                sensors are required to collect data from an environment and
+resources. In a WSN, the sensors that are located close to the              obstacles that exist in the monitored area (where the sensors
+sink have to participate in relaying data on behalf of other                can not communicate with each other) can be bypassed.
+sensors, which leads to depleting their energy very quickly                     If the sink’s mobility is controllable, higher efficiency
+(Kaur and Sood 2015; Zhu et al. 2018).                                      is assured, however, its throughput depends on the mobile
+   The exploitation of sink mobility in improving the effi-                 sink travel path. The itinerary plan (named trajectory, path
+ciency of a WSN has become a major issue of interest among                  selection, travel path, and path design as well) provides the
+the researchers, because it provides some advantages like the               site’s sequence (named settlement or pre-arranged loca-
+ones introduced in Dong et al. (2014), Kaswan et al. (2017,                 tions, parking position, and rendezvous points as well) and
+2018), Alsaafin et al. (2018) involve: (1) both energy con-                 the sojourn times for traveling mobile sink. In planning an
+sumption and interference are reduced because the nodes                     itinerary, different objectives like: sensors’ density (Kaswan
+need small transmission power to communicate with the                       et al. 2017), energy consumption (Alsaafin et al. 2018), the
+                                                                            data merit or value of information (Gjanci et al. 2018), dead-
+                                                                            line (Tashtarian et al. 2015), latency or delay (Alhasanat
+* Mohammad Khalily‑Dermany                                                  et al. 2015; Ji 2019; Mehto et al. 2020a), coverage (Wang
+                                                                            et al. 2020), and energy density (Ji 2019; Nitesh et al. 2019)
+1
+     Young Researchers and Elite Club, Khomein Branch,                      are of concern. Researchers have considered these objectives
+     Islamic Azad University, Khomein, Iran
+
+
+                                                                                                                                 1  3
+                                                                                                                          Vol.:(0123456789)
+
+
+
+                     Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+8532                                                                                                             M. Khalily‑Dermany
+
+
+and introduced many single and multi-objective optimization        and solving) should be repeated every time that the sink
+problems for planning an itinerary in WSNs (Kaswan et al.          wants to travel. Therefore, it undergoes a noticeable cost for
+2018). There are some essential and well-known drawbacks           gathering the attributes’ volumes and solving the emerged
+relating to optimal itinerary planning in practical WSNs (e.g.     optimization problem, but, it can help estimate the charac-
+its computational complexity is NP-Hard and the consider-          teristics and properties of the hardness of itinerary planning.
+able energy cost of gathering attributes’ volumes). There-         However, the ideal itinerary plan determined by solving this
+fore, it can be concluded that this optimization problem is        optimization problem helps assess the itinerary plans. Then,
+not beneficial in dynamic and heterogeneous WSNs. To               a multi-attribute algorithm for planning the itinerary of the
+apply optimization models in practical WSNs, some stud-            mobile sink in heterogeneous WSNs is proposed. This algo-
+ies assume that the sink rarely moves (Kaswan et al. 2017,         rithm is distributive because it collects the sink’s vicinity
+2018; Khalily-Dermany and Nadjafi-Arani 2017). However,            information to decide where to move and when. It considers
+if the sensors store the sensed data until the sink meets their    the sink movement as a Multi-Attributes Decision Making
+sites, then latency increases considerably. On the contrary,       (MADM) problem, and the fuzzy Technique of Order Pref-
+some studies have made an unrealistic assumption that all          erence Similarity to the Ideal Solution (TOPSIS) algorithm
+the sensors are homogeneous (e.g. having a constant rate of        is applied to propose an itinerary plan. To decide which one
+traffic generation). In this situation, the attributes’ volumes    of the potential future sites is more appropriate, the sink
+are predictable overtime, however, the practical WSNs may          gathers some information on the considered attributes of
+generate dynamic and heterogeneous traffic (Din et al. 2020).      possible sites and compares them through the decision-mak-
+    Distributed and centralized methods can be adopted in          ing system. More clearly, the neighboring adjacent sites are
+planning an itinerary for the mobile sink. The distributed         ranked by TOPSIS, and then the best site is selected. Apply-
+algorithms (the sink applies local information and draws the       ing fuzzy TOPSIS in obtaining a distributed algorithm for
+moving decisions autonomously) can better adapt to differ-         planing the itinerary of the mobile sink with multiple attrib-
+ent WSNs’ conditions because they can handle dynamic fea-          utes is the main contribution of this article which paves the
+tures, are robust to the sensors’ faults, and have low com-        way for more studies to be employed in the heterogeneous
+plexity (Alsaafin et al. 2018; Yun et al. 2013). In providing a    WSNs field. The efficiency of this algorithm is evaluated
+distributed approach for planning an itinerary, some greedy        and compared in comparison with the optimization model
+algorithms have been introduced, which make the locally            and its counterparts. The simulation results indicate that the
+optimal choice at each stage. They greedily move the sink          proposed algorithm can effectively specify an itinerary plan
+towards a location that has a higher volume for a consid-          for the mobile sink in dynamic and heterogeneous WSNs.
+ered attribute or a higher weighted value (Salarian et al.             This article is organized as follows: the literature is
+2014). For instance, the mobile sink is moved to a specific        reviewed in Sect. 2; the system model, preliminaries, and
+area where there exist more source nodes (Zhu et al. 2016),        problem statements are presented in Sect. 3; the proposed
+higher remaining energy (Tan et al. 2009), etc. However,           algorithm is introduced in Sect. 4; the performance evalu-
+greedy algorithms do not know what lies ahead of the cur-          ation is presented in Sect. 5 and the article is concluded in
+rent greedy selection, so they may fail to find the globally       Sect. 6.
+optimal solution. To the best knowledge of the authors, in
+all the available distributed algorithms in this context, at the
+most, three objects are of concern, and no algorithm consid-       2 Literature review
+ers all application requirements of heterogeneous WSNs.
+    This paper considers itinerary planning in WSNs as a           In most WSNs, the sensors collect information and report to
+multi-criteria problem and supports various types of WSN           a static sink, cooperatively. The static sink is unable to oper-
+applications that require efficiency in different attributes       ate efficiently in most scenarios because it shifts the burden
+including the data merit, deadline, used memory, latency,          from the sensors located far from the sink, to those in the
+travel time, density, and fairness. In the first step, a multi-    vicinity of the sink. The sink mobility assumption may be
+objective optimization problem is proposed which should be         especially useful where it moves inside the environment to
+executed in a central node to obtain an itinerary plan. It is a    collect data from the sensors. Researchers have introduced
+multi-objective Integer Quadratically Constrained Quadratic        three classes for sink mobility: random, predetermined, and
+Programming (IQCQP). Many algorithms can be applied                controlled.
+in solving this optimization model, but IQCQPs are com-               The random sink mobility is very simple to implement
+putationally NP-hard and cannot be solved in a polynomial          where the casual motion of mobile entities, like humans or
+time. In addition, it needs to gather attributes’ volumes into     animals, is exploited to move the sink. In direct harvest or
+a central node and then provide the optimal solution. If the       the single-hop communication that assumes the sink comes
+network’s parameters change, then this process (gathering          within the direct radio range of all sensors when traveling,
+
+13
+
+                  Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+Multi‑criteria itinerary planning for the mobile sink in heterogeneous wireless sensor…                                                 8533
+
+the random mobility leads to incomplete data collection,                      Zhan et al. (2018) introduced a mixed-integer non-convex
+high delay, and buffer overflow. Because it does not assure                   optimization problem that jointly optimizes the sensor’s
+that when the sink reaches the vicinity of an arbitrary sensor;               wake-up schedule and UAV’s trajectory to minimize the
+consequently, this class is not advised for many real applica-                maximum energy consumption of all sensors. This model
+tions, especially those with high sensor count (Kaswan et al.                 ensures that the required amount of data is collected reliably
+2018). In multi-hop communication (the sensors that cannot                    from each sensor. Tao et al. (2019) proposed an optimization
+transmit packets to the sink directly, find data routes to do                 framework that assigns energy for sensors and then finds a
+this through some intermediate sensors), random mobility                      trajectory for the mobile sink that covers aggregation nodes.
+leads to the difficulty of tracking the current position of the               They also developed a heuristic algorithm for the problem.
+sink and increases the routing complexity. Yu et al. (2010)                      The itinerary planning determines the sequence of set-
+applied the overhearing feature of the wireless networks to                   tlement locations where the sink can sojourn at them. Many
+track the position of the random mobile sink. They assumed                    optimization models have been proposed that provide
+that the mobile sink periodically transmits a beacon message                  the itinerary plan of the mobile sink. Almost all optimal
+containing its position, and the sensors apply geographic                     approaches gather the network’s parameters, then generate
+routing. However, the higher rate of sink mobility leads to                   an optimization programming, subsequently, provide an
+more energy costs for building, propagating, and maintain-                    optimal itinerary plan. However, the centralized approaches
+ing the routes between the sensors and mobile sink (Zhu                       are subject to possible disadvantages like the cost of infor-
+et al. 2018).                                                                 mation gathering, inability to handle dynamic characteris-
+    In the case of the predetermined class, the mobile sink is                tics of WSNs, and need a high degree of complexity (high
+programmed to follow a fixed path in a round-robin manner.                    execution time) (Alsaafin et al. 2018; Yun et al. 2013;
+This fixed path is predetermined and is not influenced by                     Khalily-Dermany 2021). Moreover, if an error or change
+the sensors’ behavior and the environment at run-time. In                     occurs in the network (e.g. traffic generation rate changes),
+spite of the inflexibility of this kind of mobility, the sensors              a centralized approach would be ineffective because the sink
+have the option to enter the sleep state until the predicted                  continues on the pre-specified path. In other words, after
+time for data transfer comes (Khan et al. 2013). Chakrabarti                  any change in the network characteristics or environment,
+et al. (2003) mounted the sink on a city bus, the sensors                     a new solution or plan should be provided which imposes a
+learn the times that they can connect to the sink and wake                    considerable cost to a WSN (Yun et al. 2013). To overcome
+up accordingly to transfer their data. In multi-hop commu-                    these drawbacks, researchers in Kaswan et al. (2017, 2018),
+nication, the sensors send their data to the nodes located in                 Khalily-Dermany and Nadjafi-Arani (2017) assumed high
+the vicinity of the sink’s future position (Khan et al. 2013).                volumes for sojourn time, that is, the sink rarely moves. By
+Vajdi et al. (2018) considered a mobile sink that moves in a                  this assumption, there exists enough time to gather network
+predefined trajectory in the environment, then select a set of                parameters and obtain a new solution, while, the delay of
+rendezvous points in the periphery of the predefined trajec-                  reported information increases, especially in single-hop
+tory. They aimed to minimize the energy consumption of                        communication.
+the sensors and reduce the average delay. They proposed a                        Site count has a significant influence on the performance
+Mixed Integer Linear Programming (MILP) for this problem                      of an itinerary plan (Yun and Xia 2010; Roy et al. 2021).
+and presented three distributed heuristic algorithms for plan-                In one-hop data collection, a higher count of sojourn sites
+ning, identifying rendezvous points, and constructing routes.                 decreases energy consumption significantly but increases
+    In controlled mobility, the sink is moved depending on                    delay and the tour time of the mobile sink. On the contrary,
+the network conditions. Two main schemes are applied in                       a lower count of sojourn sites may lead to long multi-hop
+most of the existing studies for the controlled class, the tra-               routes and also energy holes. Anwit and Jana (2018) pre-
+jectory, and itinerary planning. In practice, the application                 sented a variable-length genetic algorithm to find the count
+requirements of a WSN specify the appropriate scheme and                      and location of sojourn sites of the sink’s tour. To find a
+various approaches have been proposed for each one. The                       trade-off between energy consumption and delay, Roy et al.
+trajectory refers to a non-stop movement in a continuous                      (2021) studied the optimal count of sojourn sites that guar-
+manner, where the mobile sink can move to any location in                     antee the one-hop data collection from each cluster, then
+the environment, e.g. an Unmanned Aerial Vehicle (UAV)                        an ant colony optimization algorithm was applied to plan a
+flies above the node’s field to harvest the sensed data, or                   near-optimal itinerary. In addition, it is proved that the sink
+an Autonomous Underwater Vehicle (AUV) is applied                             travel time plays a major role in the efficiency of mobility
+in underwater WSNs (Gjanci et al. 2018). In trajectory                        and it should be considered as a variable in the models, espe-
+approaches, the speed variation of the sink is determined                     cially for the slow sink (Keskin and Yiğit 2020).
+by the network load: the sink will move slow if more data                        To simultaneously consider multiple aspects in planning
+should be transmitted by the nearby sensors, fast otherwise.                  an itinerary, multi-object optimization models have been
+
+
+                                                                                                                                  13
+
+                     Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+8534                                                                                                         M. Khalily‑Dermany
+
+introduced by researchers. He et al. (2019) introduced an        mobile sinks. Raj et al. (2020) combined the optimal game
+approach to select potential visiting points and an energy-      theory in selecting the best sojourn sites and ant colony
+efficient planning algorithm based on multi-objective par-       optimization in choosing the best path for the mobile sink
+ticle swarm optimization. This algorithm aims to reduce          to gather data in delay-inevitable WSNs. This distributed
+the delay in data delivery and prolong the network lifetime.     algorithm considered the data transfer and management,
+To shorten the tour time of the mobile sink, they selected       energy consumption, and delay in data delivery. Alsaafin
+potential visiting points within communication overlapping       et al. (2018) proposed a distributed data gathering protocol
+ranges of sensors, rather than their location. Mehto et al.      using a mobile sink for WSN, in which every sensor in the
+(2020a) considered data delivery delay, and the traffic rate     network independently selects itself as a rendezvous point
+constraints of sensors during sojourn site selection to design   according to a cluster-based method. However, the priority
+a delay-efficient path for the mobile sink. To meet the delay    and deadline of the gathered data are not considered by this
+requirements and minimize energy consumption in industrial       study. In the best knowledge of the authors, almost all of
+WSNs, Ji (2019) proposed a data collection strategy for the      these distributed methods make greedy decisions in moving
+mobile sink. They considered the density of sensors, relative    the sink, therefore they are not robust, may yield very poor
+residual energy, and the degree of uniformity of distribution,   quality solutions, easily fall into the local optima, and may
+then used the entropy weight method and ant colony opti-         decide that the sink never sojourns at some settlement sites.
+mization algorithm to obtain the optimal access path for the        To consider multiple criteria in moving the sink, some
+mobile sink. Nitesh and Jana (2019) applied a convex hull        studies combined itinerary planning with the clustering
+for designing a delay-bound path for the mobile sink. This       methods. In these researches, first, the network is divided
+algorithm generates a set of the convex hull as the potential    into some clusters where multiple criteria are of concern,
+paths and selects one of them as the final path for the mobile   then a path is defined to collect data from cluster heads.
+sink. Nitesh et al. (2019) considered energy density and         Gupta and Saha (2020) focused on a load-balanced clus-
+some thresholds, then proposed a dynamic, energy-efficient,      tering scheme that decreases the number of left-out nodes,
+and delay-bound path for the mobile sink. Moreover, data         and then an artificial bee colony algorithm was used for the
+merit (Gjanci et al. 2018), deadline (Tashtarian et al. 2015),   dynamic moving of the mobile sink. Bencan et al. (2020)
+latency (Alsaafin et al. 2018; Alhasanat et al. 2015), density   presented an evolutionary game-based trajectory algorithm
+of sensors (Kaswan et al. 2017), and energy consumption          for the mobile sink in WSNs. In their evolutionary game
+(Alsaafin et al. 2018) are of concern in optimizing itinerary    model, the average residual energy of each cluster, and
+plans.                                                           average inter-cluster energy consumption were applied. In
+    The distributed methods apply local information to           particular, the mobile sink moves to a cluster that has the
+obtain an itinerary plan, so they lead to low information        largest residual energy and the shortest distance to other
+gathering cost, ability to handle dynamic characteristics of     clusters. Preeth et al. (2020) used Adaptive Neuro-Fuzzy
+WSNs, and low execution time (Alsaafin et al. 2018; Yun          Inference System (ANFIS) for optimal cluster head selection
+et al. 2013). Yun et al. (2013) proposed a distributed algo-     where the three input parameters (residual energy, neighbor
+rithm that obtains sojourn times, and provides the routing       node sharing, and node behavior history) are of concern.
+between nodes. This approach limits the maximum tolerable        They also employed emperor penguin optimization to find
+latency. For providing both the sequence of settlement sites     the sojourn sites and traveling paths for the mobile sink.
+and sojourn times, almost all distributed algorithms move        Wang et al. (2018) considered the distance between cluster
+greedily the sink towards the best location in the vicinity of   heads, then an improved ant colony algorithm was applied
+its current position. These approaches select a site with the    to find a mobility trajectory for the mobile sink to com-
+highest volume for an attribute, e.g. a settlement location      municate with cluster heads. Park et al. (2020) proposed an
+with more source nodes (Zhu et al. 2016), higher remaining       iterative algorithm to minimize the amount of energy con-
+energy (Tan et al. 2009), more traffic load (Akkaya et al.       sumption. This algorithm performs two phases (clustering
+2005) and so on, subsequently send the sink to that location.    and itinerary planning) repeatedly until the amount of energy
+If multiple objectives are of concern, the weighted values of    consumed by the WSN is not reduced. In Sapre and Mini
+the considered attributes are computed and a vicinity loca-      (2021), some relay nodes were deployed using a differential
+tion with the highest volume is selected (Tan et al. 2009;       moth flame optimization algorithm, then a traversal strat-
+Bencan et al. 2020). Wang et al. (2020) proposed a trajec-       egy for the mobile sink was proposed to collect the sensed
+tory scheduling method based on coverage rate for multiple       data. Anwit et al. (2020) presented a scheme comprising of
+mobile sinks in large-scale WSNs. In particular, they used a     two algorithms based on the shark smell optimization tech-
+modified particle swarm optimization to search the sojourn       nique that solves the itinerary planning. First, a non-linear
+sites with optimal coverage rate, then the genetic algorithm     programming and an algorithm were proposed to determine
+was adopted to schedule the moving trajectory for multiple       an optimal number of rendezvous points as well as their
+
+
+13
+
+                  Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+Multi‑criteria itinerary planning for the mobile sink in heterogeneous wireless sensor…                                                           8535
+
+locations. Then, a non-linear programming and an algorithm                    Table 1  The attributes of data and their descriptions
+were proposed to find the optimal count of mobile sink and                    Notation       Definition
+to minimize the overall path length.
+   Finally, there are some studies on the existing state-of-                  MDc(d,q)       The merit of data Dc(d,q)
+the-art mobile sink approaches that focus on issues related                   SDc(d,q)       The length of data Dc(d,q)
+to sink mobility such as mobility-aware energy-efficient data                 EDc(d,q)       The time-slot that data Dc(d,q) is expired due to deadline
+gathering (Gupta and Gupta 2016), mobility-aware medium                       BDc(d,q)       The time-slot that data Dc(d,q) is completely stored in
+                                                                                              the sensor’s memory and it is ready to deliver to the
+access control (Zareei et al. 2018), mobility-aware computa-
+                                                                                              sink
+tional offloading in mobile edge networks (uz Zaman et al.
+2021), etc. In addition, Agarwal et al. (2021) presented a
+survey on the various path selection algorithm used for the
+mobile sink to collect the information. They also explained                   for at least one time-slot, then decides where to go. If the
+some other factors that affect the itinerary planning for a                   sink currently sojourns in the site la ∈ 𝕃 , it can go to one of
+mobile sink. Furthermore, Mehto et al. (2020b) presented                      the sites that belongs to:
+the issues of providing a trade-off between energy consump-                          {                    }
+tion and data latency.                                                        Aa = lb ∣ TT(a,b) ≤ TTmax                                    (2)
+
+                                                                              where TTmax is the maximum travel distance that the sink is
+                                                                              allowed to travel each time it moves and TT(a,b) is the Euclid-
+3 System model and preliminaries
+                                                                              ean distance between the sites la and lb . The set of all pos-
+                                                                              sible movements from site la is def ined by
+The system model, notations, and the problem statements                                                          ⋃ a
+                                                                              Ma = {(a, b) ∣ lb ∈ Aa } and 𝕄 =       M is the set of pairs
+for moving the mobile sink are presented in this section. In                                                          la ∈𝕃
+addition, we define some fuzzy definitions applied in the                     that joining sites whose distance of them are less or equal
+proposed algorithm.                                                           than TTmax . At the end of the itinerary plan, the sink travels
+                                                                              from any site to another fictitious site called lC+1 or the final
+3.1 System model                                                             destination.
+                                                                                 The variables of the problem of planing an optimal itiner-
+Let set 𝕍 be the set of heterogeneous sensors, scattered in                   ary for the mobile sink are tabulated in Table 2.
+the monitored environment in a random manner. In the net-
+work lifetime, the sink travels and sojourns in a set of sites                3.2 Objectives
+denoted by 𝕃 . Let V a ⊆ 𝕍 be the set of sensors around the
+site la ∈ 𝕃 and if the sink arrives at that site, it harvests the             The considered objectives for planning an optimal itinerary
+stored data from the sensors belongs to V a . Accordingly,                    and their formulas are as follows:
+binary parameter VI (q,a) is defined which is 1 if sq ∈ V a ; 0                   Data delivery: The volume of delivered data to the sink
+otherwise. In practice, the set 𝕍 is partitioned to some sub-                 is an important attribute for planning an itinerary which can
+sets in a way that each node belongs to at least one subset,                  be formulated as follows:
+i.e.                                                                                              ∑
+⋃ a                                                                           maximize: F1 =            SDc(d,q) gd(d,q)
+                                                                                                                   c
+                                                                                                  c
+                                                                                                D ∈𝔻
+                                                                                                                                        (3)
+     V =𝕍                                                     (1)                                    (d,q)
+ a
+l ∈𝕃
+                                                                              Deadline: Based on what is sensed and/or other properties
+Assume that the length of network lifetime is divided into                    of data, a deadline is defined for the stored data. The follow-
+some time-slots numbered from 0 to C where c ∈ [0, C] is a                    ing objective minimizes the volume of expired data.
+time-slot of sojourning the sink at an arbitrary site and the                                     ∑
+last time-slot the sink can receive data is C. The sensors                    minimize: F2 =            SDc(d,q) ed(d,q)
+                                                                                                                   c
+                                                                                                                                           (4)
+perform continuous sensing, where the sensor sq senses data                                     Dc ∈𝔻
+                                                                                                    (d,q)
+
+Dc(d,q) at the time-slot c. The sensors store the sensed data in
+                                                                              Memory: The memory capacity of the sensors is usually
+their memory until the mobile sink passes by. The attributes
+                                                                              limited, so they can not store the collected data for a long
+of data Dc(d,q) are tabulated in Table 1 and the set of all sensed
+                                                                              time (specifically, if the time interval between visitations is
+data that can be delivered to the sink is defined by
+                                                                              too long). If when data Dc(d,q) is sensing, the memory is full,
+𝔻 = {Dc(d,q) ∣ EDc(d,q) < C}.
+                                                                              then it will be lost, so the following objective should be of
+   The sink starts from a fictitious site called l0 and then
+                                                                              concern.
+sojourns in the sites. The sink sojourns at an arbitrary site
+
+
+                                                                                                                                          13
+
+                     Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+8536                                                                                                                                                       M. Khalily‑Dermany
+
+Table 2  Variables and their descriptions
+Notation                      Definition
+
+tic(d,q)                      The time-slot that data Dc(d,q) is delivered to the sink
+     c
+gd(d,q)                       Binary variable taking the value 1 if data Dc(d,q) is successfully delivered to the sink; 0 otherwise
+    c
+ld(d,q)                       Binary variable taking the value 1 if a data Dc(d,q) is lost due to memory fullness; 0 otherwise
+     c
+ed(d,q)                       Binary variable taking the value 1 if a data Dc(d,q) is expired due to its deadline; 0 otherwise
+moc(a,b)                      Binary variable taking the value 1 if the sink departs from (leaves) site la at time-slot c directed towards lb; 0 otherwise
+bsca                          Binary variable taking the value 1 if the sink is at site la at time-slot c; 0 otherwise
+bncq                          Binary variable taking the value 1 if the sink is at a site in the vicinity of sensor sq at time-slot c; 0 otherwise
+umcq                          The volume of used memory of sensor sq at time-slot c
+
+
+                      ∑                                                                                                  (                )
+minimize: F3 =                   SDc(d,q) ld(d,q)
+                                            c                                                                              ∑
+                    Dc(d,q) ∈𝔻
+                                                                        (5)      minimize: F7 = Varsq ∈𝕍                           bncq                                    (9)
+                                                                                                                             c∈C
+
+Data Merit: Data merit can be defined through the benefits
+obtained by taking an action therein, that is, if an urgent
+                                                                                 3.3 Constraints
+event in the environment is reported, the cost of this event
+and further damages decrease. This merit depends on the
+                                                                                 Constraints of optimization problem for obtaining multi-
+captured information and maximizing summation of data
+                                                                                 objective-itinerary plan in heterogeneous WSNs are defined
+merits is one of the considered objectives.
+                                                                                 as follows:
+                    ∑
+maximize: F4 =           MDc(d,q) gd(d,q)
+                                    c                                            ∑
+                   Dc ∈𝔻
+                                                         (6)                         bsca = 1     ∀c ∈ [0, C],                         (10)
+                      (d,q)                                                      a
+                                                                                 l ∈𝕃
+
+Latency: The delay tolerant applications can endure the                          ∑
+possibly very high latencies imposed by the sink, but the                                mo0(0,a) = 1,                                                                  (11)
+gathered data can not stay in the sensor’s memory for a quite                    la ∈𝕃
+
+long time which imposes very high overall latency. This
+                                                                                 ∑
+decreases the count and the type of applications that could                              moC+1     = 1,
+                                                                                           (b,C+1)                                                                      (12)
+apply the mobile sink for data collection. In practice,                          lb ∈𝕃
+tic(d,q) − BDc(d,q) defines the latency of data Dc(d,q) and the fol-
+lowing objective minimizes the latency of gathered data.                         TT(a,b) moc(a,b) ≤ TT Max                   ∀la , lb ∈ 𝕃, c ∈ [0, C],                  (13)
+                         ∑ (                        )
+minimizes: F5 =                 tic(d,q) − BDc(d,q)                                           ∑
+                                                                 (7)
+                         c
+                     D(d,q) ∈𝔻                                                   Arca =                   moc(b,a)         ∀la ∈ 𝕃, c ∈ [0, C],
+                                                                                                                                                                        (14)
+                                                                                            ∀(b,a)∈Mb
+Time to travel: If the sink commutes among far sites, the
+travel time increases considerably, which affects the network                                 ∑
+                                                                                 Lica =                   moc(a,b)        ∀la ∈ 𝕃, c ∈ [0, C],
+performance. The count of times that sink is commuted                                                                                                                   (15)
+                                     ∑                                                     ∀(a,b)∈M   a
+between sites la and lb is equal to      moc(a,b) and the fol-
+                                               c∈[0,C]
+lowing objective minimizes the traveled distance of the sink.                                   ∑                                          ∑
+                                                                                 mo0(0,a) +                Arca = moC+1     +                       Lica        ∀la ∈ 𝕃,
+                      [                        ]                                               c∈[0,C]
+                                                                                                                    (a,C+1)
+                                                                                                                                          c∈[0,C]
+                  ∑              ∑                                                                                                                                      (16)
+minimize: F6 =          TT(a,b)       moc(a,b)            (8)
+                    (a,b)∈𝕄                c∈[0,C]                               Arca + Lica ≤ bsca                  a
+                                                                                                                 ∀l ∈ 𝕃, c ∈ [0, C],                                    (17)
+Fairness: The count of times the sink visits the sensors is
+another attribute considered in this article. In practice, this                  Arca − Lica + bsc−1
+                                                                                                 a   = bsca                    ∀la ∈ 𝕃, c ∈ [0, C],                     (18)
+objective is applied to balance the count of visitations among
+the sensors and increases fairness. This goal is defined as the                  bncq = bsca ∗ VI (q,a) ,                ∀sq ∈ 𝕍 , c ∈ [0, C],                          (19)
+variance minimization among the count of nodes’ visitations
+as follows:
+
+
+13
+
+                     Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+Multi‑criteria itinerary planning for the mobile sink in heterogeneous wireless sensor…                                                                8537
+
+                                                                                                   ∑
+um0q = 0,           ∀sq ∈ 𝕍 ,                                               (20)      site la (         Arca + mo0(0,a)) and the count of departures from
+                                                                                                  c∈[0,C]∑
+                                                                                      the site l (  a
+                                                                                                               Lica + moC+1
+                                                                                                                        (0,C+1)
+                                                                                                                                ) are equal.
+                                                                                                     c∈[0,C]
+umc−1
+  q   + SDc(d,q) = umcq + ld(d,q)
+                            c
+                                  SDc(d,q) ,                   ∀Dc(d,q) ∈ 𝔻,              To demonstrate constraints (17), we consider two cases:
+                                                                            (21)      (1) if bsca = 0 , then Arca + Lica = 0 , that is, neither a depar-
+umc+1 = umcq − ed(d,q)
+                 c
+                       SDc(d,q) ,                 ∀Dc(d,q) ∈ 𝔻,             (22)      ture from nor an arrival to site la during time-slot c occurs;
+  q
+                                                                                      (2) if bsca = 1, then Arca + Lica ≤ 1, that is, for any site la and
+                                                                                      time-slot c, the sink can select at most one destination for
+umcq ≤ Msize (1 − bncq ),                ∀sq ∈ 𝕍 , c ∈ [0, C],              (23)      a departure from site la (i.e. 0 ≤ Arca ≤ 1) or at most one
+                                                                                      arrival to site la (i.e. 0 ≤ Lica ≤ 1), and not both. In addition,
+BDc(d,q) ≤ tic(d,q)          ∀Dc(d,q) ∈ 𝔻,                                  (24)      the second case ensures that once the sink arrives at site la ,
+                                                                                      it cannot leave immediately. Constraints (18) ensure that bsca
+                                      [                  ]                            correctly tracks the sink through time and can be interpreted
+tic(d,q) ≤ EDc(d,q) gd(d,q)
+                      c
+                            + BDc(d,q) ld(d,q)
+                                         c         c
+                                               + ed(d,q)            ∀Dc(d,q) ∈ 𝔻,     by considering the following four cases:
+                                                                            (25)
+                                                                                      • If there are no arrival or departure (i.e. Arca = Lica = 0 ),
+tic(d,q) =      min                 nbnnq + ed(d,q)
+                                              c
+                                                    BDc(d,q)      ∀Dc(d,q) ∈ 𝔻,
+           n∈[BDc ,EDc
+                  (d,q)   (d,q)
+                                  ]                                                     then bsca = bsc−1
+                                                                                                        a , so if the sink was at site
+                                                                                                                                         la at time-slot
+                                                                            (26)        c − 1, then it stays at there at time-slot c and otherwise,
+  c         c         c
+                                                ∀Dc(d,q) ∈ 𝔻,                           it is not there in time-slot c − 1 and c.
+gd(d,q) + ld(d,q) + ed(d,q) =1                                              (27)      • If there is an arrival (i.e. Arca = 1), then constraints (17)
+                                                                                        impose that Lica = 0 and bsca = 1, so bsc−1a    = 0, that is, an
+            ⎛�            �⎛          �                      ⎞⎞                         arrival to site la at time-slot c is happened.
+  c
+ed(d,q) = 𝛿 ⎜ 1 − ld(d,q)
+                    c      ⎜1 −                         bnnq ⎟⎟     ∀Dc(d,q) ∈ 𝔻,     • If there is a departure (i.e. Lica = 1), then constraints (17)
+            ⎜              ⎜                                 ⎟⎟
+            ⎝              ⎝    n∈[BDc(d,q) ,EDc(d,q) ]      ⎠⎠                         impose that Arca = 0 and bsc−1      = 1, so bsc−1   = 0, that is,
+                                                                                                                       a               a
+                                                                            (28)        if the sink is at site l at time c − 1 and it leaves site la at
+                                                                                                                a
+
+            ⎛�            �                              ⎞                              time-slot c − 1, then it is not at site la at time-slot c.
+                                  �
+  c
+gd(d,q) = 𝛿 ⎜ 1 − ld(d,q)
+                    c
+                                                    bnnq ⎟         ∀Dc(d,q) ∈ 𝔻,      • The both bsc−1a and Ar a cannot be 1, because if Ar a = 1,
+                                                                                                                  c                                c
+            ⎜                                            ⎟                              then constraints (17) imply that Lica = 0 , so if bsc−1      =1
+            ⎝               n∈[BDc(d,q) ,EDc(d,q) ]      ⎠                                                                                       a
+                                                                            (29)        and Arca = 1, then bsca = 2, which is impossible for binary
+                                                                                        variable bsca.
+
+bncq , bsca , moc(a,b) , gd(d,q)
+                           c         c
+                                 , ld(d,q)     c
+                                           , ed(d,q) ∈ {0, 1}, umcq , tic(d,q) ∈ {0, 1, 2, ...}                                                        (30)
+
+
+Constraints (10) enforce that the sink is at exactly one place                        Constraints (19) show that if the sink is at site la during the
+at any given time-slot c, that is, constraints (10) forbid                            time-slot c (i.e. bsca = 1), then it can meet all sensors sq ∈ Aa
+bsca = bscb = 1 for all la , lb ∈ 𝕃 , where la ≠ lb.                                  (i.e. bncq = 1) and vice versa (if bsca = 0, then for all sq ∈ Aa,
+    Constraints (11) and (12) imply that the sink can start and                       bncq = 0).
+finish its itinerary plan from/at any arbitrary site. Constraint                          Constraints (20) imply that the sensors’ memories are
+(11) shows when the itinerary planning is starting (time-slot                         empty at the first time-slot 0. Constraints (21) impose that
+0), then the sink travels from the imaginary initial site l0 to                       data Dc(d,q) is either stored in memory (if the memory is not
+a site la ∈ 𝕃 . In a similar manner, constraint (12) demon-                           full) or lost due memory fullness (i.e. ld(d,q)
+                                                                                                                                    c
+                                                                                                                                        = 1). Constraints
+strates that the sink travels from the last sojourning site la                        (22) imply that if data D(d,q) expire, then the sensor sq deletes
+                                                                                                                  c
+to fictitious site lC+1. Constraints (13) restrict the maximum
+                                                                                      that data from its memory. Constraints (23) can be inter-
+distance that the sink can travel and prevent the latency of
+                                                                                      preted by two cases: 1) if bncq = 0, then no delivery has hap-
+long sink traveling.
+                                                                                      pened and the used memory of sensors is lower than the
+    The auxiliary variables Arca and Lica are defined by equa-
+                                                                                      maximum capacity of memory Msize; 2) if bncq = 1, then data
+tions (14) and (15), respectively, and they are used in defin-
+                                                                                      should be delivered and memory is empty.
+ing constraints (16)–(18). In practice, if an arrival to site la
+                                                                                          Constraints (24) show that the time-slot that data Dc(d,q)
+from any other site at time-slot c occurs, then Arca = 1 and if
+                                                                                      can be delivered to the sink is after its sensing time-slot. To
+the sink departures from site la at time-slot c, then Lica = 1.
+                                                                                      demonstrate constraints (25) consider two cases: 1) if
+Constraints (16) demonstrate that the cont of arrivals to the                            c
+                                                                                      gd(d,q) = 1, then tic(d,q) ≤ EDc(d,q), that is, data Dc(d,q) is deliv-
+
+
+                                                                                                                                               13
+
+                          Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+8538                                                                                                                               M. Khalily‑Dermany
+
+ered to the sink before its deadline; 2) if either ld(d,q)
+                                                       c
+                                                           = 1 or          volume of time-slot’s period, that is, the sink rarely moves
+ed(d,q) = 1 (constraints (27) impose at most one of them
+   c                                                                       (Kaswan et al. 2017, 2018; Khalily-Dermany and Nadjafi-
+should be 1), then data Dc(d,q) is either lost or expired and the          Arani 2017). If the sensors store the sensed data until the
+                                                                           sink meets their sites, then this great period deteriorates the
+sink can not gather that data, where, constraints (25) imply
+                                                                           network performance (lose data, F2 , expired data, F3, and
+that tic(d,q) = c. In practice, the second case demonstrates that
+                                                                           data latency, F4 , increase, considerably). (2) By generat-
+if a piece of data is lost or expired, then gathering time is
+                                                                           ing homogeneous traffic, where, the traffic factors (the size,
+equal to its sensation time-slot, so the lost or expired data do
+                                                                           interval, merit, and deadline of generated data) are fixed. In
+not affect latency. Constraints (26) demonstrate that the
+                                                                           this situation, the attributes’ volumes are predictable over-
+time-slot that data Dc(d,q) is delivered to the sink is equal to
+                                                                           time and can be computed. Due to the cost of gathering
+the first time-slot before its deadline that the sink meets its            attributes’ volumes and solving the optimization problem,
+site. If the sink does not meet the sensor’s site before data              it can be concluded that this optimization problem is not
+deadline, then that data is lost and          min
+                                              c     c
+                                                        nbnnq = 0 ,        beneficial in dynamic and heterogeneous WSNs. However,
+                                              n∈[BD(d,q) ,ED(d,q) ]
+here it is assumed that tic(d,q) = c.                                      the ideal itinerary plan determined by solving this optimi-
+                                                                           zation problem helps assess the itinerary plan obtained by
+   Constraints (27) demonstrate that data Dc(d,q) should be
+                                                                           the proposed algorithm described in the following section.
+either gd(d,q)
+          c
+               = 1 (i.e. delivered to the sink) or ld(d,q)
+                                                     c
+                                                           = 1 (i.e.
+lost) or ed(d,q) = 1 (i.e. expired), while more than one should
+            c
+                                                                           3.4 Fuzzy definitions
+not be 1. Constraints (28) demonstrate the condition of
+expiring a data, where,                                                    The importance of using a fuzzy TOPSIS is to assign the rel-
+        {                                                                  ative importance of attributes using fuzzy numbers instead
+            0 if x ≤ 0
+𝛿(x) =                                                        (31)         of precise numbers and have discussed in (Salih et al. 2019).
+            1 if x > 0
+                                                                           Some useful definitions of fuzzy concepts relevant to under-
+In particular, constraints (28) is interpreted by the following            standing the proposed algorithm are described in the follow-
+two cases: (1) if either data Dc(d,q) is lost (ld(d,q)
+                                                 c
+                                                       = 1) or the         ing [for more detail see Salih et al. (2019)].
+s i n k m e et s t h e s e n s o r b e fo re d a t a d e a d l i n e
+ ∑                                                                         Definition 1 A fuzzy set is a pair (X, 𝜇) where X is a set and
+( n∈[BDc ,EDc ] bnnq ≥ 1), then ed(d,q)
+                                      c
+                                           = 0; (2) if data Dc(d,q)
+         (d,q)   (d,q)                                                     𝜇 ∶ X → [0, 1] is a membership function. The reference set
+is not lost (ld(d,q)
+               c
+                     = 0) and the sink does not meet the sensor            X is named universe of discourse and for each x ∈ X , the
+                           ∑
+before data deadline ( n∈[BDc ,EDc ] bnnq = 0 ), then that                 value 𝜇(x) is named the grade of membership of x ∈ X . The
+                                      (d,q)    (d,q)
+
+data is expired (i.e. ed(d,q)
+                           c
+                                = 1). Constraints (29) show that           function 𝜇(x) maps each element x ∈ X to a real number in
+(1) if either data D(d,q) is lost (ld(d,q)
+                    c                c
+                                           = 1) or the sink does not       the interval [0, 1].
+                                         ∑
+meet sensor before data deadline ( n∈[BDc ,EDc ] bnnq = 0),
+                                                           (d,q)   (d,q)   Definition 2 A triangular fuzzy number is represented by a
+then gd(d,q)
+        c
+             = 0 , that is, this data can not deliver properly;            triplet x̃ = (x� , x�� , x��� ) where x′ , x′′ and x′′′ are the real num-
+(2) if data Dc(d,q) is not lost (ld(d,q)
+                                   c
+                                         = 0 ) and the sink meets          bers and x′ ≤ x′′ ≤ x′′′ holds true. The membership function
+                                       ∑
+sensor before data deadline (                   bnnq ≥ 1), then that       𝜇(x) of triangular fuzzy number x̃ is expressed as:
+                                 n∈[BDc(d,q) ,EDc(d,q) ]
+data is delivered to the sink (i.e. gd(d,q)
+                                      c
+                                            = 1). Finally, con-                   ⎧ x−x� if x� ≤ x ≤ x��
+straints (31) show the domain sets of the variables.                              ⎪ x�����−x�
+                                                                           𝜇(x) = ⎨ x��� −x�� if x�� ≤ x ≤ x���                                   (32)
+   The optimization problem (3)–(30) is a multi-objective                           x −x
+                                                                                  ⎪ 0 Otherwise
+IQCQP and named OP_Sink. Many algorithms can be                                   ⎩
+applied in solving this optimization model, but IQCQPs are
+                                                                           The
+                                                                            ( ��value
+                                                                                )     of x̃ at x′′ yields the maximal grade of 𝜇(x), i.e.,
+computationally NP-hard and cannot be solved in a poly-
+                                                                           𝜇 x = 1. While, the value( of) x at x′ and    ( x��� ) yields the
+                                                                                                                              ′′′
+nomial-time (Chansombat et al. 2019; Khalily-Dermany
+                                                                           minimal grade of 𝜇(x), (i.e., 𝜇 x = 0 and 𝜇 x
+                                                                                                             �
+                                                                                                                                  = 0), indi-
+and Nadjafi-Arani 2019). In addition, it needs to gather
+                                                                           cating that the constants x′ and x′′′ are the lower and upper
+attributes’ volumes into a central node, and then provide
+                                                                           bounds of the available area.
+the optimal solution. If the network’s parameters change,
+then this process (gathering and solving) should be repeated
+                                                                           Definition 3 Let both the x̃ = (x� , x�� , x��� ) and ̃y = (y� , y�� , y��� )
+every time that the sink wants to travel. Therefore, OP_Sink
+                                                                           define the two triangular fuzzy numbers, then the distance
+undergoes a noticeable cost for gathering the attributes’ vol-
+                                                                           between them is expressed as:
+umes and solving the emerged optimization problem. Two
+options can facilitate these issues: (1) By applying a great
+
+
+13
+
+                         Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+Multi‑criteria itinerary planning for the mobile sink in heterogeneous wireless sensor…                                                       8539
+
+                   √
+                       1[ �                                           ]          4 Proposed algorithm
+Fdis (̃x, ỹ ) =         (x − y� )2 + (x�� − y�� )2 + (x��� − y��� )2
+                       3
+                                                                          (33)   This paper applies the fuzzy TOPSIS to plan an itinerary for
+Definition 4 Let both the x̃ = (x� , x�� , x��� ) and ̃y = (y� , y�� , y��� )    the sink, where, some attributes from the sensors and sites
+define two triangular fuzzy numbers, then the product                            are of concern. In brief, it compares the set of possible future
+between them is expressed as:                                                    sites by identifying their weights and normalizing scores for
+         (                               )                                       each attribute. The closest site to the Fuzzy Positive Ideal
+x̃ ⊙ ̃y = x� .y� , x�� .y�� , x��� .y���                              (34)       Solution (FPIS) and farthest from the Fuzzy Negative Ideal
+                                                                                 Solution (FNIS) is selected as the most appropriate alterna-
+Definition 5 The function Λ converts a set of real numbers,                      tives. A trade-off among the attributes where a poor out-
+A, to a triangular fuzzy number and returns the three num-                       come can be negated by a good result in another one is made
+bers x′ , x′′ and x′′′ according to                                              through this algorithm.
+                                                                                    The pseudo-code of this proposed algorithm is expressed
+Λ(A) = (x� , x�� , x��� ) = (min(A), avg(A), max(A))                      (35)
+                                                                                 in Algorithm 1, named MA_Sink. This algorithm assumes
+where, min(A), avg(A), and max(A) return the minimum,                            that the sink currently sojourns in the site la and wants to
+average, and maximum elements of the set A, respectively.                        select the next site from ∣ 𝔸a ∣ adjacent sites by considering
+                                                                                 the attributes C1 , ..., C8 ∈ J . In the following, the steps of
+                                                                                 MA_Sink are demonstrated.
+
+                                   Algorithm 1 The pseudo code of MA Sink.
+                                     1: procedure Itinerary Planning(())
+                                     2:    DM˜ 1 ← Initialize() ;
+                                             ˜ 2 ← Normalize DM     ˜ 1 ;
+                                                                       
+                                     3:    DM
+                                             ˜ 3 ← Weighting DM      ˜ 2, W ;
+                                                                           
+                                     4:    DM
+                                                                          ˜ 3 ;
+                                                                            
+                                     5:    [F + , F − ] ← FPIS FNIS DM
+                                                                ˜ 3, F +, F − ;
+                                                                            
+                                     6:    [d+ , d− ] ← Dist DM
+                                     7:    CL ← Closeness (d+ , d− ) ;
+                                     8: end procedure
+
+
+
+
+4.1 Attributes                                                                  and count of visits (C6) is more preferable. It is obvious that
+                                                                                 the union of positive and negative attributes is equal to J
+In selecting the most appropriate site from the adjacent sites,                  (i.e. J = J + ∪ J −).
+8 attributes C1 , ..., C8 ∈ J are applied in this article, how-
+ever, this proposed algorithm can consider more attributes
+                                                                                 Table 3  The attributes index, description and impact
+for future applications. A brief description and the impacts
+of the attributes are tabulated in Table 3. These attributes                     Index                 Description                        Impact
+comprise two subsets, beneficiary and cost attributes. First,
+                                                                                 C1                    Data delivery                      +
+let J + = {C1 , C3 , C4 , C5 , C8 } be the set of beneficiary attrib-
+                                                                                 C2                    Data deadline                      −
+utes with positive impact where a site with higher values
+                                                                                 C3                    Used memory                        +
+for the volume of delivered data (C1), used memory (C3),
+                                                                                 C4                    Merit of data                      +
+data merit (C4 ), latency (C5), and the count of active sen-
+                                                                                 C5                    Latency                            +
+sors (C8) is more appropriate to be the next sojourn site. On
+                                                                                 C6                    Time to travel                     −
+the other hand, the lower values of non-beneficial or cost
+                                                                                 C7                    Count of visits                    −
+attributes which constitute J − are desirable. More clearly, a
+                                                                                 C8                    Count of active sensors            +
+site with lower values for the deadline (C2), travel time (C5),
+
+
+
+
+                                                                                                                                         13
+
+                          Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+8540                                                                                                                                         M. Khalily‑Dermany
+
+
+4.2 Initialization                                                            number. For the benefit attributes (the C1, C3, C4 , C5, and C8
+                                                                               that belong to J +) r̃i,j is defined as follows:
+When the sink wants to move, it broadcasts a request mes-                             ( � �� ��� )
+                                                                                       xi,j xi,j xi,j
+sage for obtaining the volumes of the considered attributes                   r̃i,j =      , ,                                            (37)
+of each site in its vicinity. It is assumed that there exists a                        c+j c+j c+j
+sentinel node for each site that will be in charge of report-
+ing the attributes of its site. The task of sentinel nodes is to              where, c+j = max a xi,j
+                                                                                                  ���
+                                                                                                      . For the cost attributes (the C2 , C6 ,
+                                                                                                 i=1…∣𝔸 ∣
+collect and report the attributes’ volumes from their vicinity                and C7 that belong to J − ) a−j = min a xi,j
+                                                                                                                       �
+                                                                                                                           is defined as
+when requested by the sink, that is, the sink interrogates the                                                                  i=1…∣𝔸 ∣
+                                                                               follows:
+sentinel nodes of adjacent sites to collect their attributes.
+The sentinel nodes can be selected by the sink or elected by                          ( − − −)
+                                                                                       aj aj aj
+the sensors surrounding their sites.                                          r̃i,j =   ���
+                                                                                            , �� , �                                                          (38)
+                                                                                       xi,j  xi,j xi,j
+   In particular, the first step of MA_Sink consists of the
+following four phases.
+                                                                              Note that the mentioned normalization method maintains
+   Phase 1: The sink broadcasts a (beacon) packet. The sen-
+                                                                              the normalized triangular fuzzy numbers within [0, 1] range.
+sors in the transmission domain of the sink can receive this
+packet.
+                                                                              4.4 Weighting the normalized decision matrix
+   Phase 2: If a sentinel node receives the beacon, then col-
+lects 8 sets of real numbers corresponding to the attributes
+                                                                              The weighted normalized decision matrix, DM                      ̃ 3 = [̃vi,j ]∣𝔸a ∣×8,
+from its neighbors. In practice, this phase is accomplished
+                                                                              is calculated by multiplying DM 2 with the weight      ̃
+by querying the neighbor sensors about their characteristics                    ̃ = [w̃1 , … , w̃8 ], as follows:
+                                                                              W
+by the sentinel nodes. Then, the function Λ is applied to
+convert the collected sets into the triangular fuzzy numbers.                                        (                                     )
+                                                                              ṽ i,j = r̃i,j ⊙ w̃ j = w�j .ri,j                                                (39)
+                                                                                                            �
+                                                                                                                , w��j .ri,j
+                                                                                                                         ��
+                                                                                                                             , w��� .r ���
+                                                                                                                                             .
+   Phrase 3: The sentinel nodes communicate back to the                                                                         j      i,j
+
+sink the fuzzy converted of the collected sets. As to the 8
+                                                                              where, w̃ j is the attribute Cj ’s preference.
+attributes, each sentinel node transmits 8 triangular fuzzy
+numbers to the sink. This mechanism allows the sink to iden-
+                                                                              4.5 Determining FPIS and FNIS
+tify the accessible sites, because no packet is received from
+the sensors from the non-accessible sites.
+                                                                              In the fuzzy TOPSIS, the most preferable alternative, FPIS,
+   Phase 4: The sink collects the attributes of all acces-
+                                                                              is consists of the best performance values for each alterna-
+sible sites and generates the fuzzy decision matrix DM    ̃ 1 as
+                                                                              tive, while, the least preferable alternative, FNIS, consists
+follows:
+                                                                              of the( worst performance   )        values.
+                                                                                                                    (            This step ) obtains
+                      C1             C1        ...       C8                   F + = f̃1+ , f̃2+ , … , f̃8+ and F − = f̃1− , f̃2− , … , f̃8− which cor-
+      A1
+                   
+                     x̃1,1          x̃1,2      ...      x̃1,8
+                                                                             respond to FPIS and FNIS, respectively. In determining f̃j+
+      A2            x̃2,1          x̃2,2      ...      x̃2,8                 and f̃j−, the cost and benefit attributes are different. In the
+ ˜ 1= .
+                                                                   
+DM                  ..               ..                  ..           (36)   benefit attributes, f̃j+ = (c, c, c) and f̃j− = (a, a, a), while, for
+                                                                  
+      ..            .                 .       x̃i,j       .
+                                                                   
+                                                                   
+          A|Aa |       x̃|Aa |,1   x̃|Aa |,2    ...    x̃|Aa |,8              the cost attributes that belong to the J −, f̃j+ = (a, a, a) and
+                                                                               f̃j− = (c, c, c) are of concern, where, a = mini {v�i,j } and
+               (                  )                                           c = maxi {v��� i,j
+                                                                                                 }, respectively.
+where, x̃ i,j = xi,j
+                 �
+                            , xi,j is the triangular fuzzy number
+                        �� ���
+                     , xi,j
+that specifies the appropriateness of site Ai corresponding to                4.6 Calculating the distance to FPIS and FNIS
+the attribute Cj.
+                                                                              In this step, the separation of the existing alternatives from
+4.3  Normalization                                                           FPIS and FNIS is made. It highlights the similarity between
+                                                                              alternatives with the best and worst solutions. This distance
+Normalization is usually required because the attributes are                  is calculated by the Euclidean distance.
+often of incongruous dimensions. In this article, the linear                     Let di+ and di− define the distance of alternative Ai from
+scale transformation is applied to convert different attributes               FPIS and FNIS, respectively, expressed as:
+scales into a comparable
+                [ ]         scale. The normalized matrix is
+named DM  ̃ 2 = r̃i,j a , where, r̃i,j is a triangular fuzzy
+                     ∣𝔸 ∣×8
+
+
+
+
+13
+
+                    Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+Multi‑criteria itinerary planning for the mobile sink in heterogeneous wireless sensor…                                                            8541
+
+                                                                              Table 4  The lower, average and upper bounds of traffic factors
+               Node
+                                                                              Factor                    Average               Range
+               Site
+                                                                                                                              [                         ]
+                                                                              Data size                 SD = 1 kB                 SD(100−𝜒) SD(100+𝜒)
+                                                                                                                                           , 100
+                                                                                                                                     100
+                                                                                                                              [                         ]
+                                                                              Data inter-arrival        ID = 1 s                  ID(100−𝜒) ID(100+𝜒)
+                                                                                                                                           , 100
+                                                                                                                                     100
+                                                                                                                              [                             ]
+                                                                              Merit                     MD = 100                  MD(100−𝜒) MD(100+𝜒)
+                                                                                                                                           ,
+                                                                                                                                     100       100
+                                                                                                                              [                             ]
+                                                                              Deadline                  DD = 10 min               DD(100−𝜒) DD(100+𝜒)
+                                    ...                                                                                              100
+                                                                                                                                           ,   100
+
+                                    sink
+
+                                                                              is 100 m and the transmission range of sensors is 141 m.
+Fig. 1  An instance of the deployment area, where, Nv = 20 and                Changing Ns is similar to that of varying the environment
+Ns = 3
+                                                                              size with slight differences. The sensors sense the environ-
+                                                                              ment and store the gathered data in their memory until the
+                                                                              mobile sink meets their sites. The simulations are ran for 100
+                                                                              time-slots (C = 100) and the time-slot’s period is 60 s. The
+        ∑
+        8         (             )                                             memory size is 512 kB and the sensors lose the new sensed
+di+ =         Fdis ̃vi,j , f̃j+                                     (40)      data in the case of memory fullness. Note that the merit of
+        j=1
+                                                                              the stored data does not decay, but if the deadline of a stored
+                                                                              data reaches, then its merit is reduced to zero, indicating that
+        ∑
+        8         (             )                                             there is no interest in data delivery.
+di− =         Fdis ̃vi,j , f̃j−                                     (41)         The heterogeneity of a WSN depends on its applica-
+        j=1
+                                                                              tion requirements, which dictate the generated traffic of
+                                                                              sensors. In this article, a heterogeneous coefficient named
+4.7 Rank the alternatives                                                    𝜒 is applied to control the lower and upper bounds of the
+                                                                              traffic factors. It supports heterogeneous sensing/comput-
+The closeness coefficients are calculated to determine the                    ing requirements of traffic generation. In practice, the data
+relative closeness to FPIS and FNIS in a simultaneous man-                    length, time interval, merit, and deadline of the sensed data
+ner expressed as:                                                             are specified by a random distribution over their range in
+                                                                              which are tabulated in Table 4. For instance, the size of a
+               di−                                                            generated data is distributed within SD(100−𝜒)    to SD(100+𝜒) in
+CLi =                          i = 1, … , ∣ 𝔸a ∣                    (42)                                                 100          100
+         di− + di+                                                            a random manner.
+                                                                                 The following four methods are compared in this section.
+Because di+ ≥ 0 and di− ≥ 0 , CLi ∈ [0, 1]. Alternative with
+the highest CLi is the best alternative because it is the closest             – The sink travels along with the settlement sites with the
+to FPIS and farthest from FNIS. In particular, CLi = 1 if and                   optimum plan derived by a multi-objective optimization
+only if the alternative Ai is in its best condition; and CLi = 0                (3)–(30), named the OP_Sink.
+if and only if it is in its worst condition.                                  – The sink adopts MA_Sink and travels according to its
+                                                                                scenario.
+                                                                              – The sink moves towards a site with higher weighted
+5 Performance evaluation                                                       attributes as specified by GR_Sink in a greedy manner.
+                                                                                This method is distributive and considers the described
+In this paper, simulations are made to analyze the effective-                   attributes.
+ness of the proposed methods in WSNs. We assume that Nv                       – The method is termed PM_Sink (for Predetermined
+sensors are dispersed in a random manner in the environ-                        Mobility), where the sink travels in cycles around the
+ment, and there exist Ns × Ns sites (as a regular grid). The                    sites in a fixed and predetermined path.
+deployment area where Nv = 20 and Ns = 3 are shown in
+Fig. 1. To eliminate the difference caused by the random                      The results for OP_Sink have been obtained by solving the
+parameters, simulations are repeated 200 times and the pre-                   IQCQP defined in Sect. 3 using Pyomo (Hart et al. 2017) and
+sented results are the average of outcomes of these repeti-                   the CPLEX (CPLEX 2009). MA_Sink (Sect. 4) is imple-
+tions. Assume that the closest distance between the sites                     mented in a home-grown software framework by Python 3.9.
+
+
+                                                                                                                                           13
+
+                           Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+8542                                                                                                                 M. Khalily‑Dermany
+
+All simulations are run on Windows 10 personal computer                  that can solve OP_Sink in polynomial time. In dynamic
+with an Intel Core i5 CPU 2.53 GHz and 8 GB RAM, then,                   and heterogeneous WSNs where large number of gather-
+the obtained network models are implemented in the INET                  ing and solving processes are needed, the OP_Sink burdens
+Framework of OMNeT++ (Varga and Hornig 2008).                            noticeable costs to the network in terms of time and energy
+                                                                         consumption, so it is impractical and almost impossible in
+5.1 Time complexity                                                     large-scale WSNs.
+                                                                            In the following, the first scenario considers the sensors
+The assessed methods have different execution times or com-              transmit a homogeneous traffic pattern; the second scenario
+putational complexity in obtaining their solutions, which,               involves heterogeneous traffic generation where the traffic’s
+affects their application in the practice.                               factors vary with time in a random manner.
+    The complexity of PR_Sink is lower than other methods
+because it is not influenced by the network’s attributes. In             5.2 Homogeneous traffic
+practice, a fixed path is specified, where, the sink travels to
+all sites in a round-robin manner, consequently, it consumes             If the sensors sense certain data from the environment with
+no energy for collecting the attributes and executes no com-             a fixed interval, then there is no heterogeneity, 𝜒 = 0 , and
+putation to specify the movement plan.                                   traffic generation is homogeneous. The smart meter devices
+    To decide which one is more appropriate to be the next               are the samples of such applications where, they gather con-
+site, both the GR_Sink and MA_Sink collect the attributes’               sumption, diagnostic, and status data from water or energy
+volumes from the adjacent sites. GR_Sink computes the                    (gas or electric) meters in an automated manner.
+summation of products of the attributes’ volumes with the                    The effect of varying sensor and site counts on the total
+corresponding weights. If the sink sojourns in the site la ,             delivered data is drawn in Fig. 2. In this simulation, it is
+then GR_Sink can be executed in O(∣ 𝔸a ∣) . The compu-                   assumed that TTmax = 100 m and there are two cases for the
+tational complexity of MA_Sink is similar to selecting an                site count: Ns = 4 , and Ns = 8. Due to growing the gen-
+alternative by fuzzy TOPSIS where 8 attributes are of con-               erating data, an increase in the sensor count increases the
+cern. If the sink currently sojourns in site la, then the compu-         total delivered data. By comparing Fig. 2a, b, it is revealed
+tational cost of MA_Sink for choosing the most appropriate               that an increase in the site count would decrease the total
+adjacent site is O(∣ 𝔸a ∣). This complexity value is obtained            delivered data. Consequently, the objective F1 has a direct
+from the calculation of normalization and weighting, as                  relation with the sensor count, and the opposite holds true
+well as the complexity in obtaining FPIS and FNIS. Conse-                with the site count. Indeed, the results of this simulation
+quently, the computational complexity of both the MA_Sink                reveal that OP_Sink and PR_Sink obtain the best and worst
+and GR_Sink belongs to O(Ns2 ), because ∣ 𝔸a ∣≤ Ns2.                     outcomes, respectively. In addition, if Ns and Nv increase
+    OP_Sink gathers all sites’ attributes, then draws the opti-          then the total delivered data of MA_Sink, GR_Sink, and
+mal itinerary plan. If the network’s parameters change, then             PR_Sink decreases when compared with OP_Sink. In other
+this process should be repeated which wastes noticeable                  words, the efficiency of the proposed multi-attribute algo-
+energy of sensors. Furthermore, there is not any algorithm               rithm in delivering data decreases in the sparser networks
+
+
+
+
+                               (a) Ns = 4                                                  (b) Ns = 8
+
+Fig. 2  The effect of changing Nv and Ns on the objective F1, where TTmax = 100 m
+
+
+13
+
+                    Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+Multi‑criteria itinerary planning for the mobile sink in heterogeneous wireless sensor…                                              8543
+
+
+
+
+                                (a) PR Sink                                                     (b) GR Sink
+
+
+
+
+                                (c) OP Sink                                                     (d) MA Sink
+
+Fig. 3  The effect of varying Nv and Ns on the total delivery, expiring and losing ratio, where TTmax = 100 m
+
+
+
+
+                                 (a) Ns = 4                                                      (b) Ns = 8
+
+Fig. 4  The average of latencies at different sensor and site counts, where TTmax = 100 m
+
+
+and vast environment. Moreover, MA_Sink outperforms                           coherent with each other. Not providing any kind of compen-
+GR_Sink, although this experiment shows their results are                     sation between the adjacent sites is the major drawback of
+
+
+                                                                                                                              13
+
+                     Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+8544                                                                                                                   M. Khalily‑Dermany
+
+GR_Sink. Due to considering equal merit for all data (homo-                 The average of latencies when Nv increases from 40 to
+geneous traffic generation), he trends of the figures for total          90 is drawn in Fig. 4. The simulation parameters are kept at
+data merit are similar.                                                  the previously specified volumes and there are two cases for
+   The effect of varying the sensor and site counts on the               the site count: Ns = 4, and Ns = 8. The results reveal that an
+delivery, expiring, and losing ratio with respect to the total           increase in the sensor count leads to lower latency, while an
+generated data are reflected in Fig. 3. In this simulation, it           increase in the site count leads to higher latency. Same as
+is assumed that TTmax = 100 m , the sensor count is varied               the previous simulations, the OP_Sink and PR_Sink obtain
+from 40 to 90 (with step 10) and there are three cases for the           the best and worst outcomes, respectively.
+site count: Ns = 4 , Ns = 6 , and Ns = 8. The results reveal                The effect of varying sensor and site counts on the objec-
+that OP_Sink provides the best outcomes (higher deliv-                   tives F6 (the sink’s traveling distance) and F7 (fairness) are
+ery ratio as well as lower expiring and losing ratio), while             reflected in Figs. 5 and 6, respectively. In this simulation, it
+PR_Sink provides the worst. In addition, an increase in the              is assumed that TTmax = 100 m and there are two cases for
+site count leads to lower efficiency, because the probabili-             the site count: Ns = 4, and Ns = 8. In all time-slots, PR_Sink
+ties of expiring and losing data increase. Furthermore, the              moves the sink, so varying the sensor and site counts has no
+gaps among OP_Sink and other methods widen when Nv and                   effect on the sink’s movement. It is possible that OP_Sink,
+Ns increases, indicating that the performance of MA_Sink                 MA_Sink, and GR_Sink decide the sink stay at a sojourn
+decreases when site count increases.                                     site for more than one time-slot, so their traveling distance
+
+
+
+
+                                (a) Ns = 4                                                   (b) Ns = 8
+
+Fig. 5  The effect of changing Nv and Ns on the sink’s movement, where TTmax = 100 m
+
+
+
+
+                                (a) Ns = 4                                                   (b) Ns = 8
+
+Fig. 6  The effect of changing Nv and Ns on the objective F7, where TTmax = 100 m
+
+
+13
+
+                    Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+Multi‑criteria itinerary planning for the mobile sink in heterogeneous wireless sensor…                                                    8545
+
+is lower than PR_Sink. However, considering low traveling                     Table 6  The differences rates between OP_Sink and MA_Sink in var-
+distance, TTmax , leads to small differences among methods.                   ious TTmax, where Nv = 90 and Ns = 8
+Figure 6 shows that the best and worst volumes of F7 are                                    TTmax
+associated with OP_Sink and PR_Sink, respectively. In par-
+                                                                                            100 (%)      200 (%)        300 (%)         400 (%)
+ticular, the sensors’ density is not of concern in PR_Sink,
+so it yields lower fairness among the sensors. In addition,                   D1            14.26       13.00           11.48           10.03
+an increase in the sensor and site counts leads to increasing                 D2            26.01       23.76           20.90           18.40
+variance among the visitations’ counts and lower fairness.                    D3            25.22       23.06           20.58           18.09
+    The simulations results show that OP_Sink outperforms                     D4            14.26       13.00           11.48           10.03
+MA_Sink in all objectives F1–F7. The reason for this obser-                   D5            6.98        6.33            5.60            4.83
+vation is that MA_Sink gathers attributes’ volumes from the                   D6            1.25        1.98            3.21            5.28
+sink’s neighbor and decides based on, while, the OP_Sink                      D7            4.18        4.18            4.18            4.18
+applies global information to plan the itinerary. To assess
+the efficiency of MA_Sink correspond to OP_Sink, the dif-
+ference rate D1 is defined as follows.                                        Clearly, higher difference rates show that OP_Sink acts bet-
+                                                                              ter than MA_Sink. Table 5 shows the difference rates in
+               F1 (OP_Sink) − F1 (MA_Sink)
+D1 = 100 ×                                 ,                        (43)      different Nv and Ns , where TTmax = 100 m . If Nv = 40 and
+                      F1 (OP_Sink)                                            Ns = 4 , then, minimum difference rate D1 is observed and
+                                                                              the maximum D1 is occurred at a network with Nv = 90 and
+where F1 (OP_Sink) and F1 (MA_Sink) denote the volume
+                                                                              Ns = 8. The reason for this observation is that an increase
+of delivered data by OP_Sink and MA_Sink, respectively.
+                                                                              in site count leads to decreasing the proportional the neigh-
+Then, the difference rates D3–D5 are defined in a similar
+                                                                              bors’ sites (where MA_Sink can get the volumes of their
+manner. For the cost attributes ( D2 , D6 and D7), we use the
+                                                                              attributes) to the total site ratio, while OP_Sink considers
+following formula.
+                                                                              global information. The highest gap is occurred in expiring,
+               F2 (MA_Sink) − F2 (OP_Sink)                                    D2, and losing data, D3. In general, the probability of losing
+D2 = 100 ×                                 ,                        (44)      and expiring data increases in sparser and vaster networks.
+                      F2 (OP_Sink)
+                                                                              As mentioned considering equal merits for all data leads to
+
+
+Table 5  The difference rates                         Nv
+between OP_Sink and MA_
+Sink in different Nv and Ns,                          Ns             50 (%)               60 (%)       70 (%)           80 (%)           90 (%)
+where TTmax = 100 m
+                                       D1             4             0.02                  0.38         0.64             1.31             1.51
+                                                      6             3.68                  5.07         7.31             8.76             9.74
+                                                      8             5.46                  7.89         10.05            11.55            14.26
+                                       D2             4             6.87                  7.11         7.89             8.57             8.98
+                                                      6             20.31                 20.41        22.02            22.44            23.08
+                                                      8             23.38                 23.83        24.78            25.54            26.01
+                                       D3             4             6.48                  6.84         7.23             8.07             8.45
+                                                      6             18.57                 18.95        19.54            20.12            21.28
+                                                      8             22.67                 23.37        24.05            25.07            25.22
+                                       D4             4             0.02                  0.38         0.64             1.31             1.51
+                                                      6             8.20                  5.07         7.31             8.76             9.74
+                                                      8             5.46                  7.89         10.05            11.55            14.26
+                                       D5             4             2.12                  2.54         3.33             3.58             3.98
+                                                      6             2.54                  2.76         3.71             4.84             5.09
+                                                      8             3.27                  3.61         4.51             6.05             6.98
+                                       D6             4             0.67                  0.68         0.71             0.73             0.77
+                                                      6             0.70                  0.85         0.88             0.97             1.05
+                                                      8             0.81                  0.87         0.96             1.08             1.25
+                                       D7             2             1.51                  2.49         2.55             2.71             2.85
+                                                      3             2.28                  2.39         3.05             3.28             3.49
+                                                      4             2.98                  2.98         3.43             3.95             4.18
+
+
+
+                                                                                                                                    13
+
+                     Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+8546                                                                                                                 M. Khalily‑Dermany
+
+having similar D1 and D4 in all cases. Furthermore, consider-            𝜂1 = 45 nJ bit−1 and 𝜂2 = 10 pJ bit−1 m2 (Khalily-Dermany
+ing TTmax = 100 m leads to lower gaps in traveling distances             and Nadjafi-Arani 2019).
+and consequently lower difference rate D6.                             – If R increases, then the count of adjacent sites increases,
+   The difference rates between OP_Sink and MA_Sink in                   that is, more sentinel nodes are responsible to report to
+different TTmax , where Nv = 90 and Ns = 8 are tabulated in              the sink. An increase in R from 100 to 400 leads to an
+Table 6. Indeed, an increase in TTmax from 100 m to 400 m                increase in the maximum adjacent sites’ count,
+would reduce the differences rates D1-D5 and D7 . This is                max  ∣ 𝔸 ∣a , from 5 to 40.
+because that an increase in TTmax increases the count of adja-
+                                                                          a
+                                                                          l ∈𝕃
+
+cent sites to Ns × Ns ratio, thus, allowing the MA_Sink to             Consequently, we can compute the minimum and maximum
+choose the better decision and a decrease in the differences           energy consumption for collecting the attributes’ volumes
+rates. But an increase in TTmax increases D6, because the sink         by the sentinel nodes. Therefore, an increase in R from 100
+can travel to further sites and the proposed algorithm may             to 400 m leads to about 90 and 156 fold higher energy con-
+fail to select the optimal path. However, increasing TTmax             sumption. In addition, if 𝛼 = 3 (in the harsh environment),
+leads to more sentinel nodes and higher energy consumption             then an increase in R from 100 to 400 m leads to about
+which are described in the next subsection.                            362 and 627 fold higher energy consumption. Moreover, if
+                                                                       we consider the reception energy, then it is becoming more
+5.3 Heterogeneous traffic                                             evident that increasing R has a significant burden on the
+                                                                       network and energy consumption.
+The OP_Sink is aware of the attributes’ volumes of whole
+sites and sends the sink to the global optimum site in                     In dynamic networks, the attributes’ volumes change
+advance. This subsection considers dynamic and heteroge-               occasionally in the process of time, so OP_Sink should
+neous WSNs, where the factors of generated traffic (data               gather all attributes’ volumes in all time-slots from the sen-
+size, interval, merit, and deadline) are not the same and do           tinel nodes. This burdens noticeable energy to the sensors, so
+not remain constant over time (they change occasionally).              this article uses the averages of traffic factors for computing
+Indeed, applying dynamic and heterogeneous traffic pattern             the OP_Sink.
+affects the attributes’ volumes in the process of time and                 The effect of varying sensor and site counts on the total
+predicting them are not simple.                                        delivered data in heterogeneous traffic is drawn in Figs. 7
+   If the sensors generate dynamic and heterogeneous traffic,          and 8 where 𝜒 = 10 and 𝜒 = 20, respectively. In this simu-
+then OP_Sink can not gather the attributes’ volumes from               lation, it is assumed that TTmax = 100 m and there are three
+all sites, because it imposes an additional energy cost on             cases for the site count: Ns = 4, Ns = 6, and Ns = 8. Same
+the networks. The details of the total energy consumption              as homogeneous traffic, an increase in the sensor count
+for collecting information from the sites in the range R are           increases the total delivered data because more traffic is gen-
+tabulated in Table 7. The sequence of interpreting this table          erated. In addition, an increase in the site count decreases
+is as follows:                                                         the total delivered data, because more data may be lost or
+                                                                       expired. But the results of this simulation reveal that MA_
+– The consumed energy for transmission by a sentinel                   Sink may outperform OP_Sink and deliver more data to
+  node is expressed through: Etx = 𝜂1 R𝛼 + 𝜂2 where, 𝛼 is              the sink. More clearly, if Nv = 90, Ns = 4 and 𝜒 = 10, then
+  the path loss exponent with 2 ≤ 𝛼 ≤ 6 depending on the               MA_Sink overtakes OP_Sink. The reason for this observa-
+  environment, 𝜂1 and 𝜂2 are the parameters subject to the             tion is that OP_Sink provides the sink’s movement based on
+  characteristic of transceiver and the channel. In the exist-         preliminary attributes, while the instantaneous information
+  ing wireless transceivers, it can be assumed that 𝛼 = 2,             is of concern by MA_Sink. In addition, an increase in sensor
+                                                                       count leads to more efficiency for MA_Sink in comparison
+                                                                       with OP_Sink, because more heterogeneous and dynamical
+Table 7  The effect of changing R                                      data is generated, and consequently using local information
+                      R
+                                                                       by MA_Sink leads to its higher efficiency. In practice, an
+                                                                       increase in the heterogeneity coefficient (Fig. 8) leads to
+                      100           200        300         400         a more decrease in OP_Sink’s performance, so MA_Sink
+Etx                   0.45 mJ       1.80 mJ    4.05 mJ     7.20 mJ     overtakes OP_Sink in lower sensor count than the one shown
+min ∣ 𝔸 ∣a            3             6          11          17          in Fig. 7. Because higher variety among the attributes in the
+                                                                       sites is achieved if an increase in heterogeneity coefficient
+a
+l ∈𝕃
+max ∣ 𝔸 ∣a            5             13         29          49
+                                                                       of the traffic generation occurs.
+a
+l ∈𝕃
+Min wasted energy     1.35 mJ       10.80 mJ   44.55 mJ    122.40 mJ
+Max wasted energy     2.25 mJ       23.40 mJ   117.45 mJ   352.80 mJ
+
+
+
+13
+
+                    Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+Multi‑criteria itinerary planning for the mobile sink in heterogeneous wireless sensor…                                                                                                                         8547
+
+
+                                                      ·108
+
+
+                                                2.6                                                                                                                                        MA Sink
+                                                                                                                                                                                           OP Sink
+                                                                                                                                                                                           GR Sink
+
+                                                2.4
+
+
+
+
+                               Delivered data
+                                                2.2
+
+
+
+                                                 2
+
+
+
+                                                1.8
+
+
+
+                                                1.6
+
+                                                         (50, 4)   (60, 4)   (70, 4)   (80, 4)   (90, 4)   (50, 6)   (60, 6)   (70, 6)   (80, 6)   (90, 6)   (50, 8)   (60, 8)   (70, 8)   (80, 8)   (90, 8)
+
+                                                                                                                       (Nv , Ns )
+
+
+Fig. 7  The effect of changing Nv and Ns on the total delivered data, where TTmax = 100 m and 𝜒 = 10
+
+
+
+
+                                                      ·108
+
+                                                2.3
+                                                                                                                                                                                           MA Sink
+                                                                                                                                                                                           OP Sink
+                                                2.2                                                                                                                                        GR Sink
+
+
+                                                2.1
+
+
+
+
+                               Delivered data
+                                                 2
+
+
+                                                1.9
+
+
+                                                1.8
+
+
+                                                1.7
+
+
+                                                1.6
+
+
+                                                         (50, 4)   (60, 4)   (70, 4)   (80, 4)   (90, 4)   (50, 6)   (60, 6)   (70, 6)   (80, 6)   (90, 6)   (50, 8)   (60, 8)   (70, 8)   (80, 8)   (90, 8)
+
+                                                                                                                       (Nv , Ns )
+
+
+Fig. 8  The effect of changing Nv and Ns on the total delivered data, where TTmax = 100 m and 𝜒 = 20
+
+
+
+
+                                                                                                                                                                                                               13
+
+                     Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+8548                                                                                                                       M. Khalily‑Dermany
+
+Table 8  The volume of 𝜒 which         Nv                            because it considers local information about the sites. As the
+MA_Sink overtakes OP_Sink,                                           site count increase, the proportionality of the adjacent sites
+where TTmax = 100 m                    Ns 50 60 70 80 90
+                                                                     correspond to all sites decreases, leading to a lower perfor-
+                                  F1   4    25   20   18   15   10   mance for MA_Sink, so MA_Sink outperforms OP_Sink
+                                       6    28   24   20   18   15   at higher 𝜒 .
+                                       8    32   29   25   21   18
+                                  F2   4    30   24   22   19   12
+                                       6    34   29   24   21   18
+                                       8    39   35   30   25   22   6 Conclusion
+                                  F3   4    27   22   20   16   11
+                                       6    30   26   22   20   16   This paper considers itinerary planning as a multi-criteria
+                                       8    35   32   28   23   20   problem, then proposes a multi-objective optimization
+                                  F4   4    22   18   16   13   9    model and a multi-attribute algorithm. The conflicting cri-
+                                       6    25   21   18   16   13   teria: the data merit, data deadline, used memory, latency,
+                                       8    29   26   22   19   16   travel time, density, and fairness are of concern in this arti-
+                                  F5   4    20   16   14   12   8    cle. In particular, the fuzzy TOPSIS is applied in this article
+                                       6    22   19   16   14   12   to devise a distributed algorithm for planning an itinerary for
+                                       8    25   23   20   16   14   the mobile sink. The achievable throughput of the proposed
+                                  F6   4    19   14   12   10   7    methods is analyzed with respect to varying sensors and
+                                       6    20   17   14   12   11   site counts and different flow generation types. The simula-
+                                       8    23   20   18   14   13   tion results indicate that applying the local information for
+                                  F7   2    17   12   11   9    7    the proposed algorithm leads to appropriate scalability with
+                                       3    18   15   12   11   10   minimal reduction in performance. This proposed algorithm
+                                       4    20   18   16   12   12   is more appropriate to be applied in dynamic and large-scale
+                                                                     WSNs with a great count of sensors due to its low com-
+                                                                     plexity. In higher traffic load and heterogeneous WSNs, this
+    In terms of all considered metrics, an increase in the coef-     algorithm will be more beneficial in comparison with its
+ficient 𝜒 leads to degrading the performance of the methods.         available counterparts. As an interesting topic for research
+In other words, randomness in the traffic generation leads           in the future, developing a multi-attribute trajectory for UAV
+to performance degradation of the methods, especially for            to collect data from a heterogeneous WSN is of concern.
+PR_Sink where no attribute is of concern in its planning
+as well as for OP_Sink where the average of attributes is
+considered. The simulation results indicate that MA_Sink             References
+adapts to the heterogeneous traffic generation and the sink
+can even get more performance with lower complexity. The             Agarwal V, Tapaswi S, Chanak P (2021) A survey on path planning
+                                                                         techniques for mobile sink in IoT-enabled wireless sensor net-
+MA_Sink outperforms OP_Sink in higher heterogeneity due
+                                                                         works. Wirel Pers Commun 119(1):211–238. https://​doi.​org/​10.​
+to the two facts, that,                                                  1007/​s11277-​021-​08204-w
+                                                                     Akkaya K, Younis M, Bangad M (2005) Sink repositioning for
+– OP_Sink provides an optimal solution based on the                      enhanced performance in wireless sensor networks. Comput Netw
+                                                                         49(4):512–534. https://​doi.​org/​10.​1016/j.​comnet.​2005.​01.​014
+  parameters’ average, leading to high degradation in its
+                                                                     Alhasanat A, Alhasanat K, Ahmed M (2015) Range-based data gath-
+  performance                                                            ering algorithm with a mobile sink in wireless sensor networks.
+– MA_Sink does not need prior knowledge on when and                      Int J Wirel Mob Netw 7(6):1–13. https://​doi.​org/​10.​5121/​ijwmn.​
+  where the sensors produce data, making performance less                2015.​7601
+                                                                     Alsaafin A, Khedr AM, Al Aghbari Z (2018) Distributed trajectory
+  prone to heterogeneity.
+                                                                         design for data gathering using mobile sink in wireless sensor net-
+                                                                         works. AEU-Int J Electron C 96:1–12. https://​doi.​org/​10.​1016/j.​
+The volume of 𝜒 at which MA_Sink overtakes OP_Sink                       aeue.​2018.​09.​005
+at different sensor and site counts where TTmax = 100 m is           Anwit R, Jana PK (2018) A variable length genetic algorithm approach
+                                                                         to optimize data collection using mobile sink in wireless sensor
+tabulated in Table 8. As observed, an increase in the sensor
+                                                                         networks. In: 5th International Conference on signal processing
+count allows MA_Sink to overtake OP_Sink at a lower 𝜒 .                  and integrated networks, SPIN, pp 73–77, https://​doi.​org/​10.​1109/​
+This is due to the fact that the diversity among the gener-              SPIN.​2018.​84742​59
+ated information grows if the sensor count increases. Note           Anwit R, Tomar A, Jana PK (2020) Tour planning for multiple mobile
+                                                                         sinks in wireless sensor networks: a shark smell optimization
+that the diversity among the attributes’ volumes in the adja-
+cent sites leads to more advantages for applying MA_Sink
+
+
+13
+
+                   Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+Multi‑criteria itinerary planning for the mobile sink in heterogeneous wireless sensor…                                                                 8549
+
+      approach. Appl Soft Comput J 97(106):802. https://​doi.​org/​10.​         Khalily-Dermany M (2021) A decentralized algorithm to combine
+      1016/j.​asoc.​2020.​106802                                                     topology control with network coding. J Parallel Distrib Comput
+Bencan G, Panpan D, Peng C et al (2020) Evolutionary game-based                      149:174–185. https://​doi.​org/​10.​1016/j.​jpdc.​2020.​12.​001, https://​
+      trajectory design algorithm for mobile sink in wireless sensor                 www.​scien​cedir​ect.​com/​scien​ce/​artic​le/​pii/​S0743​73152​03041​72
+      networks. Int J Distrib Sens Netw 16(3):1–10. https://​doi.​org/​10.​     Khalily-Dermany M, Nadjafi-Arani MJ (2017) Itinerary planning for
+      1177/​15501​47720​911000                                                       mobile sinks in network-coding-based wireless sensor networks.
+Chakrabarti A, Sabharwal A, Aazhang B (2003) Using predictable                       Comput Commun 111:1–13. https://​doi.​org/​10.​1016/j.​comcom.​
+      observer mobility for power efficient design of sensor networks.               2017.​07.​001
+      In: Lecture Notes in Computer Science (including subseries                Khalily-Dermany M, Nadjafi-Arani MJ (2019) Mathematical aspects
+      Lecture Notes in Artificial Intelligence and Lecture Notes in                  in combining network coding with transmission range adjustment.
+      Bioinformatics), Springer, pp 129–145, https:// ​ d oi. ​ o rg/ ​ 1 0.​        IEEE Commun Lett 23(9):1568–1571. https://​doi.​org/​10.​1109/​
+      1007/3-​540-​36978-3_9                                                         LCOMM.​2019.​29246​25
+Chansombat S, Pongcharoen P, Hicks C (2019) A mixed-integer lin-                Khan MI, Gansterer WN, Haring G (2013) Static vs. mobile sink: The
+      ear programming model for integrated production and preventive                 influence of basic parameters on energy efficiency in wireless sen-
+      maintenance scheduling in the capital goods industry. Int J Prod               sor networks. Comput Commun 36(9):965–978. https://​doi.​org/​
+      Res 57(1):61–82. https://​doi.​org/​10.​1080/​00207​543.​2018.​14599​          10.​1016/j.​comcom.​2012.​10.​010
+      23                                                                        Mehto A, Tapaswi S, Pattanaik KK (2020a) PSO-based rendezvous
+CPLEX II (2009) V12. 1: User’s manual for CPLEX                                      point selection for delay efficient trajectory formation for mobile
+Din MSU, Rehman MAU, Ullah R et al (2020) Towards network life-                      sink in wireless sensor networks. In: 2020 International Confer-
+      time enhancement of resource constrained iot devices in heteroge-              ence on COMmunication Systems and NETworkS, COMSNETS
+      neous wireless sensor networks. Sensors (Switzerland) 20(15):1–                2020, IEEE, pp 252–258. https://​doi.​org/​10.​1109/​COMSN​ETS48​
+      23. https://​doi.​org/​10.​3390/​s2015​4156                                    256.​2020.​90273​30
+Dong M, Ota K, Yang LT et al (2014) Mobile agent-based energy-                  Mehto A, Tapaswi S, Pattanaik KK (2020b) A review on rendezvous
+      aware and user-centric data collection in wireless sensor networks.            based data acquisition methods in wireless sensor networks with
+      Comput Netw 74:58–70. https://​doi.​org/​10.​1016/j.​comnet.​2014.​            mobile sink. Wirel Netw 26(4):2639–2663. https://​doi.​org/​10.​
+      06.​019                                                                        1007/​s11276-​019-​02022-6
+Gjanci P, Petrioli C, Basagni S et al (2018) Path finding for maximum           Nitesh K, Jana PK (2019) Convex hull based trajectory design for
+      value of information in multi-modal underwater wireless sensor                 mobile sink in wireless sensor networks. Int J Ad Hoc Ubiqui-
+      networks. IEEE Trans Mob Comput 17(2):404–418. https://​doi.​                  tous Comput 30(1):26–36. https://​doi.​org/​10.​1504/​IJAHUC.​2019.​
+      org/​10.​1109/​TMC.​2017.​27066​89                                             097092
+Gupta N, Gupta V (2016) A review on sink mobility aware fast and                Nitesh K, Kaswan A, Jana PK (2019) Energy density based mobile
+      efficient data gathering in wireless sensor networks. In: Interna-             sink trajectory in wireless sensor networks. Microsyst Technol
+      tional Conference on advances in computing, communication and                  25(5):1771–1781. https://​doi.​org/​10.​1007/​s00542-​017-​3569-4
+      automation, ICACCA, IEEE, pp 1–4, https://​doi.​org/​10.​1109/​           Park J, Kim S, Youn J et al (2020) (2020) Iterative sensor clustering and
+      ICACCA.​2016.​75788​77                                                         mobile sink trajectory optimization for wireless sensor network
+Gupta GP, Saha B (2020) Load balanced clustering scheme using                        with nonuniform density. Wirel Commun Mob Comput. https://​
+      hybrid metaheuristic technique for mobile sink based wireless                  doi.​org/​10.​1155/​2020/​88536​62
+      sensor networks. J Ambient Intell Humaniz Comput. https://​doi.​          Preeth SKL, Dhanalakshmi R, Shakeel PM (2020) An intelligent
+      org/​10.​1007/​s12652-​020-​01909-z                                            approach for energy efficient trajectory design for mobile
+Hart WE, Laird CD, Watson JP et al (2017) Pyomo-optimization                         sink based IoT supported wireless sensor networks. Peer-to-
+      modeling in python, vol 67. Springer. https://​doi.​org/​10.​1007/​            Peer Netw Appl 13(6):2011–2022. https://​d oi.​o rg/​1 0.​1 007/​
+      978-3-​319-​58821-6                                                            s12083-​019-​00798-0
+He X, Fu X, Yang Y (2019) Energy-efficient trajectory planning algo-            Raj PV, Khedr AM, Aghbari ZA (2020) Data gathering via mobile
+      rithm based on multi-objective pso for the mobile sink in wireless             sink in wsns using game theory and enhanced ant colony opti-
+      sensor networks. IEEE Access 7:176,204-176,217. https://​doi.​org/​            mization. Wirel Netw 26(4):2983–2998. https://​doi.​org/​10.​1007/​
+      10.​1109/​ACCESS.​2019.​29578​34                                               s11276-​020-​02254-x
+Ji S (2019) Path planning for mobile sink based on enhanced ant colony          Roy S, Mazumdar N, Pamula R (2021) An optimal mobile sink sojourn
+      optimization algorithm in wireless sensor networks. Xitong Fang-               location discovery approach for the energy-constrained and delay-
+      zhen Xuebao /J Syst Simul 31(11):2543–2552. https://​doi.​org/​10.​            sensitive wireless sensor network. J Ambient Intell Humaniz
+      16182/j.​issn1​00473​1x.​joss.​19-​0298                                        Comput. https://​doi.​org/​10.​1007/​s12652-​020-​02886-z
+Kaswan A, Nitesh K, Jana PK (2017) Energy efficient path selection              Salarian H, Chin KW, Naghdy F (2014) An energy-efficient mobile-
+      for mobile sink and data gathering in wireless sensor networks.                sink path selection strategy for wireless sensor networks. IEEE
+      AEU-Int J Electron C 73:110–118. https://​doi.​org/​10.​1016/j.​aeue.​         Trans Veh Technol 63(5):2407–2419. https://​doi.​org/​10.​1109/​
+      2016.​12.​005                                                                  TVT.​2013.​22918​11
+Kaswan A, Singh V, Jana PK (2018) A multi-objective and PSO based               Salih MM, Zaidan BB, Zaidan AA et al (2019) Survey on fuzzy TOP-
+      energy efficient path design for mobile sink in wireless sensor                SIS state-of-the-art between 2007 and 2017. Comput Oper Res
+      networks. Pervasive Mob Comput 46:122–136. https://​doi.​org/​                 104:207–227. https://​doi.​org/​10.​1016/j.​cor.​2018.​12.​019
+      10.​1016/j.​pmcj.​2018.​02.​003                                           Sapre S, Mini S (2021) A differential moth flame optimization
+Kaur N, Sood SK (2015) An energy-efficient architecture for the Inter-               algorithm for mobile sink trajectory. Peer-to-Peer Netw Appl
+      net of Things (IoT). IEEE Syst J 11(2):796–805. https://​doi.​org/​            14(1):44–57. https://​doi.​org/​10.​1007/​s12083-​020-​00947-w
+      10.​1109/​jsyst.​2015.​24696​76                                           Tan CG, Xu K, Wang JX et al (2009) A sink moving scheme based on
+Keskin ME, Yiğit V (2020) Maximizing the lifetime in wireless sen-                   local residual energy of nodes in wireless sensor networks. J Cent
+      sor networks with multiple mobile sinks having nonzero travel                  South Univ Technol (English Edition) 16(2):265–268. https://​doi.​
+      times. Comput Ind Eng 148(106):719. https://​doi.​org/​10.​1016/j.​            org/​10.​1007/​s11771-​009-​0045-z
+      cie.​2020.​106719                                                         Tao L, Zhang XM, Liang W (2019) Efficient algorithms for mobile
+                                                                                     sink aided data collection from dedicated and virtual aggregation
+
+
+                                                                                                                                                13
+
+                      Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+8550                                                                                                                              M. Khalily‑Dermany
+
+    nodes in energy harvesting wireless sensor networks. IEEE Trans         Yun Y, Xia Y (2010) Maximizing the lifetime of wireless sensor net-
+    Green Commun Netw 3(4):1058–1071. https://​doi.​org/​10.​1109/​             works with mobile sink in delay-tolerant applications. IEEE Trans
+    TGCN.​2019.​29276​19                                                        Mob Comput 9(9):1308–1318. https://​doi.​org/​10.​1109/​TMC.​
+Tashtarian F, Yaghmaee Moghaddam MH, Sohraby K et al (2015)                     2010.​76
+    ODT: Optimal Deadline-based Trajectory for mobile sinks in              Yun Y, Xia Y, Behdani B et al (2013) Distributed algorithm for lifetime
+    wsn: a decision tree and dynamic programming approach. Comput               maximization in a delay-tolerant wireless sensor network with a
+    Netw 77:128–143. https://​doi.​org/​10.​1016/j.​comnet.​2014.​12.​003       mobile sink. IEEE Trans Mob Comput 12(10):1920–1930. https://​
+uz Zaman SK, Jehangiri AI, Maqsood T et al (2021) Mobility-aware                doi.​org/​10.​1109/​TMC.​2012.​152
+    computational offloading in mobile edge networks: a survey. Clus-       Zareei M, Islam AK, Vargas-Rosales C et al (2018) Mobility-aware
+    ter Comput. https://​doi.​org/​10.​1007/​s10586-​021-​03268-6               medium access control protocols for wireless sensor networks: a
+Vajdi A, Zhang G, Zhou J et al (2018) A new path-constrained ren-               survey. J Netw Comput Appl 104:21–37. https://​doi.​org/​10.​1016/j.​
+    dezvous planning approach for large-scale event-driven wireless             jnca.​2017.​12.​009
+    sensor networks. Sensors (Switzerland) 18(5):1434. https://​doi.​       Zhan C, Zeng Y, Zhang R (2018) Energy-efficient data collection in
+    org/​10.​3390/​s1805​1434                                                   UAV enabled wireless sensor network. IEEE Wirel Commun Lett
+Varga A, Hornig R (2008) An overview of the OMNeT++ simulation                  7(3):328–331. https://​doi.​org/​10.​1109/​LWC.​2017.​27769​22, arXiv:​
+    environment. In: SIMUTools 2008—1st International ICST Con-                 1708.​00221
+    ference on simulation tools and techniques for communications,          Zhu C, Zhang S, Han G et al (2016) A greedy scanning data collection
+    networks and systems. ICST (Institute for Computer Sciences,                strategy for large-scale wireless sensor networks with a mobile
+    Social-Informatics and Telecommunications Engineering), ICST,               sink. Sensors (Switzerland). https://​doi.​org/​10.​3390/​s1609​1432
+    Brussels, Belgium, pp 60:1—-60:10, https://​doi.​org/​10.​4108/​        Zhu C, Quan K, Han G et al (2018) A high-available and location
+    ICST.​SIMUT​OOLS2​008.​3027                                                 predictive data gathering scheme with mobile sinks for wireless
+Wang J, Cao J, Sherratt RS et al (2018) An improved ant colony opti-            sensor networks. Comput Netw 145:156–164. https://​doi.​org/​10.​
+    mization-based approach with mobile sink for wireless sensor                1016/j.​comnet.​2018.​08.​022
+    networks. J Supercomput 74(12):6633–6645. https://​doi.​org/​10.​
+    1007/​s11227-​017-​2115-6                                               Publisher's Note Springer Nature remains neutral with regard to
+Wang J, Gao Y, Zhou C et al (2020) Optimal coverage multi-path              jurisdictional claims in published maps and institutional affiliations.
+    scheduling scheme with multiple mobile sinks for WSNs. Com-
+    put Mater Contin 62(2):695–711. https://​doi.​org/​10.​32604/​cmc.​
+    2020.​08674
+Yu F, Lee E, Park S et al (2010) A simple location propagation scheme
+    for mobile sink in wireless sensor networks. IEEE Commun Lett
+    14(4):321–323. https://​doi.​org/​10.​1109/​LCOMM.​2010.​04.​092330
+
+
+
+
+13
+
+                     Content courtesy of Springer Nature, terms of use apply. Rights reserved.
+Terms and Conditions
+Springer Nature journal content, brought to you courtesy of Springer Nature Customer Service Center GmbH (“Springer Nature”).
+Springer Nature supports a reasonable amount of sharing of research papers by authors, subscribers and authorised users (“Users”), for small-
+scale personal, non-commercial use provided that all copyright, trade and service marks and other proprietary notices are maintained. By
+accessing, sharing, receiving or otherwise using the Springer Nature journal content you agree to these terms of use (“Terms”). For these
+purposes, Springer Nature considers academic use (by researchers and students) to be non-commercial.
+These Terms are supplementary and will apply in addition to any applicable website terms and conditions, a relevant site licence or a personal
+subscription. These Terms will prevail over any conflict or ambiguity with regards to the relevant terms, a site licence or a personal subscription
+(to the extent of the conflict or ambiguity only). For Creative Commons-licensed articles, the terms of the Creative Commons license used will
+apply.
+We collect and use personal data to provide access to the Springer Nature journal content. We may also use these personal data internally within
+ResearchGate and Springer Nature and as agreed share it, in an anonymised way, for purposes of tracking, analysis and reporting. We will not
+otherwise disclose your personal data outside the ResearchGate or the Springer Nature group of companies unless we have your permission as
+detailed in the Privacy Policy.
+While Users may use the Springer Nature journal content for small scale, personal non-commercial use, it is important to note that Users may
+not:
+
+ 1. use such content for the purpose of providing other users with access on a regular or large scale basis or as a means to circumvent access
+    control;
+ 2. use such content where to do so would be considered a criminal or statutory offence in any jurisdiction, or gives rise to civil liability, or is
+    otherwise unlawful;
+ 3. falsely or misleadingly imply or suggest endorsement, approval , sponsorship, or association unless explicitly agreed to by Springer Nature in
+    writing;
+ 4. use bots or other automated methods to access the content or redirect messages
+ 5. override any security feature or exclusionary protocol; or
+ 6. share the content in order to create substitute for Springer Nature products or services or a systematic database of Springer Nature journal
+    content.
+In line with the restriction against commercial use, Springer Nature does not permit the creation of a product or service that creates revenue,
+royalties, rent or income from our content or its inclusion as part of a paid for service or for other commercial gain. Springer Nature journal
+content cannot be used for inter-library loans and librarians may not upload Springer Nature journal content on a large scale into their, or any
+other, institutional repository.
+These terms of use are reviewed regularly and may be amended at any time. Springer Nature is not obligated to publish any information or
+content on this website and may remove it or features or functionality at our sole discretion, at any time with or without notice. Springer Nature
+may revoke this licence to you at any time and remove access to any copies of the Springer Nature journal content which have been saved.
+To the fullest extent permitted by law, Springer Nature makes no warranties, representations or guarantees to Users, either express or implied
+with respect to the Springer nature journal content and all parties disclaim and waive any implied warranties or warranties imposed by law,
+including merchantability or fitness for any particular purpose.
+Please note that these rights do not automatically extend to content, data or other material published by Springer Nature that may be licensed
+from third parties.
+If you would like to use or distribute our Springer Nature journal content to a wider audience or on a regular basis or in any other manner not
+expressly permitted by these Terms, please contact Springer Nature at
+
+onlineservice@springernature.com
+

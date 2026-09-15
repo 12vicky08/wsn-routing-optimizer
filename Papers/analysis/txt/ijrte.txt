@@ -1,0 +1,607 @@
+                                                          International Journal of Recent Technology and Engineering (IJRTE)
+                                                                           ISSN: 2277-3878, Volume-8 Issue-4, November 2019
+
+
+
+      Hybrid TABU-GA Search For Energy Efficient
+                  Routing In WSN
+                                     Varsha, Manju Bala, Manoj Kumar, Neeraj Kumar
+
+
+
+    Abstract— The heterogeneity is contextual in wireless sensor          Diverse government and research agencies are trying to put
+network. In the case of hardware terms, there might be different          different proposals for Wireless Sensor Technology
+batteries, memory, MAC layer, communication protocol, and                 advancements. Wireless sensor network contains battery
+computing architecture. To measure the system's lifetime, this            functioned small nodes which are positioned over a wide
+paper focuses on node heterogeneity that implies it has three
+                                                                          geographical area to monitor the events and to accumulate
+kinds of nodes: advance nodes, supernodes, and normal nodes.
+In this paper, proposed a new multilevel stable and energy-               the collected data to a distant centralized location called as
+efficient clustering protocol using TABU-GA search mechanism              base station. Nodes are deployed in such a way that the
+carries out two neighborhood generating operations to detect the          entire area is in the coverage of wireless nodes The deployed
+optimal path with the aim of maximize the network lifetime in the         nodes sense the data from its neighborhood and transmit the
+area of 200m×200m. The simulation is done under the MATLAB                collected data for further processing. The main distinction
+environment to observe network stability, throughput, average             between ad hoc networks and Wireless Sensor Networks is
+remaining energy, etc. Our proposed protocol outperforms in               their applications area. Ad-hoc networks primarily focus on
+comparison with the multilevel stable and energy-efficient                communications aspects whereas wireless area networks
+clustering protocol.
+                                                                          focuses more on monitoring and information collection. In
+   Keywords— Wireless sensor network, heterogeneity,                      this paper TABU-GA MSEEC routing protocol is proposed
+multilevel stable and energy-efficient clustering protocol, tabu –        .The main aim of this protocol is to prolong the network
+GA search, MATLAB, network stability, throughput, average                 period .The performance of purposed approach will be
+remaining energy.                                                         compared against basic multi-level stable and energy
+                      I. INTRODUCTION                                     efficient clustering protocol and TABU based multi-level
+                                                                          stable and energy efficient clustering protocol.[2]
+A wireless sensor network comprises of an extensive                       The rest of the paper is in the following order: Section II
+number of low - cost, low - capability, and multi-purpose                 examines related work, Section III characterizes the network
+sensor nodes that are distributed in areas that are difficult to          model. Section IV depicts the TABU-GA based MSEEC
+access, which requires sensors to be energetically                        Protocol, Section V gives the experimental setup, and
+autonomous and able to operate without manual                             Section VI gives the results and discussion and in
+intervention.[1]                                                          conclusion Section VII finishes up the paper with future
+The Sensors are mainly used to sense the environment and                  degree.
+to gather the data to a centralized location. Advent of
+                                                                                                II. RELATED WORK
+processing devices and networks makes it as “Wireless
+Sensor Network”. Development in Semi-conductor                            D. Kumar et al. [3] have reviewed the impact of
+technology and Networking method has stimulated the use                   heterogeneity of nodes in terms of their energy. They
+of sensor networks for observing and information collection.              assume that the sensor nodes are randomly distributed and
+In Wireless sensor network, information collected by                      measurements of the sensor field are known. Homogeneous
+sensors is gathered at a distant location for analyzing and               nodes have the same amount of energy. Adjusting to this
+computation purpose via wireless links. From last few                     methodology, they presented a energy productive
+decades researchers are making exertions for Wireless                     heterogeneous bunched conspire for WSN depend on
+Sensor Network (WSN) routing technology with more                         weighted political decision probabilities. At last, the
+power efficient protocols.                                                recreation results exhibited that proposed heterogeneous
+                                                                          grouping approach is progressively sufficient in drawing out
+                                                                          the system lifetime related to LEACH.
+                                                                            Saini, Parul et al. [4] have studied the upgraded conveyed
+                                                                          energy proficient grouping plan for heterogeneous systems.
+                                                                          It contains three sorts of sensor nodes to improve the
+                                                                          security of the remote sensor organizes and to make longer
+                                                                          lifetime of the network. Along these lines, the heterogeneity
+Revised Manuscript Received on November 15, 2019                          and energy level of the whole system is expanded. The
+   Varsha, Computer Science, I.K. Gujral Punjab Technical University,
+Jalandhar (Punjab), India. Email: barkhabright@gmail.com                  outcome shows that the exhibition of EDEEC is better when
+   Manju Bala, Computer Science, Khalsa College of Engineering &          contrasted with SEP. V. Raghavendran, G Naga Satish et al.
+Technology, Amritsar , (Punjab), India. Email: drmanju571@gmail.com
+    Manoj Kumar, Electronics and communication, DAV Institute of
+Engineering, Management & Technology, Jalandhar (Punjab), India. Email:
+drmanojkumarindia@gmail.com.
+   Neeraj Kumar, DIT, BBAU ( A Central University), Lucknow, India.
+Email: req.mrt@gmail.com
+
+
+
+                                                                                Published By:
+     Retrieval Number: D8046118419/2019©BEIESP                        3250      Blue Eyes Intelligence Engineering
+     DOI:10.35940/ijrte.D8046.118419                                            & Sciences Publication
+                         Hybrid TABU-GA Search For Energy Efficient Routing In WSN
+
+[5] have depicted the Swarm Intelligence (SI) approach for
+the routing process and found the Bee Ad Hoc which is the
+distribution among traffic to find out the various routes
+proportional to the quality and the capacity. The main
+disadvantage of network is control overhead created by per
+packet and furthermore, the limitation of longer route. A
+reliable approach has to find out while solving the routing
+problems in mobile Ad hoc networks.Ants directing is
+fundamental system from SI and gives a proficient
+arrangement.
+Fifi, Rawya et al. [6] presented the two energy-efficient
+clustering protocol, which used the optimum number of
+energetic nodes that achieves the minimum energy
+consumption for the network. The M-SEEC is a different
+protocol and prolongs the stability period, increases energy
+efficiency, and above-average throughput.
+Tandon, Ravi et al. [7] studied about the heterogeneous
+sensor networks. In the heterogeneous sensor network,
+various types of protocols have been discussed like SEP,
+DEEC and their improper utilization of energy. So, they                     Fig. 1: Network environment in MATLAB
+proposed the CRP which is called as cluster head re-election
+protocol ehich is heterogeneous in nature and upgrade the         This figure shows the network model of the M-SEEC
+system’s lifetime.                                                protocol in which base station is stationary and supernodes
+Gu, Yu et al. [8] kept an eye on the issue of adventures sink     are placed at a distance R2 contingent with base station and
+portability to draw out the system lifetime in remote sensor      advance nodes are placed at a distance of R1contingent with
+systems (WSNs) where the data postponement brought                the base station.
+about by moving the sink ought to be limited. Because of
+                                                                  Level of heterogeneity
+the combinational multifaceted nature of this issue, most
+past recommendations center around heuristics, and                The level of heterogeneity is represented by the given
+provable ideal calculations stay obscure. In this paper, they     formula that is
+construct a bound together system for examining this joint                                             2
+sink portability, directing, delay, and so on, yet neglected to                             Ri-1 =           Ri-2         
+                                                                                                     0.765
+clarify the speed of the system depends on the versatility
+parameter.                                                                   Where i denotes the level of heterogeneity.
+Shilpa et al. [9] proposed a chain weight estimation
+approach. This method lessens the essentialness dissipating       Optimal Number of ANs
+and adjusts the store by picking cluster head centers first, in
+light of three parameters center point degree, typical            The amount of energy consumed during a single round is
+imperativeness and minimum way incident factor, and after         expressed by the following condition
+that forming the inside and out divided group. This
+procedure decreases the overhead of the framework and                EAN= nA. L. Eelec + nA. L. EDA +L. Eelec + L. efs.𝑅12 
+correspondence cost and expanding higher imperativeness           Where EDA represents the data aggregation cost and R1
+profitability, better load adjusting and extending framework      represents the distance among advance node and base
+period, but the parameters are limited.                           station. The following equation expresses the Energy
+                 III. NETWORK MODEL                               utilized by normal nodes:
+In this network model, the base station is static and three
+                                                                                                    2
+                                                                           ENN= L. Eelec + L. efs. 𝑑𝑡𝑂 𝐴𝑁                             
+different types of nodes are using that are normal nodes,                 2
+                                                                  Where 𝑑𝑡𝑂  𝐴𝑁 represent the distance between the normal
+advance nodes, and supernodes. The base station’s position
+                                                                  node and advance nodes.
+is in center, and it will be static, and WAN is the portion of
+all nodes having α times more energy than the normal nodes        The following condition expresses the total energy
+which is called as an advance nodes and WSN is the portion        consumed during a single round
+of all nodes having β times more energy than the normal                                       𝑛1                     𝑛1
+nodes which is called as a supernodes. The rest of the nodes      ERound     =    mAN                . 𝐿. 𝐸𝑒𝑙𝑒𝑐 +          . 𝐿. 𝐸𝐷𝐴 + 𝐿. 𝐸𝑒𝑙𝑒𝑐 +
+                                                                                             𝑚 𝐴𝑁                   𝑚 𝐴𝑁
+have initial energy as E0. n=n1+n2, where n1 denotes the          𝐿.𝐸𝑓𝑠. 𝑅12+𝑛1𝑚𝐴𝑁. 𝐿.𝐸𝑒𝑙𝑒𝑐+𝑛1𝑚𝐴𝑁. 𝐿.𝐸𝑓𝑠. 𝑑𝑡𝑜 𝐴𝑁2               
+entire normal nodes attached to the AN’s, and n2 is the
+entire normal nodes attached to the supernodes. The total         After differentiating ERound correspond to mAN and equating
+initial energy of the 3 level heterogeneous networks is given     with zero, the optimal number of advance nodes found to be
+by:
+E total = n. E0 + MAN. (1+α) . E0 + Msn .(1+β ). E0                                  mAN opt =0.7668 𝑛1                              
+Therefore, the three-level M-SEEC has (α .MAN +β. MSN)                                  
+times more energy.
+
+
+
+                                                                       Published By:
+  Retrieval Number: D8046118419/2019©BEIESP                   3251     Blue Eyes Intelligence Engineering
+  DOI:10.35940/ijrte.D8046.118419                                      & Sciences Publication
+                                                                  International Journal of Recent Technology and Engineering (IJRTE)
+                                                                                   ISSN: 2277-3878, Volume-8 Issue-4, November 2019
+
+The required energy for AN
+For computing the energy of advance nodes, firstly calculate
+the total lifetime of a network which is the total of all rounds
+from beginning to end.
+                            𝑬𝒕𝒐𝒕𝒂𝒍
+           Rounds AN =                 AN                   
+                            𝑬𝒓𝒐𝒖𝒏𝒅
+
+                                 and
+                            𝑬𝒕𝒐𝒕𝒂𝒍
+           Rounds NN =                 NN                   
+                            𝑬𝒓𝒐𝒖𝒏𝒅
+
+The value of the advance node should be higher than that of
+normal nodes in each cluster.
+
+
+IV. TABU-GA BASED MULTILEVEL STABLE AND ENERGY-
+             EFFICIENT CLUSTERING PROTOCOL
+
+
+TABU search invented by Fred W. Glover in 1986 and
+infurther replenished in 1989. It is used for local search
+methods used for mathematical optimization. Tabu search
+upgrades the performance of the local search by relaxing its
+primary rules.
+          One of the meta-heuristic technique which is called
+as TABU search is depending upon the local search method
+which uses the memory structure called it as Tabu list. This
+list of TABU contains the solutions of low quality as
+forbidden and stops them from revisiting for duration of
+iterations. The term Recency is used where the previous
+solution is avoided and the term tabu tenure is another
+concept which elaborates the total number of search
+iterations for the solution. Another term is Intensification in
+which the search is again started with the best knowing
+solution. The GA which is called as genetic algorithm is also
+a meta- heuristic approach used for exploring a wide
+solution space, deals with tabu search for combinatorial
+problems. The main features of genetic algorithm are
+mutation and crossover, the GA has power to losing the                                  Fig. 2:- Flowchart of TABU-GA MSEEC
+solution which is called as chromosome that may lead to
+                                                                                                  V. EXPERIMENTAL SETUP
+find out the best solution. The solution strings have binary
+elements used in GA for solving the problem of routing.                         The MATLAB simulator is used for the implementation.
+                                                                                The simulations are run with 200 nodes and 400 nodes in
+Another     feature    of    GA           that     aligns         with   the
+                                                                                which 8 advanced nodes and 8 supernodes are fixed and rest
+intensification characteristic       of     tabu    search        is elitism,   are the normal nodes that are randomly deployed inside the
+wherein the best solutions provides a starting point for                        area of 200×200 m2. Here, the parameters are used in the
+                                                                                simulation are mentioned below in table 5.1.
+finding the next best solution. To improve diversity and
+allow the algorithm to evaluate more solutions, a multi-
+starting approach was used. This multi-starting technique
+combined with the characteristics of GA and tabu search
+mentioned above for the proposed multi-starting hybrid
+tabu-GA search method [11,12]
+The working of TABU-GA is expressed in the form of flow
+chart which is mentioned in Figure 2.
+
+
+
+
+                                                                                     Published By:
+     Retrieval Number: D8046118419/2019©BEIESP                              3252     Blue Eyes Intelligence Engineering
+     DOI:10.35940/ijrte.D8046.118419                                                 & Sciences Publication
+                                               Hybrid TABU-GA Search For Energy Efficient Routing In WSN
+
+                   Table I:- EXPERIMENTAL SETUP                                                                                          Advance alive nodes
+                                                                                                                       8
+        Parameter                                                    Value                                                                                      MSEEC
+                                                                                                                       7                                        TABU MSEEC
+                                                                                                                                                                TABU-GA MSEEC
+        Area of the network(x,y)                                     200×200
+                                                                                                                       6
+
+
+
+
+                                                                                                   No. of Nodes dead
+        Placement of Base station(x,y)                               100,100                                           5
+
+
+                                                                                                                       4
+        Total number of Nodes(n)                                     200
+                                                                                                                       3
+
+
+        Probability to be a cluster head(p)                          0.1                                               2
+
+
+                                                                                                                       1
+
+        Starting Energy given to nodes                               0.5
+                                                                                                                       0
+        (Eo)                                                                                                               0     0.5       1             1.5          2            2.5
+                                                                                                                                           No. of Rounds (r)                       4
+                                                                                                                                                                           x 10
+        Transmitted energy of nodes                                  50nJ/bit
+        Receiving energy of nodes                                    50nJ/bit
+                                                                                                                                              (b)
+        Free space                                                   10nj/bit/m2
+        Multipath                                                    0.0013pJ/bit/m4                                                     Super alive nodes
+                                                                                                                       8
+                                                                                                                                                               MSEEC
+                                                                                                                       7                                       TABU MSEEC
+                               VI. RESULTS AND DISCUSSION                                                                                                      TABU-GA MSEEC
+
+On applying TABU-GA search mechanism, the following                                                                    6
+
+results will come out. For simulation, MATLAB tool is used
+
+
+
+                                                                                                  No. of Nodes dead
+                                                                                                                       5
+for easy computing of results. All results were compared
+with the basic multi-level stable and energy-efficient
+                                                                                                                       4
+clustering protocol and TABU based multi-level stable and
+energy-efficient clustering protocol and TABU-GA
+                                                                                                                       3
+technique. The performance metrics used in the results show
+that the proposed TABU-GA based multi-level stable and
+                                                                                                                       2
+energy-efficient clustering protocol provides a more
+extended stability period, more energy efficiency, and high
+                                                                                                                       1
+throughput than the basic multi-level stable and energy-
+efficient clustering protocol.
+                                                                                                                       0
+                                                                                                                           0    0.5       1             1.5       2            2.5
+A. Alive nodes:- Results are evaluated on the performance                                                                                 No. of Rounds (r)                    4
+   of alive nodes in the case of 200×200m2networks. The                                                                                                                   x 10
+
+   red dotted lines represent the performance of MSEEC
+   protocol while Green dotted lines represents the                                                                                           (c)
+   performance of TABU MSEEC protocol and the last one
+   blue dotted lines represents the performance of TABU-                                                                       Fig. 3:- Number of alive nodes
+   GA MSEEC protocol Figure 3 shows that more number                                              (a) Alive node
+   of alive nodes are present with TABU-GA MSEEC                                                  (b) Advance alive node
+   when compared to TABU-MSEE and MSEEC algorithm                                                 (c) Super alive node
+   Alive nodes represents the number of nodes, which are
+   still alive against time steps (rounds).This is one of the                                 Figure 3 represents the number of nodes that are alive
+   critical parameters of wireless sensor networks.                                           during rounds. Figure (a) represented the alive nodes versus
+                               200
+                                                   alive nodes                                rounds, and figure (b) shown the advance alive nodes versus
+                                                                     MSEEC
+                                                                     TABU MSEEC
+                                                                                              rounds, and figure (c) shown the super alive nodes versus
+                               198
+                                                                     TABU-GA MSEEC            rounds. It is shown that in all the cases TABU-GA MSEEC
+                               196
+                                                                                              performs well. The performance of TABU-GA MSEEC in
+
+
+          No. of alive nodes
+                               194
+                                                                                              all cases is more than that of TABU MSEEC and MSEEC
+                               192                                                            protocol. From the figure, it is clearly seen that the number
+                               190                                                            of alive nodes are present in TABU-GA MSEEC in case of
+                               188
+                                                                                              alive nodes, advance alive nodes and super alive nodes. At
+                               186
+                                                                                              the round of 1000, MSEEC nodes start to dead, while in the
+                                                                                              case of TABU-MSEEC, it started at the round of 2000 and
+                               184
+                                     0   0.5     1             1.5
+                                                 No. of Rounds (r)
+                                                                        2            2.5
+                                                                                     4
+                                                                                              in the case of TABU-GA
+                                                                                x 10
+                                                                                              MSEEC, it started at the round
+                                                                                              of 2500.
+                                                    (a)
+
+
+                                                                                                  Published By:
+  Retrieval Number: D8046118419/2019©BEIESP                                                3253   Blue Eyes Intelligence Engineering
+  DOI:10.35940/ijrte.D8046.118419                                                                 & Sciences Publication
+                                                                                International Journal of Recent Technology and Engineering (IJRTE)
+                                                                                                 ISSN: 2277-3878, Volume-8 Issue-4, November 2019
+
+          B. Dead Nodes:- The lifetime of the network can be                                     nodes versus rounds, and figure (b) shown the advance dead
+             evaluated by using the number of dead nodes.                                        nodes versus rounds, and figure (c) shown the super dead
+                                                                                                 nodes versus rounds. It has been shown that TABU-GA
+                                                      dead nodes
+                                16                                                               MSEEC proved to be better than TABU-MSEEC and
+                                                                        MSEEC
+                                                                        TABU MSEEC
+                                                                                                 MSEEC. It is just opposite to the alive nodes and
+                                14
+                                                                        TABU-GA MSEEC            represented the lifetime of the network. From the figure, it is
+                                12                                                               clearly seen that less number of dead nodes are present in
+                                                                                                 TABU-GA MSEEC in case of dead nodes, advance dead
+
+
+   No. of Nodes dead
+                                10
+                                                                                                 nodes, and super dead nodes. At the round of 1000, all
+                                8                                                                MSEEC nodes are dead, while in the case of TABU-
+                                                                                                 MSEEC, the nodes are dead at the round of 2000 and in the
+                                6
+                                                                                                 case of TABU-GA MSEEC, the nodes are dead at the round
+                                4
+                                                                                                 of 2500.
+                                                                                                 C.        Packet Transferred:- Throughput is the number of
+                                2                                                                data packets which is received at the sink. It is considered as
+                                0
+                                                                                                 the complete data which is transferred through the network,
+                                     0     0.5      1             1.5      2            2.5
+                                                    No. of Rounds (r)                    4
+                                                                                                 the total data sent from advanced nodes, or supernodes to
+                                                                                  x 10
+                                                                                                 the base station. It can also be considered as the aggregate
+                                                                                                 data transmitted from the normal nodes to the advanced
+                                                        (a)                                      nodes and supernodes. The comparison of the proposed
+                                                                                                 protocol with new protocol proves that the proposed
+                                                   Advance dead nodes
+                                8                                                                protocol shows improved throughput.
+                                                                          MSEEC
+                                                                          TABU MSEEC
+                                                                                                                                                   Packets transferred
+                                7                                                                                          200
+                                                                          G
+                                                                                                                                                                         MSEEC
+                                6                                                                                                                                        TABU MSEEC
+                                                                                                                           198
+                                                                                                                                                                         TABU-GA MSEEC
+
+
+
+
+            No. of Nodes dead
+                                5
+                                                                                                                           196
+                                4
+
+
+
+
+                                                                                                     Packets transferred
+                                                                                                                           194
+                                3
+
+                                                                                                                           192
+                                2
+
+                                                                                                                           190
+                                1
+
+                                                                                                                           188
+                                0
+                                     0     0.5      1             1.5      2            2.5
+                                                    No. of Rounds (r)                    4
+                                                                                  x 10                                     186
+
+
+                                                                                                                           184
+                                                        (b)                                                                      0         0.5      1             1.5       2            2.5
+                                                                                                                                                    No. of Rounds (r)                    4
+                                                                                                                                                                                   x 10
+
+                                                    Super dead nodes                                                                 Fig 5: Packet transferred Vs Rounds
+                                8
+                                                                        MSEEC                    Figure 5 shows that the throughput of the network means the
+                                                                        TABU MSEEC
+                                7
+                                                                        TABU-GA MSEEC
+                                                                                                 number of data messages received to the base station. The
+                                6
+                                                                                                 lifetime of the network is high if nodes die rate is low and
+                                                                                                 vice-versa. The number of alive nodes will send more data
+
+
+
+            No. of Nodes dead
+                                5                                                                to base station. It has shown that TABU-GA MSEEC
+                                                                                                 proved to be better than TABU-MSEEC and MSEEC. In
+                                4
+                                                                                                 MSEEC the packets sent to the base station are at 1200
+                                3                                                                rounds, while for TABU MSEEC it is after 2500 rounds and
+                                                                                                 in case of TABU-GA MSEEC it is 2600 rounds.
+                                2
+                                                                                                       D. Remaining Energy:-
+                                1
+                                                                                                It is defined as the amount of energy left with sensor nodes.
+                                0                                                                It is computed at the beginning of each round during the
+                                     0     0.5      1             1.5      2            2.5
+                                                    No. of Rounds (r)
+                                                                                  x 10
+                                                                                        4        execution of the algorithm. This parameter helps to
+                                                                                                 determine the stability period, consumption of energy, and
+                                                        (c)                                      lifetime of WSNs. The residual energy is a significant
+                                                                                                 parameter to be considered for WSNs, that is calculated
+                                                                                                 using
+                                         Fig. 4   Number of dead nodes
+                                                                                                       RemEng re = nN=1 Err (Nd)              
+          (a) Dead node
+          (b) Advance dead node                                                                  Where Err (Nd) is the energy of Ndth node for the rr th round.
+          (c) Super dead node                                                                    Table 6 represents the numeric values that correspond to the
+Figure 6 shows the behavior of dead nodes in detailed                                            RemainingEnergy.
+manner in MSEEC and TABU MSEEC and TABU-GA
+MSEEC routing protocol. Figure (a) represented the dead
+
+
+
+                                                                                                                            Published By:
+                 Retrieval Number: D8046118419/2019©BEIESP                                    3254                          Blue Eyes Intelligence Engineering
+                 DOI:10.35940/ijrte.D8046.118419                                                                            & Sciences Publication
+                                              Hybrid TABU-GA Search For Energy Efficient Routing In WSN
+
+                                     Average remaining energy of normal nodes                         Distributed and Grid Computing (PDGC), 2010 1st International
+                    0.505                                                                             Conference on. IEEE, 2010.
+                                                                         MSEEC
+                                                                         TABU MSEEC
+                                                                                                  5. V.Raghavendran, Naga Satish, P. Suresh Varma, “Intelligent routing
+                      0.5
+                                                                         TABU-GA MSEEC                techniques for mobile ad hoc networks using swarm intelligence”, I.J
+                                                                                                      Intelligence systems and applications, 2013, Vol. 01, pp 81-89.
+                    0.495
+                                                                                                  6. Farouk F, Rizk R, et al. “Multi-level stable and energy efficient
+                     0.49
+                                                                                                      clustering protocol in heterogeneous wireless sensor networks”
+
+
+     Energy level
+                                                                                                      published in IET wireless sensor systems, special issues on intelligent
+                    0.485                                                                             wireless sensor networks and application, 2014 Volume 4, Issue 4,
+                                                                                                      pp159-169.
+                     0.48                                                                         7. Tandon, Ravi, and Sukumar Nandi. "CRP: Cluster head Re-election
+                                                                                                      Protocol for heterogeneous wireless sensor networks." In
+                    0.475                                                                             Communication Systems and Networks (COMSNETS), 2013 Fifth
+                                                                                                      International Conference on, pp. 1-10. IEEE, 2013.
+                     0.47
+                                                                                                  8. Gu, Y., Ji, Y., Li, J., & Zhao, B. (2012). ESWC: Efficient scheduling
+                    0.465
+                                                                                                      for the mobile sink in wireless sensor networks with delay
+                            0      0.5           1             1.5              2        2.5          constraint. IEEE Transactions on Parallel and Distributed
+                                                 No. of Rounds (r)                       4
+                                                                                    x 10              Systems, 24(7), 1310-1320.
+Fig 5: Average remaining energy Vs Rounds                                                         9. Mahajan, S., Malhotra, J., & Sharma, S. (2014). An energy balanced
+                                                                                                      QoS based cluster head selection strategy for WSN. Egyptian
+                                                                                                      Informatics Journal, 15(3), 189-199.
+Here the results envisage that the average remaining energy                                       10. Ouzineb, M., Nourelfath, M., & Gendreau, M. (2008). Tabu search for
+in case of MSEEC, TABU MSEEC, and TABU-GA                                                             the redundancy allocation problem of homogenous series–parallel
+                                                                                                      multi-state systems. Reliability Engineering & System Safety, 93(8),
+MSEEC protocol. From the figure, it is clearly shown that                                             1257-1272.
+number of energy remains with TABU-GA MSEEC                                                       11. Li, R., Hu, S., Wang, Y., & Yin, M. (2017). A local search algorithm
+protocol, and its observation states that 0.502-joule energy is                                       with tabu strategy and perturbation mechanism for generalized vertex
+remaining with TABU-GA MSEEC protocol, while in the                                                   cover problem. Neural Computing and Applications, 28(7), 1775-1785.
+                                                                                                  12. Sivaram, M., Batri, K., Amin Salih, M., & Porkodi, V. (2019).
+case of TABU MSEEC it is 0.495 joule and in the case of                                               Exploiting the Local Optima in Genetic Algorithm using Tabu
+MSEEC it is 0.49 joule. So, the observations reveal that the                                          Search. Indian Journal of Science and Technology, 12(1), 9.
+performance of TABU-GA MSEEC is very high as                                                      13. Kumar, N., Kumar, A., & Chaudhry, D. (2011). A Novel Approach to
+compared to the TABU MSEEC protocol and MSEEC                                                         use Nano-Sensor in WSN Applications. International Journal of
+                                                                                                      Computer Applications, 975, 8887.
+protocol because TABU-GA search chooses the most                                                  14. Pandey, A., Kumar, N., & Tripathi, R. C. A Framework to Prevent
+effective solution.                                                                                   Mobile Sinks Accessing by Unauthorized Nodes in WSN.
+                                                                                                  15. Kumar, N., & Khan, R. A. (2017). Emergency Information System
+                       VII. CONCLUSION AND FUTURE SCOPE                                               Architecture      for    Disaster     Management:       Metro      City
+                                                                                                      Perspective. International Journal of Advanced Research in Computer
+Current work forwards our last studies done in the same area                                          Science, 8(5).
+                                                                                                  16. Kumar, N., Agrawal, A., & Khan, R. A. (2017, October). Smartphone
+of WSN [13,14]. While now this work going towards
+                                                                                                      with solar charging mechanism to issue alert during rainfall disaster.
+development of IoT[15-17]. In this paper, MSEEC, TABU                                                 In International Conference on Recent Developments in Science,
+MSEEC, and TABU-GA MSEEC protocol have been                                                           Engineering and Technology (pp. 442-449). Springer, Singapore.
+compared for wireless sensor networks. Here, the                                                  17. Kumar, N., Agrawal, A., & Khan, R. A. (2019). Cost estimation of
+                                                                                                      cellularly deployed IoT-enabled network for flood detection. Iran
+performance comparison is done under the 200×200 m2                                                   Journal of Computer Science, 2(1), 53-64.
+scenario. The performance of TABU-GA MSEEC is more in
+all cases like more number of alive nodes are present in                                                                AUTHOR’S PROFILE
+TABU-GA MSEEC in case of alive nodes, advance alive
+nodes and super alive nodes. At the round of 1000, MSEEC
+nodes start to dead, while in the case of TABU-MSEEC, it                                                                  Varsha, Received Her B-Tech From MIMIT,
+started at the round of 2000, and in the case of TABU-GA                                                                  Malout, India And Master Of Technology In
+MSEEC, it started at the round of 2500.Similarly, the                                                                     Computer Science And Engineering From Guru
+remaining energy observation states that 0.502 energy is                                                                  Nanak Dev Engineering College ,Ludhiana In
+remaining with TABU-GA MSEEC protocol, while in the                                                                       The Year 2011 And Pursuing Her Ph.D. From
+                                                                                                                          Punjab Technical University Jalandhar. She Has
+case of TABU MSEEC it is 0.495 and in the case of
+                                                                                                                          Published Many Papers In IEEE Conferences &
+MSEEC, it is 0.49. So, the observations reveal that the
+                                                                                                  Scopus Indexed Journals And Many More In The International/National
+performance of TABU-GA MSEEC is very high as                                                      Conferences. Her Area Of Interest Is Wireless Sensor Network, Data
+compared to the TABU MSEEC protocol and MSEEC                                                     Communication And Computer Network.
+protocol because TABU-GA search chooses the most
+effective solution.
+
+REFERENCES                                                                                                                 Manju Sharma, Received Her B-Tech From
+                                                                                                                           UP Technical University, Lucknow, India And
+1.                  Holms, A., & Culler-Mayeno, E. (2006). A Technical Report: Wireless                                    Master Of Technology In Computer Science
+                    Sensor Networks and How They Work. University of California, Santa
+                    Barbara.                                                                                               And Engineering From Punjab Technical
+2.                  Dargie, W., & Poellabauer, C. (2010). Fundamentals of wireless sensor                                  University Jalandhar, In The Year 2007 And She
+                    networks: theory and practice. John Wiley & Sons.                                                      Has Done Her Ph.D. From Punjab Technical
+3.                  Kumar, Dilip, Trilok C. Aseri, and R. B. Patel. "EEHC: Energy                                          University Jalandhar. Currently, She Is Director
+                    efficient heterogeneous clustered scheme for wireless sensor                  At Khalsa College Of Engineering & Technology, Amritsar Punjab, India.
+                    networks." Computer Communications 32.4 (2009): pp. 662-667.
+4.                  Saini, Parul, and Ajay K. Sharma. "E-DEEC-enhanced distributed
+                    energy efficient clustering scheme for heterogeneous WSN." Parallel
+
+
+
+
+                                                                                                       Published By:
+     Retrieval Number: D8046118419/2019©BEIESP                                                 3255    Blue Eyes Intelligence Engineering
+     DOI:10.35940/ijrte.D8046.118419                                                                   & Sciences Publication
+                                                            International Journal of Recent Technology and Engineering (IJRTE)
+                                                                             ISSN: 2277-3878, Volume-8 Issue-4, November 2019
+
+She Has Published Many Papers In IEEE Conferences & Scopus Indexed
+Journals And Many More In The International/National Conferences. Her
+Area Of Interest Is Wireless Sensor Network, Data Communication And
+Computer Network. She Is Guiding Many Research Scholars.
+
+                          Manoj Kumar, received his B.E (ECE) from
+                          Gulbarga University in the year 1990 &
+                          received his M-Tech (ECE) from Punjab
+                          Technical University, Jalandhar in the year
+                          2001 & Ph.D. from Punjab Technical
+                          University Jalandhar in the year 2007. His area
+                          of    specialization     is    Optical    fibre
+                          Communication, Wireless Communication.
+                          Currently He is a director at DAV Institute of
+                          Engineering & Technology, Jalandhar. He has
+   visited many Countries like U.S.A, U.K, France and Italy. He is life
+   member of ISTE & Punjab Academy of Sciences.
+
+                              Neeraj Kumar, is a researcher and
+                              academic of CSE/IT with a specialization in
+                              Security,     Expert     systems,     Mobile
+                              Computing and IoT. He has completed his
+                              education from UPBTE Lucknow (2001),
+                              UPTU Lucknow (2006), and IIIT Allahabad
+                              (2010). Currently, he is involved in solving
+                              real-life problems such as Ranking, Cyber
+                              Security, and Disaster Management by
+                              techniques      of     Soft      Computing,
+   Cryptography, Mobile Networks, and IoT in BBAU (A Central
+   University) Lucknow. He has published dozens of research papers in
+   International Journals along with the book chapters and Patents.
+
+
+
+
+                                                                                Published By:
+     Retrieval Number: D8046118419/2019©BEIESP                           3256   Blue Eyes Intelligence Engineering
+     DOI:10.35940/ijrte.D8046.118419                                            & Sciences Publication
+

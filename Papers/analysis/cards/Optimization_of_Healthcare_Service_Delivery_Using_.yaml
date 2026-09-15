@@ -1,0 +1,42 @@
+relevance_flag: "possibly tangential — verify this is actually about WSN mobile sinks, not a different healthcare-IoT topic"
+source_file: Optimization_of_Healthcare_Service_Delivery_Using_.pdf
+title: "Optimization of Healthcare Service Delivery Using Deep Genetic Algorithm"
+authors: "Girimurugan B; Ashvin T.K; Hemalatha T; Riyaz Hussain Sk; Sannidhan M S; Umaya Salma Shajahan"
+venue_year: "Informing Science: The International Journal of an Emerging Transdiscipline, 2025"
+problem: "Optimizing the delivery of healthcare services (e.g., patient scheduling, resource allocation, inventory control, treatment planning) is difficult because healthcare institutions are complex and unpredictable, making traditional optimization techniques often insufficient."
+approach: "Deep Genetic Algorithm (DGA) framework that combines a deep neural network (DNN) with a genetic algorithm (GA). The DNN evaluates the feasibility/fitness of candidate solutions (encoded from the problem space), and the GA iteratively evolves a population of solutions via selection, crossover, and mutation guided by the DNN fitness scores, for tasks such as patient classification and healthcare resource/service optimization."
+sink_mobility: unknown
+routing_clustering_scheme: unknown
+simulator: "Python-based healthcare optimization framework implemented in TensorFlow (deep learning) and DEAP (genetic algorithm operations); run on a computing cluster with Intel Xeon processors, 64GB RAM, NVIDIA Tesla V100 GPUs"
+node_count: unknown
+area: unknown
+energy_model: unknown
+metrics_reported:
+  - "Fitness score (accuracy-based, dimensionless, 0-1 scale)"
+  - "Convergence rate (in iterations)"
+  - "Solution quality (0-1 scale)"
+  - "Loss in optimization (0-1 scale)"
+  - "Scalability (unspecified unit, plotted 0-200 range, likely time/iterations)"
+key_numeric_results:
+  - "Table 1 (GA/DNN hyperparameters): population size 100, max generations 50, crossover probability 0.8, mutation probability 0.1, number of features 10, selection method tournament selection, crossover method single-point crossover, mutation method Gaussian mutation, fitness evaluation metric accuracy, learning rate 0.001, batch size 32, network architecture convolutional neural network, 3 convolutional layers, 2 recurrent layers, dropout rate 0.2, weight decay 0.0001, optimizer Adam, activation function ReLU, epochs 50, number of individuals selected 20, crossover point random, mutation rate 0.05, termination criterion maximum generations reached, evaluation dataset size 10000, validation split 0.2"
+  - "Dataset: 10,000 patient records with varying demographics, treatment options, and resource limitations"
+  - "Simulated annealing parameters: initial temperature 100, cooling rate 0.95"
+  - "Table 3 Fitness score at 50 patients: Simulated annealing 0.88, Genetic reinforcement learning 0.89, Deep genetic method 0.91"
+  - "Table 4 Convergence rate (iterations) at 50 patients: Simulated annealing 40, Genetic reinforcement learning 36, Deep genetic method 35"
+  - "Table 5 Solution quality at 50 patients: Simulated annealing 0.88, Genetic reinforcement learning 0.89, Deep genetic method 0.91"
+  - "Table 6 Loss in optimization at 50 patients: Simulated annealing 0.42, Genetic reinforcement learning 0.40, Deep genetic method 0.38"
+  - "Table 7 Scalability metric at 50 patients: Simulated annealing 140, Genetic reinforcement learning 160, Deep genetic method 100"
+  - "Proposed method yields a notable achievable percent improvement in the range of 5 to 10 over genetic reinforcement learning and simulated annealing"
+  - "Fewer iterations needed for convergence across patient population sizes gives an efficiency increase of 10-20%"
+stated_limitations: "May not be universally applicable across all healthcare environments; relies on high-quality data and high computational resources; may face challenges in under-resourced/rural or low-income healthcare settings with limited data availability; ability to adapt to dynamic conditions and ethical considerations around data privacy must be addressed; requires significant computational resources and skilled personnel for real-world implementation; quantitative evidence on computation time/memory/energy usage vs. baselines was not provided in the paper (noted as a gap); termination criteria details (convergence rate, max iterations, error margin) and feature extraction process were noted as needing further elaboration."
+citation_fields:
+  bibkey: "girimurugan2025dga"
+  authors_bibtex: "Girimurugan, B. and Ashvin, T. K. and Hemalatha, T. and Riyaz Hussain, Sk. and Sannidhan, M. S. and Shajahan, Umaya Salma"
+  title: "Optimization of Healthcare Service Delivery Using Deep Genetic Algorithm"
+  year: 2025
+  journal_or_booktitle: "Informing Science: The International Journal of an Emerging Transdiscipline"
+  volume: 28
+  number: "Article 3"
+  pages: unknown
+  doi: "10.28945/5447"
+  publisher: unknown

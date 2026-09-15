@@ -1,0 +1,76 @@
+source_file: network-05-00050.pdf
+title: "A Two-Phase Genetic Algorithm Approach for Sleep Scheduling, Routing, and Clustering in Heterogeneous Wireless Sensor Networks"
+authors: Sarah Abdulelah Abbas; Leili Farzinvash; Mina Zolfy
+venue_year: "Network (MDPI), 2025"
+problem: >
+  In heterogeneous wireless sensor networks (HWSNs), existing clustering/routing approaches
+  suffer from suboptimal energy distribution and weak network coverage, and mostly fail to
+  exploit sleep scheduling as an additional energy-saving technique; prior methods also treat
+  clustering, routing, and sleep scheduling separately despite their strong interdependence.
+approach: >
+  A two-phase genetic algorithm (GA) approach that jointly optimizes sleep scheduling, tree
+  construction (routing), and clustering in HWSNs. Phase 1 uses a GA with a chromosome
+  encoding both super-node sleep state and tree-parent selection, a ring-based initialization
+  (network split into concentric rings around the BS with an equal number of awake super
+  nodes per ring, inspired by unequal clustering) and customized crossover/mutation with a
+  repair mechanism; its cost function balances normal-node coverage (orphan nodes) and
+  minimum remaining energy of tree nodes. Phase 2 uses a GA to cluster normal nodes to
+  awake cluster heads (CHs), with a cost function balancing even cluster-member distribution
+  and minimum remaining energy of CHs/normal nodes.
+sink_mobility: static
+routing_clustering_scheme: >
+  Two-phase GA: Phase 1 - joint sleep scheduling of super nodes and construction of a
+  multi-hop routing tree among awake super nodes (ring-based unequal-clustering-inspired
+  initialization, RWS selection, single-point crossover with repair, adaptive mutation rate
+  decreasing over iterations). Phase 2 - GA-based clustering assigning normal nodes to awake
+  super nodes (CHs) within transmission range.
+simulator: "WSNSimPy (Python 3 discrete-event WSN simulation library)"
+node_count: >
+  WSN1: 60 super nodes + 200 normal nodes; WSN2: 80 super nodes + 250 normal nodes;
+  WSN3: 120 super nodes + 500 normal nodes
+area: >
+  WSN1 and WSN2: 200 m x 200 m; WSN3: 300 m x 300 m
+energy_model: >
+  Radio energy model of Heinzelman, Chandrakasan & Balakrishnan [38] (first-order radio model):
+  etrs(l,dtr) = l*eelec + l*efs*dtr^2 (dtr < d0) or l*eelec + l*emp*dtr^4 (dtr >= d0);
+  erec(l) = l*eelec. Parameters: eelec = 50 nJ/bit, efs = 10 pJ/bit/m^2, emp = 0.0013 pJ/bit/m^4,
+  d0 = sqrt(efs/emp); eN (normal node initial energy) = 2 J, eS (super node initial energy) = 10 J,
+  trN = 30 m, trS = 90 m; 50 time slices per round; number of rings = 4; ar (awake super nodes
+  per ring) = 50% of all super nodes.
+metrics_reported:
+  - "Normal node coverage / area coverage (%)"
+  - "Total consumed energy (Joules, cumulative)"
+  - "Network lifetime: First Node Die (FND) and Last Node Die (LND), measured in rounds/time slices"
+  - "Number of available super nodes (count, per round)"
+  - "Time complexity / runtime (seconds)"
+key_numeric_results:
+  - "Overall (abstract): proposed method reduces energy consumption by ~23% and improves network coverage by ~21.9% on average, and extends network lifetime by 501 rounds, compared to state-of-the-art methods."
+  - "Normal node coverage improvement over HEDHMG/EFCRPSO/EFEBPSO/CRCGA: WSN1 8.6%/29%/31.1%/51.1%; WSN2 5.6%/14.5%/27.4%/33.4%; WSN3 9%/36%/41%/61%."
+  - "Coverage ranges (Table 4): WSN1 76-94% (expected 85%) vs competitors 36-94% (expected 65%); WSN2 86-100% (expected 93%) vs 50-99% (expected 74.5%); WSN3 70-89% (expected 79.5%) vs 32-88% (expected 60%)."
+  - "Total energy consumption reduction vs HEDHMG/EFCRPSO/EFEBPSO/CRCGA: WSN1 10.5%/14%/16.4%/18.7%; WSN2 10.7%/16.9%/20.7%/21%; WSN3 11.5%/15.5%/17.7%/20%."
+  - "FND improvement (rounds) vs HEDHMG/EFCRPSO/EFEBPSO/CRCGA: WSN1 56/167/293/402; WSN2 161/311/487/532; WSN3 23/122/161/175."
+  - "LND improvement (rounds) vs HEDHMG/EFCRPSO/EFEBPSO/CRCGA: WSN1 140/620/615/810; WSN2 128/508/681/757; WSN3 150/480/570/560."
+  - "Number of available super nodes improvement after 1800 time slices (WSN1): +5 over HEDHMG, +16 over EFCRPSO, +21 over EFEBPSO, +35 over CRCGA. WSN2 (1800 slices): +5/+15/+26/+28. WSN3 (1200 slices): +23/+32/+44/+40."
+  - "Time complexity (seconds), Table 5: WSN1 proposed 12.1 vs HEDHMG 12.8, EFEBPSO 22.9, EFCRPSO 23.1, CRCGA 14.1; WSN2 14.3 vs 15.9/27.1/27.9/16.8; WSN3 20.6 vs 22.7/39.9/41.1/23."
+  - "GA parameters (Table 3): population size = 30, number of iterations = 50; cost1 weights w1=0.5, w2=0.5; cost2 weights w3=0.3, w4=0.4, w5=0.3."
+  - "Number of rings = 4, awake super nodes per ring (ar) = 50% of all super nodes (determined via preliminary simulations)."
+stated_limitations: >
+  Authors state path-loss effects related to carrier frequency are not considered (focus on
+  algorithmic performance under uniform propagation conditions; note the algorithm is
+  applicable to path-loss environments too). Future work: explore other energy-saving
+  techniques such as dynamic modulation scaling; examine other meta-heuristics (e.g., GWO)
+  combined with GA; allowing normal nodes to act as CHs increases flexibility/efficiency but
+  expands the solution space and complexity, making convergence harder (left as future work
+  to achieve acceptable time complexity); security aspects (trust-aware routing, attack
+  mitigation, using forecasting to identify suspect nodes) not addressed and left for future work.
+citation_fields:
+  bibkey: abbas2025twophase
+  authors_bibtex: "Abdulelah Abbas, Sarah and Farzinvash, Leili and Zolfy, Mina"
+  title: "A Two-Phase Genetic Algorithm Approach for Sleep Scheduling, Routing, and Clustering in Heterogeneous Wireless Sensor Networks"
+  year: 2025
+  journal_or_booktitle: Network
+  volume: 5
+  number: 4
+  pages: "50"
+  doi: "10.3390/network5040050"
+  publisher: MDPI

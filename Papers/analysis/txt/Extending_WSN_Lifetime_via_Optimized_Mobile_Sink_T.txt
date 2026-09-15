@@ -1,0 +1,2160 @@
+Article
+
+Extending WSN Lifetime via Optimized Mobile Sink
+Trajectories: Linear Programming and Cuckoo Search
+Approaches with Overhearing-Aware Energy Models
+Ghada Turki Al-Mamari 1, * , Fatma Bouabdallah 2                        and Asma Cherif 1,3
+
+                                         1   Department of Information Technology, Faculty of Computing and Information Technology, King Abdulaziz
+                                             University, Jeddah 21589, Saudi Arabia; acherif@kau.edu.sa
+                                         2   School of Engineering, Computing and Mathematics, University of Plymouth, Plymouth PL4 8AA, UK;
+                                             fatma.bouabdallah@plymouth.ac.uk
+                                         3   Center of Excellence in Smart Environment Research, King Abdulaziz University, Jeddah 21589, Saudi Arabia
+                                         *   Correspondence: galmoammari@gmail.com
+
+
+                                         Abstract
+                                         Maximizing the lifetimes of Wireless Sensor Networks (WSNs) is a prominent area of re-
+                                         search. The energy hole problem is a major cause of network shutdown, where nodes within
+                                         the Sink coverage deplete their energy faster due to the high energy cost of forwarding data
+                                         from distant nodes to the Sink. Several research works have proposed solutions to address
+                                         this issue, including the use of a mobile Sink to balance energy consumption throughout the
+                                         network. However, most Sink mobility models overlook the energy consumption caused
+                                         by overhearing, which is a critical factor in WSNs. In this paper, we introduce Linear
+                                         Programming (LP) and Cuckoo Search (CS) metaheuristic optimization-based solutions
+                                         to maximize the lifetime of WSNs by determining the optimal Sink sojourn points and
+                                         associated durations. The proposed approaches consider the energy consumption levels
+                                         of both reception and transmission, in addition to accounting for overhearing as an addi-
+                                         tional source of energy consumption. This allows for a comparison between the LP and
+                                         CS solutions in terms of their effectiveness. To further enhance our solution, we apply
+                                         the Travel Salesman Problem (TSP) to find the shortest path between the Sink sojourn
+Academic Editor: Antonio Guerrieri       points. By incorporating the TSP, we can optimize the routing path for the mobile Sink,
+Received: 5 May 2025                     thereby minimizing energy consumption and maximizing network lifetime. Test results
+Revised: 31 August 2025                  demonstrate that the LP solution provides more accurate Sink sojourn times and locations,
+Accepted: 4 September 2025               while the CS solution is faster, particularly for large WSNs. Moreover, our findings indicate
+Published: 14 September 2025
+                                         that overlooking overhearing leads to a 48% decrease in WSN lifetime, making it essential
+Citation: Al-Mamari, G.T.;               to consider this factor if one is to achieve realistic results.
+Bouabdallah, F.; Cherif, A. Extending
+WSN Lifetime via Optimized Mobile
+                                         Keywords: wireless sensor networks; mobile Sink; energy hole problem; linear programming;
+Sink Trajectories: Linear Programming
+                                         artificial intelligence
+and Cuckoo Search Approaches with
+Overhearing-Aware Energy Models.
+IoT 2025, 6, 54. https://doi.org/
+10.3390/iot6030054
+                                         1. Introduction
+Copyright: © 2025 by the authors.
+Licensee MDPI, Basel, Switzerland.            Wireless Sensor Networks (WSNs) are becoming more and more ubiquitous, especially
+This article is an open access article   when combined with the Internet of Things (IoT). They are used to collect and sense data in
+distributed under the terms and          many fields. Usually, they are deployed in harsh environments to facilitate data collection
+conditions of the Creative Commons
+                                         and smarter decision making in applications such as military field scenarios [1], healthcare
+Attribution (CC BY) license
+(https://creativecommons.org/
+                                         systems [2], and environment monitoring; an example is monitoring the condition and
+licenses/by/4.0/).                       ripeness of date palms in agricultural oases [3]. WSNs generally comprise two types of
+
+
+IoT 2025, 6, 54                                                                                                   https://doi.org/10.3390/iot6030054
+IoT 2025, 6, 54                                                                                           2 of 39
+
+
+
+                  nodes; the Sink node leads and collects data from many wireless sensor nodes, which are
+                  scattered in the target field to serve a given use case.
+                        However, wireless sensor nodes rely on batteries, making them difficult to replace or
+                  recharge once they are deployed. Consequently, it is essential to maximize the network
+                  lifetime through the efficient use of the nodes’ initial energy, specifically those nodes that
+                  are placed near the Sink. These nodes deplete their energy budget first (as illustrated by
+                  the red batteries in Figure 1), since they relay distant nodes’ data to the Sink (s) while the
+                  other nodes still retain a good amount of their energy (as illustrated by the yellow and
+                  green batteries in Figure 1). This problem is known as the energy hole problem, as a hole is
+                  created around the Sink [4] (see Figure 1). When sensor nodes within the Sink coverage
+                  deplete their energy, the Sink becomes unreachable, making the overall network useless
+                  and unable to deliver the sensed data to the Sink for further processing.
+
+
+
+
+                  Figure 1. The energy hole problem in WSNs.
+
+                       Numerous approaches have been proposed to overcome this problem [5], including
+                  the strategic deployment of relay nodes between the Sink and sensor nodes to reduce
+                  transmission distances, thereby significantly minimizing energy consumption [6]. Some ap-
+                  proaches adaptively assign sensor nodes to different transmission power levels [7]. Others
+                  implement the non-uniform distribution of initial energy [8], deploy unequal clustering
+                  techniques [9,10], or leverage mobile Sink technology [11].
+                       Among adaptive power control solutions, the sensors two or three hops away from
+                  the Sink can send data to the Sink directly in order to balance the energy consumed by
+                  sensors, thereby bypassing the sensors closest to the Sink. Consequently, the nodes around
+                  the Sink are relieved of the relaying task, leading to improved WSN lifetime. Following this
+                  strategy, refs. [12,13] proposed protocols that allow sensor nodes to transmit data not only
+                  directly to the Sink but also through multiple intermediate hops or paths. This multi-path,
+                  multi-hop approach has the effect of more evenly balancing the communications load
+                  across the network. Experiments have shown that the employment of multiple paths and
+                  hops improved the network lifetime by several orders of magnitude in comparison with
+                  single direct transmission or nominal transmission-range models.
+                       For non-uniform initial energy budget distribution approaches, the nearest sensors to
+                  the Sink provide more energy budget than other nodes; consequently, they do not drain
+                  their energy very quickly. However, the lifetime of these sensors still constrains the whole
+                  network, as they relay all data to the Sink. An example of such solutions is the approach
+                  suggested in [8]. Here, the authors proposed an algorithm that recognizes the critical region
+                  in the WSN which is most likely to suffer from the energy hole problem. The model then
+                  finds the required initial sensor energies that best balance the WSN’s energy consumption
+                  and lifetime.
+IoT 2025, 6, 54                                                                                             3 of 39
+
+
+
+                       In a third approach, many researchers have highlighted the employment of unequal
+                  clustering methods to alleviate the energy hole problem and improve the overall energy
+                  distribution of WSNs. Smaller clusters are formed near the Sink, while larger clusters are
+                  formed in the more distant parts. This configuration reduces the relaying burden on nodes
+                  nearby the Sink, thereby saving their energy and extending the lifetime of the network. For
+                  instance, ref. [14] used metaheuristic algorithms to dynamically create unequal clusters that
+                  were optimized based on their distance to the Sink and residual energy parameters. The
+                  results showed improved energy efficiency and lifetime compared to equal-size clustering
+                  methods. In the same direction, ref. [15] proposed a hybrid method combining fuzzy logic
+                  and Q-learning to adaptively design unequal clusters and learn to select Cluster Heads
+                  and routes. Through multi-hop routing and the adaptation of cluster size, their protocol
+                  was able to appropriately balance energy consumption across the network, resulting in
+                  expanded WSN lifetime.
+                       Finally, a fourth class of solutions assumes that the Sink can move to visit all the sensor
+                  nodes. Accordingly, the energy consumption is balanced between nodes, as they drain
+                  their energy uniformly and smoothly.
+                       It is worth pointing out that most of the proposed Sink mobility models consider data
+                  transmission and reception as the main sources of energy consumption. This ignores the
+                  impact of overhearing, which is an important energy consumption source in WSNs [16,17].
+                  Overhearing is often ignored because it adds considerable complexity to the energy model.
+                  However, it has a huge impact on WSNs’ energy; hence, ignoring it may totally distort the
+                  solution. To fill this research gap and build a more realistic solution, this research considers
+                  overhearing as one of the main energy consumption sources.
+                       In this research, we maximize the WSN’s lifetime by exploiting Sink mobility. We
+                  define the appropriate routing flow among sensor nodes that balances the energy consump-
+                  tion. The main contributions of this research are as follows:
+                  •    Formalizing a new energy model that considers overhearing as one of the main sources
+                       of energy consumption.
+                  •    Solving the maximization problem using Linear Programming while considering the
+                       new energy model and assessing the impact of overhearing on the WSN lifetime.
+                  •    Solving the optimization problem using an enhanced swarm-intelligence-based solution.
+                  •    Evaluating and comparing both models in terms of the achieved WSN lifetime and
+                       execution time.
+                  •    Finding the Sink’s shortest path to cover all the sojourn points for both models using
+                       the Traveling Salesman Problem (TSP) algorithm.
+                       The remainder of this paper is structured as follows: Section 2 provides a compre-
+                  hensive review of research related to Sink mobility. Section 3 elaborates on the primary
+                  constraints within WSN environments, details the network topology implemented, and
+                  clearly defines the problem addressed. Section 4 presents a rigorous mathematical for-
+                  mulation of our WSN model. In Sections 5 and 6, we thoroughly analyze the Linear
+                  Programming and Artificial Intelligence solutions along with their respective experimental
+                  results. Section 7 offers an in-depth comparative analysis of these two methodological
+                  approaches. Section 8 demonstrates the application of the TSP algorithm to determine the
+                  optimal path traversing all identified sojourn points. Finally, Section 9 summarizes our
+                  findings and discusses potential directions for future research.
+
+                  2. Related Work
+                       In this section, we present a comprehensive review of the existing Sink mobility
+                  models. Our analysis begins with an examination of LP-based approaches, followed by a
+                  detailed discussion of AI-driven methodologies.
+IoT 2025, 6, 54                                                                                          4 of 39
+
+
+
+                  2.1. LP-Based Sink Mobility Models
+                         Many researchers have investigated the maximization of WSN lifetime through
+                  the strategic deployment of a single mobile Sink for data collection from distributed
+                  sensor nodes.
+                         Yun et al. [18] proposed a distributed algorithm to maximize the WSN lifetime. They
+                  formulated three main constraints (see Section 3) and solved the problem as a linear min-
+                  imization of the consumed energy. These three constraints are used (i) to limit the total
+                  energy consumption for every node, (ii) to guarantee the flow conservation law among
+                  sensor nodes, and (iii) to ensure the total amount of traffic delivered to the Sink. Upon
+                  establishing these constraints, the authors split the relaxed problem into sub-problems by
+                  employing the fractional knapsack problem to devise distributed algorithms for determin-
+                  ing whether a node can transmit data to the single mobile Sink or buffer it. Notably, the
+                  distributive nature of the proposed algorithms is highly required in WSNs, as it enables
+                  each sensor to make forwarding decisions independently without requiring additional
+                  packet exchanges between nodes. Moreover, by calculating the average WSN lifetime
+                  achieved by this algorithm and comparing it to the optimal WSN lifetime value, they
+                  proved that their algorithm is efficient and converges to the optimal value.
+                         In [19], Wang et al. investigated the WSN lifetime optimization through the use of
+                  either a mobile relay (a mobile sensor node with unlimited energy) or a mobile Sink. They
+                  studied the trade-offs associated with these two approaches. The authors demonstrated
+                  that, when deploying both a mobile Sink and a mobile relay node simultaneously, optimal
+                  network lifetime is achieved when the mobile relay maintains a two-hop distance from
+                  the Sink. This configuration necessitates that, whenever the Sink changes position, it must
+                  select a new aggregation node to disseminate the Sink’s updated location to all other nodes
+                  in the network. Their findings concluded that the concurrent deployment of both a mobile
+                  relay and a mobile Sink maximizes the network life. The suggested solution is efficient, as
+                  it fits large-scale networks with a high node density. However, using two mobile entities
+                  incurs more communication and computation overhead for building a new route.
+                         Xie L. et al. [20] proposed an optimization model for the movement of Wireless
+                  Charging Vehicles (WCVs) in sensor networks. In their approach, a WCV performs the
+                  dual function of data collection and node recharging throughout the WSN. The authors
+                  proposed a comprehensive travel path for a WCV that simultaneously minimizes energy
+                  consumption, facilitates efficient data collection from all nodes, and implements a balanced
+                  recharging strategy. They defined a new constraint to ensure that the total traveling time
+                  for the WCV is less than its allocated vacation time. Moreover, they defined another energy
+                  criterion constraint, ensuring that each sensor node’s energy, initially at Emax , must be
+                  fully recharged to Emax before the end of the WCV tour. After deriving these constraints,
+                  the authors demonstrated that the time-dependent solution is equivalent to the space-
+                  dependent solution. Therefore, finding a near-optimal solution requires discretizing the
+                  path into a finite number of segments, and subsequently assigning a logical point to each
+                  one. If the segment is not sufficiently small, it is further discretized until reaching a gap
+                  within (1 − ϵ) between the upper and lower bounds. Finally, the authors demonstrated
+                  that their suggested algorithm finds the threshold between collecting data and recharging
+                  the sensors, which allows the WSN to operate continuously.
+                         In [21], the authors proposed a lifetime maximization model for WSNs called WSNDID,
+                  which ensures intruder detection. The model was formulated as a Mixed-Integer Linear
+                  Programming (MILP) problem that considers sensor deployment, scheduling, data routing,
+                  mobile Sink planning, and detection timing. Due to MILP complexity, a Lagrangean heuris-
+                  tic was applied to reduce computational load while maintaining near-optimal solutions,
+                  making it suitable for real-world applications such as border surveillance. The model was
+IoT 2025, 6, 54                                                                                           5 of 39
+
+
+
+                  evaluated on a grid-structured WSN with sensors positioned at grid corners and Sinks
+                  located at cell centers. The authors performed path planning using the relaxed MILP and
+                  tested it across six different network sizes. They compared the performance against the
+                  Gurobi solver by measuring detection rate, network lifetime, and computational efficiency.
+                  They demonstrated that WSNDID achieved higher detection rates and longer lifetime as
+                  the network size increases, while Gurobi’s performance declined. This shows that the
+                  proposed model is more efficient and scalable, although computational costs remain high
+                  because of the mixed-integer nature of the problem.
+                       El-Fouly et al. [22] proposed a comprehensive framework that addresses the critical
+                  challenges faced by WSNs with mobile Sink deployment. Their approach significantly
+                  enhances energy efficiency by considering various environmental parameters while si-
+                  multaneously guaranteeing timely data transmission. They tackled three main problems:
+                  planning the best path for the mobile Sink, selecting Cluster Heads, and finding the best
+                  routing strategy. These problems were modeled using 0/1 Integer Linear Programming
+                  (ILP), with objective functions and constraints that consider energy use, environmental
+                  risks, and delay. Some of the constraints help avoid dangerous areas, give priority to
+                  sensitive zones, and choose reliable nodes that save energy. Since solving ILP for large
+                  networks can be very complex, they used swarm intelligence methods to obtain practical
+                  solutions. Upon comparative analysis with six state-of-the-art algorithms, their framework
+                  demonstrated superior performance in multiple critical metrics: energy conservation, data
+                  delivery reliability, and adaptive response to environmental challenges.
+
+                  2.2. AI-Based Sink Mobility Models
+                       While linear optimization models address certain aspects of the energy hole prob-
+                  lem, the emergence of artificial intelligence techniques has opened new avenues for
+                  innovative solutions.
+                       In [23], Zhu C. et al. proposed a WSN scheme that is inspired by the honeycomb
+                  system. They split the network into hexagons, then assigned a partition ID and a direction
+                  value for each one. Sensor nodes are also identified by an integrated addressing value that
+                  contains (i) the partition ID, (ii) the direction value, and (iii) the node ID. The node sends
+                  its data to the Sink partition through its direction value. Three strategies are defined for
+                  the Sink movement strategy: (i) the random movement (RM), (ii) the data volume-based
+                  greedy movement (DGM), and the energy-based greedy movement (EGM). The authors
+                  simulated the three proposed strategies and evaluated their performance against multiple
+                  metrics: average energy consumption, maintenance overhead, packet collection ratio, and
+                  packet loss rate. The testing results showed that the Honeycomb Structure with DGM
+                  (HSDG-DGM) outperformed the alternative approaches.
+                       Zhang H. et al. [24] proposed a strategy for collecting data using ant colony opti-
+                  mization. A new method is proposed for selecting rendezvous nodes based on entropy
+                  weighting of several indicators, such as relative residual energy and node density. The al-
+                  gorithm enables the identification of the most suitable access path to the mobile Sink while
+                  minimizing energy consumption in the WSN and tolerating some delay to compensate
+                  for energy usage. The simulation results showed that the suggested model balances the
+                  energy consumption between sensed nodes. However, the main shortcoming is that the
+                  algorithm minimizes the residual energy of the whole network rather than maximizing the
+                  WSN’s lifetime.
+                       Jong G. J [25] proposed another AI-based model termed QHBM for maximizing
+                  the WSN lifetime. This approach was inspired by the intelligent migration patterns and
+                  collective behavior of honey bee colonies in nature. In this biologically inspired QHBM
+                  model, the central Sink node functions as the queen bee. Each cluster within the network
+IoT 2025, 6, 54                                                                                           6 of 39
+
+
+
+                  topology is governed by a designated Cluster Head (CH). If the energy of the CH reaches
+                  a given threshold, it is replaced with a new CH with higher residual energy. The CH
+                  nodes play the role of bee scouts, predestined to lead the Sink to come over. The authors
+                  demonstrated that the QHBM architecture alleviates the routing overhead as the Sink
+                  communicates only with the CH nodes. Consequently, only CHs need the updated location
+                  of the Sink. Moreover, the solution provides a balanced energy consumption model, since
+                  it relies on a scanning step in which the Sink searches for the CH nodes with the highest
+                  residual energy to visit.
+                        Ref. [26] focused on reducing sensor energy consumption in IoT networks to improve
+                  the network lifespan. A hybrid metaheuristic approach combining the Whale Optimiza-
+                  tion Algorithm (WOA) with Simulated Annealing (SA) is proposed to optimize energy
+                  consumption through strategic Cluster Head (CH) selection within the IoT network archi-
+                  tecture. Multiple performance metrics, such as load, temperature, residual energy, number
+                  of alive nodes, and a cost function, were used to choose the optimal CH in the IoT network
+                  clusters. The proposed hybrid methodology is subsequently evaluated against several
+                  established optimization techniques, including the Adaptive Gravitational Search algo-
+                  rithm, the Artificial Bee Colony algorithm, the Genetic Algorithm, and the standard Whale
+                  Optimization Algorithm. The results demonstrated the superiority of the proposed hybrid
+                  approach over existing methods.
+                        In [27], the authors addressed the hot spot problem in WSNs through the development
+                  of the EPMS algorithm, which integrated PSO and mobile Sink technology to form energy-
+                  efficient clusters. Initially, PSO divides the network into distinct regions by calculating
+                  each region’s gravitational center. Cluster Heads are subsequently designated based on
+                  their proximity to the calculated centroid and their corresponding residual energy. Then,
+                  the PSO algorithm iteratively optimizes the cluster formation while preserving optimal
+                  candidate solutions. The mobile Sink subsequently calculates the mean residual energy
+                  metric for each cluster to determine its optimal traversal trajectory. The authors evalu-
+                  ated EPMS against LEACH and TTDD, demonstrating superior energy efficiency metrics
+                  and enhanced data delivery ratios, attributable to the algorithm’s adaptive CH selection
+                  mechanism and optimized Sink mobility patterns. However, the iterative computation of
+                  mean residual energy parameters by the Sink node introduced significant computational
+                  overhead, particularly in large-scale WSNs.
+                        Ref. [28] proposed a Deep Reinforcement Learning Framework for lifetime maxi-
+                  mization in Wireless Sensor Networks (HGFF), which integrated heterogeneous graph
+                  neural networks (GNNs) with Deep Reinforcement Learning (DRL) to maximize WSN
+                  lifetime. The WSN is formalized as a heterogeneous graph structure. GNNs learn node
+                  representations by aggregating neighbor data and capturing hierarchical features, with
+                  a multi-head attention mechanism enabling Sink nodes to selectively prioritize relevant
+                  sensor information. A greedy policy framework was trained to iteratively select optimal
+                  Sink positions and construct energy-efficient movement paths. The HGFF framework
+                  underwent rigorous evaluation across ten distinct network configurations encompassing
+                  both static and dynamic WSN deployment scenarios, and was benchmarked against estab-
+                  lished heuristic algorithms and state-of-the-art DRL-based methodologies. Experimental
+                  results consistently showed that HGFF outperforms existing approaches in terms of both
+                  network lifetime and computational efficiency metrics, thereby validating its applicability
+                  and efficiency for real-world WSN deployments.
+                        In [29], the authors proposed a new protocol called ExAq-MSPP to improve energy
+                  efficiency in WSNs. The researchers implemented an enhanced Aquila Optimization Algo-
+                  rithm incorporating chaotic mapping functions to facilitate optimal trajectory determination
+                  for the mobile Sink node. Initially, sensor nodes are strategically deployed utilizing Voronoi
+IoT 2025, 6, 54                                                                                          7 of 39
+
+
+
+                  diagrams to ensure uniform spatial coverage across the monitoring region. Subsequently,
+                  network clusters are established through an enhanced variant of the LEACH protocol that
+                  designates Cluster Heads based on residual energy parameters and communication cost
+                  metrics. The mobile Sink moves around the network following an optimized route that
+                  reduces propagation delay, conserves energy, and facilitates efficient data collection. Simu-
+                  lations showed that ExAq-MSPP consistently outperforms contemporary methodologies
+                  across multiple performance metrics, including end-to-end latency, energy consumption
+                  efficiency, network longevity, and data throughput.
+
+                  2.3. Non-LP/AI Sink Mobility Models
+                        Nusaiba N. et al. [30] proposed an enhanced version of the LEACH protocol incor-
+                  porating a mobile Sink instead of a conventional static approach. In the original LEACH
+                  version, the sensor nodes are randomly distributed, with CH selection executed locally
+                  by each node based on statistical parameters. CHs are systematically reappointed at each
+                  round to balance energy. In certain instances, the newly designated CH is too close to its
+                  predecessor, thereby accelerating energy depletion. To address this topological inefficiency,
+                  the authors delegated CH selection authority to the mobile Sink node, implementing a
+                  centralized decision-making architecture. The mobile Sink traverses along the vertical
+                  Y-axis, with its positional coordinates recalculated at each transmission cycle based on the
+                  geographical distribution of CHs and their respective data transmission volumes. The
+                  protocol efficiency was evaluated using multiple parameters, including alive nodes, dead
+                  nodes, energy dissipated, residual energy, throughput, and latency. Extensive MATLAB
+                  simulations conducted on a network configuration comprising 100 sensor nodes demon-
+                  strated a quantitative improvement of 5% improvement in alive nodes and 64% in residual
+                  energy compared to the standard LEACH protocol, indicating enhanced performance.
+                  However, the methodology exhibited several limitations. First, the experimental validation
+                  was tested on a single network size, which limits the statistical reliability of the results.
+                  Secondly, the 5% improvement in alive nodes represents a marginal enhancement that may
+                  not be statistically significant. Lastly, the simulation framework neglects the overhearing
+                  phenomena, potentially compromising the accuracy of the comparative analysis.
+                        Abu Taleb et al. [31] proposed a mobility model that aims to improve data collection
+                  in WSNs with a mobile Sink. Their architectural model employs a bipartite graph approach
+                  to partition the sensor node population into two mutually exclusive subsets. The Sink
+                  initiates its trajectory by visiting one of the sets using a breadth-first traversal approach
+                  that depends on the Euclidean distance between nodes. After completing the first subset,
+                  the mobile Sink moves to the second subset, maintaining identical traversal methodology.
+                  During the visit, the Sink can also collect data from neighboring nodes that belong to the
+                  other subset, which reduces buffer overflow and data delays. The model was evaluated
+                  using NS-2 simulator and compared against three other models. The results showed that
+                  the proposed model achieves better performance in terms of delay, delivery ratio, and
+                  throughput, especially in medium-sized networks and with moderate Sink speed.
+                        Mohapatra et al. [32] proposed a routing protocol specifically designed for Wireless
+                  Sensor Networks (WSNs) with mobile Sinks. Their approach aims to address several critical
+                  challenges in such networks, including hot spot formation, increased transmission delay,
+                  and non-uniform energy consumption in the vicinity of the Sink node. Their protocol
+                  builds a virtual ring architecture consisting of one-hop or two-hop neighbor nodes around
+                  the mobile Sink. This ring serves as a mechanism to disseminate the Sink’s location to
+                  CHs, thereby reducing the control overhead usually associated with Sink mobility. The
+                  Sink itself moves based on a greedy geographic strategy that favors regions with high-
+                  priority data. The protocol also includes a dynamic CH selection method that considers the
+IoT 2025, 6, 54                                                                                                                           8 of 39
+
+
+
+                                     remaining energy and the distance to the Sink. Additionally, the ring can be reconfigured
+                                     if some nodes run out of energy or when the Sink moves to a new position. Simulations
+                                     demonstrated that the proposed protocol outperformed other established protocols such as
+                                     LBDD and Mob M-LEACH, particularly in throughput, energy efficiency, and end-to-end
+                                     delay metrics.
+
+                                     2.4. Discussion
+                                           WSNs face many challenges in energy efficiency that directly impact network lifetime
+                                     and operational sustainability. The energy hole problem remains a critical limitation in
+                                     static Sink deployments. To address this challenge, mobile Sink strategies have emerged
+                                     as promising solutions, offering more balanced energy consumption across the network.
+                                     However, the effectiveness of these mobile Sink approaches depends significantly on
+                                     the underlying methodologies, trajectory planning algorithms, and energy consumption
+                                     models employed. This section presents a comprehensive evaluation of existing mobile
+                                     Sink strategies in WSNs, systematically comparing their methodological frameworks,
+                                     performance characteristics, and practical limitations. By examining the state-of-the-art
+                                     across LP-based, AI-based, and Non-LP/AI approaches, we identify critical research gaps
+                                     and establish the foundation for our novel contribution that integrates overhearing-aware
+                                     energy modeling with advanced optimization techniques.
+
+                                     2.4.1. Comparative Analysis
+                                          In this section, we present a comprehensive analysis of the existing literature on
+                                     Sink mobility in WSNs, categorized into three primary approaches: LP-based, AI-based,
+                                     and Non-LP/AI models. Each approach offers distinct advantages and limitations in
+                                     addressing energy efficiency and extending network lifetime. The key features, advantages,
+                                     limitations, consideration of overhearing, energy balancing, and/or lifetime maximization
+                                     are summarized in Tables1–3.
+                                          Table 1 presents the LP-based approaches for mobile Sink approaches. These methods
+                                     formulate the network lifetime maximization as mathematical programming problems
+                                     with constraints related to energy consumption, data flow, and routing. Although these
+                                     LP-based approaches offer near-optimal solutions with theoretical guarantees, they often
+                                     encounter scalability challenges in large-scale networks and fail to account for overhearing
+                                     effects, which can significantly impact energy consumption in practical deployments.
+
+                                     Table 1. Comparison of LP-based Sink mobility models in WSN lifetime optimization.
+
+                                                                                                                           Energy Balanc-
+ Reference              Approach            Key Features          Advantages           Limitations           Overhearing
+                                                                                                                           ing/Lifetime
+                                            Distributed           Near-optimal
+                        LP + fractional     algorithm with        lifetime,            Single Sink,
+ Yun et al. [18]                                                                                             No            Lifetime
+                        knapsack            energy, flow, and     distributed          limited scalability
+                                            traffic constraints   decisions
+                                                                                       Higher
+                        LP + mobile relay   Trade-off analysis,   Suitable for dense   communication
+ Wang et al. [19]                                                                                            No            Lifetime
+                        and Sink            relay placement       large networks       and computation
+                                                                                       overhead
+                        LP + Wireless       Balanced data                              Path discretization
+                                                                  Continuous                                               Lifetime and
+ Xie et al. [20]        Charging Vehicle    collection and                             and complex           No
+                                                                  operation                                                energy
+                        (WCV)               recharging                                 timing
+                        MILP +              Scheduling,
+                                                                  High detection       High                                Lifetime and
+ WSNDID [21]            Lagrangean          routing, intruder                                                No
+                                                                  rate, scalable       computational cost                  detection
+                        heuristic           detection
+                                                                  Improved energy      ILP complexity,
+                        0/1 ILP + Swarm     Path planning,
+ El-Fouly et al. [22]                                             saving and timely    approximate           No            Lifetime
+                        Intelligence        Cluster Heads
+                                                                  delivery             solution
+IoT 2025, 6, 54                                                                                                                           9 of 39
+
+
+
+                                           Table 2 presents a detailed comparison of various AI-based approaches for mobile
+                                      Sink optimization in WSNs. These methods leverage various metaheuristic algorithms and
+                                      machine learning techniques to determine optimal Sink movement patterns and Cluster
+                                      Head selection. AI-based approaches generally offer greater adaptability and flexibility
+                                      compared to LP-based methods, particularly in dynamic environments. However, they
+                                      predominantly focus on energy balancing rather than direct lifetime maximization and still
+                                      overlook the critical factor of overhearing in their energy models.
+
+                                      Table 2. Comparison of AI-based Sink mobility models in WSN lifetime optimization.
+
+                                                                                                                           Energy Balancing
+ Reference                Approach             Key Features         Advantages          Limitations          Overhearing
+                                                                                                                           vs. Lifetime
+                                               Partitioned nodes,
+                          Honeycomb +                               Reduces energy      Limited dynamic
+ Zhu C. et al. [23]                            movement                                                      No            Energy balancing
+                          RM/DGM/EGM                                waste, DGM best     adaptability
+                                               strategies
+                                               Rendezvous node                          Does not
+                          Ant Colony +                              Balances node
+ Zhang H. et al. [24]                          selection, energy                        maximize             No            Energy balancing
+                          entropy weighting                         energy
+                                               balance                                  network lifetime
+                          QHBM                 CHs as scouts,       Reduces routing     Random CH
+ Jong G. J [25]                                                                                              No            Energy balancing
+                          (bee-inspired)       Sink follows CH      overhead            selection
+                                                                    Outperforms
+                                                                                        Medium
+                          Hybrid WOA +         Optimal CH           other
+ Iwendi et al. [26]                                                                     computational        No            Energy balancing
+                          SA                   selection            metaheuristic
+                                                                                        complexity
+                                                                    tasks
+                                               Cluster formation                        Computational
+                          EPMS (PSO +                               High energy
+ Dash et al. [27]                              + Sink path                              overhead for large   No            Energy balancing
+                          Mobile Sink)                              efficiency
+                                               optimization                             networks
+                                               Graph                Outperforms         Requires training,
+                          HGFF (GNN +                                                                                      Lifetime and
+ Han et al. [28]                               representation,      heuristics,         complex for very     No
+                          DRL)                                                                                             energy
+                                               greedy Sink policy   practical           large networks
+                                               Voronoi              Energy efficient,
+                          ExAq-MSPP
+                                               placement,           reduces delay,      Computationally                    Lifetime and
+ Sangeetha et al. [29]    (Aquila                                                                            No
+                                               optimized Sink       improves            intensive                          energy
+                          Optimization)
+                                               path                 throughput
+
+
+
+                                            Table 3 summarizes the diverse Non-LP/AI approaches that leverage alternative
+                                      techniques such as graph-based methods for Sink mobility optimization. These techniques
+                                      often employ clustering mechanisms like LEACH with modifications to accommodate
+                                      mobile Sinks; while these approaches generally require less computational resources than
+                                      the LP or AI-based methods, they exhibit limited scalability and have been predominantly
+                                      tested only on small–medium-sized network configurations. Similar to other approaches,
+                                      these approaches neglect critical effect of overhearing and prioritize energy balancing over
+                                      lifetime maximization.
+
+                                      Table 3. Comparison of Non-LP/AI Sink mobility models in WSN lifetime optimization.
+
+                                                                                                                           Energy Balancing
+ Reference                 Approach             Key Features        Advantages          Limitations          Overhearing
+                                                                                                                           vs. Lifetime
+                                                Sink selects CH
+                                                                    Improves residual
+                                                based on                                Small network,
+                          Enhanced LEACH                            energy, slight
+ Nusaiba N. et al. [30]                         geographic                              minor                No            Energy balancing
+                          + Mobile Sink                             increase in alive
+                                                location and data                       improvement
+                                                                    nodes
+                                                load
+                                                Sink visits two     Reduces buffer
+                           Bipartite graph +                                            Limited to
+ Abu Taleb et al. [31]                          disjoint sets       overflow and                             No            Energy balancing
+                           BFS traversal                                                medium networks
+                                                iteratively         delay
+IoT 2025, 6, 54                                                                                                                   10 of 39
+
+
+
+                                    Table 3. Cont.
+
+                                                                                                                       Energy Balancing
+ Reference               Approach             Key Features        Advantages         Limitations         Overhearing
+                                                                                                                       vs. Lifetime
+                                                                  Reduces
+                         Virtual ring +
+                                              Ring shares Sink    overhead,          Reconfiguration
+                         greedy
+ Mohapatra et al. [32]                        location, dynamic   improves           needed if nodes     No            Energy balancing
+                         geographic Sink
+                                              CH selection        throughput and     die or Sink moves
+                         movement
+                                                                  energy
+
+
+                                    2.4.2. Critical Gaps in the Literature
+                                           Our comparative analysis reveals several significant research gaps in the existing literature:
+                                    •      Overhearing:
+                                           Consistently overlooked in prior research, compromising the accuracy of energy
+                                           consumption estimation models.
+                                    •      Optimal Mobile Sink Trajectory: Predominantly addressed through heuristic or partial
+                                           solutions, leaving the determination of truly optimal trajectories largely unexplored.
+                                    •      Dynamic Adaptability: Significantly enhanced in AI-based models compared to LP or
+                                           non-LP/AI approaches when responding to changing network conditions.
+                                    •      Environment and Scalability: Severely limited in LP approaches when applied to large
+                                           networks, restricted to small-to-medium networks in non-LP/AI methods, and rarely
+                                           accounting for environmental factors across all approaches.
+                                    •      Lifetime vs. Energy: Theoretically maximized in LP methods despite limited prac-
+                                           tical adaptability, while primarily focused on energy balancing rather than lifetime
+                                           maximization in AI and non-LP/AI approaches.
+
+                                    2.4.3. Research Contribution
+                                         To address these critical gaps, we present a comprehensive energy model that achieves
+                                    the following remedies:
+                                    •      Incorporates overhearing effects to significantly enhance energy consumption estima-
+                                           tion accuracy.
+                                    •      Integrates both AI-based optimization techniques (Cuckoo Search algorithm) and
+                                           Linear Programming approaches.
+                                    •      Dynamically optimizes routing paths and Sink positioning strategies across variable
+                                           network scales.
+                                    •      Maximizes WSN lifetime through strategic energy balancing and consumption opti-
+                                           mization.
+                                    •      Accounts for critical real-world environmental factors to ensure effective practical
+                                           deployment (e.g., overhearing phenomena).
+                                         This two-pronged approach offers a strong tool for WSN energy optimization by inte-
+                                    grating theoretical optimization (LP), adaptive AI, and real-world deployment (overhearing).
+
+                                    3. System Model
+                                         In this section, we examine the most widely acknowledged constraints identified in
+                                    the reviewed literature and present our comprehensive system model.
+
+                                    3.1. Main Constraints of Sink Mobility Approach
+                                        In our comprehensive review of state-of-the-art solutions addressing Sink mobility
+                                    and WSN lifetime maximization, we identified three fundamental conditions that are
+                                    consistently applied across the literature when modeling network nodes (i.e., both Sink
+                                    and sensor nodes).
+IoT 2025, 6, 54                                                                                       11 of 39
+
+
+
+                       First, we define two constraints for each sensor node, namely the energy constraint
+                  and the flow conservation law:
+                  1.   The energy constraint: this constraint states that the total energy consumed at
+                       each node by the data reception and transmission must not overextend its initial
+                       allocated energy.
+                  2.   The flow conservation law: every node should satisfy the equality between the total
+                       incoming flow rates added to the self-generated data rate and the sum of the resulting
+                       outgoing flow rates at any time.
+                       As for the Sink, it has to satisfy the following constraint:
+                  •    The total traffic received by the Sink in a given duration must equal the total of the
+                       data generated by all the sensor nodes in the same duration.
+
+                  3.2. Assumptions and Network Topology
+                        In our context, we employ LP to find the optimal Sink sojourn locations and durations
+                  that maximize the WSN lifetime, while ensuring each node’s cumulative energy consump-
+                  tion remains within its initial energy capacity. Most Sink mobility models only consider
+                  data transmission and reception as the main sources of energy consumption. However,
+                  in reality, WSNs experience additional sources of energy drains, particularly from phe-
+                  nomena such as overhearing and packet collision [16,33]. We propose an LP model that
+                  determines optimal Sink sojourn points and durations while maximizing network lifetime
+                  by incorporating the critical energy consumption component due to overhearing. Naturally,
+                  our model predicts shorter WSN lifetimes compared to solutions that ignore overhearing
+                  effects, but our priority is developing a model that reflects realistic WSN communication
+                  scenarios with maximum fidelity.
+                        This research adopts the network model proposed by Wang et al. [34] as its founda-
+                  tional framework, wherein the authors formulate an LP model to maximize the mobile
+                  Sink’s sojourn duration while maintaining balanced energy consumption across the entire
+                  WSN grid. Our contribution extends this model by incorporating previously unaccounted
+                  energy consumption due to packet overhearing, a significant factor affecting the network
+                  lifetime. Building upon Wang et al.’s work, which provides a mathematical formulation for
+                  energy consumption in a square grid, we adopt the same regular grid structure to extend
+                  the model. In such a topology, each sensor node has a deterministic number of neighbors,
+                  enabling precise analytical calculation of energy dissipation due to overhearing during
+                  packet-forwarding operations.
+                        Although deploying wireless sensor nodes in a regular grid represents an idealized
+                  configuration, this approach offers several significant methodological advantages. First,
+                  it establishes a rigorous foundation for our mathematical model, particularly regarding
+                  the quantification of overhearing energy consumption, which constitutes the primary
+                  contribution of this work. Second, the regular structure enables precise identification of
+                  energy consumption sources for each sensor, including neighbor count and overhearing-
+                  related energy losses—essential factors for developing a tractable analytical model.
+                        It is worth noting that several real-world applications utilize strategically placed
+                  sensors in predefined regular patterns, such as grid layouts. This renders our assumption
+                  valid within specific operational contexts. In contrast, random topologies would require
+                  a primarily simulation-based methodology, as the varying number of neighbors across
+                  nodes would significantly complicate the creation of a universal mathematical model for
+                  energy consumption.
+                        The proposed methodology is based on the following key assumptions:
+IoT 2025, 6, 54                                                                                          12 of 39
+
+
+
+                  •    The network consists of a bi-dimensional square grid with size N = L × L, where N
+                       represents the total number of static sensors.
+                  •    The Sink can move among nodes in the grid to collect data, with negligible moving
+                       time compared to its sojourn time.
+                  •    All sensors can communicate with the Sink during its sojourn time through either
+                       one-hop or multi-hop communication schemes.
+                  •    The primary sources of energy consumption are data reception, transmission, and
+                       overhearing. Notably, the consideration of overhearing constitutes our main contribution.
+                  •    All sensors are homogeneous, possessing identical data generation rates, power con-
+                       sumption rates, and transmission ranges.
+                  •    Communication channels are error-free, symmetric, and bi-directional.
+                  •    All sensors are equipped with the same limited initial energy and unlimited buffer size.
+                  •    When the Sink is neither co-located with a sensor nor directly connected to it, commu-
+                       nication between them occurs through the shortest path in the multi-hop scheme.
+                        As shown in Figure 2, the WSN can be modeled as a square grid, where N is the set of
+                  sensor nodes that compose the network, and L is the grid’s edge length (measured in sensor
+                  units). Given the uniform distribution of sensors within this square grid configuration,
+                  each sensor (except those at the borders) maintains connections with four neighboring
+                  nodes. Regarding data generation, all sensor nodes generate the data packets at a fixed rate.
+                  In this study, we assume that the Sink potential sojourn locations coincide with the sensor
+                  nodes’ positions. Furthermore, we define the network lifetime as the period during which
+                  the Sink continuously traverses these sojourn locations until at least one sensor exhausts its
+                  initial energy supply.
+
+
+
+
+                  Figure 2. WSN model.
+
+                  3.3. Problem Description
+                       Our research work aims to maximize WSN lifetime by determining the optimal Sink
+                  sojourn locations and their associated durations. Each candidate Sink sojourn point cor-
+                  responds to a specific sensor node location, i ∈ N, where N is a grid of size L × L. The
+                  Sink sojourns at location k for a period of time denoted by tk . Consequently, the value of tk
+                  indicates both whether a given node is visited and the duration of the Sink’s sojourn at that
+IoT 2025, 6, 54                                                                                            13 of 39
+
+
+
+                  location. When tk = 0, the Sink does not visit that node; when tk > 0, the Sink remains at
+                  sensor location i = k for tk time units.
+                       The total lifetime of the Wireless Sensor Network, denoted as T, is the sum of all
+                  individual sojourn times across all feasible Sink points:
+
+
+                                                              ∑ tk = T                                         (1)
+                                                             k∈ N
+
+                        It is important to note that this definition of T encompasses all feasible sojourn points,
+                  regardless of whether a particular sojourn time is zero or positive. The network lifetime thus
+                  accumulates the contributions from all potential Sink locations. The cumulative duration
+                  of the Sink’s sojourns across all points is constrained by each node’s initial energy capacity.
+                  In other words, the total energy consumed by each node during the Sink’s sojourning at
+                  all locations must not exceed its initial energy reserves. Furthermore, in our model, when
+                  a sensor is positioned on the same horizontal or vertical line as the Sink, only a single
+                  shortest path is considered for communication, despite the potential existence of multiple
+                  equidistant routes. Indeed, there are eight shortest paths between each node and the Sink.
+                  However, our model selectively considers only the two paths that form a rectangle with
+                  the sensor and Sink at opposite corners, as depicted in Figure 3.
+
+
+
+
+                  Figure 3. The two considered paths between a sensor node i and the Sink s.
+
+                       For energy consumption calculations, we employ the widely adopted first-order radio
+                  model. To calculate the energy consumed by a receiver processing k1 bits/s, we utilize the
+                  following equation:
+                                                         pr = k 1 β
+
+                  where β is the receiving energy consumption rate.
+                      Second, for the k2 bits/s transmission energy, we utilize the following equation:
+
+                                                        p t = k 2 ( α1 + α2 d p )
+
+                  where α1 is the energy consumption rate for transmission and α2 is the amplifier energy
+                  consumption rate, d is the distance, and p is the path loss (usually between 2 and 4). Based
+IoT 2025, 6, 54                                                                                              14 of 39
+
+
+
+                  on empirical findings from real-life WSN energy model prototypes, the energy consumed
+                  during both transmission and reception phases remains constant and equivalent. We denote
+                  this constant energy quantity as e. Consequently, the total energy consumption from these
+                  communication processes can be calculated as follows:
+
+                                            pr + p t = k 1 β + k 2 ( α1 + α2 d p ) ≈ e ( k 1 + k 2 )              (2)
+
+                  4. Mathematical Formulation
+                       In this section, we list the parameters and variables employed in the formulation of
+                  our optimization problem:
+
+                  4.1. Parameters
+                  •    L: Number of sensors along each edge of the square grid.
+                  •    N: Total number of sensors in the square grid (L × L).
+                  •    e0 : Initial energy (J) allocated to each node, from which energy is deducted during
+                       each operation.
+                  •    e: Energy consumption rate (J/bit).
+                  •    r: Sensor data generation rate (bits/s), constant across all sensors.
+                  •    Fijk : Data transmission rate between nodes when the Sink is positioned at sojourn point
+                       k (bits/s).
+                  •    Si : Set of neighboring nodes for node i.
+                  •    Cik : Power consumption rate at sensor node i, while the Sink remains at sojourn point
+                       k (J/s).
+                  •    Oi : Overhearing rate between the sensor node and its neighbors.
+                  •    Ocond : Additional overhead for specific conditions or locations within the grid.
+
+                  4.2. Decision Variables
+                  •    tk : Sink sojourn duration (s) at node k.
+
+                  4.3. Objective Function
+                  •    Maximize T, representing the total WSN lifetime, defined as the sum of all Sink sojourn
+                       durations across all possible sojourn points (s).
+                       Primarily, from the flow conservation law (previously established in Section 3) which
+                  stipulates that each node must maintain equilibrium between its total incoming flow rates
+                  plus self-generated data rate and the sum of its outgoing flow rates at all times, we can
+                  derive the following equation:
+
+                                                            ∑ Fjik + r = ∑ Fijk                                   (3)
+                                                          j:i ∈Si            j ∈ Si
+
+
+                       By integrating the aforementioned conservation along with overhearing considera-
+                  tions, the energy consumption for a node during the Sink’s sojourn at a specified location
+                  can be calculated from (2) as:
+                                  
+                                  e(∑       k               k
+                                       j∈Si Fij + ∑ j:i ∈Si Fji ) + ( er × Oi ), ∀i, k ∈ [0, N − 1] and i ̸ = k
+                            Cik =                                                                               (4)
+                                  er + (er × Oi ),                              ∀i, k ∈ [0, N − 1] and i = k
+
+                  4.4. Linear Programming Formulation
+                       As previously established, Linear Programming is used for optimization. In Equation (5),
+                  the main objective is to maximize T, representing the WSN lifetime, which equals the sum of all
+                  sojourn durations tk . It is noteworthy that the Sink sojourn duration tk at each possible location
+IoT 2025, 6, 54                                                                                                 15 of 39
+
+
+
+                  ∀k ∈ [0, N − 1] is determined by the LP solution to the optimization problem formulated
+                  in Equation (5). The principal constraint, expressed in Equation (6), ensures that each
+                  sensor node’s energy consumption during lifetime T remains less than or equal to its initial
+                  energy allocation. Finally, constraint (7) stipulates that all tk values must be greater than or
+                  equal to zero, with a value of zero indicating that the Sink does not visit or sojourn at the
+                  corresponding location.
+
+                                                 N −1
+                                    Max T =       ∑ tk                                                              (5)
+                                                 k =0
+                                                 N −1
+                                   Subject to     ∑ cik × tk ≤ e0 ,                  ∀i ∈ [0, N − 1]                (6)
+                                                 k =0
+                                                tk ≥ 0,                              ∀k ∈ [0, N − 1]                (7)
+
+                        The main contribution of the base model [34] is the sub-areas-based energy model. As
+                  illustrated in Figure 4, a pair of intersecting horizontal and vertical dotted lines demarcates
+                  the sensors aligned with the row and column of the Sink’s position. This configuration
+                  generates eight distinct sub-regions: upper left (UL), upper right (UR), horizontal left (HL),
+                  horizontal right (HR), vertical above (VA), vertical below (VB), lower left (LL), and lower
+                  right (LR). The directional arrows indicate the data flow received and transmitted by sensor
+                  node i to the Sink via the two shortest paths, a concept previously elucidated in Section 3.3.
+
+
+
+
+                  Figure 4. Divided subareas and data flows received and transmitted at node i. The dotted lines
+                  indicate the boundaries of the subareas, while the arrows represent the data transmission directions.
+
+                       As a significant contribution of our research, the power consumption rate Cik is cal-
+                  culated for each sensor node according to its designated sub-area and precise spatial
+                  coordinates (column and row positions denoted as (x, y)) using the following formu-
+                  lations, which distinctively incorporate both the overhearing factor Oi and conditional
+                  overhead Ocond :
+IoT 2025, 6, 54                                                                           16 of 39
+
+
+
+
+                        
+                        
+                        
+                         er [ 12 ( L − 1) + ( x + 1)] + Ocond ,              if i ∈ HL
+                        
+                          er [ 12 ( L − 1) + ( L − x )] + Ocond , ,           if i ∈ HR
+                        
+                        
+                        
+                        
+                        
+                          er [(y + 1) + ( 12 ( L − 1))] + Ocond ,
+                        
+                                                                              if i ∈ VA
+                        
+                        
+                        
+                        
+                        
+                                           1
+                        er [( L − y) + 2 ( L − 1)] + Ocond ,                 if i ∈ VB
+                        
+                        
+                        
+                  Oi = er [1 + ( 21 y) + 12 ( x + 1)] + Ocond                 if i ∈ UL
+                      
+                        er [2 + 21 ( L − x )] + Ocond ,
+                      
+                                                                              if i ∈ UR
+                      
+                      
+                      
+                      
+                      
+                        er [ 12 ( L − y) + 1 + 12 ( x + 1)] + Ocond ,         if i ∈ LL
+                      
+                      
+                      
+                      
+                      
+                        er [ 12 ( L − y) + 1 + 12 ( L − x ) + 1)] + Ocond ,
+                      
+                                                                              if i ∈ LR
+                      
+                      
+                      
+                      
+                      
+                      (( L2 − 1) + 1),
+                      
+                                                                              if i = k
+                             
+                               1
+                             
+                             
+                              2 ( x + 1)                 if i ∈ HL and y ̸= 0
+                             
+                               1
+                               2 ( x + 1)                 if i ∈ HL and y ̸= L − 1
+                             
+                             
+                             
+                             
+                             
+                               1
+                             
+                               2 ( L − x)                 if i ∈ HR and y ̸= 0
+                             
+                             
+                             
+                             
+                             
+                               1
+                               2 ( L − x)                 if i ∈ HR and y ̸= L − 1
+                             
+                             
+                             
+                             
+                             
+                               1
+                             
+                               2 ( y + 1)                 if i ∈ VA and x ̸= 0
+                             
+                             
+                             
+                             
+                             
+                               1
+                                                          if i ∈ VA and x ̸= L − 1
+                             
+                               2 ( y + 1)
+                             
+                             
+                             
+                             
+                             
+                               1
+                               2 ( L − y)                 if i ∈ VB and x ̸= 0
+                             
+                             
+                             
+                             
+                             
+                               1
+                             
+                               2 ( L − y)                 if i ∈ VB and x ̸= L − 1
+                             
+                             
+                             
+                             
+                             
+                               1
+                               2 ( x + 1)                 if i ∈ UL and y ̸= 0
+                             
+                             
+                             
+                             
+                             
+                               1
+                             
+                               2 ( y + 1)                 if i ∈ UL and x ̸= 0
+                             
+                             
+                             
+                             
+                             
+                               ( 12 y) + 1                if i ∈ UL and x + 1 ̸= xk
+                             
+                             
+                             
+                             
+                             
+                             
+                               y+1                        if i ∈ UL and x + 1 = xk
+                             
+                             
+                             
+                             
+                             
+                              1
+                             
+                             
+                             
+                              2x                         if i ∈ UL and y + 1 ̸= yk
+                             
+                               x                          if i ∈ UL and y + 1 = yk
+                             
+                             
+                             
+                             
+                             
+                               1
+                             
+                               2 ( L − x)                 if i ∈ UR and y ̸= 0
+                             
+                             
+                             
+                             
+                             
+                              1 ( L − y)
+                             
+                                                          if i ∈ UR and x ̸= L − 1
+                      Ocond = 2
+                               1
+                             
+                             
+                              2y                         if i ∈ UR and x − 1 ̸= xk
+                             
+                             
+                             
+                             
+                             
+                              y                          if i ∈ UR and x − 1 = xk
+                             
+                               1
+                               2 ( L − x)                 if i ∈ UR and y + 1 ̸= yk
+                             
+                             
+                             
+                             
+                             
+                             
+                             
+                             
+                             
+                              ( L − x)                   if i ∈ UR and y + 1 = yk
+                             
+                               1
+                               2 ( L − y)                 if i ∈ LL and x ̸= 0
+                             
+                             
+                             
+                             
+                             
+                             
+                               ( L − y)                   if i ∈ LL and x + 1 = xk
+                             
+                             
+                             
+                             
+                             
+                               1
+                               2 ( L − y − 1) + 1         if i ∈ LL and x + 1 ̸= xk
+                             
+                             
+                             
+                             
+                             
+                             
+                               1
+                               2 ( x + 1)                 if i ∈ LL and y − 1 ̸= yk
+                             
+                             
+                             
+                             
+                             
+                             
+                             
+                             
+                             
+                              ( x + 1)                   if i ∈ LL and y − 1 = yk
+                             
+                               1
+                               2 ( L − y − 1)             if i ∈ LL and y ̸= L − 1
+                             
+                             
+                             
+                             
+                             
+                               1
+                             
+                               2 ( L − y)                 if i ∈ LR and x + 1 ̸= L − 1
+                             
+                             
+                             
+                             
+                             
+                               1
+                               2 ( L − x )s               if i ∈ LR and y + 1 ̸= L − 1
+                             
+                             
+                             
+                             
+                             
+                             
+                               ( 12 ( L − x − 1))         if i ∈ LR and y − 1 ̸= yk
+                             
+                             
+                             
+                             
+                             
+                             
+                             
+                             
+                             
+                              ( L − x − 1)               if i ∈ LR and y − 1 = yk
+                             
+                               ( 12 ( L − y − 1))         if i ∈ LR and x − 1 ̸= xk
+                             
+                             
+                             
+                             
+                             
+                             
+                               ( L − y − 1)               if i ∈ LR and x − 1 = xk
+                             
+IoT 2025, 6, 54                                                                                         17 of 39
+
+
+
+                       Consequently, the power consumption rate at sensor node i during the Sink’s sojourn
+                  at location k is quantified using the following formulation:
+                                           
+                                           
+                                           
+                                            er [( x + 1)(1 + L) − 1] + (er × Oi ), if i ∈ HL
+                                           
+                                           
+                                           
+                                           
+                                           
+                                            er [( L − x )(1 + L) − 1] + (er × Oi ), if i ∈ HR
+                                           
+                                             er [(y + 1)(1 + L) − 1] + (er × Oi ), if i ∈ VA
+                                           
+                                           
+                                           
+                                           
+                                           
+                                           
+                                             er [( L − y)(1 + L) − 1] + (er × Oi ), if i ∈ VB
+                                           
+                                           
+                                           
+                                           
+                                           
+                                           er (1 + x + y) + (er × O ),
+                                           
+                                                                                     if i ∈ UL
+                                                                       i
+                                     Cik =
+                                           
+                                           
+                                            er ( L − x + y) + (er × Oi ),           if i ∈ UR
+                                           
+                                           
+                                           
+                                           
+                                           
+                                            er ( L + x − y) + (er × Oi ),           if i ∈ LL
+                                           
+                                             er (2L − x − y − 1) + (er × Oi ),       if i ∈ LR
+                                           
+                                           
+                                           
+                                           
+                                           
+                                           
+                                             er [( x + 1)(1 + L) − 1] + (er × Oi ), if i ∈ HL
+                                           
+                                           
+                                           
+                                           
+                                           
+                                           er + (er × O ),
+                                           
+                                                                                     if i = k
+                                                            i
+
+
+                  where xk and yk are the ( x, y) coordinate of the Sink sojourn point. This energy model is
+                  programmed in java, and the solution of the LP model has been implemented using Google
+                  OR-Tool version 9.5 [35].
+
+                  5. LP-Based Analytical Result
+                       Following our enhancement of the energy model presented by Wang et al. [34] through
+                  the incorporation of overhearing effects, we implemented and solved the LP model (both
+                  with and without overhearing considerations) across varying grid dimensions, with L
+                  ranging from 3 to 20. The comprehensive simulation parameters utilized in our analysis
+                  are enumerated in Table 4.
+
+                  Table 4. Simulation parameters’ values.
+
+                                    Parameter                      Value
+                                         e0                        1,350,000 µJ
+                                         e                         0.62 µJ/bit
+                                         r                         1 bit/s
+
+
+                  5.1. Achieved WSN Lifetime
+                        The initial comparative results are presented in Table 5: the first two columns specify
+                  the network dimensions, the third column indicates the maximum WSN lifetime achieved
+                  by the model proposed in [34], and the fourth column illustrates the maximum WSN
+                  lifetime attained through our enhanced model (incorporating overhearing effects). As
+                  expected, there is a substantial reduction in WSN lifetime when energy consumption of
+                  overhearing is considered. This reduction is quantified as a percentage in the last column of
+                  the table. We observe a minimum decrease of 48% in the network lifetime when accounting
+                  for overhearing, which demonstrates the significant inaccuracy introduced by omitting
+                  overhearing as a critical component of energy consumption in WSN models.
+                        The data presented in Table 5 are visualized in Figure 5, which illustrates the network
+                  lifetime across various grid dimensions for both energy modeling approaches—with and
+                  without overhearing considerations. As shown in Figure 5, the impact of overhearing
+                  on the WSN lifetime decreases as network size increases. This is can be attributed to the
+                  constant ratio of overhearing energy consumption, whereas the ratio of energy consumed
+                  by data transmission escalates with increasing network dimensions. Consequently, the
+                  ratio of overhearing to the ratio of data transmission decreases as the network expands.
+IoT 2025, 6, 54                                                                                           18 of 39
+
+
+
+                  Table 5. Achieved WSN lifetime by LP with and without overhearing in different WSN sizes.
+
+                       WSN Size                  WSN Lifetime (s)
+                                                                                     Decrease in Percentage
+                   L     N = L2     Without Overhearing       With Overhearing
+                   3     9          802,207                   231,751                71%
+                   4     16         451,917                   171,888                62%
+                   5     25         320,054                   141,999                56%
+                   6     36         263,601                   120,256                54%
+                   7     49         222,869                   104,031                53%
+                   8     64         193,126                   91,773                 52%
+                   9     81         169,493                   82,153                 52%
+                   10    100        151,529                   74,416                 51%
+                   11    121        137,219                   68,028                 50%
+                   12    144        125,451                   62,680                 50%
+                   13    169        115,285                   58,114                 50%
+                   14    196        106,707                   54,176                 49%
+                   15    225        99,423                    50,742                 49%
+                   16    256        93,075                    47,725                 49%
+                   17    289        87,360                    45,050                 48%
+                   18    324        82,370                    42,658                 48%
+                   19    361        77,978                    40,510                 48%
+                   20    400        73,986                    38,569                 48%
+
+
+
+
+                  Figure 5. Different WSN lifetimes with and without overhearing by LP.
+
+                  5.2. Sink’s Sojourn and Sensors’ Residual Energy Distribution
+                       To provide a deeper explanation, we analyze the Sink’s sojourn distribution along with
+                  the sensors’ residual energy, providing a more comprehensive comparative assessment
+                  between the two energy models.
+                       We conduct a comparative analysis of both models across three representative net-
+                  work dimensions: L = 6, 9, and 14. Examining first the Sink sojourn locations and their
+                  corresponding durations when L equals 6, we observe that both models exhibit identical
+IoT 2025, 6, 54                                                                                                     19 of 39
+
+
+
+                  behavioral patterns. Specifically, the Sink predominantly allocates its sojourn time at the
+                  four corner positions of the grid, as illustrated in Figure 6.
+
+
+
+
+                  (a) Sink sojourn points and durations without               (b) Sink sojourn points and durations with
+                  overhearing for L = 6.                                      overhearing for L = 6.
+
+
+
+
+                  (c) Sink sojourn points and durations without                (d) Sink sojourn points and durations with
+                  overhearing for L = 9.                                       overhearing for L = 9.
+
+
+
+
+                  (e) Sink sojourn points and durations without             (f) Sink sojourn points and durations with over-
+                  overhearing for L = 14.                                   hearing for L = 14.
+
+                  Figure 6. Sink sojourn points and durations (in second) using LP for different grid sizes. (a,b) L = 6,
+                  (c,d) L = 9, (e,f) L = 14 (without and with overhearing, respectively).
+
+                        However, a slight difference between the two energy models in terms of Sink sojourn
+                  points and durations is observed. Indeed, in our proposed energy model that incorporates
+                  overhearing effects, as illustrated in Figure 6b,d,f, the Sink avoids the four central nodes;
+                  this is unlike the behavior observed in Figure 6a,c,e, which represents the energy model
+                  without overhearing considerations. This divergence can be attributed to the fact that, in
+                  the overhearing-aware model, these central nodes experience higher energy consumption
+                  in comparison with the peripheral nodes, as they are located at the grid’s center where
+IoT 2025, 6, 54                                                                                                      20 of 39
+
+
+
+                  they inevitably overhear transmissions from all surrounding sensors. Nonetheless, as
+                  demonstrated in Figure 6, although the Sink in the overhearing-inclusive energy model
+                  visits fewer nodes than its counterpart in the model without overhearing, both approaches
+                  strategically attempt to balance energy consumption by maximizing utilization of each
+                  sensor’s energy capacity. From a broader perspective, sensor nodes in the overhearing model
+                  have lower residual energy compared to those in the model without overhearing, as shown
+                  in Figure 7, owing to the additional energy consumption source introduced by overhearing.
+                  Tables 6–9 show the detailed values of Sink sojourn points and their corresponding durations,
+                  alongside sensor residual energy for both models when L is set equal to 6.
+
+
+
+
+                  (a) Sensors residual energy without overhear-                  (b) Sensors residual energy with overhearing
+                  ing for L = 6.                                                 for L = 6.
+
+
+
+
+                  (c) Sensors residual energy without overhear-                  (d) Sensors residual energy with overhearing
+                  ing for L = 9 .                                                for L = 9 .
+
+
+
+
+                  (e) Sensors residual energy without overhearing              (f) Sensors residual energy with overhearing
+                  for L = 14.                                                  for L = 14.
+
+                  Figure 7. Sensors residual energy (in joule) using LP for different grid sizes. (a,b) L = 6, (c,d) L = 9,
+                  (e,f) L = 14 (without and with overhearing, respectively).
+IoT 2025, 6, 54                                                                                               21 of 39
+
+
+
+                  Table 6. LP Sink sojourn points and durations without overhearing, L = 6.
+
+                   25,562.38        0               0                0               0              21,909.61
+                   0                883.449         548.3728         97.8            2198.067       1100
+                   0                621.3749        1083.469         1233.625        2070           0
+                   0                281.4028        1324.894         1626.36         2270           0
+                   0                4842.191        1676.129         1386.798        4818.932       1654.615
+                   21,310.66        0               0                0               0              21,761.73
+
+                  Table 7. LP Sink sojourn points and durations with overhearing, L = 6.
+
+                   28,662.13        3.85 × 10−1     0                0               0              28,662.13
+                   0                10,155.87       0                6.17 × 10−12    10,155.87      1.04 × 10−11
+                   0                0               27,082.33        27,082.33       9.84 × 10−12   0
+                   0                0               27,082.33        27,082.33       3.52 × 10−12   0
+                   10,155.87        0               0                0               10,155.87      0
+                   18,506.26        10,155.87       0                0               0              28,662.13
+
+                  Table 8. LP sensors residual energy without overhearing, L = 6.
+
+                   1,008,862        1.55 × 105      0                0               155,317        1,008,862
+                   155,317          533,116         0                0               533,116        1.55 × 105
+                   0                0               0                0               0              0
+                   0                0               0                0               0              0
+                   369,403          167,910         0                0               533,116        155,317
+                   945,896          369,403         0                0               155,317        1,008,862
+
+                  Table 9. LP sensors residual energy with overhearing, L = 6.
+
+                   50,199           1.98 × 104      0                7129            32,501         116,321
+                   12,193           0               0                0               0              1.13 × 104
+                   0                0               0                0               0              0
+                   10,414           0               0                0               0              0
+                   62,786           0               0                0               0              28,915
+                   127,713          36,975          0                0               55,530         105,229
+
+
+                        By comparing the obtained results for different WSN sizes, we conclude that, irrespec-
+                  tive of network size, both models—with and without overhearing considerations—exhibit
+                  consistent Sink sojourn patterns, as depicted in Figure 6. Moreover, considering overhear-
+                  ing as one of the sources of energy consumption impacts network performance, reducing
+                  the achievable lifetime by approximately 50%, thereby providing a more realistic scenario.
+                  Furthermore, our analysis reveals a direct correlation between network scale and energy
+                  efficiency: as WSN dimensions increase, sensor nodes experience higher energy consump-
+                  tion due to transmission across extended paths to reach the Sink, consequently resulting in
+                  diminished Sink sojourn durations and reduced overall network lifetime.
+IoT 2025, 6, 54                                                                                         22 of 39
+
+
+
+                  6. AI-Based Solution
+                        The application of LP to complex optimization problems entails significant com-
+                  putational complexity, with the simplex algorithm exhibiting exponential complexity in
+                  worst-case scenarios and polynomial complexity in average cases. Notably, employing
+                  deterministic optimization methodologies for Wireless Sensor Network problems becomes
+                  progressively prohibitive in terms of both computational and physical resource require-
+                  ments as the WSN grid dimension N increases [36,37].
+                        Conversely, meta-heuristic algorithms have basic characteristics, which are intensi-
+                  fication and diversification. The intensification process involves the selection of optimal
+                  solutions and subsequent generation of new candidates based on these exemplars. Diversi-
+                  fication, in contrast, ensures comprehensive exploration of the search space [38].
+                        Swarm intelligence algorithms effectively resolve optimization issues with remarkable
+                  efficiency. We adopt the Cuckoo Search (CS) algorithm due to its inherent utilization of
+                  Lévy flights, which enables efficient exploration of large and scalable search spaces. This
+                  capability is particularly well-suited for WSNs where expansive solution spaces and scala-
+                  bility represent key characteristics. Furthermore, compared to alternative metaheuristics,
+                  CS offers the significant advantage of requiring fewer parameters, making it simpler to
+                  fine-tune while maintaining competitive performance [39,40]. Numerous comparative
+                  studies [39–42] have consistently demonstrated CS’s superior performance relative to
+                  conventional algorithms. Notably, CS maintains its relevance and continues to evolve
+                  within the WSN domain. A recent investigation [43] introduced an enhanced CSO with
+                  opposition-based learning (ECSO-OBL) for addressing coverage optimization in WSNs.
+                  This research confirmed that while standard CS already facilitates effective global search
+                  through Lévy flights, the enhanced variant substantially improves local search capabilities
+                  and robustness when applied to multi-dimensional optimization problems, consequently
+                  yielding superior deployment and coverage schemes. Such ongoing development clearly
+                  establishes CS as a viable and efficient methodology for WSN optimization, justifying its
+                  adoption and implementation in contemporary applications.
+                        In the subsequent section, we delineate our methodology for implementing the Cuckoo
+                  Search algorithm, which is strategically informed by the previously established LP solution,
+                  incorporating overhearing considerations.
+
+                  6.1. Cuckoo Search Optimization
+                        The CS algorithm was proposed in 2009 by Yang and Deb [44]. It is inspired by the
+                  behavior of Cuckoo birds’ reproduction strategy, wherein females lay their eggs in the nests
+                  of other birds, known as hosts, to take care of them. They might even remove the hosts’
+                  eggs to increase the chance that their eggs would survive. If the host bird discovers the new
+                  eggs, it typically abandons or destroys the nest along with all eggs. Within this algorithmic
+                  framework, each potential solution is conceptualized as an egg, with optimization achieved
+                  through the systematic elimination of suboptimal solutions (those exhibiting inferior fitness
+                  values) from the search domain. The Lévy flight (LV) algorithm is used by the CS algorithm
+                  to find a new solution. It uses the Lévy distribution to calculate the random walk to the
+                  next solution. This movement mechanism draws inspiration from various biological flight
+                  patterns observed in insects and animals, including fruit flies [45–48]. CS leverages LV to
+                  balance the global and local random walks, making it more efficient than the symmetric
+                  random walk in other algorithms, such as the Genetic Algorithm (GA) [42]. Notably,
+                  the algorithm initializes with a randomly generated population of nests. New eggs (i.e.,
+                  solutions) are generated at each iteration to replace poor eggs in accordance with their
+                  quality. The fitness value, which is calculated based on the primary objective function, is
+IoT 2025, 6, 54                                                                                              23 of 39
+
+
+
+                  used to assess and verify the quality of the solution. Bad nests are eliminated at the end of
+                  each iteration.
+                       The original CS algorithm proceeds according to the following sequence:
+                  •     Initialize the population with a predetermined number of host nests.
+                  •     Each cuckoo generates a single egg and deposits it in a randomly selected nest from
+                        the initialized population.
+                  •     At each iteration, a new candidate nest is generated from a randomly selected nest using
+                        LV. If the new nest has a better egg value (fitness value) than the selected one, then it is
+                        replaced. Only nests containing superior eggs progress to the subsequent generation.
+                  •     The nests are sorted according to their fitness value.
+                  •     A discovery probability, denoted as pα ∈ [0, 1], represents the likelihood of host
+                        birds detecting foreign eggs. Consequently, a proportion of nests equivalent to pα is
+                        eliminated from consideration.
+                  •     The final optimal solution is found upon reaching the maximum number of iterations
+                        or if a stop criterion is satisfied, whereupon the highest-quality nest is returned as the
+                        best solution.
+                       Given an objective function with the formal notation f ( x ), x = ( x1 , . . . , xd ), where d
+                  denotes the dimensionality of the optimization problem, each potential solution is repre-
+                  sented by a cuckoo egg. At iteration t, the number of nests is n, and the set of potential
+                  solutions is denoted by xi , (i = 1, 2, . . . , n).
+                       In accordance with Equation (8), at iteration (t + 1), LV is used to create a new solution
+                  from a randomly selected one ( xit ) at iteration (t).
+
+                                                      ( t +1)      (t)
+                                                     xi         = xi + α ⊕ Levy(λ)                               (8)
+
+                  where the step size is represented by α, and the Lévy distribution used to determine the
+                  symmetric step size is Levy(λ).
+                       The operational sequence of the Cuckoo Search algorithm is systematically presented
+                  as pseudocode in Algorithm 1, implemented with the control parameters presented in the
+                  following section.
+
+                  Algorithm 1 Original CS algorithm.
+                   1: Objective function f ( x ), where x = ( x1 , x2 , . . . , xd ).
+                   2: Generate an initial population of n nests xi , where i = 1, 2, . . . , n.
+                   3: Set t ← 0 and define M as the maximum number of iterations.
+                   4: while t < M or stop criterion not met. do
+                   5:   Randomly select a cuckoo xi using Lévy flight.
+                   6:   Evaluate its fitness: Fi = f ( xi ).
+                   7:   Randomly select another nest x j from the population.
+                   8:   Evaluate its fitness: Fj = f ( x j ).
+                   9:   if Fi > Fj then
+                  10:      Replace x j with xi .
+                  11:   end if
+                  12:   Abandon a proportion pα of the worst nests and generate new ones.
+                  13:   Retain the best solutions and sort the population.
+                  14:   Update the best solution found so far.
+                  15: end while
+IoT 2025, 6, 54                                                                                               24 of 39
+
+
+
+                  Parameters
+                  •    x = ( x1 , x2 , . . . , xd ): Candidate solution vector (nest).
+                  •    d: Dimensionality of the optimization problem (number of decision variables per nest;
+                       where d ≤ N, since not all potential sojourn points necessarily receive positive sojourn
+                       durations, indicating that the Sink may not visit all candidate locations).
+                  •    t: Iteration index.
+                  •    M: Maximum number of iterations.
+                  •    C: Population counter for tracking solution generation.
+                  •    S: Population size (number of nests).
+                  •    F ( x ): Fitness evaluation function = ∑kN=−01 tk (representing total WSN lifetime).
+                  •    Pa : Discovery probability (fraction of abandoned nests).
+                  •    xit : Solution vector i at iteration t.
+
+                  6.2. Proposed Improved Cuckoo Search
+                        First, the meta-heuristic solution requires a suitable initialization step even though it
+                  is time- and space-efficient. Each sojourn time, tk , in the energy hole problem needs to be
+                  initialized randomly at the first population. We discovered that starting from extremely
+                  small values ∑kN=−01 tk = 0 is time-consuming. Especially, for checking the constraint
+                  enforcement for each sensor i, it needs to calculate the ∑kN=−01 Cik × tk and store it for each
+                  sensor, i, which has high complexity. We propose a better starting point for the CS method
+                  by loosening the problem restriction; this allows us to define an upper bound for some of
+                  the sojourn durations and to optimize the swarm intelligence approach.
+                        In what follows, we present the improved CS algorithm and take readers step-by-step
+                  through the model formulation.
+
+                  6.2.1. Improved Cuckoo Search Solution’s Structure
+                       In order to address the WSN energy hole problem, we transfer it to the CS structure
+                  as follows:
+                  •    Each nest has a full solution as a matrix of tk , which is the Sink sojourn point and
+                       duration tk in WSN.
+                  •    The fitness function of each solution, f ( x ) = ∑kN=−01 tk , is the objective function, which
+                       is maximizing the WSN lifetime, ( T ).
+
+                  6.2.2. Enhanced Initialization Phase
+                      We improve the method used to create the initial population. In the no-overhearing
+                  energy model, the maximum tk is related to the case where the Sink co-located with the
+                  node i where the Cik = (er ) is the minimum. Thus, we were able to determine the max
+                  bound of the total ∑kN=−01 tk by eer0 . Accordingly,
+
+                                                  N −1
+                                            since ∑ Cik × tk ≤ e0 and Cik ≥ er ∀(i, k),
+                                                  k =0
+                                                                            N −1
+                                                we conclude that er × ∑ tk ≤ e0
+                                                                            k =0
+
+                       Thus,
+
+                                                            N −1
+                                                                       e0
+                                                             ∑ tk ≤ er                                            (9)
+                                                             k =0
+IoT 2025, 6, 54                                                                                              25 of 39
+
+
+
+                       To find the possible maximum value of ∑kN=−01 tk for the model considering the over-
+                  hearing, we refer to our proposed energy model with overhearing and found that the
+                  minimum value of Cik is found when the x and y are equal to zero and i ∈ UL. Accordingly,
+                  the minimum Cik = er + (er × 23 ). So, the maximum possible tk is as follows
+                                          N −1
+                                                                                3
+                                     since ∑ Cik × tk ≤ e0 and Cik ≥ (er + (er × )) ∀(i, k),
+                                           k =0
+                                                                                2
+                                                                  N −1
+                                            we conclude that er × ∑ tk ≤ e0
+                                                                  k =0
+
+                       Thus,
+
+                                                       N −1
+                                                                         e0
+                                                       ∑ tk ≤ er + (er × 3 )                                    (10)
+                                                       k =0                   2
+
+                      We choose to create the first population from a single initial nest and use the random
+                  walk of the LV for the remaining solutions in order to make further improvements.
+                      Additionally, to create this initial nest, we employed sampling technique to obtain
+                                                                       e0
+                  random values of tk from the highest ∑kN=−01 tk =       3 , referring to Equation (10). For
+                                                                         er +(er × 2 )
+                                     N −1
+                  this, the largest ∑k=0 tk value is divided at random and uniformly distributed among N
+                                                             e0
+                  values, where their sum is equal to                  .
+                                                        er +(er × 32 )
+                       Inspired from the deterministic solution, we choose to randomly set 50% of tk equal to
+                  zero in order to obtain a more realistic outcome.
+                       As a result, in order to obtain a solution xi , the inequality specified in Equation (6)
+                  must be satisfied. If it is not, then an LV which employs only a single nest is used to
+                  generate a new solution xi+1 .
+
+                  6.2.3. Generating First Population
+                      Using the LV which takes only one nest, the previous initial solution is passed to
+                  generate a predefined number of nests to form the first population. The enforcement of the
+                  energy constraint (in Equation (6)) is checked for each newly created cuckoo.
+
+                  6.2.4. Search Process
+                       It is noteworthy that, in order to find the first single nest faster, we begin by minimizing
+                  the sampled solution. Then, utilizing LV, we produce the initial population by maximization
+                  to construct a solution with a longer total duration. After that, starting with the initial
+                  population, the search iterates until reaching the last iteration. At the last iteration, the best
+                  solution is found and returned as the optimum solution.
+                       Our improved CS steps are summarized as pseudo-code in Algorithm 2.
+
+                  6.3. Analytical Results
+                        Since the CS uses by default a random Sink sojourn pattern as a starting solution,
+                  we further improve the initialization step by considering two sojourn points’ distribution
+                  patterns. The first one is the cross pattern (CS-C). It is inspired by the linear solution, where
+                  the Sink sojourns mostly at the corners and at the center. As for the second pattern, it
+                  is based on a random distribution (CS-R). In this pattern, we also inspired by the linear
+                  solution to deduce the ratio of sojourn points. In linear solution, this ratio varies between
+                  30% and 60%. In our testing, we set this ratio to 50%. We tested the previously mentioned
+                  initialization patterns with different network sizes L, L being in [3, 20] with the same
+                  simulation parameters used in the LP testing (see Table 4). Moreover, for the CS’s own
+                  parameters, we set pα = 0.25 as suggested in [44], while the number of the first generation
+IoT 2025, 6, 54                                                                                            26 of 39
+
+
+
+                  is set to 10. Since CS is a meta-heuristic algorithm, we run all the testing scenarios 10 times.
+                  Furthermore, we compare the two initialization patterns CS-C and CS-R in terms of the
+                  achieved WSN lifetime (summation of tk ), the execution time, the distribution of tk , and
+                  finally the sensors’ residual energy.
+
+                  Algorithm 2 Improved Cuckoo Search (CS) algorithm.
+                  Input:
+                  •     N: number of sensor nodes (L × L).
+                  •     M: maximum number of iterations.
+                  •     S: population size.
+                  •     p a : abandon probability.
+                  Output:
+                  •     Maximum WSN lifetime (result of fitness function).
+                  •     Best Sink sojourn points and duration (as a matrix).
+                   1: Define the objective function F ( x ), where x = ( x1 , x2 , . . . , xd ).
+                   2: Initialize:
+                   3: Generate an initial single nest xi .
+                                                                                            N −1
+                   4: The tk values of this nest are initialized by sampling to maximize ∑k=0 tk .
+                   5: Set iteration counter t ← 0.
+                   6: Set population counter c ← 0.
+                   7: Create initial population of size S.
+                   8: while the nest xi does not satisfy constraints (energy constraint) do
+                   9:   Generate a new nest xi+1 using Lévy flight based on xi with a decrement step.
+                  10: end while
+                  11: while c < S or xi does not satisfy constraints do
+                  12:   Generate a new nest xi+1 using Lévy flight based on xi with an increment step.
+                  13:   Update c ← c + 1.
+                  14: end while
+                  15: while t < M do
+                  16:   Generate a cuckoo solution xi using Lévy flight.
+                  17:   Evaluate its fitness Fi = f ( xi ).
+                  18:   Randomly select a nest x j from the population.
+                  19:   Evaluate its fitness Fj = f ( x j ).
+                  20:   if Fi > Fj then
+                  21:      Replace x j ← xi .
+                  22:   end if
+                  23:   Abandon fraction p a of the worst nests and generate new ones.
+                  24:   Sort population based on the fitness function F and retain best solutions.
+                  25:   Identify and update global best solution (with the maximum F).
+                  26:   Update iteration counter t ← t + 1.
+                  27: end while
+                  28: Return the best solution found (best Sink sojourn points and duration, as a matrix).
+                  29: Post-process results and visualize outputs.
+
+
+                  6.3.1. Achieved WSN Lifetime
+                        First, the tk sojourn duration in all sojourn points are listed in Table 10. To better
+                  illustrate the result, we provide a bar graph to show the difference between CS-R and CS-C
+                  Figure 8 indicates both models give nearly similar results. Thus, the initialization patterns
+                  have no impact on the WSN lifetime.
+IoT 2025, 6, 54                                                                                             27 of 39
+
+
+
+
+                  Figure 8. WSN lifetimes achieved by the two CS (CS-C and CS-R) models with overhearing.
+
+                  Table 10. WSN lifetimes achieved by CS-C and CS-R with overhearing.
+
+                                   WSN Size                                    WSN Lifetime (s)
+                   L                       N = L2                 CS-C                   CS-R
+                   3                      9                       210,974                219,545
+                   4                      16                      150,958                145,280
+                   5                      25                      119,392                116,982
+                   6                      36                      100,243                96,687
+                   7                      49                      76,036                 79,712
+                   8                      64                      72,692                 67,319
+                   9                      81                      63,213                 60,118
+                   10                     100                     50,876                 53,057
+                   11                     121                     49,578                 49,908
+                   12                     144                     44,127                 45,621
+                   13                     169                     39,406                 38,157
+                   14                     196                     34,685                 36,575
+                   15                     225                     33,559                 34,011
+                   16                     256                     31,516                 35,496
+                   17                     289                     28,853                 33,100
+                   18                     324                     26,220                 28,600
+                   19                     361                     24,240                 29,259
+                   20                     400                     24,851                 25,945
+
+
+                  6.3.2. Execution Time
+                       To gain more insights into the performances achieved by CS-C and CS-R, we calculate
+                  the execution time for both patterns. The results are listed in Table 11 and depicted in
+                  Figure 9, which indicate that the CS-R pattern is either faster or has equal performance
+                  to the CS-C pattern. Indeed, CS-C outperforms CS-R only twice (L = 12 and L = 19).
+                  Accordingly, we can conclude that CS-R is slightly better than CS-C in terms of execution
+                  time. This is because, in CS-R, the ratio of sojourn points to the grid sensor nodes is
+IoT 2025, 6, 54                                                                                    28 of 39
+
+
+
+                  greater than that of CS-C, giving more chances to CS-R to find the approximated optimal
+                  solution faster.
+
+
+
+
+                  Figure 9. Execution time of the CS algorithm for the two patterns (CS-C and CS-R) models
+                  with overhearing.
+
+                  Table 11. Execution time of CS-C AND CS-R with overhearing.
+
+                                   WSN Size                                 Execution Time (ms)
+                   L                      N = L2                 CS-C                 CS-R
+                   3                      9                      78                   78
+                   4                      16                     78                   78
+                   5                      25                     78                   63
+                   6                      36                     94                   94
+                   7                      49                     94                   94
+                   8                      64                     78                   78
+                   9                      81                     94                   94
+                   10                     100                    93                   94
+                   11                     121                    110                  110
+                   12                     144                    109                  125
+                   13                     169                    125                  125
+                   14                     196                    125                  110
+                   15                     225                    156                  141
+                   16                     256                    172                  157
+                   17                     289                    156                  125
+                   18                     324                    156                  156
+                   19                     361                    125                  172
+                   20                     400                    187                  188
+IoT 2025, 6, 54                                                                                                     29 of 39
+
+
+
+                  6.3.3. Sink’s Sojourn and Sensors’ Residual Energy Distribution
+                       To visualize the distribution of the tk and the residual energy, we consider for example
+                  the grid size L = 6, and show the results in Figures 10 and 11 for both CS-C and CS-R with
+                  overhearing. Note that, the same results are detailed in Tables 12–15. Since CS-C places
+                  the Sink in the corners and the center, thus it gives a better energy consumption at each
+                  sensor node.
+
+
+
+
+                  (a) CS-R Sink sojourn points and durations with            (b) CS-C Sink sojourn points and durations with
+                  overhearing.                                               overhearing.
+
+                  Figure 10. Sojourn points and durations (in second) with overhearing using Cuckoo Search with the
+                  two initialization patterns. (a) CS-R, (b) CS-C.
+
+
+
+
+                  (a) Sensors residual energy with overhearing us-           (b) Sensors residual energy with overhearing
+                  ing the random pattern (CS-R).                             using the cross pattern (CS-C).
+
+                  Figure 11. Residual energy (in joule) using Cuckoo Search with the two initialization patterns. (a) CS-
+                  R, (b) CS-C.
+
+                  Table 12. CS-C Sink sojourn points and durations with overhearing, L = 6.
+
+                   10,377             0                 0             0                  0                 16,539
+                   0                  6398              0             0                  2842              0
+                   0                  0                 3555          2100               0                 0
+                   0                  0                 893           3154               0                 0
+                   0                  8259              0             0                  11,157            0
+                   16,575             0                 0             0                  0                 18,395
+IoT 2025, 6, 54                                                                                           30 of 39
+
+
+
+                  Table 13. CS-R Sink sojourn points and durations with overhearing, L = 6.
+
+                   8357            1186             0               53              0           755
+                   0               5917             0               890             0           0
+                   1617            92               9211            0               3359        0
+                   2520            2419             3116            0               0           9122
+                   8965            6208             0               0               972         0
+                   2849            0                0               4232            0           24,846
+
+                  Table 14. CS-C sensors residual energy with overhearing, L = 6.
+
+                   659,133         512,992          417,816         369,595         342,141     423,985
+                   483,226         184,553          187,643         156,897         59,030      340,416
+                   396,100         240,853          188,655         208,816         134,606     271,644
+                   369,115         254,863          214,567         190,987         131,476     260,444
+                   376,228         260,031          230,128         187,529         53,114      300,831
+                   408,338         325,932          252,761         224,174         270,365     319,989
+
+                  Table 15. CS-R sensors residual energy with overhearing, L = 6.
+
+                   801,790         674,567          494,162         396,622         375,142     820,061
+                   635,307         326,539          204,844         78,149          98,269      518,727
+                   606,102         348,652          42,217          27,057          162,243     345,890
+                   652,494         387,962          207,113         95,626          206,146     195,826
+                   736,766         501,756          289,361         174,622         329,407     271,329
+                   904,800         605,811          369,220         52,100          227,572     164,864
+
+
+                  7. Comparative Analysis
+                        In this section, we present a comparative analysis between the Linear Programming
+                  and Cuckoo Search optimization approaches. Initially, both proposed methodologies
+                  are applied to identical WSN configurations to ensure valid comparison. Subsequently,
+                  we evaluate their relative performances across multiple critical metrics: computational
+                  efficiency (execution time), network longevity (achieved lifetime), and energy utilization
+                  efficiency (sensors’ residual energy distribution).
+
+                  7.1. Execution Time
+                       Figure 12 shows the execution times of both solutions (LP and CS). The results indicate
+                  that LP outperforms the CS-R and CS-C models when the WSN edge length, L, is less than
+                  14. However, from L = 14, CS-R and CS-C are much faster than LP when L increases. This
+                  is due to the high complexity required to calculate the linearity with the multi-constraints
+                  objective function [49], since the number of constraints increases with L.
+IoT 2025, 6, 54                                                                                          31 of 39
+
+
+
+
+                  Figure 12. Comparison of execution time between LP and CS (with overhearing).
+
+                  7.2. Achieved WSN Lifetime
+                        Moreover, the achieved WSN lifetime differs between the two solutions since the LP is
+                  a deterministic while CS is non-deterministic. Thus, the LP gives optimal results, while CS
+                  gives approximated results. Figure 13 illustrates the difference between these two solutions
+                  in terms of the achieved network lifetime.
+
+
+
+
+                  Figure 13. Comparison of achieved WSN lifetime between LP and CS (with overhearing).
+
+                  7.3. Sensors Residual Energy
+                       To represent the efficiency of the proposed model in finding the sojourn Sink points
+                  and durations that efficiently exploit the sensors’ energy, we provide 2D bar graphs of the
+                  sensors’ residual energy for both solutions (LP and CS). From Figures 14–16 we can see
+                  that since LP provides the optimal solution, it achieves a better distribution.
+IoT 2025, 6, 54                                                                                    32 of 39
+
+
+
+
+                  Figure 14. LP sensors’ residual energy with overhearing.
+
+
+
+
+                  Figure 15. CS-C sensors’ residual energy with overhearing.
+
+
+
+
+                  Figure 16. CS-R sensors’ residual energy with overhearing.
+
+                  8. Optimal Sink Trajectory Planning Using TSP-Based
+                  Mobility Optimization
+                       In this section, we highlight the theoretical relationship between our problem and
+                  the well-known Traveling Salesman Problem (TSP), which is a fundamental optimization
+                  task in operations research and computer science. The TSP has been extensively studied
+IoT 2025, 6, 54                                                                                            33 of 39
+
+
+
+                  for decades and provides a natural formulation for minimizing the cost of visiting a set of
+                  locations exactly once. The TSP has been the subject of rigorous investigation for decades,
+                  offering a natural mathematical framework for minimizing traversal costs when visiting a
+                  predetermined set of locations exactly once. By establishing this foundational connection,
+                  we not only contextualize our research within an established optimization framework but
+                  also enhance our analytical approach through the incorporation of realistic Sink mobility
+                  considerations between consecutive sojourn points.
+                        To optimize our solution methodology, we incorporate the TSP, a classical combina-
+                  torial optimization paradigm utilized to determine the route through a specified set of
+                  locations which has the minimum cost, returning to the origin with minimal total distance
+                  traversed [50]. Within our application context, we employ the TSP framework to compute
+                  the optimal trajectory for Sink movement across designated sojourn locations. While our
+                  current modeling assumptions stipulate that Sink transit duration is negligible relative to
+                  sojourn intervals, the integration of TSP principles becomes particularly significant when
+                  considering realistic mobility constraints. In scenarios where transit time is non-negligible,
+                  identifying the shortest path becomes critical for optimizing the Sink’s movement efficiency,
+                  thereby maximizing the effective operational time of the network.
+                        It is essential to clarify that the incorporation of TSP methodology in this investigation
+                  does not constitute our primary scientific contribution, but rather serves as a complemen-
+                  tary analytical component that enhances our evaluation framework and demonstrates the
+                  operational viability of our proposed models in practical implementations. In realistic de-
+                  ployment scenarios, the assumption of random Sink movement between sojourn locations
+                  would be fundamentally impractical, inevitably resulting in superfluous travel distances
+                  and consequent resource inefficiency. Although our preceding analysis operates under
+                  the simplifying assumption that Sink transit time is negligible, determining an efficient
+                  trajectory remains critically important in contexts where mobility-related temporal factors
+                  cannot be disregarded. Consequently, we employ the TSP formulation to ensure that the
+                  Sink traverses the minimal-length path connecting all designated sojourn locations, thereby
+                  eliminating suboptimal routing patterns and maximizing system performance.
+                        In particular, we solve the TSP using the polynomial-time approximation algorithm,
+                  Christofides [51,52], within the OR-tools framework [35]. The Christofides algorithm is
+                  widely recognized for its efficiency in producing near-optimal solutions with a guaranteed
+                  performance ratio, which makes it well-suited for modeling realistic Sink trajectories. This
+                  allows us to validate that the proposed models are not only effective in theory but can also
+                  be extended to practical deployments where Sink trajectory optimization is required.
+                        Tables 16 and 17 present the optimized routes computed for both energy models across
+                  two representative network configurations (L = 6 and L = 9), along with the corresponding
+                  total distance for each trajectory. Comparative analysis reveals that the CS with random
+                  initialization (CS-R) consistently produces the shortest traversal distance among all three
+                  optimization approaches (LP, CS with corners initialization (CS-C), and CS-R), primarily
+                  due to its characteristic cross-diagonal routing pattern between grid corners. This routing
+                  efficiency makes the CS-R approach particularly advantageous in deployment scenarios
+                  where Sink mobility constraints and distance minimization represent critical operational
+                  parameters. To facilitate a visual comparison of movement trajectories across all three
+                  methodologies, Figure 17 provides a graphical representation of the TSP-optimized routes
+                  for each approach, implemented with the overhearing-inclusive energy model at network
+                  dimension L = 6 (corresponding to the detailed Sink sojourn locations and durations
+                  previously presented) (See Figure 17).
+IoT 2025, 6, 54                                                                                                                             34 of 39
+
+
+
+                                    Table 16. TSP shortest path for the energy model without overhearing.
+
+ WSN Size         Sink Mobility Model Type   Route                                                                      Distance (Number of Nodes)
+                                             0[0, 0] → 3[1, 0] → 9[3, 2] → 8[3, 1] → 11[4, 1] → 15[5, 0] →
+                  LP                         16[5, 1] → 12[4, 2] → 13[4, 3] → 17[5, 5] → 14[4, 4] → 10[3, 3] →          22
+                                             5[1, 5] → 1[0, 4] → 2[0, 5] → 7[2, 3] → 6[2, 2] → 4[1, 1] → 0
+                                             0[0, 0] → 2[1, 1] → 4[2, 2] → 6[3, 2] → 8[4, 1] → 10[5, 0] →
+ L=6              CS-C                                                                                                  20
+                                             11[5, 5] → 9[4, 4] → 7[3, 3] → 5[2, 3] → 3[1, 4] → 1[0, 5] → 0
+                                             0[0, 0] → 3[1, 2] → 7[2, 1] → 6[2, 0] → 10[3, 0] → 13[4, 0] → 16[5, 0] →
+                  CS-R                       11[3, 1] → 14[4, 2] → 15[4, 3] → 17[5, 3] → 18[5, 5] → 12[3, 3] →          25
+                                             9[2, 4] → 5[1, 5] → 2[0, 5] → 1[0, 4] → 4[1, 4] → 8[2, 2] → 0
+                                             0[0, 0] → 1[0, 1] → 6[1, 2] → 12[2, 3] → 20[3, 4] → 25[4, 5] →
+                                             32[5, 6] → 33[5, 7] → 40[6, 6] → 50[8, 8] → 47[7, 7] → 41[6, 7] →
+                                             46[7, 6] → 45[7, 5] → 39[6, 5] → 30[5, 4] → 24[4, 3] → 19[3, 3] →
+                                             13[2, 4] → 7[1, 5] → 2[0, 6] → 8[1, 6] → 9[1, 7] → 3[0, 8] →
+                  LP                         10[1, 8] → 17[2, 8] → 16[2, 7] → 22[3, 6] → 14[2, 5] → 15[2, 6] →          53
+                                             21[3, 5] → 26[4, 6] → 31[5, 5] → 38[6, 4] → 37[6, 3] → 44[7, 3] →
+                                             36[6, 2] → 43[7, 2] → 35[6, 1] → 48[8, 0] → 49[8, 1] → 42[7, 1] →
+                                             34[6, 0] → 27[5, 1] → 28[5, 2] → 29[5, 3] → 23[4, 2] → 18[3, 2] →
+                                             11[2, 2] → 5[1, 1] → 4[1, 0] → 0
+
+ L=9                                         0[0, 0] → 2[1, 1] → 4[2, 2] → 6[3, 3] → 8[4, 4] → 10[5, 5] →
+                  CS-C                       12[6, 6] → 14[7, 7] → 16[8, 8] → 15[8, 0] → 13[7, 1] → 11[6, 2] →          32
+                                             9[5, 3] → 7[3, 5] → 5[2, 6] → 3[1, 7] → 1[0, 8] → 0
+                                             0[0, 0] → 5[1, 0] → 12[3, 0] → 13[3, 2] → 14[3, 3] → 15[3, 4] →
+                                             19[4, 5] → 16[3, 6] → 20[4, 6] → 25[5, 5] → 18[4, 4] → 24[5, 4] →
+                                             28[6, 3] → 23[5, 3] → 31[7, 1] → 35[8, 0] → 26[6, 0] → 22[5, 1] →
+                  CS-R                       27[6, 2] → 32[7, 3] → 36[8, 3] → 37[8, 4] → 33[7, 4] → 29[6, 5] →          50
+                                             34[7, 5] → 38[8, 6] → 39[8, 7] → 40[8, 8] → 30[6, 7] → 21[4, 8] →
+                                             17[3, 8] → 4[0, 8] → 3[0, 7] → 7[1, 6] → 2[0, 5] → 1[0, 4] → 11[2, 5] →
+                                             10[2, 4] → 9[2, 3] → 8[2, 2] → 6[1, 1] → 0
+
+
+                                    Table 17. TSP shortest path for energy model with overhearing.
+
+ WSN Size         Sink Mobility Model Type   Route                                                                      Distance (Number of Nodes)
+                                             0[0, 0] → 2[1, 1] → 6[2, 1] → 11[3, 2] → 14[4, 1] → 18[5, 0] →
+                                             19[5, 1] → 15[4, 2] → 10[3, 1] → 7[2, 2] → 8[2, 3] → 13[3, 4] →
+                  LP                                                                                                    24
+                                             16[4, 3] → 20[5, 4] → 21[5, 5] → 17[4, 4] → 12[3, 3] → 9[2, 4] →
+                                             1[0, 5] → 5[1, 4] → 4[1, 3] → 3[1, 2] → 0
+                                             0[0, 0] → 2[1, 1] → 4[2, 2] → 6[3, 2] → 8[4, 1] → 10[5, 0] →
+ L=6              CS-C                                                                                                  20
+                                             11[5, 5] → 9[4, 4] → 7[3, 3] → 5[2, 3] → 3[1, 4] → 1[0, 5] → 0
+                                             0[0, 0] → 1[0, 1] → 2[0, 3] → 3[0, 5] → 19[5, 5] → 18[5, 3] →
+                                             16[4, 4] → 13[3, 5] → 9[2, 4] → 5[1, 3] → 8[2, 2] → 7[2, 1] →
+                  CS-R                                                                                                  27
+                                             12[3, 2] → 11[3, 1] → 14[4, 0] → 17[5, 0] → 15[4, 1] → 10[3, 0] →
+                                             6[2, 0] → 4[1, 1] → 0
+                                             0[0, 0] → 3[1, 0] → 6[2, 1] → 13[3, 2] → 18[4, 2] → 23[5, 2] →
+                                             24[5, 3] → 28[6, 2] → 34[7, 1] → 41[8, 0] → 42[8, 1] → 35[7, 2] →
+                                             36[7, 3] → 29[6, 3] → 37[7, 4] → 30[6, 4] → 38[7, 5] → 32[6, 6] →
+                                             39[7, 6] → 43[8, 7] → 44[8, 8] → 40[7, 7] → 33[6, 7] → 27[5, 6] →
+                  LP                                                                                                    46
+                                             21[4, 5] → 20[4, 4] → 19[4, 3] → 25[5, 4] → 31[6, 5] → 26[5, 5] →
+                                             22[4, 6] → 16[3, 5] → 17[3, 6] → 12[2, 7] → 5[1, 7] → 2[0, 8] →
+                                             1[0, 7] → 11[2, 6] → 10[2, 5] → 9[2, 4] → 8[2, 3] → 15[3, 4] →
+                                             14[3, 3] → 7[2, 2] → 4[1, 1] → 0
+                                             0[0, 0] → 2[1, 1] → 4[2, 2] → 6[3, 3] → 8[4, 4] → 10[5, 5] →
+ L=9              CS-C                       12[6, 6] → 14[7, 7] → 16[8, 8] → 15[8, 0] → 13[7, 1] → 11[6, 2] →          32
+                                             9[5, 3] → 7[3, 5] → 5[2, 6] → 3[1, 7] → 1[0, 8] → 0
+                                             0[0, 0] → 1[0, 1] → 2[0, 3] → 7[1, 3] → 13[2, 4] → 12[2, 3] →
+                                             16[3, 2] → 22[4, 1] → 23[4, 2] → 17[3, 3] → 24[4, 4] → 18[3, 4] →
+                                             8[1, 6] → 3[0, 6] → 9[1, 7] → 4[0, 8] → 10[1, 8] → 14[2, 7] →
+                                             20[3, 8] → 19[3, 7] → 30[5, 8] → 35[6, 8] → 40[7, 7] → 46[8, 8] →
+                  CS-R                                                                                                  52
+                                             45[8, 7] → 44[8, 6] → 29[5, 7] → 25[4, 6] → 28[5, 5] → 34[6, 5] →
+                                             39[7, 4] → 33[6, 3] → 27[5, 2] → 32[6, 2] → 38[7, 3] → 43[8, 3] →
+                                             37[7, 2] → 42[8, 1] → 41[8, 0] → 36[7, 1] → 31[6, 0] → 26[5, 0] →
+                                             21[4, 0] → 15[3, 0] → 11[2, 0] → 5[1, 0] → 6[1, 1] → 0
+IoT 2025, 6, 54                                                                    35 of 39
+
+
+
+
+                                                   (a) LP.
+
+
+
+
+                                          (b) CS with cross pattern.
+
+
+
+
+                                         (c) CS with random pattern.
+
+                  Figure 17. Shortest path with overhearing for grid size L = 6.
+IoT 2025, 6, 54                                                                                                 36 of 39
+
+
+
+                  9. Conclusions
+                        In this article, we present an improved LP solution to maximize the lifetime of a
+                  Wireless Sensor Network (WSN) by considering overhearing as a significant factor in
+                  energy consumption, in addition to data transmission and reception. Our main contribu-
+                  tion lies in using LP and Cuckoo Search (CS) algorithms to determine the optimal Sink
+                  sojourn points and sojourn durations, which directly prolong the network lifetime. We
+                  tailored the original CS algorithm to suit our model’s requirements. In addition to the
+                  randomly distributed CS solution (CS-R), we introduced a new Sink sojourn distribution
+                  pattern called the cross pattern (CS-C), inspired by the LP solution, to further enhance
+                  network performance.
+                        Our findings indicate that the LP solution consistently achieves the optimal Sink
+                  sojourn points and durations, providing the longest possible WSN lifetime through de-
+                  terministic calculations. However, due to its high computational complexity, the Cuckoo
+                  Search (CS) algorithm is preferable for large WSN sizes (L > 14) because of its faster execu-
+                  tion time. This work serves as a first step to quantify the impact of overhearing, confirming
+                  that overlooking overhearing can reduce the network lifetime by almost half (48%). Since
+                  our model aims to determine the optimal Sink sojourn points, we used the Traveling
+                  Salesman Problem (TSP) to determine the shortest path for the Sink to traverse these
+                  points efficiently.
+                        The current study is limited to a regular network grid, which may not generalize
+                  directly to other grid topologies. Future work will extend the research by generalizing
+                  the model to accommodate other grid shapes as well as random topologies, making the
+                  approach more widely applicable. It will also focus on developing techniques to actively
+                  mitigate overhearing without ignoring it, based on the observed significant impact of
+                  overhearing. Additional research directions include integrating wireless energy harvesting
+                  to allow nodes to recharge, exploring the optimal Sink trajectory to evenly distribute energy
+                  among nodes and reduce overall consumption, and investigating the use of other AI-based
+                  algorithms that may yield better performance and solutions. By combining these strategies,
+                  the network lifetime is expected to be significantly enhanced, resulting in WSNs that are
+                  more energy-efficient, resilient, and long-lasting.
+
+                  Author Contributions: Conceptualization, G.T.A.-M., F.B. and A.C.; Formal analysis, G.T.A.-M., F.B.
+                  and A.C.; Investigation, G.T.A.-M.; Methodology, F.B. and A.C.; Resources, F.B. and A.C.; Software,
+                  G.T.A.-M.; Supervision, F.B. and A.C.; Validation, G.T.A.-M., F.B. and A.C.; Visualization, G.T.A.-M.;
+                  Writing—original draft, G.T.A.-M.; Writing—review and editing, F.B. and A.C. All authors have read
+                  and agreed to the published version of the manuscript.
+
+                  Funding: This research work was funded by Institutional Fund Projects under grant no. (IFPIP:
+                  1564-612-1443). The authors gratefully acknowledge technical and financial support provided by
+                  the Ministry of Education and King Abdulaziz University, Deanship of Scientific Research, Jeddah,
+                  Saudi Arabia.
+
+                  Data Availability Statement: This study does not involve any datasets for publication. The algorithms
+                  proposed are fully described within the article, and therefore no additional data are required.
+
+                  Acknowledgments: I thank Allah for giving me the strength and ability to complete this work. I am
+                  very grateful to my supervisor, Fatma Bouabdallah, for her support, encouragement, and helpful
+                  advice during this study. I also sincerely thank my co-supervisor, Asma Cherif, for her guidance,
+                  patience, and continuous help. I truly appreciate all the time and effort she gave me.
+
+                  Conflicts of Interest: The authors declare no conflicts of interest.
+IoT 2025, 6, 54                                                                                                                 37 of 39
+
+
+
+References
+1.    Allakonda, M.; Anjareddy, G.; Shanthi, B.; Kuntala, R.; Venkata Balamurali Krishna, K.; Reddy, P.N. Enhancing Military
+      Surveillance Through WSN-Machine Learning Fusion for Anomaly Detection and Threat Identification. In Proceedings of the
+      Third International Conference on Cognitive and Intelligent Computing (ICCIC 2023), Hyderabad, India, 8–9 December 2023;
+      Springer: Berlin/Heidelberg, Germany, 2023; pp. 587–596.
+2.    Vinoth Kumar, P.; Jayanthi, R.; Sivaranjani, S.; Pradeep, S. Clustering Technique Based on ARSH-FATI for Data Transmission in
+      WSN-IoT Healthcare System. In Proceedings of the 2025 International Conference on Multi-Agent Systems for Collaborative
+      Intelligence (ICMSCI), Erode, India, 20–22 January 2025. [CrossRef]
+3.    Mohamed, B.; Abdellatif, E. Fog-Enabled IoT Robotic System for Efficient Date Palm Monitoring in Moroccan Oases. IoT 2025, 6, 16.
+      [CrossRef]
+4.    Sharmin, N.; Karmaker, A.; Lambert, W.L.; Alam, M.S.; Shawkat, M.S.A. Minimizing the energy hole problem in wireless sensor
+      networks: A wedge merging approach. Sensors 2020, 20, 277. [CrossRef]
+5.    Shafique, T.; Gantassi, R.; Soliman, A.H.; Amjad, A.; Hui, Z.Q.; Choi, Y. A review of Energy Hole mitigating techniques in
+      multi-hop many to one communication and its significance in IoT oriented Smart City infrastructure. IEEE Access 2023, 11,
+      121340–121367. [CrossRef]
+6.    D’Andreagiovanni, F.; Nardin, A. Towards the fast and robust optimal design of wireless body area networks. Appl. Soft Comput.
+      2015, 37, 971–982. [CrossRef]
+7.    Hung, C.W.; Zhuang, Y.D.; Lee, C.H.; Wang, C.C.; Yang, H.H. Transmission power control in wireless sensor networks using
+      fuzzy adaptive data rate. Sensors 2022, 22, 9963. [CrossRef]
+8.    Asadollahi, H.; Zandi, S.; Asharioun, H. Maximizing Network Lifetime in Many-to-One Wireless Sensor Networks (WSNs).
+      Wirel. Pers. Commun. 2022, 123, 2971–2983. [CrossRef]
+9.    Joon, R.; Tomar, P.; Kumar, G.; Balusamy, B.; Nayyar, A. Unequal clustering energy hole avoidance (UCEHA) algorithm in
+      cognitive radio wireless sensor networks (CRWSNs). Wirel. Netw. 2025, 31, 735–757. [CrossRef]
+10.   Yadav, A.; Kumar, S.; Vijendra, S. Network Life Time Analysis of WSNs Using Particle Swarm Optimization. Procedia Comput. Sci.
+      2018, 132, 805–815; International Conference on Computational Intelligence and Data Science. [CrossRef]
+11.   Wu, X.; Chen, Z.; Zhong, Y.; Zhu, H.; Zhang, P. End-to-end data collection strategy using mobile Sink in wireless sensor networks.
+      Int. J. Distrib. Sens. Netw. 2022, 18, 15501329221077932. [CrossRef]
+12.   Sridhar, M.; Pankajavalli, P. Adaptive data aggregation scheme with optimal hop selection using optimized distributed Voronoi-
+      based cooperation with energy-aware dual-path geographic routing protocol. Wirel. Pers. Commun. 2023, 130, 2215–2230.
+      [CrossRef]
+13.   Fu, X.; Yang, Y.; Postolache, O. Sustainable multipath routing protocol for multi-Sink wireless sensor networks in harsh
+      environments. IEEE Trans. Sustain. Comput. 2020, 6, 168–181. [CrossRef]
+14.   Alsolai, H.; Maashi, M.; Saeed, M.K.; Mohamed, A.; Assiri, M.; Abdelbagi, S.; Drar, S.; Abdelmageed, A.A. Leveraging
+      metaheuristic unequal clustering for hotspot elimination in energy-aware wireless sensor networks. Sensors 2023, 23, 2636.
+      [CrossRef]
+15.   Wang, Z.; Duan, J. An Unequal Clustering and Multi-Hop Routing Protocol Based on Fuzzy Logic and Q-Learning in WSNs.
+      Entropy 2025, 27, 118. [CrossRef]
+16.   Sherazi, H.H.R.; Grieco, L.A.; Boggia, G. A comprehensive review on energy harvesting MAC protocols in WSNs: Challenges
+      and tradeoffs. Ad Hoc Netw. 2018, 71, 117–134. [CrossRef]
+17.   Amengu, A.A.; Abdulai, J.D.; Katsriku, F.A.; Adu-Manu, K.S. SMAC-Based WSN Protocol-Current State of the Art, Challenges,
+      and Future Directions. J. Comput. Netw. Commun. 2022, 2022, 6707413. [CrossRef]
+18.   Yun, Y.; Xia, Y.; Behdani, B.; Smith, J.C. Distributed Algorithm for Lifetime Maximization in a Delay-Tolerant Wireless Sensor
+      Network with a Mobile Sink. IEEE Trans. Mob. Comput. 2013, 12, 1920–1930. [CrossRef]
+19.   Wang, Y.C.; Chen, K.C. Efficient Path Planning for a Mobile Sink to Reliably Gather Data from Sensors with Diverse Sensing
+      Rates and Limited Buffers. IEEE Trans. Mob. Comput. 2019, 18, 1527–1540. [CrossRef]
+20.   Xie, L.; Shi, Y.; Hou, Y.T.; Lou, W.; Sherali, H.D.; Zhou, H.; Midkiff, S.F. A Mobile Platform for Wireless Charging and Data
+      Collection in Sensor Networks. IEEE J. Sel. Areas Commun. 2015, 33, 1521–1533. [CrossRef]
+21.   Çorapsız, M.F. Lifetime maximization of wireless sensor networks while ensuring intruder detection. Soft Comput. 2024, 28,
+      4197–4215. [CrossRef]
+22.   El-Fouly, F.H.; Altamimi, A.B.; Ramadan, R.A. Energy and environment-aware path planning in wireless sensor networks with
+      mobile Sink. Sensors 2022, 22, 9789. [CrossRef] [PubMed]
+23.   Zhu, C.; Han, G.; Zhang, H. A honeycomb structure based data gathering scheme with a mobile Sink for wireless sensor networks.
+      Peer -Peer Netw. Appl. 2017, 10, 484–499. [CrossRef]
+IoT 2025, 6, 54                                                                                                                  38 of 39
+
+
+
+24.   Zhang, H.; Li, Z.; Shu, W.; Chou, J. Ant colony optimization algorithm based on mobile Sink data collection in industrial wireless
+      sensor networks. EURASIP J. Wirel. Commun. Netw. 2019, 2019, 152. [CrossRef]
+25.   Jong, G.J.; Aripriharta; Hendrick; Horng, G.J. A Novel Queen Honey Bee Migration (QHBM) Algorithm for Sink Repositioning in
+      Wireless Sensor Network. Wirel. Pers. Commun. 2017, 95, 3209–3232. [CrossRef]
+26.   Iwendi, C.; Maddikunta, P.K.R.; Gadekallu, T.R.; Lakshmanna, K.; Bashir, A.K.; Piran, M.J. A metaheuristic optimization approach
+      for energy efficiency in the IoT networks. Softw. Pract. Exp. 2021, 51, 2558–2571. [CrossRef]
+27.   Dash, L.; Pattanayak, B.K.; Laha, S.R.; Pattnaik, S. Enhanced network lifetime with EPMS: An energy-aware PSO based routing
+      algorithm with mobile Sink support for hot spot mitigation in WSNs. Int. J. Intell. Syst. Appl. Eng. 2023, 11, 18–26.
+28.   Han, X.; Mu, X.; Zhong, J. HGFF: A Deep Reinforcement Learning Framework for Lifetime Maximization in Wireless Sensor
+      Networks. IEEE Trans. Artif. Intell. 2024, 6, 859–873. [CrossRef]
+29.   Sangeetha, S.; Victoire, T.; Premkumar, M.; Sowmya, R. ExAq-MSPP: An Energy-Efficient Mobile Sink Path Planning Using
+      Extended Aquila Optimization Algorithm. Int. J. Comput. Intell. Syst. 2024, 17, 1–21. [CrossRef]
+30.   Al-Salahat, N.N.; Eljaafreh, Y.G. Maximizing the Lifetime of Wireless Sensor Networks with Mobile Sink. J. Commun. 2023, 18,
+      613–620. [CrossRef]
+31.   Abu Taleb, A.; Abu Al-Haija, Q.; Odeh, A. Efficient mobile Sink routing in wireless sensor networks using bipartite graphs.
+      Future Internet 2023, 15, 182. [CrossRef]
+32.   Mohapatra, S.; Behera, P.K.; Sahoo, P.K.; Ojha, M.K.; Swarup, C.; Singh, K.U.; Pandey, S.K.; Kumar, A.; Goswami, A. Modified
+      ring routing protocol for mobile Sinks in a dynamic sensor network in smart monitoring applications. Electronics 2023, 12, 281.
+      [CrossRef]
+33.   Ye, W.; Heidemann, J.; Estrin, D. An energy-efficient MAC protocol for wireless sensor networks. In Proceedings of the
+      Proceedings. Twenty-First Annual Joint Conference of the IEEE Computer and Communications Societies, New York, NY, USA,
+      23–27 June 2002; IEEE: Piscataway, NJ, USA, 2002; Volume 3, pp. 1567–1576.
+34.   Wang, Z.M.; Basagni, S.; Melachrinoudis, E.; Petrioli, C. Exploiting Sink Mobility for Maximizing Sensor Networks Lifetime.
+      In Proceedings of the 38th Annual Hawaii International Conference on System Sciences, Big Island, HI, USA, 6 January 2005;
+      p. 287a, ISSN 1530-1605. [CrossRef]
+35.   Google OR-Tools. 2008. Available online: https://developers.google.com/optimization (accessed on 19 July 2008).
+36.   Mohammed, L.A.; Hasan, A.M.; Hamza, E.K. Optimizing Energy Efficiency in Wireless Sensor Networks Using Dijkstra’s
+      Algorithm. Instrum. Mes. Metrol. 2024, 23, 307. [CrossRef]
+37.   Houssein, E.H.; Saad, M.R.; Djenouri, Y.; Hu, G.; Ali, A.A.; Shaban, H. Metaheuristic algorithms and their applications in wireless
+      sensor networks: Review, open issues, and challenges. Clust. Comput. 2024, 27, 13643–13673. [CrossRef]
+38.   Yang, X.S. Harmony Search as a Metaheuristic Algorithm. In Music-Inspired Harmony Search Algorithm: Theory and Applications;
+      Geem, Z.W., Ed.; Studies in Computational Intelligence; Springer: Berlin/Heidelberg, Germany, 2009; pp. 1–14. [CrossRef]
+39.   Civicioglu, P.; Besdok, E. A conceptual comparison of the Cuckoo-search, particle swarm optimization, differential evolution and
+      artificial bee colony algorithms. Artif. Intell. Rev. 2013, 39, 315–346. [CrossRef]
+40.   Wang, T.; Meskin, M.; Grinberg, I. Comparison between particle swarm optimization and Cuckoo Search method for optimization
+      in unbalanced active distribution system. In Proceedings of the 2017 IEEE International Conference on Smart Energy Grid
+      Engineering (SEGE), Oshawa, ON, Canada, 14–17 August 2017; pp. 14–19. [CrossRef]
+41.   Gandomi, A.H.; Yang, X.S.; Alavi, A.H. Cuckoo search algorithm: A metaheuristic approach to solve structural optimization
+      problems. Eng. Comput. 2013, 29, 17–35. [CrossRef]
+42.   Abdel-Basset, M.; Hessin, A.N.; Abdel-Fatah, L. A comprehensive study of cuckoo-inspired algorithms. Neural Comput. Appl.
+      2018, 29, 345–361. [CrossRef]
+43.   Reddy, M.R.; Chandra, M.L.R.; Dilli, R. Enhanced Cuckoo Search Optimization with Opposition-Based Learning for the Optimal
+      Placement of Sensor Nodes and Enhanced Network Coverage in Wireless Sensor Networks. Appl. Sci. 2025, 15, 8575. [CrossRef]
+44.   Yang, X.S.; Deb, S. Cuckoo Search via Lévy flights. In Proceedings of the 2009 World Congress on Nature Biologically Inspired
+      Computing (NaBIC), Coimbatore, India, 9–11 December 2009; pp. 210–214. [CrossRef]
+45.   Bonabeau, E.; Dorigo, M.; Theraulaz, G.; Theraulaz, G. Swarm Intelligence: From Natural to Artificial Systems; Oxford University
+      Press: Oxford, UK, 1999; Number 1.
+46.   Blum, C.; Roli, A. Metaheuristics in combinatorial optimization: Overview and conceptual comparison. ACM Comput. Surv.
+      (CSUR) 2003, 35, 268–308. [CrossRef]
+47.   Yang, X.S. Nature-Inspired Metaheuristic Algorithms; Luniver Press: Frome, UK, 2010.
+48.   Adekanmbi, O.; Green, P. Conceptual comparison of population based metaheuristics for engineering problems. Sci. World J.
+      2015, 2015, 936106. [CrossRef] [PubMed]
+49.   RinnooyKan, A.; Telgen, J. The complexity of linear programming. Stat. Neerl. 1981, 35, 91–107. [CrossRef]
+50.   Reinelt, G. The Traveling Salesman: Computational Solutions for TSP Applications; Springer: Berlin/Heidelberg, Germany, 2003;
+      Volume 840.
+IoT 2025, 6, 54                                                                                                                39 of 39
+
+
+
+51.   Christofides, N. Worst-Case Analysis of a New Heuristic for the Travelling Salesman Problem; Technical Report; Carnegie-Mellon
+      University, Management Sciences Research Group: Pittsburgh, PA, USA, 1976.
+52.   Andrews, J.; Sethian, J. Fast marching methods for the continuous traveling salesman problem. Proc. Natl. Acad. Sci. USA 2007,
+      104, 1118–1123. [CrossRef] [PubMed]
+
+Disclaimer/Publisher’s Note: The statements, opinions and data contained in all publications are solely those of the individual
+author(s) and contributor(s) and not of MDPI and/or the editor(s). MDPI and/or the editor(s) disclaim responsibility for any injury to
+people or property resulting from any ideas, methods, instructions or products referred to in the content.
+

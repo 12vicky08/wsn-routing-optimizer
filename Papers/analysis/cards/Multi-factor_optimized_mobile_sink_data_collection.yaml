@@ -1,0 +1,71 @@
+source_file: Multi-factor_optimized_mobile_sink_data_collection.pdf
+title: Multi-factor optimized mobile sink data collection framework for hybrid WSN-LTE assisted IoT network
+authors: Saranga Mohan; Sunita Panda
+venue_year: Heliyon, 2024
+problem: >
+  Providing a scalable and effective mobile-sink data collection solution for WSN-assisted IoT
+  networks that jointly considers multi-criteria quality of service (delay, overhead, energy) and
+  lifetime maximization remains a challenge; existing works optimize clustering/path planning mostly
+  for energy or delay alone, without adaptive, deadline-aware forwarding or LTE backhaul integration.
+approach: >
+  MFO-MS (Multi-factor optimized mobile sink) framework: a two-stage optimization for a hybrid
+  WSN-LTE-assisted IoT network. Stage 1 uses a hybrid meta-heuristic (Bat algorithm for initial
+  solution + PSO for refinement) to select cluster heads based on node density, energy consumption,
+  distance to relay, and cluster maintenance overhead. Stage 2 builds a graph over cluster heads and
+  LTE-capable one-hop neighbors, applies the Graph Iterated 1-Steiner (GI1S) algorithm to find Steiner
+  points, groups Steiner points via PSO into designated sink-visit locations (centroids), and orders
+  sink visits via Dijkstra's traveling-salesman-style path. A deadline-guided data forwarding protocol
+  at cluster heads chooses among store-and-forward, WSN-interface forwarding, or LTE-interface
+  forwarding based on packet deadline vs. projected delivery latency (computed from a probability
+  distribution of past round-trip times) and packet priority (ordinary vs. emergency).
+sink_mobility: controlled/optimized-trajectory
+routing_clustering_scheme: >
+  Two-level hierarchical clustering: hybrid Bat-algorithm+PSO based cluster head selection
+  (multi-factor fitness over density, energy, relay distance, maintenance overhead), then Steiner
+  minimal tree (GI1S) over cluster heads plus PSO grouping of Steiner points into designated mobile
+  sink stopping locations, with Dijkstra-based ordering of sink visits.
+simulator: Network Simulator 2 (NS2); trace files analyzed with AWK scripts
+node_count: 100 to 500
+area: 1000 m x 1000 m
+energy_model: >
+  Not a named standard model (e.g., not explicitly "first-order radio model"); energy consumption (E)
+  computed as E = NF * PT * phi_T (NF = average number of frames needed per packet delivery, PT =
+  transmitting power, phi_T = transmission duration), with NF derived from retransmission count R
+  based on error probability and node density (eq. 7-9). Default node energy = 100 J.
+metrics_reported:
+  - "Packet delay (msec)"
+  - "Average energy consumed per node (J)"
+  - "Network lifetime (minutes, time to first node death)"
+  - "Cluster maintenance overhead (Kbps)"
+  - "Packet delay vs. node speed (m/s)"
+  - "Lifetime vs. speed"
+  - "Energy histogram (percentage distribution of nodes across energy levels)"
+  - "Average residual energy over simulation time (for 500 nodes)"
+  - "Average hop count for routing"
+  - "LTE interface usage cost vs. deadline-constrained packet ratio"
+  - "Delay vs. deadline-constrained ratio for various LTE interface costs"
+key_numeric_results:
+  - "Overall: at least 6% increase in lifetime and 26% reduction in packet delivery delay vs. existing methodologies (abstract)"
+  - "Average packet delay: proposed 16 msec vs. Wei et al. 20.2, Fu et al. 27.8, Bouarourou et al. 28.8 (Table 4); 26% lower vs Wei et al., 73% lower vs Fu et al., 80% lower vs Bouarourou et al."
+  - "Average energy consumption: proposed 25.6 J vs. Wei et al. 33.2, Fu et al. 35.4, Bouarourou et al. 31.4 (Table 5); reduced by 29.6% (Wei), 38% (Fu), 22% (Bouarourou) -- conclusion states overall 22% reduction"
+  - "Lifetime: proposed avg 21.4 min vs. Wei et al. 18.6, Fu et al. 19, Bouarourou et al. 20 (Table 8); increased by 13% (Wei), 11% (Fu), 6% (Bouarourou)"
+  - "Cluster maintenance overhead: proposed avg 15.2 Kbps vs. Wei et al. 21.6, Fu et al. 22.4, Bouarourou et al. 24 (Table 6); 42% lower (Wei), 47% lower (Fu), 57% lower (Bouarourou)"
+  - "Packet delay at 300 nodes with node mobility: 11.3% lower vs Wei et al., 24% lower vs Fu et al., 4% lower vs Bouarourou et al. (Table 7)"
+  - "Average residual energy (500 nodes): at least 11% higher at 10 min, 41% higher at 20 min, 54% higher at 30 min vs existing works"
+  - "Average hop count at least 53% lower vs existing works"
+  - "Comparison with Baniata et al. (LTE cost=1, deadline ratio=0.5): delay reduced ~7%, energy consumption at least 16% lower, LTE interface cost at least 7.3% lower"
+  - "Simulation parameters: communication range 100 m, LTE node spread 20%, simulation time 30 min, interface queue length 50, MAC = 802.11, normal-to-deadline packet ratio 0.1, default node energy 100 J, LTE interface cost 5 to 1 (Table 3)"
+stated_limitations: >
+  "The network maintenance phase in the proposed solution is not optimal and improving it is in the
+  scope of the future work." (Conclusion, Section 6)
+citation_fields:
+  bibkey: mohan2024mfoms
+  authors_bibtex: Mohan, Saranga and Panda, Sunita
+  title: Multi-factor optimized mobile sink data collection framework for hybrid WSN-LTE assisted IoT network
+  year: 2024
+  journal_or_booktitle: Heliyon
+  volume: "10"
+  number: unknown
+  pages: e25998
+  doi: 10.1016/j.heliyon.2024.e25998
+  publisher: Elsevier Ltd

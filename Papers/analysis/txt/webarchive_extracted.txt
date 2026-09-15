@@ -1,0 +1,367 @@
+An efficient cluster head election based on optimized genetic algorithm for movable sinks in IoT enabled HWSNs - ScienceDirect
+Skip to main content
+Skip to article
+ScienceDirect
+Journals & Books
+Access through
+your organization
+Purchase PDF
+Search ScienceDirect
+Article preview
+Abstract
+Introduction
+Section snippets
+References (44)
+Cited by (56)
+Applied Soft Computing
+Volume 107
+,
+August 2021
+, 107318
+An efficient cluster head election based on optimized genetic algorithm for movable sinks in IoT enabled HWSNs
+Author links open overlay panel
+Aridaman Singh
+Nandan
+,
+Samayveer
+Singh
+,
+Lalit K.
+Awasthi
+Show more
+Add to Mendeley
+Share
+Cite
+https://doi.org/10.1016/j.asoc.2021.107318
+Get rights and content
+Highlights
+•
+An Optimize GA for Cluster Head Selection protocol is proposed for IoT enabled WSN.
+•
+To alleviate hot-spot problem, multiple movable sinks in network are incorporated.
+•
+A new deployment strategy is considered for optimization of network energy.
+•
+Performance evaluation of OptiGACHS variants is done against the GAOC and MS-GAOC.
+•
+OptiGACHS variants are developed for unattended hostile applications.
+Abstract
+The most crucial design constraint on the
+Internet of Things
+(IoT) enabled
+wireless sensor networks
+(WSNs) is
+energy dissipation
+. The inefficient data collection by the resource constraint sensors becomes a major roadblock in energy preservation to achieve network longevity. The energy of nodes has to be utilized in an efficient manner which helps in increasing the longevity of WSNs. Clustering is a technique that can utilize the energy of the sensors efficiently by maintaining load balancing among the sensors for increasing the lifetime and scalability of the networks. In this paper, the energy consumption of the network is improved by considering the
+Genetic Algorithm
+evolutionary computing technique. The proposed OptiGACHS protocol describes the improved cluster head (CH)
+selection procedure
+by incorporating criteria of distance, density, energy, and heterogeneous node’s capability for developing fitness function. The OptiGACHS protocol operates with single, multiple static, and multiple movable sinks to have an impartial comparative examination. Multiple movable sinks are proposed to shorten transmission distance between the sink and CH and also pact with the hot-spot problem. A deployment strategy for nodes is also discussed for energy and distance optimization during network operation. It is observed from simulations that the proposed OptiGACHS protocol outperforms existing protocols.
+Introduction
+Nowadays, worldwide researchers are considering variouspromising technologies such as the Internet of Things (IoTs), Fog & Cloud Computing and Big Data for solving computationally expensive real-life problems. These emerging as well as promising technologies are being applied in various fields such as smart surveillance, smart city, infrastructure, water distribution, automated transportation, urban security and environmental monitoring, healthcare, smarter energy management systems and other industrial necessities for providing efficient solutions. But among all technologies, IoTs is one of the keystone achievements which makes a huge impact on modern life by connecting things with the Internet. The increment in the IoT infrastructure requires a dense structure of IoT enabled wireless sensor networks (WSN) [1]. The IoTs enabled WSNs are a group of spatially distributed battery-operated sensors that are dedicated to performing a pre-defined task. These sensor nodes are capable of monitoring various environmental conditions such as moisture, temperature, vibration, etc. which are recorded, processed and communicated wirelessly to a central location called a sink. The IoT enabled WSNs can be divided into different categories depending on the application domain for which they are designed, such as event-driven WSNs (sensor nodes get activated only when some event occurs), query-driven WSNs (sensor nodes get activated only to respond to a user-generated query), the periodic update is driven WSNs (sensor nodes send the collected data at periodic intervals to the user), etc. The IoT enabled WSNs are exploited in numerous domains such as military applications, agricultural monitoring, home automation, industrial control, etc. These networks offer the ability of self-configuration allowing them to work in unattended, remote, and hostile environments [2], [3].
+Although the IoT enabled WSNs have brought unprecedented opportunities in different application domains, they are vulnerable to some of the resource constraints. The most important resource in a given IoT enabled WSN is the energy of nodes which is required in many tasks of IoT enabled WSN i.e. monitoring, recording, processing, and communicating. As the sensor nodes are equipped with a limited battery, they suffer from energy drainage which can further lead to a whole network shutdown. Since in remote or hostile environments, it is not possible to replace the batteries; much of the research work in the field of IoT enabled WSNs is focused on increasing the lifetime of the network. It has been observed that the longevity of the IoT enabled WSN is determined by the energy depletion rate of the sensor nodes. The faster the energy depletion rate, the smaller would be the lifetime of the network [3], [4], [5].
+To address the issue of energy depletion, the concept of clustering was introduced. The idea of clustering is to group the sensors and elect a cluster head (CH) as the representative of each cluster. It is designed with the sole aim of energy preservation where the task of data communication from sensor nodes to the sink, is delegated to the CHs. The earliest work to a clustering algorithm is Low Energy Adaptive Clustering Hierarchy (LEACH) protocol which was specifically designed for homogeneous networks [6]. In homogeneous networks, all nodes are assumed to have the same capability in terms of energy and processing power. But, the existence of homogeneity in nodes is not always possible. Many improvements of the LEACH protocol have been proposed which can significantly increase the network lifetime. However, the application of clustering protocols in heterogeneous networks, particularly the heterogeneity in terms of energy, needs to be considered. In the clustering-based protocols, the election of CH is itself a big concern. In a typical clustering algorithm, the selection of CH is based on some parameters, and every sensor in a cluster passes its data to the corresponding CH. The CH is responsible for aggregating the collected data to remove redundancy and communicate the data to the sink. It is to be noted that one of the major energy-depleting elements is the wireless radio. This implies that the CH is vulnerable to more energy drainage issues as compared to other sensor nodes in the cluster. If a CH goes out of energy, the functioning of the whole cluster would be disturbed which can impact the lifetime of the network [6], [7], [8], [9].
+To handle the above-mentioned issues, an optimized approach for the selection of CH is required. Many researchers have put forward their proposed strategies using metaheuristic approaches for optimizing the CH selection. Their research aims to develop an optimized selection of CH that minimizes energy consumption. However, the problem of the selection of optimal CH towards energy-efficient routing is a non-deterministic polynomial-time hard (NP-Hard) problem. Nevertheless, the selection of CH can be optimized by employing metaheuristics incorporating some key factors of CH selection in the processing of building the fitness function. Some of the metaheuristic techniques such as genetic algorithm (GA), artificial bee colony (ABC), particle swarm optimization (PSO), etc. have been utilized for CH selection that focuses on energy saving of nodes. Another factor that is responsible for the energy consumption of the nodes in the communication through a wireless medium [10]. Generally, the transmission power of a node decays in proportionality to the distance between the communicating nodes. Applications with large regions of interest can cause energy exhaustion at a faster rate if single-hop communication is used. Therefore, using multi-hop communication seems like a rescue for such energy depletion. But, multi-hop transmission causes energy depletion of relaying nodes that are exhausted of their energy resources gradually over time. This leads to a ‘no connection zone’ called ‘hotspot’ that is a region in which the sensor nodes are completely exhausted. To alleviate and diminish the hotspot problem, the proposed system is incorporated with movable sinks inside and outside the region to ameliorate the distance factor for communication.
+Genetic algorithm-based methods are suitable for large IoT enabled WSN areas for data communication and formulate energy-efficient clusters for data aggregation. Initially, the protocol randomly selects cluster head (CH) from homogeneous and heterogeneous sensor nodes and then gradually shift to efficient solutions. Generally, most of the Genetic algorithm-based protocols do not algorithmically take advantage of network heterogeneity. Since the algorithm is of heuristic nature where any combination of chromosomes can result in best fitness value, a normal node can be selected as CH despite the presence of an intermediate or advanced node in the cluster. If such a situation occurs in setup phase, it can lead to instability; as a normal energy node will not be able to hold the cluster for a long time. To overcome this, the proposed protocol not only considers energy but also considers comparative hardware capabilities as a parameter (bias) for evaluation and efficient selection of CH. This way, most powerful nodes in the network have a higher chance of being selected as CH. The residual energy, node density and distance optimization are also taken care of for the network’s longevity. The CH to sink communication distance is optimized by introducing movable sinks. The sink movement benefits the clusters to choose closest of the available sinks and transmit data to it, which also promotes distribution and balancing the load onto sinks.
+(1)
+Proposes a new clustering approach using GA
+: This work proposes an Optimized Genetic Algorithm for Cluster Head Selection (OptiGACHS) protocol for CH selection by incorporating criterion of distance, density, energy, and heterogeneous node’s capability for its developed fitness function. Since GA is a heuristic technique, it eases the cognitive load of CH decision making by formulating its fitness function based on carefully chosen parameters. Thus, this metaheuristic approach brings unprecedented network structures for unintended hostile environments.
+(2)
+Introduces a deployment strategy for energy optimization:
+In this work, a deployment strategy is also introduced for positioning heterogeneous sensors in a well-organized way. The sensors are deployed in the region of interest according to a coherent logical structure. During network operation, the optimally placed sensor node with respect to sinks minimizes energy consumption. The strategy also supervises the unnecessary closely bound deployment of high energy nodes.
+(3)
+Incorporates multiple movable sinks inside and outside network region to alleviate the hot-spot problem:
+Both static and movable sinks are employed in different scenarios of OptiGACHS protocol outside the network area to diminish the hot-spot problem. A single sink scenario is also introduced following the same parameters for CH selection as defined for multiple sinks. For ameliorating distance factor, sinks move in predefined trajectory outside the network area and CH chooses the closest sink available for communication.
+(4)
+Performance evaluation of proposed approach with state of the art protocols:
+Performance of OptiGACHS protocol is assessed against the state of the art protocols on some metrics viz. network lifetime, stability period, remaining energy, and throughput. Moreover, to contemplate the essence of movable data sinks outside the network area, performance evaluation of multiple static sinks is done against multiple movable sinks.
+The rest of the paper is organized as follows: Section 2 discusses the comprehensive literature review of the GA based clustering techniques. Section 3 explains the system model which includes the network model and radio energy dissipation model. The OptiGACHS proposed protocol is discussed in Section 4. The simulation results and discussions are presented in Section 5 and the paper is concluded in Section 6 with its future works.
+Access through your organization
+Check access to the full text by signing in through your
+organization.
+Access through
+your organization
+Section snippets
+Literature review
+The recent developments in the Internet of Things (IoT) enabled WSNs are directed to design the routing protocols with their major goal to tackle the energy constraints. Many advancements related to this research area have been proposed, and among them, clustering-based strategies are best suited to maintain load-balancing among the sensors and balancing the energy drainage levels between them [10]. A lot of research is focused on designing clustering protocols for homogeneous WSNs in which the
+System model
+In this section, we will discuss the network model and radio energy dissipation model. The heterogeneous and homogeneous networks are briefly explained in the network model where the heterogeneity of the networks is defined based on the preliminary energy of the deployed nodes.
+Proposed work
+In this section, the sensor node deployment strategy, optimized genetic algorithm for CH selection, the working process of the proposed technique, and stable and movable multiple sink strategies are discussed.
+Simulation results and discussions
+In this section, the performance of the proposed protocols and the state of the art protocols are investigated using various simulated scenarios.
+Two states of art protocols (published in 2019) are selected for comparison namely Genetic Algorithm-based optimized clustering (GAOC) and multiple data sinks based GAOC (MS-GAOC)
+[35]
+after comprehensive literature review
+. In this work, four different protocols are proposed namely OptiGACHS-StSS, OptiGACHS-StMS, OptiGACHS-MoMS-Outside and
+Conclusion and future works
+In most of the IoT based WSNs, selection of CHs is a supreme concern in acquiring optimized performance. To earn high energy effectiveness, OptiGACHS protocol is described with different viewpoints of the single static sink, multiple static sinks, and multiple movable sinks. The fitness parameters of remaining energy, distance, node density and capability bias are enrolled for fitness function evaluation. The node density factor assists in preserving energy for intracluster transmission.
+CRediT authorship contribution statement
+Aridaman Singh Nandan:
+Methodology, Software, Writing - original draft.
+Samayveer Singh:
+Conceptualization, Methodology, Investigation, Writing - review & editing, Validation.
+Lalit K. Awasthi:
+Conceptualization, Methodology, Writing - review & editing, Validation.
+Declaration of Competing Interest
+The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+Recommended articles
+References
+(44)
+Akyildiz
+I.F.
+et al.
+Wireless sensor networks: a survey
+Comput. Netw.
+(2002)
+Singh
+S.
+et al.
+Energy-efficient heterogeneous DEEC pro-tocol for enhancing lifetime in WSNs
+Eng. Sci. Technol. Int. J.
+(2017)
+Tyagi
+S.
+et al.
+A systematic review on clustering and routing techniques based upon LEACH protocol for wireless sensor networks
+J. Netw. Comput. Appl.
+(2013)
+Liao
+W.H.
+et al.
+A power-saving data storage scheme for wireless sensor networks
+J. Netw. Comput. Appl.
+(2012)
+Qing
+L.
+et al.
+Design of a distributed energy-efficient clustering algorithm for heterogeneous wireless sensor networks
+Comput. Commun.
+(2006)
+Kumar
+D.
+et al.
+EEHC: Energy efficient heterogeneous clustered scheme for wireless sensor networks
+Comput. Commun.
+(2009)
+Javaid
+N.
+et al.
+EDDEEC:Enhanced developed distributed energy-efficient clustering for heterogeneous wireless sensor networks
+Procedia Comput. Sci.
+(2013)
+Qureshi
+T.N.
+et al.
+BEENISH:Balanced energy efficient network integrated super heterogeneous protocol for wireless sensor networks
+Procedia Comput. Sci.
+(2013)
+Bari
+A.
+et al.
+A genetic algorithm based approach for energy efficient routing in two-tiered sensor networks
+Ad Hoc Netw.
+(2009)
+Bayraklı
+S.
+et al.
+Genetic algorithm based energy efficient clusters(GABEEC) in wireless sensor networks
+Procedia Comput. Sci.
+(2012)
+Kuila
+P.
+et al.
+A novel evolutionary approach for load balanced clustering problem for wireless sensor networks
+Swarm Evol. Comput.
+(2013)
+Bhatia
+T.
+et al.
+A genetic algorithm based distance aware routing protocol for wireless sensor networks
+Comput. Electr. Eng.
+(2016)
+Verma
+S.
+et al.
+Genetic Algorithm-based Optimized Cluster Head selection for single and multiple data sinks in Heterogeneous Wireless Sensor Network
+Appl. Soft Comput.
+(2019)
+Hanh
+N.T.
+et al.
+An efficient genetic algorithm for maximizing area coverage in wireless sensor networks
+Inform. Sci.
+(2019)
+Sahoo
+B.M.
+et al.
+GAPSO-H: A hybrid approach towards optimizing the cluster based routing in wireless sensor network
+Swarm Evol. Comput.
+(2021)
+Lakshmi
+P.
+et al.
+Stability enhancement of a multimachine power system using fuzzy logic based power system stabilizer tuned through genetic algorithm
+Int. J. Electr. Power Energy Syst.
+(2000)
+He
+S.
+et al.
+A clustering routing protocol for energy balance of WSN based on genetic clustering algorithm
+IERI Procedia
+(2012)
+Pottie
+G.J.
+Wireless sensor networks
+Chand
+S.
+et al.
+Heterogeneous HEED Protocol for Wireless Sensor Networks
+Wirel. Pers. Commun.
+(2014)
+Heinzelman
+W.R.
+et al.
+Energy-efficient communication protocol for wireless microsensor networks
+Liu
+Y.
+et al.
+Multi-layer clustering routing algorithm for wireless vehicular sensor networks
+IET Commun.
+(2010)
+Smaragdakis
+G.
+et al.
+SEP: A Stable Election Protocol for clustered heterogeneous wireless sensor networks
+View more references
+Cited by (56)
+Optimizing energy consumption in WSN-based IoT using unequal clustering and sleep scheduling methods
+2023, Internet of Things Netherlands
+Show abstract
+Wireless Sensor Networks (WSNs) are the main data collection tools used by Internet of Things (IoT) devices. The WSN-based IoT is a collection of several small, geographically dispersed, battery-powered sensors that are devoted to carrying out a certain activity in a collaborative manner. In a dense WSN-based IoT network, numerous sensors that are near to one another simultaneously collect the same data about the occurrence. Even though WSN-based IoT has opened up previously unimaginable possibilities in a variety of application areas, they are still susceptible to resource limitations. The energy of nodes, which is needed to run well for extended periods of time in many activities, is the most crucial resource in a given WSN-based IoT. Increasing the lifetime of the network is a major focus of research in the field of WSN-based IoT because it is impossible to replace or recharge batteries in remote, harsh or dangerous environments. In this article, an energy-efficient fuzzy-based unequal clustering with a sleep scheduling (EFUCSS) protocol for IoT that uses WSN is proposed. This protocol makes the network last longer and uses less energy. It does this by using clustering, scheduling, and data transmission. Unequal clusters based on Fuzzy C-Means are formed using this protocol to balance the energy used via reducing the distance that data travels. The selection of the cluster head is carried out using fuzzy logic system. The gateway’s (GW) distance, remaining energy, and centrality are input variables. The output fuzzy variable is chance. Fuzzy inference is performed using the Mamdani technique. The sleep scheduling strategy is used between the coupled nodes to reduce the number of transmitted nodes. Extensive Python-based simulation experiments are run in order to evaluate the performance of the proposed EFUCSS protocol. While taking into account different WSN-based IoT scenarios and several criteria, such as network stability, network lifetime, and energy efficiency, a comparison is made between the proposed EFUCSS protocol and other well-known conventional protocols. The results show that the proposed EFUCSS improves remaining energy by 26.92%–213.4% and network lifespan by 39.58%–408.13%. The suggested EFUCSS also results in a greater improvement in network lifespan compared to other comparable algorithms.
+Energy-efficient coverage optimization in wireless sensor networks based on Voronoi-Glowworm Swarm Optimization-K-means algorithm
+2021, Ad Hoc Networks
+Show abstract
+Deployment of sensor nodes is one of the crucial factors in mobile wireless sensor networks for improving the performance of the network. The network's lifetime primarily depends on the consumed energy and area coverage by the sensor nodes. The efficiency of mobile wireless sensor networks increases by the efficient deployment of the sensors. Coverage and energy consumption mainly depends on the effective deployment schemes of sensors. This article presents an energy-efficient coverage optimization technique with the help of the Voronoi-Glowworm Swarm Optimization-K-means algorithm. In this approach, Glowworm Swarm Optimization, K-means algorithm, and Voronoi cell structure enhance the coverage area with a minimum number of active nodes. This approach considers optimum sensing radius calculation for efficient sensor deployment. Furthermore, the proposed method improves the lifetime of the deployed network by decreasing the consumed energy by the deployed sensor nodes using multi-hop transmission and the sleep-wake mechanism. The simulation result shows that area coverage is achieved by the proposed method up to 99.99% with the optimum number of active sensor nodes.
+Optimized clustering routing framework to maintain the optimal energy status in the wsn mobile cloud environment
+2024, Multimedia Tools and Applications
+An Energy Efficient Wireless Sensor Network with Flamingo Search Algorithm Based Cluster Head Selection
+2023, Wireless Personal Communications
+A novel optimized routing technique to mitigate hot-spot problem (NORTH) for wireless sensor network-based Internet of Things
+2022, International Journal of Communication Systems
+A Green Data Collection Transmission Method for IoT-Based WSN in Disaster Management
+2021, IEEE Sensors Journal
+View all citing articles on Scopus
+View full text
+© 2021 Elsevier B.V. All rights reserved.
+Recommended articles
+N-TWR: An accurate time-of-flight-based N-ary ranging protocol for Ultra-Wide band
+Ad Hoc Networks, Volume 79, 2018, pp. 1-19
+François
+Despaux
+, …,
+Thierry
+Val
+Lightweight On-demand Ad hoc Distance-vector Routing - Next Generation (LOADng): Protocol, extension, and applicability
+Computer Networks, Volume 126, 2017, pp. 125-140
+Thomas
+Clausen
+, …,
+Ulrich
+Herberg
+FellowMe Cache: Fog Computing approach to enhance (QoE) in Internet of Vehicles
+Future Generation Computer Systems, Volume 113, 2020, pp. 170-182
+Tasnim
+Abar
+, …,
+Sadok
+el Asmi
+Tridynamic model of the beam with transverse shear deformation
+Computer Methods in Applied Mechanics and Engineering, Volume 388, 2022, Article 114257
+Mohsen
+Nowruzpour
+, …,
+Majid
+Akbarzadeh Khorshidi
+Machine learning algorithm for cluster analysis of mixed dataset based on instance-cluster closeness metric
+Chemometrics and Intelligent Laboratory Systems, Volume 215, 2021, Article 104346
+K.
+Balaji
+,
+K.
+Lavanya
+Differential spectrum access for next generation data traffic in massive-IoT
+Microprocessors and Microsystems, Volume 82, 2021, Article 103951
+T.
+Prem Jacob
+, …,
+Fadi
+Al-Turjman
+Show 3 more articles
+Article Metrics
+Citations
+Citation Indexes
+56
+Captures
+Mendeley Readers
+29
+View details
+About ScienceDirect
+Remote access
+Contact and support
+Terms and conditions
+Privacy policy
+Cookie settings
+All content on this site: Copyright ©
+2025
+Elsevier B.V., its licensors, and contributors. All rights are reserved, including those for text and data mining, AI training, and similar technologies. For all open access content, the relevant licensing terms apply.
+We use cookies that are necessary to make our site work. We may also use additional cookies to analyze, improve, and personalize our content and your digital experience. You can manage your cookie preferences using the
+Cookie settings
+link. For more information, see our
+Cookie Policy
+Cookie settings
+Accept all cookies
+Cookie Preference Center
+We use cookies which are necessary to make our site work. We may also use additional cookies to analyse, improve and personalise our content and your digital experience. For more information, see our
+Cookie Policy
+and the list of
+Google Ad-Tech Vendors
+.
+You may choose not to allow some types of cookies. However, blocking some types may impact your experience of our site and the services we are able to offer. See the different category headings below to find out more or change your settings.
+Allow all
+Manage Consent Preferences
+Strictly Necessary Cookies
+Always active
+These cookies are necessary for the website to function and cannot be switched off in our systems. They are usually only set in response to actions made by you which amount to a request for services, such as setting your privacy preferences, logging in or filling in forms. You can set your browser to block or alert you about these cookies, but some parts of the site will not then work.
+Cookie Details List‎
+Functional Cookies
+Functional Cookies
+These cookies enable the website to provide enhanced functionality and personalisation. They may be set by us or by third party providers whose services we have added to our pages. If you do not allow these cookies then some or all of these services may not function properly.
+Cookie Details List‎
+Performance Cookies
+Performance Cookies
+These cookies allow us to count visits and traffic sources so we can measure and improve the performance of our site. They help us to know which pages are the most and least popular and see how visitors move around the site.
+Cookie Details List‎
+Contextual Advertising Cookies
+Contextual Advertising Cookies
+These cookies are used for properly showing banner advertisements on our site and associated functions such as limiting the number of times ads are shown to each user.
+Cookie Details List‎
+Back Button
+Cookie List
+Search Icon
+Filter Icon
+Clear
+checkbox label
+label
+Apply
+Cancel
+Consent
+Leg.Interest
+checkbox label
+label
+checkbox label
+label
+checkbox label
+label
+Confirm my choices
+Your Privacy [`dialog closed`]

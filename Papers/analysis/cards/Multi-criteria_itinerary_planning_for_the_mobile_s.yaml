@@ -1,0 +1,76 @@
+source_file: Multi-criteria_itinerary_planning_for_the_mobile_s.pdf
+title: "Multi-criteria itinerary planning for the mobile sink in heterogeneous wireless sensor networks"
+authors: Mohammad Khalily-Dermany
+venue_year: "Journal of Ambient Intelligence and Humanized Computing, 2023 (Received 29 March 2021 / Accepted 24 November 2021 / Published online 6 January 2022; volume issue dated 2023)"
+problem: >
+  Planning the itinerary (sequence of settlement sites and sojourn times) of a mobile sink in
+  heterogeneous WSNs is difficult because it must simultaneously balance multiple conflicting
+  criteria (data merit, latency, deadline, used memory, travel time, density, fairness), and
+  optimal centralized planning is computationally NP-hard and costly to re-solve as network
+  conditions change dynamically.
+approach: >
+  Two methods are proposed: (1) OP_Sink, a multi-objective Integer Quadratically Constrained
+  Quadratic Programming (IQCQP) formulation solved centrally to obtain an optimal itinerary
+  (used as a benchmark/upper bound); and (2) MA_Sink, a distributed multi-attribute decision-making
+  algorithm in which the sink gathers 8 attributes of neighboring candidate sites and ranks them
+  using fuzzy TOPSIS (Technique for Order of Preference by Similarity to Ideal Solution), then
+  moves to the best-ranked adjacent site.
+sink_mobility: controlled/optimized-trajectory
+routing_clustering_scheme: >
+  unknown (no explicit clustering/routing protocol proposed; sink uses "sentinel nodes" per site
+  that collect and report site attributes to the sink; single/multi-hop communication is discussed
+  in related work but not formalized as the paper's own scheme)
+simulator: "INET Framework of OMNeT++ (Varga and Hornig 2008); OP_Sink solved via Pyomo (Hart et al. 2017) with CPLEX (CPLEX 2009); MA_Sink implemented in Python 3.9"
+node_count: "Nv (sensor count) varied from 40 to 90 (step 10); example instance shown with Nv=20; site counts Ns x Ns grid with Ns = 3, 4, 6, 8"
+area: "unknown exact area units; deployment is an Ns x Ns grid of sites; closest distance between sites = 100 m; sensor transmission range = 141 m"
+energy_model: >
+  Etx = eta1 * R^alpha + eta2 (transmission energy for sentinel node reporting), with alpha
+  (path loss exponent) 2<=alpha<=6, eta1 = 45 nJ/bit, eta2 = 10 pJ/bit/m^2 (values from
+  Khalily-Dermany and Nadjafi-Arani 2019). Memory size per sensor = 512 kB; simulations run for
+  C=100 time-slots with 60 s per time-slot.
+metrics_reported:
+  - "F1: total delivered data volume"
+  - "F2: volume of expired data (deadline-based)"
+  - "F3: volume of lost data (memory fullness)"
+  - "F4: total data merit"
+  - "F5: latency (delivery time minus buffered time)"
+  - "F6: total travel/traveled distance (time to travel)"
+  - "F7: fairness (variance of visitation counts among sensors)"
+  - "Difference rates D1-D7 (% performance gap between OP_Sink and MA_Sink)"
+  - "Sentinel node transmission energy (mJ) and min/max wasted energy (mJ) vs range R"
+  - "Algorithm time complexity (Big-O)"
+key_numeric_results:
+  - "MA_Sink and GR_Sink computational complexity: O(|A^a|), bounded by O(Ns^2)"
+  - "Difference rate D1 (delivered data gap, OP_Sink vs MA_Sink) ranges from 0.02% (Nv=50,Ns=4) to 14.26% (Nv=90,Ns=8), TTmax=100m"
+  - "D2 (expired data gap) ranges 6.87% (Nv=50,Ns=4) to 26.01% (Nv=90,Ns=8)"
+  - "D3 (lost data gap) ranges 6.48% to 25.22% across same conditions"
+  - "D7 (fairness gap) ranges 1.51% to 4.18%"
+  - "At Nv=90, Ns=8: increasing TTmax from 100 to 400 m reduces D1 from 14.26% to 10.03%, D2 from 26.01% to 18.40%, D3 from 25.22% to 18.09%, but D6 (travel distance gap) increases from 1.25% to 5.28%"
+  - "Increasing R (sentinel reporting range) from 100 to 400 m increases sentinel transmission energy from 0.45 mJ to 7.20 mJ (about 90-fold increase in min wasted energy: 1.35 mJ to 122.40 mJ; and about 156-fold in max wasted energy: 2.25 mJ to 352.80 mJ, alpha=2); with alpha=3 (harsh environment) increase is about 362 and 627 fold respectively"
+  - "max|A^a| (max adjacent sites) grows from 5 to 40 as R increases from 100 to 400 m (Table 6 context) / from 5 to 49 in Table 7"
+  - "min|A^a| grows from 3 to 17 as R increases from 100 to 400 m"
+  - "Under heterogeneous traffic (chi=10), MA_Sink overtakes OP_Sink in total delivered data at Nv=90, Ns=4"
+  - "Table 8: minimum chi at which MA_Sink overtakes OP_Sink on F1 ranges from 32 (Nv=50,Ns=8) down to 10 (Nv=90,Ns=4)"
+  - "Simulations repeated 200 times per configuration and averaged"
+stated_limitations: >
+  OP_Sink (the centralized IQCQP) is NP-hard, cannot be solved in polynomial time, requires
+  gathering all attributes' volumes into a central node, and must be re-solved every time network
+  parameters change, imposing high time/energy cost; it is described as impractical/almost
+  impossible for large-scale, dynamic, heterogeneous WSNs. OP_Sink also relies on averaged traffic
+  factors (not real-time data), which degrades its performance under heterogeneous/dynamic traffic.
+  MA_Sink outperforms OP_Sink in all objectives (F1-F7) under homogeneous traffic conditions since
+  it lacks global information, and its relative performance degrades as site count increases (fewer
+  neighboring sites proportional to total sites). The paper notes MA_Sink's efficiency in delivering
+  data decreases in sparser and larger environments. Future work proposed: extending to a
+  multi-attribute trajectory design for UAVs collecting data from heterogeneous WSNs.
+citation_fields:
+  bibkey: khalilydermany2023multicriteria
+  authors_bibtex: "Khalily-Dermany, Mohammad"
+  title: "Multi-criteria itinerary planning for the mobile sink in heterogeneous wireless sensor networks"
+  year: 2023
+  journal_or_booktitle: "Journal of Ambient Intelligence and Humanized Computing"
+  volume: 14
+  number: unknown
+  pages: "8531-8550"
+  doi: "10.1007/s12652-021-03616-9"
+  publisher: "Springer-Verlag GmbH Germany, part of Springer Nature"

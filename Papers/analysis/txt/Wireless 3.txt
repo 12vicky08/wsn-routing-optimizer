@@ -1,0 +1,671 @@
+Journal of Robotics and Control (JRC)
+Volume 3, Issue 6, November 2022
+ISSN: 2715-5072, DOI: 10.18196/jrc.v3i6.16526                                                                                    827
+
+
+        Wireless Sensor Network Optimization Using
+                    Genetic Algorithm
+       Aseel B. Alnajjar 1,*, Azhar M. Kadim 1, Ruaa Abdullah Jaber 1, Najwan Abed Hasan 1, Ehsan Qahtan Ahmed 1,
+                                    Mohammed Sahib Mahdi Altaei 1, Ahmed L. Khalaf 2
+             1
+               Computer Science Department, College of Science, Al Nahrain University, Jadriya, Baghdad, Iraq
+    2
+      Department of Communication Technology Engineering, College of Information Technology, Imam Ja'afar Al-Sadiq
+                                                  University, Baghdad, Iraq
+                                         Email: 1 aseel.alnajjar@nahrainuniv.edu.iq
+                                                   *Corresponding Author
+
+    Abstract—Wireless Sensor Network (WSN) is a high                  which include (temperature, sound, pollution levels,
+potential technology used in many fields (agriculture, earth,         humidity, and wind) can be measured the usage of WSNs.
+environmental monitoring, resources union, health, security,          which can be used broadly in lots of fields: weather
+military, and transport, IoT technology). The band width of           forecasting, earthquakes detection, tsunami, water great
+each cluster head is specific, thus, the number of sensors
+connected to each cluster head is restricted to a maximum limit
+                                                                      control, fuel leakage, forest hearth prediction, volcanoes, site
+and exceeding it will weaken the connection service between           visitors tracking, and chemical threat detection [3]. WSNs
+each sensor and its corresponding cluster head. This will achieve     have large quantity of sensors which connect with every other
+the research objective which refers to reaching the state where       over short-variety wirelessly the usage of low electricity. A
+the proposed system energy is stable and not consuming further        single sensor node is working on accumulating information
+more cost. The main challenge is how to distribute the cluster        relies upon on their domain programs, that is the reason why
+heads regularly on a specified area, that’s why a solution was        big wide variety of sensors are used to shape WSN consists
+supposed in this research implies finding the best distribution of    of a few cluster head (CH) communicated with base station
+the cluster heads using a genetic algorithm. Where using an           (BS), CH is then ship and receive the facts with the outside
+optimization algorithm, keeping in mind the cluster heads
+positions restrictions, is an important scientific contribution in
+                                                                      sensors that either being high sensors range (HSR) or low
+the research field of interest. The novel idea in this paper is the   sensors range (LSR) as proven in Fig. 1 [4].
+crossover of two-dimensional integer encoded individuals that
+replacing an opposite region in the parents to produce the
+children of new generation. The mutation occurs with
+probability of 0.001, it changes the type of 0.05 sensors found in
+handled individual. After producing more than 1000
+generations, the achieved results showed lower value of fitness
+function with stable behavior. This indicates the correct path of
+computations and the accuracy of the obtained results. The
+genetic algorithm operated well and directed the process              Fig. 1. WSN distribution
+towards improving the genes to be the best possible at the last
+generation. The behavior of the objective function started to be           Sensor nodes were mounted randomly within the field for
+regular gradually throughout the produced generations until           monitoring and detection duties the usage of the programs.
+reaching the best product in the last generation where it is          energy efficiency is the main concern in WSN because a
+shown that all the sensors are connected to the nearest cluster       major amount of electricity is utilized in records transmission
+head. As a conclusion, the genetic algorithm developed the            and thus schemes to select the exceptional direction need to
+sensors’ distribution in the WSN model, which confirms the
+validity of applying of genetic algorithms and the accuracy of
+                                                                      follow for efficient energy intake [5]. Routing calls for most
+the results.                                                          beneficial course from supply station to vacation spot to
+                                                                      satisfy first-rate of carrier (QoS) needs in terms of delay,
+Keywords— Wireless Sensor Network (WSN), High Sensors                 jitter, throughput, and bandwidth for quit customers with
+Range (HSR); Low Sensors Range (LSR); Genetic Algorithm               specific actual time applications [6]. The Wi-Fi networks
+(GA)                                                                  including hierarchical primarily based optimized routing
+                                                                      used distinct routing algorithms including genetic algorithm
+                      I.      INTRODUCTION                            (GA) [5]. To reveal the power availability of the sensor
+    Wireless Sensor Network (WSN) is a high potential                 gadgets which assist to gain the lifetime of the community,
+technology used in many fields, such as agriculture, earth or         the advanced routing by GA described powerful overall
+environmental monitoring, resources union, health, security,          performance. Furthermore, the entire upkeep of the first-rate
+military, and transport [1], WSN also is a crucial aspect in          of WSN services maintained as a multi-objective task as the
+IoT technology [2]. Wireless Sensor Network (WSN) refers              stability among each tradeoff inclusive of coverage energy,
+to community dedicated sensors that screen and record the             latency, efficiency and network lifetime are treated
+physical situations of the environment and ahead the gathered         continuously [7].
+records to an important vicinity. Environmental situations
+
+
+
+                               Journal Web site: http://journal.umy.ac.id/index.php/jrc              Journal Email: jrc@umy.ac.id
+Journal of Robotics and Control (JRC)                  ISSN: 2715-5072                                                           828
+
+A. GA based WSN optimization                                                                   𝑁𝑓𝑢𝑙𝑙
+                                                                                             ∑𝑖=1    𝑛𝑖
+    Several applications associated with environmental
+                                                                                𝑆𝐶𝐸 = {      𝑁𝑓𝑢𝑙𝑙    𝑖𝑓 𝑁𝑓𝑢𝑙𝑙 > 0                (3)
+sensing counted within the method of WSN design, which are
+used widely in recent times in internet of things (IoT)                                   0 𝑜𝑡ℎ𝑒𝑟𝑤𝑖𝑠𝑒
+structures. In systems, a crucial function is performed by               In which, Nfull is the cluster-heads (or clusters) with more
+means of sensor networks, those systems address regular              than 15 energetic sensors of their clusters where ni is the wide
+environmental situations. Numerous sensing strategies of             variety of sensors within the cluster i, (15 energetic sensors is
+sensing that help to data gathering, along with remote sensing       the default number). Consequently, SCE is the physical
+thru sensors of airborne and satellites, embedded, networked         verbal exchange capabilities of the sensors as well as their
+systems and mobile systems which include Wireless Sensor             facts management talents in terms of quantity of statistics that
+Networks. There are numerous complicated clustering                  may be processed by way of a cluster-head sensor. Even as,
+methodologies [8] inside WSNs’ literatures in terms of power         you could use the SORE to make certain that each sensor is
+save. Literatures tackled the power save established via the         able to connect with its CH that depends at the sensor’s signal
+working modes optimizing for sensors, such reason                    range capability. Through supposing the HSR sensors cowl a
+necessitate easy approach of clustering sensors is followed          curved region that has radius of 10 duration units, LSR
+for the formation of clusters in the community as ordinary           sensors work on a 5 period gadgets radius circular area, then
+working modes with their closest cluster head (CH) sensor.           the number of energetic not-communicated sensors with their
+Wherein, CH refers to the Access Point (AP), moving the              CH (Nout) relative to N indicates the overall quantity of
+signal among sensors (HSR and LSR) is its main function [9].         energetic sensors within the network [11]:
+The optimization is handled either by minimizing the
+parameters that related to the power or maximizing the                                                    𝑁𝑜𝑢𝑡
+                                                                                             𝑆𝑂𝑅𝐸 =                               (4)
+factors related to uniformity sensing. The most two important                                              𝑁
+parameters for energy are: operating energy (OE) and                     The relations in Eq.s (1-4) to make appropriate objective
+communication energy (CE), at the same time as the most two          characteristic during the assessment of the fitness feature of
+interesting sensing factor uniformity are: sensors for each          GA enable to give excessive pleasant for each possible
+cluster head error (SCE) and sensors out-of-range error              answer of the optimization hassle [10, 11]. GA is an artificial
+(SORE). Accordingly, OE and CE may be used as fitness                intelligence seek approach based totally on Darwin’s concept
+functions for attaining most effective WSN shape which its           of Evolution, which inspired with the aid of the idea that the
+overall performance is evaluated by the use of SCE and               one that is great adapted to the environment will continue to
+SORE. OE points to the energy consuming of the sensor at             exist. usually, GA results in a populace of people, or a hard
+operational time. It essentially relies upon sensor operational      and fast of feasible answers to the hassle, subjecting it to
+mode, i.e., it works as a LSR, HSR, or CH, or inactive. The          random actions the usage of biological evolution of genetic
+OE consumption parameter is given as [10]:                           mutations and recombination. Also, it helps to make the
+                                                                     selection according to the criterion, based on which it is
+                       𝑁𝐶𝐻          𝑁𝐻𝑆𝑅     𝑁𝐿𝑆𝑅                    decided to be the most adapted individuals that survive
+        𝑂𝐸 = (20 ×         ) + (2 ×      )+(      )           (1)
+                        𝑁            𝑁        𝑁                      through evolution. The most important concepts in GA are
+in which, NCH, NHSR, and NLSR are the quantity of LSR,               coding scheme and fitness Function, coding scheme is a
+HSR, or CH within WSN, and N equal to the summation of               possible solution to the represented problem, the most
+all clusters of types NLSR, NHSR and NCH together.                   common encoding of solutions is through binary strings, real
+                                                                     numbers, letters, or characters to represent chromosomes.
+    CE is consuming power related to the communication               Fitness function is the base of GA that computed for each
+among sensors in ordinary cluster heads and operating                individual as surviving score based on how good solutions
+modes. It particularly relies upon distance among CH and             they are to the problem [13]. Parameters that control the
+their sensors, which referred as CE and depicted as follows          performance of GA are the probability of crossing,
+[11]:                                                                probability of mutation, population size, number of
+                                                                     generations, etc. The following steps show the generic
+                            𝑁𝐶𝐻 𝑛𝑖
+                                                                     structure of the GA that depicted in Fig. 2 [14,15]:
+                     𝐶𝐸 = ∑ ∑ 𝜇. 𝑑𝑗𝑖𝑘                         (2)
+                                                                     1. An initial population of individuals usually is generated
+                             𝑖=1 𝑗=1
+                                                                        randomly.
+Where, ni is No. of ith cluster, dji is distance from cluster head
+to jth sensor while µ and k are constants represent the              2. Selection phase: The best individuals are selected.
+topological characteristic of the WSN. For a determined              3. Reproduction phase: The selected individuals are crossed
+application accuracy of monitoring of the open field, these             by means of the crossing function, giving rise to a new
+factors are µ=1 and k=3.                                                generation that will replace the previous one.
+    The WSN performance evaluation is usually related to the         4. Mutation Phase: Mutations are introduced into certain
+existence of network connection and satisfying all needed               individuals in the new population at random. Mutation
+constraints, which includes both SCE and SORE. SCE is used              allows the introduction of the new chromosomal material
+to investigate that CH do not have a number of sensors is               into the population, just like what happens in their
+greater than the maximum allowed one in regular operating               biological equivalents.
+mode that is given as follows [12]:
+
+
+Aseel B. Alnajjar, Wireless Sensor Network Optimization Using Genetic Algorithm
+Journal of Robotics and Control (JRC)               ISSN: 2715-5072                                                              829
+
+5. New generation is produced usually with better solutions           programs field of hobby. The maximum good-sized
+   than the previous one.                                             literatures are noted with information in the following:
+6. Genetic algorithms end either when reaching a specific             1. An energy-efficient clustering routing protocol relying on
+   number of generations or when they fulfil a stop                      the premise of a modified genetic algorithm worked on in
+   condition.                                                            [17] utilizing back propagation neural network for
+                                                                         underwater wireless sensor networks. The three main
+B. Problem Statement
+                                                                         stages of the proposed protocol are: the cluster head node
+    The uniform distribution of sensors in a uniform                     selection, the cluster arrangement, and the data
+geographic area (square) may contain some problems when                  transmission. GA used to present multi-hop transmission
+the half distance between each two of CHs is greater than the            paths, each made with security ideas to further develop
+range of LSR and HSR. Thus, there are areas that cannot be               transmission efficiency and improving network resources
+covered and the sensors in those areas will be unconnected to            [17].
+the nearest CH. To overcome this problem, there are two
+solutions: The first lies in increasing the number of the CHs         2. consumed strength changed into superior to in addition
+and spreading it in all areas where there are likely to be               increase the life span of WSN via communique set of
+sensors, but the presence of a large number of CHs leads to              rules. The clustering of nodes improves the energy use of
+the consumption of more energy, and this waste of energy is              devices, wherein nodes are allowed to move as indicated
+not intended. The second solution involves finding the                   to to be had energy device nodes popularity. GA turned
+optimum distribution of CH locations using optimization                  into used for finding the cluster middle in the wi-fi
+algorithms to be in locations that completely sufficient to              community. assurance of cluster middle became executed
+cover all the sensors in the sensing area, which is the method           based on node strength and the space from the sink node.
+that adopted in the present work.                                        identifying packets of information became transferred to
+                                                                         the sink node straightforwardly from each cluster center
+C. Literature Review                                                     [18].
+    Many literatures dedicated to WSN, they range in many
+                                                                      3. Proposed a focal effective clustering protocol primarily
+elements which includes hypothesis, technique, or even the
+                                                                         based on GA to increase the three-D WSN stability length
+utility boundaries. there may be a brilliant deal of attention
+                                                                         for better dependability and maximum excessive network
+become granted to WSN [16]. several techniques were
+                                                                         lifestyles time. New genetic set of rules fitness function is
+advanced for reaching more green techniques that serving the
+                                                                         applied to enhance the quantity of clusters in the network,
+                                                                         which basically contains statistics approximately the type
+
+
+
+
+                                                 Fig. 2. General sequential stages of GA
+
+
+
+
+Aseel B. Alnajjar, Wireless Sensor Network Optimization Using Genetic Algorithm
+Journal of Robotics and Control (JRC)                ISSN: 2715-5072                                                         830
+
+   of connections that the member nodes lay out with cluster      optimization lies in the process of mating these individuals
+   heads in a cluster and cluster heads establish with the sink   by mixing half the number of this gene from one parent with
+   within the community [19].                                     the other half gene belonging to the other parent. Since the
+                                                                  number of CH and its connected sensors in half of the first
+4. The dynamic task distribution of WSNs with considering
+                                                                  gene is not equal to their number in the second gene, the
+   the weakness of the wireless communication and the
+                                                                  number of CH in the resulting individuals will be slightly
+   location of the nodes is proposed. This incorporates a real
+                                                                  more or less than their initial default number. Such increase
+   location algorithm that can recover the network from
+                                                                  in the number of the CH provides better connectivity and does
+   potential failures. GA is popularly utilized for optimizing
+                                                                  not waste a lot of energy, and its objective function will often
+   the underlying solutions using mapper algorithm. An
+                                                                  be better compared to the previous generation, and it will also
+   adaptive solution envelope (ASE) is produced to comply
+                                                                  be a candidate for mating in the next generation. Thus, the
+   with the time constraint while extending the network
+                                                                  WSN model improved generation after generation with a few
+   lifetime and ensuring the security requirements. For a real
+                                                                  changes in the number of CH till achieving the best
+   scenario, the heterogeneous nodes were considered too
+                                                                  generations.
+   [20].
+5. Applying AI machine-learning (ML) algorithms on the                                    II.    METHOD
+   sensor-statistics streams which can be given by way of the         The proposed technique consists of establish a most
+   WSNs and designed to be installed in the pilot web sites       desirable WSN gadget such as two tiers: the primary degree
+   producing occupant-conduct profiles that mimic the             is used to create a WSN model consistent with certain
+   inhabitants’ movements and add to the accuracy of              assumed conditions that may be used as a character inside the
+   strength performance assessment, utilizing ML-                 2nd stage. the second one stage involves using the concept of
+   empowered occupant conduct strategies [21]. The                GA to locate the quality distribution of sensors that consumed
+   applying, technology, topology, and fee of sturdy WSNs         the least operating energy. the following subsections provide
+   are addressed to collect and ship actual-time information.     an explanation for greater information about the proposed
+   The proposed real WSN considers different necessities          GA based totally WSN optimization technique according to
+   within the field, constraints, and selections on the pilot     the sequential stages of proposed method shown in figure (3).
+   destinations, and hence, it units the lines for similar
+                                                                      The proposed model includes non-uniform redistributing
+   institutions predicted by using the development enterprise
+                                                                  the CHs depending on the presence of a sufficient number of
+   for amassing dynamic data required for smart systems
+                                                                  connection sensors of the two types: HSR and LSR to ensure
+   [22].
+                                                                  that all these peripheral sensors are connected to the available
+6. more desirable Multi-objective Non-dominated Sorting           CH (close and with a connection capacity). This is done by
+   Genetic Routing set of rules (ENSGRA) is a new                 using a genetic algorithm to distribute CHs among the
+   algorithm was proposed for positive modifications in           sensors, ensuring that they are all linked in a specific
+   allocating reference points and crossover operation. This      geographical area. Thus, the number of the CHs depends
+   upgrade can be performed with the aid of improving 3           mainly on the capacity of the extension of this geographical
+   objectives in deployment and routing degree: range of          area to ensure comprehensive coverage, and therefore if it is
+   dynamic sensor nodes, electricity consumption, and             assumed that the capacity of the extension of area is 30×30
+   community inclusion. ENSGRA became working in a hit            (i.e., Width=Height=30 length unit), then the assumed
+   dynamic WSNs scheme whilst evaluating with distinctive         number of the CH (NCH) is 10% of the capacity of that area
+   works in as some distance as calculation time and              (i.e., NCH=90). Since each CH has a specific communication
+   optimized route [23].                                          capacity with the sensors that distributed surrounding it, the
+                                                                  number of HSR is NHSR=2×NCH =180, while LSR (NLSR)
+7. Chain routing algorithm is a clustering of sensors (CS)
+                                                                  equals double the number of HSR (i.e., NLSR =2×NHSR),
+   primarily based became proposed, WSN is separated into
+                                                                  such determinations of these parameters credit achieving a
+   M routes, wherein the electricity productiveness and the
+                                                                  maximum number of sensors in the sensing area, where the
+   reconstruction mistakes are capabilities of the quantity of
+                                                                  CH are redistributed to obtain comprehensive coverage with
+   paths. The energy performance and the variety of routes
+                                                                  lower cost. The maximum connection capacity of each CH is
+   also depend on the transmission scopes of the nodes (R),
+                                                                  set to contain only 10 sensors of HSR and 10 of LSR, which
+   whilst the reconstruction-errors likewise relies upon the
+                                                                  is satisfied with the conditions of Equation (3). In this model,
+   satisfactory of the sensing matrix and the range of routes.
+                                                                  the CHs are distributed in random chosen locations within the
+   To get the premier wide variety of measurements (Mopt),
+                                                                  sensing area, with a distance of LSR from the edges of the
+   the surest sending range of the nodes (Ropt), and the most
+                                                                  area, and with an interstitial distance greater than twice the
+   beneficial sensing matrix as mutual coherence, that raise
+                                                                  LSR. Then a number of NLSR of LSR are distributed in
+   the strength-performance and bounds the reconstruction
+                                                                  randomly chosen locations between the CHs on all places in
+   errors, numerous goal genetic algorithms were used [24].
+                                                                  the sensing area, and then connecting each LSR to the closest
+D. Contribution                                                   CH. The same manner is applied on HSR that are distributed
+    Our contribution addressed in this research is considering    on the remaining empty locations of the sensing area, which
+that each WSN model is an individual consisting of one gene       are directly connected with closest CH. In the event that there
+that contains codes consisting of a specific number of CH,        is an LSR or HSR sensors located in a place far from the CH
+LSR, and HSR with their locations in that model. The              by a distance exceeds its range, it is considered to be not
+                                                                  connected. The empty locations in between CH, LSR, and
+
+
+Aseel B. Alnajjar, Wireless Sensor Network Optimization Using Genetic Algorithm
+Journal of Robotics and Control (JRC)                     ISSN: 2715-5072                                                                     831
+
+HSR in the sensing area are considered to be contained                  ones with the best fitness function, which are 50
+inactive sensors.                                                       chromosomes (equivalent to 25 pairs) used to produce the
+                                                                        next generation. The used fitness function is:
+A. WSN Model Optimization
+    The genetic algorithm was adopted in the process of                          𝐹𝑘 = 𝑤1 × 𝐽1 + 𝑤2 × 𝐽2 + 𝑤3 × 𝐽3 + 𝑤4 × 𝐽4                   (5)
+optimizing the WSN model, where it was considered that
+each WSN model is an individual with one chromosome                     Where, w1, w2, w3, and w4 are contribution weights of
+containing four genes: 1, 2, and 3 are representing the                 fraction values between (0-1), J1, J2, J3, and J4 are objective
+symbols of the types of CH, HSR, and LSR sensors                        functions representing the objective parameters OE, CE,
+respectively, while the gene 0 indicates there is no sensor in          SCE, and SORE given in equations (1-4) mentioned before
+that location [25-35]. The parameters of GA were set to be as           [46-60].
+given in Table 1, while the implementation of the GA (Fig. 1            Crossover: It is the process of mating between any pair
+& Algorithm 1) is carried out according to the following work           chosen randomly from among the selected chromosomes in
+steps:                                                                  order to generate newly two individuals by single
+                                                                        replacement as that shown in Fig. 4. There is no prohibition
+                  TABLE 1. GA PARAMETERS VALUES
+                                                                        for any individual chosen at random to mating more than
+                 Parameter               Value                          once, and this process continues until completing the number
+               Population size            100                           of individuals of the new generation. Thus, the crossover is
+               Mutation rate             0.001
+               Crossover type       Single crossover
+                                                                        exchanging the lower half area between each pair of
+               Generation size           1000                           individuals to produce other individuals belong to the next
+                                                                        generation, this process repeated 50 times to produce 100
+                                                                        individuals of the next generation.
+
+
+
+
+                                                                        Fig. 4. Producing 4 children in the next generation by crossover the
+                                                                        individual pairs
+
+                                                                        Mutation: The genetic mutation takes place in the same
+                                                                        chromosome with occurrence probability of 0.001%, in
+                                                                        which about 5% of the sensors are inverted into another type.
+                                                                        Thus, about 45 genes (sensors) are randomly chosen to be
+                                                                        inverted into another type except the type it was. Fig. 5 shows
+                                                                        few genes of one type of CH, HSR, or LSR are chosen to be
+                                                                        inverted due to mutation, they marked with a white circle
+
+
+
+
+Fig. 3. Block diagram shows the sequential stages of the proposed WSN
+optimization method
+
+Random Generation: A number of 100 individuals are
+generated to form the population that representing the first
+generation. Each individual is generated in the form of the
+proposed WSN model. This model consists of a number of
+CH, HSR, and LSR sensors with a number of NCH, NHSR,
+and NLSR in random locations of length 30×30 sensing area.
+Selection: Selecting a number of chromosomes with amount
+                                                                        Fig. 5. Producing new individual in the next generation by mutation
+50% of the population size of the current generation to make
+pairs between the [36-.45] The selected chromosomes are the
+
+
+
+Aseel B. Alnajjar, Wireless Sensor Network Optimization Using Genetic Algorithm
+Journal of Robotics and Control (JRC)                   ISSN: 2715-5072                                                                832
+
+                                               Algorithm 1. GA applied for WSN optimization
+       Initialization: Generate random population of N chromosomes
+           While the stop condition is not satisfied do
+                Evaluate the fitness function F of each chromosome x in the population
+                While the new population is not completed do
+                   Selection: Select two parent chromosomes from a population according to their fitness.
+                   Crossover: With a crossover probability, crossover the parents to form a new child.
+                   Mutation: With a mutation probability mutate new chromosome.
+                   Accepting: Place new children in a new population.
+                End
+                Replace: Use new generation population for further runs.
+           End
+       Return: The best solution of the current population.
+
+Regeneration: The process of the regeneration occurs when
+the optimal state of the individuals of the last generation is
+not reached, the new generations continue to be generated
+with developing the genes until meeting the stop condition of
+the GA. The stop condition is either to reach the state where
+there are a few changes occurred in the fitness function of
+about 0.01 (or no change at all), or reaching to 1000
+generation as shown in Algorithm (1).
+                III.       RESULTS AND DISCUSSION
+    The two stages of WSN modeling and optimization were                         (a) WSN model 1                (b) WSN model 2
+implemented according to the setting mentioned previously
+[26, 27], the achieved results are given in the following
+subsections. The proposed modeling method was
+implemented and WSNs were obtained with an area of 30×
+30 length unit containing 90 CHs were randomly distributed
+in the sensing region, each CH was associated with a number
+of HSR and LSR nearby. Fig. 6 shows the results of four
+WSN models obtained by the proposed method. It is shown
+that there few sensors are occupied places far from any CH,
+so they were not connected to them, this is due to their
+                                                                                 (c) WSN model 3                (d) WSN model 4
+random distribution in the sensor area. Table 2 presents the
+amount of the computed objective functions for the four                 Fig. 6. Resulted four WSN models using proposed WSN modeling method
+resulting WSN models. The results show that although the
+distribution was random, it is considered regular because                   The values of the contribution weights for each objective
+most of the sensors were connected to the CH close to it, and           function were adjusted according to their subject matter
+this is what makes these WSN models acceptable and can be               importance as: w1=0.4, w2=0.3, w3=0.2, w4=0.1. By
+used in the subsequent optimization process.                            observing the behavior of F, it is found that its values were
+                                                                        higher for the first generation relative to their values for the
+      TABLE 2. RESULTS OF OBJECTIVE AND FITNESS FUNCTIONS OF            last generation, and this indicates that the process of
+                 THE FOUR RESULTED WSN MODELS                           producing generations was directed towards improving the
+       WSN          OE        CE      OCE     SORE      F               genes to be the best possible at the last generation.
+      Model-1      6.069     21.142   0.021    102    18.974
+      Model-2      5.994     10.937   0.003    96     15.279                Also, it is observed that the behavior of F in Fig. 7
+      Model-3      5.892     6.800    0.004    92     13.597            contained more fluctuations in the first generation, while this
+      Model-4      5.986     3.166    0.004    84     11.745            behavior had less fluctuation in the behavior of the last
+                                                                        generation, and this indicates the stability occurred in the
+B. WSN Optimization Results                                             genes of the last generation. To search more on this subject
+                                                                        (gene stability with more generations), the fitness function F
+    The genetic algorithm was implemented based on the                  in Fig. 7 has been analyzed into its four components: J1, J2,
+parameters setting given in Table (1), where there 100                  J3, J4 shown in Fig. 8 and Fig. 9.
+individuals were generated from a WSN model whose
+average objective function was shown in Fig. 6, this was for
+a number of generations of 1000. Then, the last best
+generation was obtained. The optimization is determined by
+the fitness function shown in Fig. 6 relative to that of the first
+generation.
+
+
+
+Aseel B. Alnajjar, Wireless Sensor Network Optimization Using Genetic Algorithm
+Journal of Robotics and Control (JRC)                             ISSN: 2715-5072                                                                      833
+
+                                                                                                  0.05
+                                                                                                  0.04
+
+                                                                                 J3 Value
+                                                                                                  0.03
+                                                                                                  0.02                                       G1
+                                                                                                  0.01
+                                                                                                                                             G1000
+                                                                                                     0     0
+                                                                                                          10
+                                                                                                          20
+                                                                                                          30
+                                                                                                          40
+                                                                                                          50
+                                                                                                          60
+                                                                                                          70
+                                                                                                          80
+                                                                                                          90
+                                                                                                         100
+                                                                                                                   Individual
+
+Fig. 7. Resulted average of fitness function of both the first and last
+generation                                                                                      150
+
+
+                                                                                     J4 Value
+    It is noticeable that the reason of fluctuations in the F                                   100
+function in each generation is due to the behavior of the
+fourth objective function (J4) of the higher values, which                                      50                                          G1
+represents the amount of inactive sensor in each individual,
+                                                                                                                                            G1000
+which appears different according to the different distribution                                  0      0
+of the sensors in each individual. Also, the fluctuation in the
+                                                                                                       10
+                                                                                                       20
+                                                                                                       30
+                                                                                                       40
+                                                                                                       50
+                                                                                                       60
+                                                                                                       70
+                                                                                                       80
+first objective function (J1) appeared effective due to
+                                                                                                       90
+                                                                                                      100
+different number of CH were shown in individuals of last                                                          Individual
+generations. The NCH begins with constant value (90 CH),
+whereas it is noticeable that this value was varied with more                 Fig. 9. Resulted average of J3 and J4 of both the first and last generation
+generation due to the single crossover. The rate of their
+behavior will appear more random among individuals                               100
+belonging to one generation, and then the function improves                       90
+slightly with the progress of generations and its fluctuations                    80
+are appeared as few as possible in the last generation as                      NCH70
+shown in Fig. 10. This change in NCH is an important result
+                                                                                  60
+worth interesting. Fig. 11 shows the four randomly selected
+WSN models of the new generation, it is shown that all the                        50
+sensors in them have been connected to the nearest CH that                                       0 100 200 300 400 500 600 700 800 900
+occupied location that guarantee the connection for all                                                             Generations
+sensors of HSR and LSR type with the least amount of
+objective functions: less power, less cost, and less error. This              Fig. 10. Average behavior of NCH variation with generations
+indicates the extent of benefiting from GA to develop the
+distribution of sensors in the WSN model, and this confirms
+the validity of the application of GA and the accuracy of the
+obtained results.
+            8
+            6
+
+ J1 Value
+            4
+                                                                  G1
+            2
+                                                                  G1000
+            0            0
+                        10
+                        20
+                        30                                                                      (a) WSN model-1                   (b) WSN model-2
+                        40
+                        50
+                        60
+                        70
+                        80
+                        90
+                       100
+                            Individual
+
+
+                       30
+
+
+            J2 Value
+                       20
+                       10                                        G1
+                        0     0                                  G1000
+                             10
+                             20
+                             30
+                             40
+                             50
+                             60
+                             70
+                             80
+                             90
+                            100                                                                 (c) WSN model-3                   (d) WSN model-4
+                             Individual                                       Fig. 11. Resulted four WSN models of the last generation
+
+
+Fig. 8. Resulted average of J1 and J2 of both the first and last generation
+
+
+
+
+Aseel B. Alnajjar, Wireless Sensor Network Optimization Using Genetic Algorithm
+Journal of Robotics and Control (JRC)                             ISSN: 2715-5072                                                                       834
+
+                         IV.        CONCLUSIONS                                   [17] X. Xiao, H. Huang, and W. Wang, "Underwater wireless sensor
+                                                                                       networks: An energy-efficient clustering routing protocol based on
+    It concludes that the proposed two-dimensional model for                           data fusion and genetic algorithms," Applied Sciences, vol. 11, no. 1,
+representing WSN models was successful in showing a WSN                                p. 312, 2021.
+model with a specific capacity of sensors connected to the                        [18] V. Sakalle, S. Phulare and A. Chaturvadi, "WSN Energy Optimization
+cluster head. Also, the genetic algorithm was successful in the                        Using Intelligent Water Drop Genetic Algorithms," International
+                                                                                       Journal of Advanced Research in Engineering and Technology
+process of differentiating models, and its application to the                          (IJARET), vol. 11, no. 12, pp. 2449-2462, 2020.
+proposed model has given distinct results, represented by                         [19] I. Jannoud, Y. Jaradat, M. Z. Masoud, A. Manasrah, and M. Alia, “The
+generations with high quality characteristics. It is hoped that                        Role of Genetic Algorithm Selection Operators in Extending WSN
+the work will be developed to apply the clustering operations                          Stability Period: A Comparative Study,” Electronics, vol. 11, no. 1, p.
+such as k-means on the WSN models resulted from the                                    28, 2021.
+genetic algorithm. Also, the proposed method can be applied                       [20] A. O. Ojo, "Cost-Effective and Security-Aware Task Allocation
+                                                                                       Algorithm for Dynamic Wireless Sensor Networks," Available at
+to mobile sensors.                                                                     SSRN 4022956, 2022.
+                            ACKNOWLEDGEMENTS                                      [21] N. F. AL-Bakri, A. F. Al-zubidi, A. B. Alnajjar, E. Qahtan, “Multi
+                                                                                       label restaurant classification using support vector machine,"
+    The authors are grateful to the Iraqi Ministry of Higher                           Periodicals of Engineering and Natural Sciences (PEN), vol. 9, no. 2,
+Education and Scientific Research (MOHESR) for                                         pp. 774-783, 2021.
+technically supporting the current research.                                      [22] D. Kontaxis, G. Tsoulos, G. Athanasiadou, and G. Giannakis,
+                                                                                       “Wireless Sensor Networks for Building Information Modeling,”
+                                                                                       Telecom, vol. 3, no. 1, pp. 118–134, 2022.
+                                  REFERENCES
+                                                                                  [23] M. Moshref, R. Al-Sayyed and S. Al-Sharaeh, "An Enhanced Multi-
+[1]    R. Ouni and K. Saleem, “Framework for Sustainable Wireless Sensor               Objective Non-Dominated Sorting Genetic Routing Algorithm for
+       Network Based Environmental Monitoring,” Sustainability, vol. 14,               Improving the QoS in Wireless Sensor Networks," in IEEE Access,
+       no. 14, p. 8356, 2022.                                                          vol. 9, pp. 149176-149195, 2021.
+[2]    S. W. Nourildean, M. D. Hassib, and Y. A. Mohammed, “Internet of           [24] M. A. Mazaideh and J. Levendovszky, "A multi-hop routing
+       things based wireless sensor network: a review,” Indones. J. Electr.            algorithm for WSNs based on compressive sensing and multiple
+       Eng. Comput. Sci, vol. 27, no. 1, pp. 246-261, 2022.                            objective genetic algorithm," in Journal of Communications and
+[3]    A. García-Nájera, S. Zapotecas-Martínez, and K. Miranda, "Analysis              Networks, vol. 23, no. 2, pp. 138-147, 2021.
+       of the multi-objective cluster head selection problem in WSNs,"            [25] A. M. Kadim, F. Saad Al-Mukhtar, N. Abed Hasan, A. B. Alnajjar,
+       Applied Soft Computing, vol. 112, p. 107853, 2021.                              and M. Sahib Mahdi Altaei, “K-Means clustering of optimized
+[4]    J. -W. Lee, B. -S. Choi and J. -J. Lee, "Energy-Efficient Coverage of           wireless network sensor using genetic algorithm,” Period. Eng. Nat.
+       Wireless Sensor Networks Using Ant Colony Optimization with                     Sci., vol. 10, no. 3, p. 276, 2022.
+       Three Types of Pheromones," in IEEE Transactions on Industrial             [26] I. Al Barazanchi, A. S. Shibghatullah, and S. R. Selamat, “A New
+       Informatics, vol. 7, no. 3, pp. 419-427, 2011.                                  Routing Protocols for Reducing Path Loss in Wireless Body Area
+[5]    A. Srivastava and P. K. Mishra, "A Survey on WSN Issues with its                Network (WBAN),” J. Telecommun. Electron. Comput. Eng. Model,
+       Heuristics and Meta-Heuristics Solutions," Wireless Personal                    vol. 9, no. 1, pp. 1–5, 2017.
+       Communications, vol. 121, pp. 745-814, 2021.                               [27] I. Al Barazanchi, W. Hashim, A. A. Alkahtani, H. H. Abbas, and H.
+[6]    O. Singh, V. Rishiwal, R. Chaudhry, and M. Yadav, "Multi-Objective              R. Abdulshaheed, “Overview of WBAN from Literature Survey to
+       Optimization in WSN: Opportunities and Challenges," Wireless                    Application Implementation,” 2021 8th Int. Conf. Electr. Eng.
+       Personal Communications, vol. 121, no. 1, pp. 745-814, 2021.                    Comput. Sci. Informatics, pp. 16–21, 2021.
+[7]    S. B. Sasi and R. Santhosh, "Multi-objective routing protocol for          [28] M. Rathee, S. Kumar, A. H. Gandomi, K. Dilip, B. Balusamy, and R.
+       wireless sensor network optimization using antcolony conveyance                 Patan, “Ant colony optimization based quality of service aware energy
+       algorithm," International Journal of Communication Systems, vol 34,             balancing secure routing algorithm for wireless sensor networks,”
+       no. 6, p. e4270, 2021.                                                          IEEE Trans. Eng. Manag., vol. 68, no. 1, pp. 170–182, 2021.
+[8]    L. E. George and A. M. Kadim, “Color Image Compression Using               [29] M. Mathapati, T. S. Kumaran, A. Muruganandham, and M.
+       Fast VQ with DCT Based Block Indexing Method,” In International                 Mathivanan, “Secure routing scheme with multi-dimensional trust
+       Conference Image Analysis and Recognition, pp. 253-263, 2011.                   evaluation for wireless sensor network,” J. Ambient Intell. Humanized
+                                                                                       Comput., vol. 12, no. 6, pp. 6047–6055, 2021.
+[9]    M. Al-Obaidy, A. Ayesh, and S. F. Sheta, "Optimizing the
+       communication distance of an ad hoc wireless sensor networks by            [30] W. Fang, W. Zhang, W. Chen, Y. Liu, and C. Tang, “TMSRS: Trust
+       genetic algorithms," Artificial Intelligence Review, vol. 29, no. 3, pp.        management-based secure routing scheme in industrial wireless
+       183-194, 2008.                                                                  sensor network with fog computing,” Wireless Netw., vol. 26, no. 5,
+                                                                                       pp. 3169–3182, Sep. 2020.
+[10]   K. P. Ferentinos and. T. A. Tsiligiridis, "Adaptive design optimization
+       of wireless sensor networks using genetic algorithms," Computer            [31] L. Wei, Y. Qing, and Y. Nan, “A trust-based secure routing algorithm
+       Networks, vol. 51, no. 4, 2007.                                                 for wireless sensor networks,” Proc. 34th Chin. Control Conf. (CCC),
+                                                                                       pp. 7726–7729, 2015.
+[11]   Z. Michalewicz and D. B. Fogel, “How to solve it: modern heuristics,”
+       Springer Science & Business Media, 2013.                                   [32] A. Ahmed, K. A. Bakar, M. I. Channa, and A. W. Khan, “A secure
+                                                                                       routing protocol with trust and energy awareness for wireless sensor
+[12]   M. Iqbal, M. Naeem, A. Anpalagan, and M. Azzam, "Wireless sensor
+                                                                                       network,” Mobile Netw. Appl., vol. 21, no. 2, pp. 272–285, 2016.
+       network optimization: Multi-objective paradigm,” Sensors, vol. 15,
+       no. 7, pp. 17572-17620, 2015.                                              [33] K. A. Awan, I. Din, A. Almogren, M. Guizani, A. Altameem, and S.
+                                                                                       U. Jadoon, “RobustTrust—A pro-privacy robust distributed trust
+[13]   R. Karan, "An Introduction to Genetic Algorithms," 2021. [Online].
+                                                                                       management mechanism for Internet of Things,” IEEE Access, vol. 7,
+       Available: https://www.naukri.com/learning/articles/an-introduction-
+                                                                                       pp. 62095–62106, 2019.
+       to-genetic-algorithms/.
+                                                                                  [34] W. Fang, C. Zhu, W. Chen, W. Zhang, and J. J. P. C. Rodrigues,
+[14]   X.-S. Yang, "Genetic Algorithms," in Nature-Inspired Optimization
+                                                                                       “BDTMS: Binomial distribution-based trust management scheme for
+       Algorithms, pp. 91-100, 2021.
+                                                                                       healthcare-oriented wireless sensor network,” in Proc. 4th Int.
+[15]   M. L. Rocca, Advanced Algorithms and Data Structures, Simon and                 Wireless Commun. Mobile Comput. Conf., pp. 382–387, 2018.
+       Schuster, 2021.
+                                                                                  [35] R. W. Anwar, A. Zainal, F. Outay, A. Yasar, and S. Iqbal, “BTEM:
+[16]   N. A. Hassan, F. S. Al-Mukhtar, and E. H. Ali, “Encrypt Audio File              Belief based trust evaluation mechanism for wireless sensor
+       using Speech Audio File As a key,” In IOP Conference Series:                    networks,” Future Gener. Comput. Syst., vol. 96, pp. 605–616, Jul.
+       Materials Science and Engineering, vol. 928, no. 3, p. 032066, 2020.            2019.
+
+
+
+
+Aseel B. Alnajjar, Wireless Sensor Network Optimization Using Genetic Algorithm
+Journal of Robotics and Control (JRC)                           ISSN: 2715-5072                                                                        835
+
+[36] M. Zhang, “Trust computation model based on improved Bayesian for                technique for wireless sensor network,”Proc. Comput. Sci., vol. 167,
+     wireless sensor networks,” in Proc. IEEE 17th Int. Conf. Commun.                 pp. 468–476, 2020.
+     Technol. (ICCT), 2017, pp. 960–964.                                       [49]   C. Ryan, “Evolutionary algorithms and metaheuristics,” in
+[37] A. B. Feroz Khan and G. Anandharaj, “A cognitive energy efficient                Encyclopedia of Physical Science and Technology, 3rd ed., R. A.
+     and trusted routing model for the security of wireless sensor networks:          Meyers, Ed. New York, NY, USA: Academic Press, pp. 673–685, 2003.
+     CEMT,” Wireless Pers. Commun., vol. 119, no. 4, pp. 3149–3159,            [50]   G. Poonam, “A comparison between memetic algorithm and genetic
+     2021.                                                                            algorithm for the cryptanalysis of simplified data encryption standard
+[38] Y. Hu, Y. Wu, and H. Wang, “Detection of insider selective                       algorithm,” Int. J. Netw. Secur. Appl., vol. 1, no. 1, pp. 34–42, 2009.
+     forwarding attack based on monitor node and trust mechanism in            [51]   H. A. Shehadeh, H. M. Mustafa, and M. Tubishat, “A hybrid genetic
+     WSN,” Wireless Sensor Netw., vol. 6, no. 11, pp. 237–248, 2014.                  algorithm and sperm swarm optimization (HGASSO) for multimodal
+[39] D. Qin, S. Yang, S. Jia, Y. Zhang, J. Ma, and Q. Ding, “Research on              functions,” Int. J. Appl. Metaheuristic Comput., vol. 13, no. 1, pp. 1–
+     trust sensing based secure routing mechanism for wireless sensor                 33, 2022.
+     network,” IEEE Access, vol. 5, pp. 9599–9609, 2017.                       [52]   N. El-Omari, “Sea lion optimization algorithm for solving the
+[40] A. Beheshtiasl and A. Ghaffari, “Secure and trust-aware routing                  maximum flow problem,” Int. J. Adv. Comput. Sci. Appl., vol. 10, no.
+     scheme in wireless sensor networks,” Wireless Pers. Commun., vol.                5, pp. 388–395, 2021.
+     107, no. 4, pp. 1799–1814, 2019.                                          [53]   H. A. Shehadeh, I. Ahmedy, and I. M. Y. Idris, “Empirical study of
+[41] X. Yu, F. Li, T. Li, N. Wu, H. Wang, and H. Zhou, “Trust-based                   sperm swarm optimization algorithm,” in Intelligent Systems and
+     secure directed diffusion routing protocol in WSN,” J. Ambient Intell.           Applications. Cham, Switzerland: Springer, pp. 1082-1104, 2019.
+     Hum. Comput., pp. 1–13, 2020.                                             [54]   P. Bajpai and M. Kumar, “Genetic algorithm—An approach to solve
+[42] P. A. Patil, R. S. Deshpande, and P. B. Mane, “Trust and opportunity             global optimization problems,” Indian J. Comput. Sci. Eng., vol. 1,
+     based routing framework in wireless sensor network using hybrid                  pp. 199–206, 2010.
+     optimization algorithm,” Wireless Pers. Commun., vol. 115, no. 1, pp.     [55]   N. Razali and J. Geraghty, “Genetic algorithm performance with
+     415–437, 2020.                                                                   different selection strategies in solving TSP,” in Proc. World Congr.
+[43] T. Kalidoss, L. Rajasekaran, K. Kanagasabai, G. Sannasi, and A.                  Eng., vol. 2, pp. 1–6, 2011.
+     Kannan, “QoS aware trust based routing algorithm for wireless sensor      [56]   S. Surjanovic and D. Bingham, “Virtual Library of Simulation
+     networks,” Wireless Pers. Commun., vol. 110, no. 4, pp. 1637–1658,               Experiments: Test Functions and Datasets,” 2013. [Online].
+     2020.                                                                            Available: https://www.sfu.ca/ ssurjano/index.html
+[44] M. Hajiee, M. Fartash, and N. Osati Eraghi, “An energy-aware trust        [57]   L. Jourdan, M. Basseur, and E.-G. Talbi, “Hybridizing exact methods
+     and opportunity based routing algorithm in wireless sensor networks              and metaheuristics: A taxonomy,” Eur. J. Oper. Res., vol. 199, no. 3,
+     using multipath routes technique,” Neural Process. Lett., vol. 53, no.           pp. 620–629, 2009.
+     4, pp. 2829–2852, 2021.
+                                                                               [58]   A. Norouzi and A. Zaim, “Genetic algorithm application in
+[45] J. Jasper, “A secure routing scheme to mitigate attack in wireless               optimization of wireless sensor networks,” Sci. World J., vol. 2014,
+     adhoc sensor network,” Comput. Secur., vol. 103, p. 102197, 2021                 Feb. 2014.
+[46] W. Fang, W. Zhang, W. Chen, J. Liu, Y. Ni, and Y. Yang, “MSCR:            [59]   A. George, B. R. Rajakumar, and D. Binu, “Genetic algorithm based
+     Multidimensional secure clustered routing scheme in hierarchical                 airlines booking terminal open/close decision system,” in Proc. Int.
+     wireless sensor networks,” EURASIP J. Wireless Commun. Netw.,                    Conf. Adv. Comput., Commun. Informat. (ICACCI), pp. 174–179,
+     vol. 2021, no. 1, pp. 1–20, 2021.                                                2012.
+[47] Q. Zhang, X. Liu, J. Yu, and X. Qi, “A trust-based dynamic slicing        [60]   S. Katoch, S. S. Chauhan, and V. Kumar, “A review on genetic
+     mechanism for wireless sensor networks,” Proc. Comput. Sci., vol.                algorithm: Past, present, and future,” Multimedia Tools Appl., vol. 80,
+     174, pp. 572–577, 2020.                                                          no. 5, pp. 8091–8126, 2021.
+[48] V. K. Chawra and G. P. Gupta, “Load balanced node clustering
+     scheme using improved memetic algorithm based meta-heuristic
+
+
+
+
+Aseel B. Alnajjar, Wireless Sensor Network Optimization Using Genetic Algorithm
+

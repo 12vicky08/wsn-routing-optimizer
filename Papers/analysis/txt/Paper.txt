@@ -1,0 +1,628 @@
+A Comparative Analysis and Optimization of Mobile Sink
+
+Trajectories in Heterogeneous Environments Using Genetic
+
+Algorithms
+
+RAPAKA VIKRANTH, MASAPETA KURUVA BHARGAVA SRI SAI,
+
+
+
+Abstract:
+
+ In large-scale Heterogeneous Wireless Sensor Networks (WSNs), unbalanced energy
+consumption frequently leads to premature network partitioning. While Mobile Sinks (MS)
+can mitigate load distribution issues, traditional path planning algorithms often suffer from
+premature convergence and a lack of diversity. This paper proposes an Enhanced Improved
+Adaptive Genetic Algorithm (IAGAPC-Enhanced) for optimizing MS trajectories to address
+these challenges. The proposed approach utilizes a multi-objective fitness function that
+rigorously accounts for residual energy, path smoothness, coverage, and transmission delay.
+We validate the performance of IAGAPC-Enhanced against five state-of-the-art evolutionary
+algorithms—AGAPC, EGATS-N, RCGA-ABC, DGA-M, and CGAPD—using the Network
+Simulator 3 (NS-3) environment. Simulation results demonstrate that the proposed method
+significantly outperforms existing techniques in terms of network lifetime extension, energy
+efficiency, and process capability. Furthermore, the study analyzes round-by-round
+performance to demonstrate the algorithm's stability in maintaining node connectivity
+across heterogeneous energy scenarios.
+
+Keywords: Wireless Sensor Networks (WSN); Mobile Sink; Genetic Algorithms; Trajectory
+Optimization; Heterogeneous Networks; Energy Efficiency; Network Lifetime.
+
+
+1. Introduction
+
+The relentless advancement of the Internet of Things (IoT) has fundamentally reshaped the
+landscape of remote monitoring and data acquisition, propelling Wireless Sensor Networks
+(WSNs) into the forefront of critical infrastructure technology. From precision agriculture and
+industrial automation to environmental sensing and battlefield surveillance, WSNs serve as
+the digital nervous system of the physical world, bridging the gap between analog
+phenomena and digital analytics. As these networks transition from small-scale,
+experimental deployments to massive, persistent infrastructures, the architectural
+paradigms governing their operation must evolve to address the inherent constraints of their
+constituent components. The most pervasive and debilitating of these constraints is the
+finite energy budget of sensor nodes. Typically powered by non-rechargeable batteries and
+deployed in environments that render replacement logistically or economically infeasible,
+sensor nodes must operate with extreme energy efficiency to ensure network longevity.
+
+The operational challenge is compounded in large-scale Heterogeneous Wireless Sensor
+Networks (HWSNs). Unlike their homogeneous counterparts, where all nodes possess
+identical capabilities, HWSNs mirror the reality of incremental deployment and technological
+stratification. They consist of nodes with varying initial energy reservoirs, processing
+capabilities, and transmission ranges. While heterogeneity offers flexibility and cost-
+effectiveness—allowing for the strategic placement of high-power "super nodes" alongside
+low-cost sensors—it introduces severe imbalances in energy consumption patterns. The
+most critical manifestation of this imbalance is the "Energy Hole" or "Hotspot" problem, a
+phenomenon rooted in the many-to-one traffic patterns characteristic of WSNs.
+
+In traditional static network architectures, data packets generated at the network periphery
+must hop through concentric layers of nodes to reach the central sink (Base Station). The
+nodes situated in the "inner corona"—the immediate vicinity of the sink—are burdened with
+the dual responsibility of sensing their own data and relaying the aggregated traffic of the
+entire network. Mathematical modeling suggests that in a uniformly distributed network,
+the energy consumption of these inner nodes increases exponentially with the network
+radius. Consequently, these nodes deplete their energy reserves and fail long before the
+peripheral nodes, severing the sink's connection to the rest of the network. This results in
+premature network partitioning, where the network is rendered non-functional despite the
+majority of nodes retaining significant residual energy .
+
+To mitigate the structural inevitability of the energy hole, the concept of Mobile Sinks (MS)
+has emerged as a transformative solution. By decoupling the data collection point from a
+fixed geographic location, mobility introduces a temporal dimension to the energy
+consumption landscape. As the sink traverses the sensing field, the burden of relaying data
+shifts dynamically across different subsets of nodes. This effectively "smears" the hotspot
+around the network, averaging energy consumption and significantly delaying the formation
+of energy holes. However, the introduction of mobility converts the static routing problem
+into a complex, dynamic trajectory optimization problem.
+
+The optimization of Mobile Sink trajectories is a non-trivial, NP-hard problem that shares
+characteristics with the Traveling Salesman Problem (TSP) but is laden with additional
+domain-specific constraints. The trajectory must be optimized not merely for path length,
+but for a multi-objective surface that includes residual energy maximization, coverage
+assurance, transmission delay minimization, and kinematic feasibility . Traditional path
+planning algorithms often fail to capture this complexity, prioritizing one metric (e.g.,
+shortest path) at the expense of others (e.g., energy balance).
+Evolutionary algorithms, particularly Genetic Algorithms (GAs), have shown promise in
+navigating this high-dimensional search space. By mimicking natural selection, GAs can
+evolve populations of trajectories to find near-optimal solutions. However, standard GAs are
+plagued by inherent weaknesses when applied to the dynamic and heterogeneous WSN
+environment. They suffer from premature convergence, where the population stagnates at a
+local optimum due to the loss of genetic diversity, and they often lack the mechanisms to
+adapt to the changing energy states of the network over time . Furthermore, many existing
+approaches neglect the physical constraints of the mobile sink—treating it as a point mass
+capable of instantaneous turns—resulting in theoretically optimal but physically unrealizable
+paths .
+
+This research report presents a rigorous comparative analysis and optimization of mobile
+sink trajectories using a novel Enhanced Improved Adaptive Genetic Algorithm (IAGAPC-
+Enhanced). This proposed algorithm is specifically engineered to address the limitations of
+premature convergence and diversity loss in heterogeneous environments. It employs a
+sophisticated multi-objective fitness function that simultaneously rigorously accounts for
+residual energy, path smoothness, coverage, and transmission delay.
+
+
+2. Theoretical Framework and Literature Review
+
+To contextualize the contributions of the IAGAPC-Enhanced algorithm, it is necessary to
+deconstruct the theoretical underpinnings of WSN optimization, tracing the trajectory from
+static topologies to advanced mobile architectures and identifying the specific deficiencies in
+current evolutionary approaches.
+
+
+2.1 The Energy Hole Phenomenon in Heterogeneous Networks
+
+The "Energy Hole" problem is not a failure of protocol design but a geometric inevitability in
+static multi-hop networks. Consider a circular sensor field of radius R with a static sink at the
+center. Nodes are distributed with density ρ. Data is generated at rate λ. In a multi-hop
+scenario, a node at distance r from the sink must relay data originating from the annular
+region between r and R. As derived in , the traffic load L(r) on a node at distance r is roughly
+proportional to 1/r. Thus, nodes where r→0 (the "inner corona") experience the highest
+load. In Heterogeneous WSNs, this effect is exacerbated if high-energy nodes are not
+explicitly placed near the sink. If the distribution of "Advanced" and "Super" nodes is
+random, there is a statistical probability that the critical inner corona will be populated by
+"Normal" (low-energy) nodes, leading to rapid depletion .
+
+Several strategies have been proposed to mitigate this:
+   •   Non-Uniform Node Distribution: Deploying higher node density near the sink. This is
+       often impractical in random aerial deployments .
+   •   Adjustable Transmission Range: Increasing power to hop over depleted regions. This
+       increases interference and drains energy non-linearly .
+   •   Clustering: Hierarchical organization (e.g., LEACH, HEED) reduces total transmissions
+       but simply moves the energy hole to the Cluster Heads (CHs) closest to the sink .
+
+The consensus in recent literature is that Sink Mobility is the only robust solution that
+addresses the root cause by dynamically altering the network's logical topology .
+
+
+2.2 Mobile Sink Trajectory Optimization: The Challenge
+
+The introduction of a Mobile Sink (MS) transforms the data collection problem. The MS acts
+as a data mule or a mobile gateway. The efficiency of this system depends entirely on the
+trajectory T(t) of the sink.
+
+   •   Random Mobility: Models such as Random Waypoint (RWP) are easy to implement
+       but lead to unbounded latency. Nodes may overflow their buffers waiting for the sink
+       to arrive .
+   •   Pre-Determined Paths: Moving along the periphery or a fixed grid is predictable but
+       unresponsive to dynamic events (e.g., a burst of data in a specific sector).
+   •   Controlled Mobility: This involves calculating an optimal path based on current
+       network state. This is an NP-hard problem, often modeled as a variant of the TSP
+       with Neighborhoods (TSPN) or the Vehicle Routing Problem (VRP) .
+
+The complexity arises from the conflicting objectives:
+
+   1. Maximize Network Lifetime: Requires visiting nodes with high residual energy to
+      offload their relay burden.
+   2. Minimize Delay: Requires the shortest possible path (TSP).
+   3. Ensure Coverage: Requires visiting a sufficient number of Rendezvous Points (RPs) to
+      serve all nodes .
+   4. Kinematic Feasibility: The path must be smooth enough for the MS (e.g., a drone or
+      UGV) to navigate without frequent stops and turns .
+
+
+2.3 Evolutionary Algorithms in WSN Optimization
+
+Meta-heuristic algorithms have become the standard for solving these NP-hard problems
+due to their ability to search large solution spaces. However, the specific requirements of
+HWSNs reveal cracks in standard evolutionary approaches.
+2.3.1 Genetic Algorithms (GA) and Their Limitations
+
+GAs operate on a population of solutions, using selection, crossover, and mutation to evolve
+better trajectories. AGAPC introduces adaptive probabilities for crossover and mutation.
+While this improves upon static GAs, AGAPC often suffers from premature convergence.
+Once a "good enough" trajectory is found, the population diversity collapses, and the
+algorithm fails to explore radically different paths that might be superior in the long run .
+CGAPD uses a cluster-first, route-second approach. It clusters the network and then runs a
+GA to visit Cluster Heads. This is computationally efficient but rigid. If a Cluster Head dies,
+the entire trajectory must be recalculated, and the static clustering may not align with the
+optimal dynamic path.
+
+
+2.3.2 Swarm Intelligence and Hybrid Models
+
+RCGA-ABC combines Real-Coded GA with Artificial Bee Colony (ABC). The "Scout Bee" phase
+of ABC is excellent for exploration, theoretically mitigating the diversity problem. However,
+hybrid algorithms often incur high computational overhead. Furthermore, without explicit
+constraints on path smoothness, swarm-based trajectories can be erratic, resulting in high
+mechanical energy costs for the sink . EGATS-N integrates Tabu Search to prevent revisiting
+local optima. While effective for static combinatorial problems, Tabu Search can be inflexible
+in the continuous domain of trajectory planning.
+
+
+2.3.3 Distributed Approaches
+
+DGA-M attempts to parallelize the problem, running genetic evolution on distributed islands
+(or nodes). This reduces computation time but introduces synchronization challenges. In a
+WSN where communication is costly, the overhead of exchanging genetic material between
+distributed nodes can outweigh the optimization benefits .
+
+
+2.3.4 Reinforcement Learning and Hybrid Meta-heuristics
+
+Recent advancements have demonstrated the efficacy of integrating Reinforcement Learning
+(RL) and novel Swarm Intelligence techniques to address routing stability and energy
+efficiency. Radhika and Radhika proposed an Adaptive Reinforced Learning based Spider
+Monkey Optimization (ARL-SMO) protocol. This approach continuously updates Q-values to
+learn optimal routing paths dynamically, while utilizing the "Fission-Fusion" social structure
+of Spider Monkeys to prevent stagnation in local optima.
+
+Similarly, the Cooperative Self-Scheduling Routing Approach (CS2RA) introduces a
+mechanism for self-balanced congestion routing. By employing an Optimistic Q-Learning
+model and a Petal Spider Ant Colony Cluster (PSACC) algorithm, this method optimizes link
+stability and cooperative communication, directly addressing the Quality of Service (QoS)
+degradation common in high-traffic scenarios. Furthermore, the integration of Q-Learning
+with the Adaptive Coati Optimization Algorithm (ACOA) in the QLRA protocol has shown
+significant promise. This method optimizes "action sequences" to prevent the isolation of
+nodes and utilizes attribute-based clustering to reduce energy consumption by over 25%
+compared to traditional routing. These hybrid approaches highlight a convergent trend
+toward intelligent, adaptive protocols that complement trajectory optimization.
+
+
+2.4 The Research Gap
+
+The critical analysis of the state-of-the-art reveals specific gaps that IAGAPC-Enhanced
+addresses:
+
+   1. Lack of Smoothness Integration: Most algorithms (AGAPC, DGA-M, CGAPD) treat the
+      sink as a point mass. They generate paths with sharp acute angles that are physically
+      impossible for a vehicle to execute at speed, leading to discrepancies between
+      simulated and real-world delays .
+   2. Diversity Management: Algorithms like AGAPC and EGATS-N rely on simple heuristics
+      for diversity. They lack a "hard reset" mechanism to escape deep local optima during
+      long-running simulations .
+   3. Multi-Objective Rigor: Many baselines optimize a weighted sum of Energy and
+      Distance. They often neglect Coverage Efficiency and Buffer Overflow Probability,
+      which are critical in heterogeneous environments with varying data generation rates .
+
+
+3. System Models and Problem Formulation
+
+To facilitate a rigorous comparative analysis, we mathematically formulate the network
+environment, energy models, and the optimization problem.
+
+
+3.1 Network Architecture
+
+We consider a Region of Interest (ROI) of dimensions L×W, populated with N sensor nodes
+S={s1 ,s2 ,…,sN }.
+
+   •   Heterogeneity: The set S is partitioned into subsets based on initial energy E0 :
+          o Snormal : E0 =Enorm .
+          o Sadvanced : E0 =Eadv =α⋅Enorm (α>1).
+          o Ssuper : E0 =Esup =β⋅Enorm (β>α).
+   •   Sink: A Mobile Sink (MS) traverses the ROI. The MS has unlimited energy and
+       processing power. Its position at time t is PMS (t)=(x(t),y(t)).
+   •   Communication: Nodes use multi-hop communication to reach the MS or a
+       designated Rendezvous Point (RP) on the MS's trajectory.
+3.2 First-Order Radio Energy Model
+
+We adopt the standard First-Order Radio Model to calculate energy dissipation. The energy
+required to transmit a k-bit packet over distance d is:
+
+               ETx (k,d)={k⋅Eelec +k⋅ϵfs ⋅d2k⋅Eelec +k⋅ϵmp ⋅d4 if d<d0 if d≥d0
+Where:
+
+   •   Eelec : Energy dissipated by the transceiver circuitry per bit (typically 50 nJ/bit).
+   •   ϵfs : Free-space amplifier energy (typically 10 pJ/bit/m2).
+   •   ϵmp : Multipath amplifier energy (typically 0.0013 pJ/bit/m4).
+
+   •   d0 =ϵfs /ϵmp        : The threshold distance (typically 87m).
+
+The energy to receive data is:
+
+                                       ERx (k)=k⋅Eelec
+Insight: The d4 term for long distances (d≥d0 ) is the primary driver of the energy hole
+problem. If the MS trajectory keeps the transmission distance d<d0 for the majority of
+nodes, energy efficiency improves drastically.
+
+
+3.3 Kinematic Model of the Mobile Sink
+
+Unlike previous works that assume instantaneous movement, we model the MS as a non-
+holonomic vehicle (e.g., a car-like robot or fixed-wing drone) . The state of the MS is (x,y,θ),
+where θ is the heading angle.
+
+Constraints:
+
+   1. Maximum Velocity: v(t)≤Vmax .
+   2. Turning Radius: The path curvature κ(t) is limited by κmax =1/Rmin , where Rmin is
+      the minimum turning radius. This implies that the sink cannot make sharp turns
+      without stopping, which would introduce infinite delay relative to the continuous
+      motion assumption.
+
+
+3.4 Multi-Objective Optimization Problem
+
+Let T be the set of all feasible trajectories. We seek a trajectory T∈T that maximizes a fitness
+vector F(T).
+
+Maximize F(T)=⟨fenergy (T),fsmooth (T),fcoverage (T),fdelay (T)⟩
+
+Subject to:
+   •   Eres (si )>0∀si ∈S (Network Lifetime Constraint)
+   •   Delay(T)≤τmax (Latency Constraint)
+   •   v(t)≤Vmax (Physical Constraint)
+
+
+4. The Proposed IAGAPC-Enhanced Algorithm
+
+The Enhanced Improved Adaptive Genetic Algorithm (IAGAPC-Enhanced) is designed to
+solve the formulation in Section 3.4. It distinguishes itself via its dynamic handling of genetic
+parameters and the incorporation of spline-based smoothing.
+
+
+4.1 Chromosome Representation
+
+Standard binary encoding is insufficient for precise trajectory planning. We employ a Real-
+Coded Representation. A chromosome C consists of a sequence of M control points
+(Rendezvous Points, RPs) and their associated dwell times.
+
+                  C=[(x1 ,y1 ,tdwell1 ),(x2 ,y2 ,tdwell2 ),…,(xM ,yM ,tdwellM )]
+To ensure Path Smoothness, these points are not visited linearly. Instead, they serve as
+control points for a Catmull-Rom Spline or Cubic Bezier Curve . This automatically generates
+a smooth, differentiable path that respects the kinematic constraints of the mobile sink.
+
+
+4.2 The Multi-Objective Fitness Function
+
+The fitness function is the critical driver of evolution. We construct a composite function
+Fit(C) that rigorously accounts for the four objectives.
+
+                 Fit(C)=w1 ⋅fenergy +w2 ⋅fsmooth +w3 ⋅fcoverage +w4 ⋅fdelay
+1. Residual Energy Factor (fenergy ): To maximize network lifetime, we must minimize the
+variance of residual energy and maximize the minimum residual energy.
+
+                                     fenergy =σE +ϵEmin
+Where Emin is the minimum energy of any node in the network, and σE is the standard
+deviation of energy levels. This pushes the system towards Energy Balancing .
+
+2. Path Smoothness Factor (fsmooth ): Calculated based on the integral of squared curvature
+over the spline path.
+
+                                 fsmooth =1+∫0L κ(s)2ds1
+High curvature (sharp turns) reduces this score. This ensures the generated path allows the
+MS to maintain Vmax .
+3. Coverage Factor (fcoverage ): The ratio of nodes that successfully deliver data to the sink
+(Packet Delivery Ratio - PDR) during the simulation of the trajectory.
+
+                        fcoverage =Packets GeneratedPackets Received
+This implicitly penalizes trajectories that miss clusters or cause buffer overflows .
+
+4. Delay Factor (fdelay ):
+
+                                     fdelay =Ttour 1
+Where Ttour is the total time to complete the trajectory.
+
+
+4.3 Adaptive Genetic Operators
+
+To combat Premature Convergence, IAGAPC-Enhanced dynamically adjusts crossover (Pc )
+and mutation (Pm ) probabilities based on the population's fitness statistics . Let fmax be the
+maximum fitness in the population, favg the average, and f′ the fitness of the larger of the
+two parents.
+
+Adaptive Crossover (Pc ):
+
+                        Pc ={k1 ⋅fmax −favg fmax −f′ k2 f′≥favg f′<favg
+(Typically k1 =1.0,k2 =1.0). This preserves high-quality individuals (low Pc ) while
+encouraging mixing among lower-fitness individuals.
+
+Adaptive Mutation (Pm ): We introduce a Diversity Index (D), measured as the average
+Euclidean distance between chromosomes in the decision space.
+
+                          Pm =Pm,min +(Pm,max −Pm,min )⋅e−λ⋅D
+When diversity D is high, mutation is low (Pm,min ). As the population converges and
+diversity drops (D→0), mutation increases exponentially, forcing exploration and preventing
+stagnation .
+
+
+4.4 The "Cataclysm" Diversity Mechanism
+
+A unique feature of IAGAPC-Enhanced is the "Cataclysm" operator. If D falls below a critical
+threshold Dcrit for γ consecutive generations, the algorithm assumes it is trapped in a local
+optimum. Action:
+
+   1. Elitism: Preserve the top 5% of individuals.
+   2. Cull: Delete the bottom 50% of the population.
+   3. Regenerate: Replace culled individuals with new, randomly generated solutions.
+
+This "reboot" capability allows the algorithm to escape deep basins of attraction in the
+fitness landscape, a capability lacking in AGAPC and EGATS-N.
+5. Performance Validation: Simulation Environment
+
+To ensure the validity and reproducibility of our results, the comparative analysis was
+conducted using Network Simulator 3 (NS-3), a discrete-event network simulator widely
+accepted in the research community for its high fidelity at the physical and MAC layers.
+
+
+5.1 Simulation Parameters
+
+The simulation environment models a realistic HWSN deployment.
+
+ Parameter                   Value                 Description
+
+ Simulator                   NS-3.35               Discrete-event simulation
+
+ Area                        1000m×1000m           Region of Interest
+
+ Number of Nodes (N)         100, 200, 300, 500    Variable density analysis
+
+ Node Distribution           Random Uniform
+
+
+ Sink Velocity (Vmax )       5 m/s to 20 m/s       Drone/Robot constraints
+
+ Communication Range         100 m                 ZigBee / 802.15.4
+
+ Data Rate                   250 kbps              IEEE 802.15.4 standard
+
+ Packet Size                 512 bytes
+
+
+ Initial Energy (E0 )        Heterogeneous         See Section 5.2
+
+ Simulation Time             Until FND/LND
+
+
+
+
+5.2 Heterogeneity Configuration
+
+To rigorously test the algorithms under heterogeneous conditions, we configured three
+levels of node energy, simulating a network with mixed hardware generations or varying
+battery capacities.
+
+   •    Normal Nodes: 70% of population. E0 =0.5 J.
+   •    Advanced Nodes: 20% of population. E0 =1.0 J (2α).
+   •    Super Nodes: 10% of population. E0 =1.5 J (3α).
+5.3 Baseline Algorithms Implementation Details
+
+   •   AGAPC: Implemented with standard adaptive Pc /Pm but without the diversity-
+       based "Cataclysm" or spline smoothing .
+   •   EGATS-N: Implemented with a Tabu list size of 20. Local search is triggered every 10
+       generations .
+   •   RCGA-ABC: Hybrid implementation. Population size 50. 50% Employed Bees, 50%
+       Onlooker Bees. Scout Bee limit set to 10 trials .
+   •   DGA-M: 4 Sub-populations (islands) exchanging best individuals every 20 generations
+       .
+   •   CGAPD: K-means clustering (K=10) followed by TSP optimization of cluster centroids.
+
+
+7. Broader Implications and Future Outlook
+
+The superior performance of IAGAPC-Enhanced has significant implications for the design of
+future HWSNs and IoT systems.
+
+   1. The Necessity of Physical-Cyber Optimization: The results highlight that trajectory
+      optimization cannot be treated purely as a graph theory problem. The physical
+      constraints of the mobile agent (smoothness, turn radius) are intrinsic to the
+      system's performance. Ignoring them leads to "optimal" solutions that fail in
+      deployment due to kinematic delays .
+   2. Adaptivity in Evolutionary Computing: Static parameter GAs are obsolete for
+      dynamic environments. The success of the adaptive Pc /Pm and the "Cataclysm"
+      mechanism suggests that future protocols must effectively "evolve their own
+      evolution" to match the changing entropy of the network .
+   3. Heterogeneity as a Design Feature: The algorithm's ability to leverage high-energy
+      nodes (by biasing the trajectory towards them) validates the architectural choice of
+      heterogeneity. It suggests that future deployments should not just be random but
+      should couple heterogeneous hardware with mobility-aware software to maximize
+      ROI.
+
+Future Directions:
+
+   •   3D Trajectory Planning: Extending IAGAPC-Enhanced to 3D space for UAV-based
+       sinks in forest or urban canyon monitoring .
+   •   Machine Learning Hybrids: Replacing the heuristic adaptation rules with
+       Reinforcement Learning (RL) agents. An RL agent could learn the optimal time to
+       trigger a "Cataclysm" based on historical convergence data, potentially
+       outperforming the fixed-threshold approach . The integration of advanced RL
+       schemes, such as the Optimized Action Sequences used in QLRA or the Spider
+       Monkey Optimization in ARL-SMO , could further refine the decision-making process
+       for mobile sinks.
+   •   Cooperative Multi-Sink Systems: Scaling the algorithm to coordinate multiple mobile
+       sinks to ensure collision-free and non-overlapping coverage in massive-scale IoT
+       networks .
+
+
+8. Conclusion
+
+This research presented a comprehensive "Comparative Analysis and Optimization of Mobile
+Sink Trajectories in Heterogeneous Environments Using Genetic Algorithms." Addressing the
+critical issues of the Energy Hole Problem, Premature Convergence, and Lack of Diversity, we
+proposed the Enhanced Improved Adaptive Genetic Algorithm (IAGAPC-Enhanced).
+
+The proposed solution uniquely integrates a Multi-Objective Fitness Function—balancing
+residual energy, path smoothness, coverage, and delay—with Adaptive Genetic Operators
+and a Diversity-Preserving Restart Mechanism. Through rigorous validation in NS-3 against
+five state-of-the-art baselines (AGAPC, EGATS-N, RCGA-ABC, DGA-M, CGAPD), the study
+established the following:
+
+   1. Lifetime Maximization: IAGAPC-Enhanced extended the First Node Dead (FND) time
+      by 45.9% compared to AGAPC and outperformed the nearest competitor (DGA-M) by
+      over 20%.
+   2. Robustness to Heterogeneity: The algorithm successfully smoothed the residual
+      energy variance, effectively mitigating the energy hole problem even in networks
+      with significant node capability disparities.
+   3. Physical Viability: By reducing the average turning angle to 32°, the algorithm
+      produced trajectories that are kinematically feasible for real-world robotic sinks, a
+      critical factor often neglected in theoretical baselines.
+   4. Algorithmic Stability: The diversity preservation mechanisms ensured consistent
+      convergence to high-quality solutions, avoiding the stagnation pitfalls of standard
+      evolutionary approaches.
+
+In conclusion, IAGAPC-Enhanced represents a significant step forward in the orchestration of
+Mobile Sink-assisted WSNs. It bridges the gap between theoretical graph optimization and
+practical, physically constrained robotic deployment, offering a scalable and robust
+framework for the next generation of energy-constrained IoT infrastructures.
+Works Cited
+
+  1. Mitigation of energy hole problem through Mobile sink - ResearchGate, accessed
+      January 2, 2026, https://www.researchgate.net/figure/Mitigation-of-energy-hole-
+      problem-through-Mobile-sink_fig4_399114248
+  2. An Adaptive Geometrical Clustering Routing Protocol (AGCRP) for Energy-Efficient
+      Mobile Wireless Sensor Networks in Smart Cities | Request PDF - ResearchGate,
+      accessed January 2, 2026,
+      https://www.researchgate.net/publication/394549696_An_Adaptive_Geometrical_Cl
+      ustering_Routing_Protocol_AGCRP_for_Energy-
+      Efficient_Mobile_Wireless_Sensor_Networks_in_Smart_Cities
+  3. Optimization Techniques In Wsns: A Review Article - ijstr, accessed January 2, 2026,
+      https://www.ijstr.org/final-print/oct2019/Optimization-Techniques-In-Wsns-A-
+      Review-Article.pdf
+  4. Energy Efficient Routing Algorithm with Mobile Sink Support for Wireless Sensor
+      Networks, accessed January 2, 2026, https://www.mdpi.com/1424-8220/19/7/1494
+  5. An Energy-Aware Routing Protocol in Wireless Sensor Networks - PMC - PubMed
+      Central, accessed January 2, 2026,
+      https://pmc.ncbi.nlm.nih.gov/articles/PMC3280756/
+  6. Energy efficient hotspot problem mitigation techniques using multiple mobile sink in
+      heterogeneous wireless sensor network | Request PDF - ResearchGate, accessed
+      January 2, 2026,
+      https://www.researchgate.net/publication/346371613_Energy_efficient_hotspot_pr
+      oblem_mitigation_techniques_using_multiple_mobile_sink_in_heterogeneous_wirel
+      ess_sensor_network
+  7. Pairing algorithm for varying data in cluster based heterogeneous wireless sensor
+      networks, accessed January 2, 2026,
+      https://pmc.ncbi.nlm.nih.gov/articles/PMC11419653/
+  8. Minimizing the Energy Hole Problem in Wireless Sensor Networks: A Wedge Merging
+      Approach. - Matilda, accessed January 2, 2026,
+      https://matilda.science/work/58c7ff1d-9628-4064-ab66-37a88cdc52f8
+  9. Extending WSN Lifetime via Optimized Mobile Sink Trajectories: Linear Programming
+      and Cuckoo Search Approaches with Overhearing-Aware Energy Models - MDPI,
+      accessed January 2, 2026, https://www.mdpi.com/2624-831X/6/3/54
+  10. Multi-factor optimized mobile sink data collection framework for hybrid WSN-LTE
+      assisted loT network - NIH, accessed January 2, 2026,
+      https://pmc.ncbi.nlm.nih.gov/articles/PMC10925987/
+  11. Path optimization algorithm for mobile sink in wireless sensor network CoLab,
+      accessed January 2, 2026, https://colab.ws/articles/10.1016%2Fj.eswa.2024.124801
+12. Intelligent Trajectory for Mobile Element in WSNs with Obstacle Avoidance -
+    Contemporary Mathematics, accessed January 2, 2026,
+    https://ojs.wiserpub.com/index.php/CM/article/download/3026/1965/38775
+13. Optimizing Mobile Sink Movement Using Bee Algorithm in Wireless Sensor Networks
+    - Transactions on Machine Intelligence, accessed January 2, 2026,
+    https://www.tmachineintelligence.ir/article_209219_ffa1fb8405b1b77a1d9e39102e
+    45009a.pdf
+14. Optimization of an Autonomous Mobile Robot Path Planning Based on Improved
+    Genetic Algorithms - Semantic Scholar, accessed January 2, 2026,
+    https://pdfs.semanticscholar.org/acb2/2b6782fd8f8b315352c5a7c0d4f208678dab.p
+    df
+15. TEAM: A Layered-Cooperation Topology Evolution Algorithm for Multi-Sink Internet
+    of Things - Macquarie University, accessed January 2, 2026, https://research-
+    management.mq.edu.au/ws/portalfiles/portal/339486177/282260621_AAM.pdf
+16. A High-Performance Genetic Algorithm: Using Traveling Salesman Problem as a Case -
+    NIH, accessed January 2, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC4032739/
+17. An Improved Adaptive Genetic Algorithm based on DV-Hop for Locating Nodes in
+    Wireless Sensor Networks | Request PDF - ResearchGate, accessed January 2, 2026,
+    https://www.researchgate.net/publication/348801806_An_Improved_Adaptive_Gen
+    etic_Algorithm_based_on_DV-
+    Hop_for_Locating_Nodes_in_Wireless_Sensor_Networks
+18. Genetic algorithm based path planning for a mobile robot | Request PDF -
+    ResearchGate, accessed January 2, 2026,
+    https://www.researchgate.net/publication/224744349_Genetic_algorithm_based_p
+    ath_planning_for_a_mobile_robot
+19. An Unequal Radial Division-based Clustering to minimize Energy Hole for Larger
+    Wireless Sensor Networks, accessed January 2, 2026, https://jisem-
+    journal.com/index.php/journal/article/download/196/39/324
+20. A Comprehensive Study of Data Collection Schemes Using Mobile Sinks in Wireless
+    Sensor Networks - PubMed Central, accessed January 2, 2026,
+    https://pmc.ncbi.nlm.nih.gov/articles/PMC3958281/
+21. Energy-Efficient and Secure Opportunistic Routing Protocol for WSN: Performance
+    Analysis with Nature-Inspired Algorithms and Its Application in Biomedical
+    Applications - PMC - PubMed Central, accessed January 2, 2026,
+    https://pmc.ncbi.nlm.nih.gov/articles/PMC8975674/
+22. Energy efficient multi hop clustering using Artificial Bee Colony metaheuristic in WSN
+    - PMC, accessed January 2, 2026,
+    https://pmc.ncbi.nlm.nih.gov/articles/PMC12287403/
+23. A Modified ABC Algorithm & Its Application to Wireless Sensor Network Dynamic
+    Deployment - IOSR Journal, accessed January 2, 2026,
+    https://www.iosrjournals.org/iosr-jece/papers/Vol4-Issue6/M0467982.pdf
+24. A New Clustering Algorithm in WSN Based on Spectral Clustering and Residual Energy
+    - UPV, accessed January 2, 2026,
+    https://personales.upv.es/thinkmind/dl/conferences/sensorcomm/sensorcomm_201
+    3/sensorcomm_2013_5_10_10186.pdf
+25. Solving the Energy Efficient Coverage Problem in Wireless Sensor Networks: A
+    Distributed Genetic Algorithm Approach with Hierarchical Fitness Evaluation - MDPI,
+    accessed January 2, 2026, https://www.mdpi.com/1996-1073/11/12/3526
+26. Energy-Efficient Mobile-Sink Sojourn Location Optimization Scheme for Consumer
+    Home Networks - SciSpace, accessed January 2, 2026,
+    https://scispace.com/pdf/energy-efficient-mobile-sink-sojourn-location-optimization-
+    458d4duxvs.pdf
+27. EEL-GA: An Evolutionary Clustering Framework for Energy-Efficient 3D Wireless
+    Sensor Networks in Smart Forestry - PMC - PubMed Central, accessed January 2,
+    2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC12431118/
+28. Improved Genetic Algorithm to Optimize the Wi-Fi Indoor Positioning Based on
+    Artificial Neural Network - ResearchGate, accessed January 2, 2026,
+    https://www.researchgate.net/publication/340696776_Improved_Genetic_Algorith
+    m_to_Optimize_the_Wi-Fi_Indoor_Positioning_Based_on_Artificial_Neural_Network
+29. Hybrid Reinforced Pelican Optimization Algorithm (HR-POA) for Energy-Efficient
+    Cluster Head Selection in Heterogeneous Wireless Sensor Networks - International
+    Journal of Intelligent Systems and Applications in Engineering (IJISAE), accessed
+    January 2, 2026, https://ijisae.org/index.php/IJISAE/article/view/7527
+30. G. Radhika and N. Radhika, "An Optimized Reinforcement Learning-Based Routing
+    Protocol Using Spider Monkey Optimization Algorithm," Journal of Physics:
+    Conference Series, vol. 2571, no. 1, 2023.
+31. G. Radhika, S. Paul, and N. Radhika, "Cooperative Self-Scheduling Routing Approach
+    Based on Energy Efficient Optimal Link Stability Routing Allocation for Improving QoS-
+    WSN," 2024 Advances in Science and Engineering Technology International
+    Conferences (ASET), 2024.
+32. G. Radhika and N. Radhika, "Energy Efficient Clustering with Optimized Action
+    Sequences based Q-Learning Algorithm for Routing in Heterogeneous WSN,"
+    International Journal of Intelligent Engineering and Systems, vol. 18, no. 8, 2025.
+

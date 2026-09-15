@@ -1,0 +1,892 @@
+Received December 9, 2021, accepted January 9, 2022, date of publication January 18, 2022, date of current version February 1, 2022.
+Digital Object Identifier 10.1109/ACCESS.2022.3144015
+
+
+
+
+Energy-Aware and Trust-Based Secure Routing
+Protocol for Wireless Sensor Networks
+Using Adaptive Genetic Algorithm
+YOUJIA HAN              1 , HUANGSHUI HU1,2 , AND YUXIN GUO1
+1 College of Computer Science and Engineering, Changchun University of Technology, Jilin 130012, China
+2 School of Artificial Intelligence, The Tourism College of Changchun University, Jilin 130607, China
+
+Corresponding author: Huangshui Hu (huhs08@163.com)
+This work was supported in part by the Science and Technology Development Project of Jilin Province under Grant 20200201009JC and
+Grant 20210201051GX.
+
+
+
+
+  ABSTRACT Due to their working environments, limited resources and communication characteristics,
+  wireless sensor networks face some challenges including energy optimization and security enhancement to
+  extend the network lifetime and guarantee the network security. Therefore, an energy-aware and trust-based
+  routing protocol for wireless sensor networks using adaptive genetic algorithm called TAGA is proposed to
+  not only resist common routing attacks and special trust attacks, but also minimize the energy consumption
+  caused by data transmission. To this end, TAGA constructs the nodes’ comprehensive trust values based on
+  their direct trust values considering the volatilization and adaptive penalty factors, and indirect trust values
+  with the filtering mechanisms. In addition, a novel threshold function is presented to select the optimal
+  cluster heads, which considers the dynamic changes of the nodes’ comprehensive trust values and residual
+  energy. Finally, a genetic algorithm with adaptive crossover probability and mutation probability is applied
+  to find the optimal secure routing for the cluster heads. The simulation results show that TAGA can reduce
+  the number of packets discarded by malicious nodes when facing common attacks and special trust attacks,
+  and effectively improve the energy efficiency compared to the relative secure routing protocols EOSR and
+  IASR.
+
+  INDEX TERMS Wireless sensor networks, secure routing, comprehensive trust, direct trust.
+
+
+I. INTRODUCTION                                                                                   on WSNs. However, such defense mechanisms cannot defend
+Wireless sensor networks (WSNs) are comprised of multi-                                           against attacks inside the network [11], [12]. This is because
+tudinous sensor nodes that are low-priced, low-power and                                          it is a prerequisite for realising these schemes that nodes in
+miniature characteristics [1]–[3]. These nodes are data-                                          a network are cooperative and fully reliable [13]. Moreover,
+centric responsible for collecting relevant data in the target                                    they require sophisticated calculations and large amounts of
+area and transmitting the data to the sink node (base station or                                  memory, which can incur higher energy overhead. There-
+control center) in a single-hop or multi-hop manner [4], [5].                                     fore, security mechanisms using trust have been proposed
+In recent years, wireless sensor networks have been widely                                        to solve internal attacks on WSNs have been shown to be
+spread in aerospace, industry, home, battlefield, and many                                        feasible [14], [15].
+other fields [6]–[8]. Usually, sensor nodes are deployed in                                          Trust-based security mechanisms predict the behavior of
+harsh environments or unattended areas, which makes their                                         the node in the next moment based on its historical behavior
+routing protocols susceptible to all kinds of attacks [9]. Such                                   [16], [17]. They quantify the behavior of nodes by building
+attacks can be classified as external and internal attacks                                        models. The more good behaviors a node has, the higher the
+[10], [36]. To enable WSNs to operate in a healthy and secure                                     trust value and security will be. However, traditional trust-
+environment, the security mechanisms based on cryptography                                        based security mechanisms also have some drawbacks, such
+and identity verification are proposed to resist external attacks                                 as not being able to defend against multiple types of attacks
+                                                                                                  simultaneously, not being fast enough to identify mali-
+   The associate editor coordinating the review of this manuscript and                            ciousness, and high energy consumption. More importantly,
+approving it for publication was Ghufran Ahmed               .                                    there is a spear and a shield, and trust attacks (on-off and
+
+                     This work is licensed under a Creative Commons Attribution 4.0 License. For more information, see https://creativecommons.org/licenses/by/4.0/
+11538                                                                                                                                                                 VOLUME 10, 2022
+Y. Han et al.: Energy-Aware and Trust-Based Secure Routing Protocol for WSNs Using Adaptive Genetic Algorithm
+
+
+
+
+bad-mouth attacks) are designed to target trust-based security                   considers two factors: direct trust value and energy consump-
+mechanisms. Its purpose is to destroy the trust evaluation                       tion. In constructing the direct trustvalue, they use the Beta
+mechanism, thereby paralyzing these defense mechanisms.                          model  with penalty function (1 − β W ) and tuning function
+Therefore, normal nodes will also be evaluated as malicious                      (1 − 1 (α + δ)) to help construct the direct trust. Although
+nodes. Therefore, how to resist both common attacks and trust                    the penalty function and tuning function are introduced in the
+attacks, as well as to find a secure and energy-saving route                     direct trust model, the burden from the historical evaluation
+for the network, is one of the important issues that many                        is not considered. In [5], an algorithm based on ant and trust
+researchers explore.                                                             called MPASR is proposed to alleviate the burden caused
+   The routing protocol based on trust and adaptive genetic                      by historical evaluation by introducing η (weakening factor),
+algorithm proposed in this paper resists common routing                          as well as to save energy. The trust type of MPASR is modeled
+attacks and special trust attacks by building a trust model.                     as Beta distribution, and the comprehensive trust value is cal-
+For example, common attacks include black hole, selective                        culated with direct and indirect trust values. Unlike previous
+forwarding, sinkhole and hello flooding attacks [18], [19];                      studies, MPASR filters out unnecessary third-party nodes in
+trust attacks include on-off and bad-mouth attacks [20].                         order to save energy when calculating indirect trust values.
+TAGA design the fitness function of an adaptive genetic                          Then in the route establishment phase, MPASR integrates
+algorithm (AGA) according to node comprehensive trust                            the trust value, residual energy and delay to obtain a com-
+value, energy trust value and hop count as parameters to                         prehensive pheromone that is an important factor to improve
+find secure and energy-saving routes. In addition, adaptive                      the traditional ant colony algorithm, which in turn finds the
+crossover probability, adaptive variation probability and ran-                   most appropriate transmission route for each node in the
+dom crossover mapping method are introduced in the AGA to                        network.
+enhance the diversity of the population, so as to accelerate the                    In [23], a hybrid optimization algorithm called Monarch-
+convergence of chromosomes and avoid the local optimum                           Cat Swarm Optimization (M-CSO) is proposed to ensure the
+phenomenon.                                                                      effective security of the network. Nodes are identified as
+   The main contributions of this paper are as follows:                          secure or not by calculating the tolerance constant according
+   TAGA is developed by integrating trust security mecha-                        to trust, connectivity and Quality of Service. The oppor-
+nism and AGA so that routing can take into account both                          tunity routing of M-CSO is done by integrating the MBO
+security and energy saving.                                                      (Monarch Butterfly Optimization) and the CSO (Cat Swarm
+   TAGA is improving security by building an adaptive trust                      Optimization), which balances the advantages and disad-
+model to evaluate the comprehensive trust value of each node                     vantages of both algorithms. However, in the establishment
+to resist common attacks and special trust attacks.                              of the trust model, the consideration is not comprehensive
+   The cluster heads (CHs) selection threshold is improved                       enough, which makes the evaluation not accurate enough.
+according to the dynamic changes of trust value and energy,                      In [24], the Secure Quality of Service (QoS) aware Energy
+so as to avoid malicious nodes acting as CHs.                                    Efficient Routing (SQEER) protocol is proposed, which is
+   The rest of the paper is organized as follows: Section 2                      designed based on trust and energy models. SQEER cal-
+presents the past work of many researchers; Section 3                            culates three types of trust values to improve the security
+describes the improved trust proposed in this paper;                             of network communication and the accuracy of evaluation.
+Section 4 presents the energy model of TAGA; Section 5                           The protocol calculates the total trust value from direct and
+describes the pathfinding process of TAGA in detail;                             indirect trust values. QoS and trust are then applied together
+Section 6 verifies the performance of TAGA through simu-                         in an integrated way to the security CHs selection mechanism.
+lation experiments; Section 7 concludes the paper.                               Finally, the optimal path is selected based on path trust,
+                                                                                 energy and hop count. In [25], an algorithm combining trust
+II. RELATED WORK                                                                 and opportunistic routing called ETOR is proposed, which
+In [21], a security and trust-aware routing scheme is pro-                       consists of two components. One uses tolerance constants to
+posed, which differs from other methods in that it acquires                      carefully select safety nodes, and the other selects some of
+trust by using fuzzy logic. The fuzzy logic contains two                         these nodes to form a route. In the routing phase, a new hybrid
+inputs and one output. The source and destination are used                       fitness function is designed to select the optimal secure route.
+as input to the fuzzy logic, and TU (trust and untrust) is used                  This function specifically involves parameters such as energy,
+as output. The fuzzy logic is used to distinguish between                        trust, QoS, connectivity, distance, hop count and network
+normal and unnatural sensors, where unnatural sensors can be                     traffic. ETOR is superior to M-CSO and SQEER in terms of
+considered as internal attacks. For the routing of this scheme,                  energy efficiency and trust model design. In [37], an effec-
+they utilize the MDS-MAP (multidimensional scaling map-                          tive fuzzy path selection approach is proposed to reduce
+ping) algorithm to decide the best path with less error. But                     the impact of selective forwarding attacks. This approach is
+this scheme requires the support of fuzzy system, Dijkstra                       roughly divided into two phases: the first phase is when the
+algorithm, MDS-MAP algorithm, so the complexity is high.                         compromised node is monitored; the second phase is when a
+In [22], a trust-based secure directed diffusion routing pro-                    new secure route is selected using fuzzy rules. This method
+tocol (TSDDR) is proposed to guarantee the confidentiality                       takes the average link residual energy and hop count as inputs
+of data during transmission. The trust model of TSDDR                            for fuzzy control and then obtains the candidate chance values
+
+VOLUME 10, 2022                                                                                                                            11539
+                                         Y. Han et al.: Energy-Aware and Trust-Based Secure Routing Protocol for WSNs Using Adaptive Genetic Algorithm
+
+
+
+
+for a particular route. Finally, a new disjoint secure route is           evaluation value according to the direct attack probability.
+selected to resist selective forwarding attacks.                          Finally, direct and indirect trust are simply integrated to get
+   In [26], base station (BS) controlled secure routing pro-              the integrated trust. Using the Dijkstra algorithm as the basis
+tocol (BSCSRP) is proposed. The CH selection mechanism                    of pathfinding, the total state value of nodes in the whole
+of BSCSRP is based on the classical LEACH (Low Energy                     path is calculated based on the trust value (attack probability)
+Adaptive Clustering Hierarchy) protocol. However, the CHs                 associated with the state (remaining energy and distance to
+election threshold of BSCSRP only considers the residual                  the sink). Therefore, the optimal route with minimum cost can
+energy of nodes. BSCSRP considers direct trust, indirect                  be found. Although these two schemes consider the impact
+trust, packet drop trust and attribute trust when construct-              of trust attacks, they do not consider the negative impact of
+ing a comprehensive trust model. The energy, distance and                 historical evaluation on the current evaluation. In addition, the
+delay parameters in communication are used as the basis                   node with bad behavior is not penalized to speed them up to
+for path selection. But BSCSRP does not consider whether                  be identified. Therefore, these two schemes will lose a large
+this CH is secure or not when selecting the CH. In [27],                  number of packets when attacked.
+a multidimensional secure cluster routing scheme (MSCR) in                   All the acronyms mentioned in this paper are listed in
+hierarchical WSNs is proposed to participate in the selection             Table 1.
+of CHs based on several factors, including security. MSCR
+first constructs the trust synthesis, the environmental factors,          TABLE 1. Definition of acronyms.
+and the security domain. Then, MSCR also takes LEACH
+protocol as the basic framework to improve the CHs election
+thresholds by introducing the energy domain, the distance
+domain, the environment domain and the security domain.
+Although MSCR contributes in the CHs election phase, all
+CHs of the network transmit their collected data to the BS
+in a single-hop manner. Therefore, applying MSCR to large-
+scale networks shows poor performance. In [28], a trust-based
+dynamic slicing mechanism (TDSM) is proposed to improve
+the performance of WSNs. This mechanism evaluates the
+corresponding trust degree based on data forwarding, latency
+and packet loss and then averages these three values. The
+node with the largest communication trust value is used as
+the CHs in the CHs selection phase; the node with a com-
+munication trust value less than 4 is the discard node; the
+rest are the member nodes. Finally, each node splits its data
+into different pieces and sends them to the corresponding
+nodes. The corresponding nodes mix the received slices with
+their own sensed data and sends them to the corresponding
+multi-hop link.
+   None of the above schemes can resist trust attacks. Once
+a malicious node launches a trust attack, many normal
+nodes with trust-based security mechanisms will be para-                   III. TRUST MODEL
+lyzed. In [29], an energy-optimized secure routing algorithm              Since a normal node is captured as a malicious node, security
+(EOSR) is proposed, which is designed as a multi-factor                   schemes based on cryptographic mechanisms cannot defend
+routing method. The comprehensive trust of EOSR is a com-                 it. Therefore, human-to-human trust relationships are applied
+bination of direct and indirect trust values. In constructing             to WSNs to evaluate whether or not each node is captured
+the direct trust model, EOSR considers that the uncoopera-                as a malicious node. The higher a node is trusted, the higher
+tive behavior may be from malicious or normal nodes. Thus                 its security. The watchdog mechanism is used for recon-
+EOSR corrects the accuracy of the direct trust model. In addi-            naissance to obtain the data source of trust evaluation [19]
+tion, the deviation degree is introduced to filter false recom-           and mainly monitors the nodes in the route for sending and
+mendations when calculating the indirect trust value. Finally,            receiving packets. In TAGA, hierarchical trust values are used
+EOSR combines the AODV (Ad hoc On-demand Distance                         to maintain the dynamic behavior of trust.
+Vector Routing) protocol, trust, residual energy and hop count
+to calculate the combined path cost. Thus, the path with the               A. DIRECT TRUST VALUE
+smallest combined path cost is selected as the optimal route.             The direct trust value is meant to be obtained by the nodes
+In [30], Information-Aware Secure Routing in WSNs (IASR)                  that personally monitor the behavior of their neighbors. In this
+is proposed. IASR calculates the direct attack probability                paper, The direct trust model is constructed by monitoring the
+based on the communication behavior of nodes and then cal-                status of neighbor nodes receiving and sending data pack-
+culates the indirect attack probability and filters the malicious         ets. The direct trust of node i evaluating neighbor node j
+
+11540                                                                                                                                 VOLUME 10, 2022
+Y. Han et al.: Energy-Aware and Trust-Based Secure Routing Protocol for WSNs Using Adaptive Genetic Algorithm
+
+
+
+
+can be expressed as:                                                             B. INDIRECT TRUST VALUE
+                                                                                 Although nodes can be evaluated by direct trust, if the level
+                  Dtij = ψ ∗ PTijt + (1 − ψ) ∗ NTijt                   (1)
+                                                                                 of information interaction between nodes is not enough or is
+where PT tij denotes trust values that node i has evaluated                      affected by the channel, direct trust is not accurate enough to
+node j in the past, i.e., historical trust values. It aims to limit              measure the trustworthiness of a node [30]. Therefore, it is
+the high trust values evaluated long time ago, thus improv-                      necessary to introduce indirect trust to enhance the accuracy
+ing the security, accuracy and speeding up identification in                     of trust assessment. The indirect trust value is the trust value
+WSNs. NTijt indicates the trust value of node j evaluated by                     provided by the common nodes between the node and the
+node i in the current evaluation cycle, and satisfies NTijt =                    target node. In other words, the direct trust value provided
+Rtj + Sjt . ψ and 1 − ψ are the measuring factor of historical                   by the common trusted neighbor nodes of node i and node j is
+and current trust values, 0 < ψ < 1, whose values are set                        used to calculate the indirect trust value of node j. The indirect
+in terms of the specific circumstances. For fairness, the value                  trust value of node i to node j is expressed as:
+of ψ is usually set to 0.5. Rj and Sj denote under the penalty
+                                                                                                       X                          
+                                                                                                Iijt =            φk ∗ Dtik ∗ Dtkj              (7)
+mechanism the ratio of the number of data received and sent                                                     k∈PBh
+by node j to the total number of packets, respectively, and are                  where PBh stands for the set of trusted nodes that are jointly
+expressed as follows:                                                            owned by i and j. The common neighbor nodes of i and j may
+                                                                                 be trusted or untrusted. Therefore it is necessary to filter the
+                               γ ∗ rej − rjj
+                         Rj =                                          (2)       neighbor nodes. Moreover, if a third-party node k launches
+                                   mej                                           bad-mouth attacks, the trust mechanism can suffer a devastat-
+                               γ ∗ sej − usj                                     ing disaster due to malicious evaluations. To avoid bad-mouth
+                          Sj =                                         (3)
+                                    mej                                          attacks and enhance the security of the trust mechanism, this
+where, rej and sej respectively represent the number of pack-                    paper uses Equation 8 to filter the false evaluations.
+                                                                                                       v
+ets that j received and sent. rjj and usj denote the number of                                         uP                   2
+                                                                                                       t Bx ∈B D − DtkBx
+                                                                                                       u
+data that j rejected to received and sent, respectively. Message
+denotes the total number of packets received and sent by                                         dkt =                                            (8)
+                                                                                                                     l
+node j. γ is the adaptive penalty factor. It serves to speed up
+                                                                                 where D represents the median that i evaluates node Bx .
+the decline of trust value of malicious nodes. The expression
+                                                                                 As shown in Figure 1, Bx stands for the node jointly owned by
+formula of γ is as follows:
+                                                                                 i and third-party node k, Bx ∈ B = [B1 , B2 · · · Bl ], and l is the
+                                 −a                                              number of common neighbor nodes. dkt is related to whether
+                     γ =         −b∗(BP
+                                             +1              (4)
+                           1+e         j +c)                                     the value recommended by k is reliable. Therefore, the rec-
+                           ABj                                                   ommendation threshold is set to guarantee the authenticity of
+                   BPj =                                     (5)
+                           NBj                                                   the recommended values. If dkt is greater than the threshold ε,
+                                                                                 the value recommended by node k is not adopted by node i
+where BPj is the ratio of abnormal behavior ABj to normal
+                                                                                 and the abnormal behavior of k increases by l. Instead, node k
+behavior NBj in the last five trust evaluation cycles. a, b and
+                                                                                 is added to PBh . The size of the threshold value ε depends on
+c represent changeable parameters of γ , respectively, and
+                                                                                 the specific application; in this paper, ε is set to 0.5. Note
+control the strength of the penalty to node j. Their magni-
+                                                                                 that the direct trust values recommended by the nodes in the
+tudes depend on the specifics of the network. When node j
+                                                                                 set PBh are trusted, but it does not mean that these nodes are
+is successfully caught at some point, ABj increases sharply,
+                                                                                 trusted themselves.
+which leads to a decrease in BPj . Under the action of BPj ,
+γ decreases Correspondingly, which results in fast dropping
+current values. Therefore, the adaptive penalty factor γ is
+helpful to improve the recognition speed.
+   In the perfect case, when a node becomes a malicious node,
+it can be identified immediately enough. However, in reality,
+it takes a period of evaluation cycle to identify it as a mali-
+cious node. Therefore, how to shorten the evaluation cycle is
+one of the issues discussed by many researchers. Malicious
+nodes are normal nodes with high trust value before they
+are captured, so the high historical trust value acts as a hin-
+drance to the current evaluation. Therefore, the introduction                    FIGURE 1. Common neighbors of node i and third-party node k.
+of volatilization factor ρ to reduce the effect of historical trust
+value is helpful to speed up the recognition speed. Its value is                   In order to improve the accuracy of trust evaluation, the
+taken in the range of [0, 0.5]. The expression formula for the                   weight of node k is set as follows:
+historical trust value is as follows.                                                                            Dt
+                                                                                                     φk = P ik t                         (9)
+                    PTijt = ρ ∗ (Dt−1     t−1
+                                  ij + PTij )                          (6)                                     k∈PBh Dik
+
+VOLUME 10, 2022                                                                                                                                 11541
+                                         Y. Han et al.: Energy-Aware and Trust-Based Secure Routing Protocol for WSNs Using Adaptive Genetic Algorithm
+
+
+
+
+where node k is from PBh to avoid malicious destruction of                   Thus, for j, the energy trust value is:
+the weights.                                                                                                    REj
+                                                                                                         Ej =                                   (17)
+C. COMPREHENSIVE TRUST VALUE                                                                                    E0
+The comprehensive trust value combines the direct and the                  V. SECURE ROUTING
+indirect to ultimately express the basis of whether a node                The third section describes the trust evaluation mechanism of
+is trusted or not. The higher the comprehensive trust value,              TAGA, which aims to evaluate the security level of individual
+as shown in formula 10, the higher the security level and                 nodes. This section, on the other hand, aims at finding the
+trustworthiness of the node.                                              safest and most energy-efficient route through an AGA to
+                (
+           t      (1 − η) ∗ Dtij + η ∗ Iijt if j 6 = k                    achieve secure routing in WSNs.
+          Cij =                                         (10)
+                  (1 − η) ∗ Iijt + η ∗ Dtij else j = k
+                                                                           A. SELECTION OF CHs
+                                     if dkt < ε
+                (
+                  0.5                                                     TAGA is a hierarchical routing protocol that first selects the
+           η=                                           (11)
+                   Dtij − Iijt /Dtij else dkt ≥ ε                         nodes with the highest combined capability as the CHs based
+                                                                          on the comprehensive trust value and the remaining energy.
+where η is their weight coefficient. According to Equation 11,            Since the main function of the CHs are to receive and forward
+if node k, the common neighbor of node i and node j, ini-                 the data sent by the nodes in the cluster and to forward the data
+tiates bad-mouth attack, the calculation prefers the direct               from other CHs, the node with high overall quality must be
+value. Conversely, for fairness, the weight coefficients for              selected as the CH. In traditional trust-based secure routing
+both direct and indirect are 0.5. The node that initiates the             protocols, only nodes with high security are considered as
+bad-mouth attack may be either a third-party node k or the                CHs, which is deficient. Because if a node does not have
+evaluated. If it is the former, the calculation of the comprehen-         much-remaining energy but has a high-security level, then
+sive trust value focuses more on the result of the evaluator’s            this node is bound to take the role of CH. So, in this case,
+assessment. On the contrary, the direct and indirect trust                these nodes are always selected as CHs, and then his energy
+values are considered in combination.                                     decreases very quickly.
+                                                                             The secure routing in this paper is in terms of the frame-
+IV. ENERGY MODEL                                                          work of classical LEACH protocol, a hierarchical network
+Usually, the nodes in WSNs are deployed in harsh and unat-                topology with operational phases including cluster construc-
+tended environments, which prevents the nodes from replen-                tion phase and stable data transmission phase. However,
+ishing their energy. Therefore, it is important to consider               in these two phases, the selection of CHs and data transmis-
+the energy consumption while enhancing the security of the                sion on the path make the WSNs full of crisis and energy
+network to avoid rapid energy depletion of the nodes. In this             wastage. Therefore, it is necessary to improve the CHs selec-
+paper, we use a similar energy model as used in [30], [34]. The           tion mechanism and path planning method. The improved
+energy consumed by node i to send s-bits of data to node j at             CHs selection mechanism is shown in the following equation.
+a distance d is as follows:                                                                    p
+                                                                                      1 − p(rmod(1/p)) ∗ ((1 − ϕ) ∗ Cj + ϕ∗E j )
+                 (                                                                                                          t       0
+                  s ∗ Eelec + s ∗ εfs ∗ d 2 d < d0
+                                                                                     
+                                                                                     
+         Esj =                                             (12)
+                  s ∗ Eelec + s ∗ εmp ∗ d 4 d ≥ d0                           T (j) =
+                                                                                           j∈G
+                                                                                             /G
+                                                                                     
+                                                                                       0 j∈
+                                                                                     
+  The energy consumed by node j to receive the s-bits data
+sent by node i is as follows:                                                                                                          (18)
+                       Erj = s ∗ Eelec                         (13)       where, p is the percentage of the number of CHs in the
+where Eelec denotes the energy cost of transmitting 1 bit                 network to the total number of nodes, r is the number of
+by the transmitter; εfs and εmp denotes the energy cost of                rounds the network is running, and G is the set of nodes that
+the free-space and multi-path fading models, respectively;                were not selected as CHs in the previous round and have
+Additionally, d0 is the threshold value for an amplifier to               residual energy greater than the average. In order to select
+adjust its power.                                                         high quality CHs with high security and sufficient energy,
+                           q                                             the average of the comprehensive trust value Cjt and the min-
+                      d0 = εfs εmp                     (14)               max normalization of energy trust value Ej0 are introduced.
+                                                                          ϕ is adaptive weight. Traditional trust-based security schemes
+  The energy consumption of s-bits data aggregation is:
+                                                                          use fixed weights, which makes them inadequate to adapt to
+                       EDA = s ∗ Epb                           (15)       changes in the network. Since in the early stage of network
+                                                                          operation, the comprehensive trust value of nodes has not
+  The energy cost to fuse 1 bit of data is Epb .
+                                                                          yet reached the state of convergence, the comprehensive trust
+  Assuming that the initial energy of each node is E0 , the
+                                                                          value is relatively volatile, which makes it poor to judge
+remaining energy of each node is
+                                                                          the security of nodes. Therefore, in the early stages of the
+               REj = REj − Erj − Esj − EDA                     (16)       network, energy trust should be favored more compared to the
+
+11542                                                                                                                                 VOLUME 10, 2022
+Y. Han et al.: Energy-Aware and Trust-Based Secure Routing Protocol for WSNs Using Adaptive Genetic Algorithm
+
+
+
+
+comprehensive trust. After the initial stage of the network,                     to the BS should be greater than the distance from CH j to the
+the assessed value of the nodes is stable and the energy in                      BS; (iii) the distance between CH i and CH j should be smaller
+the network gradually decreases with the operation of the                        than the distance from CH i to the BS.
+network. Therefore gradually focus on the role played by the
+comprehensive trust value in CHs selection. The formula for
+the weighting factor is as follows.
+       
+       Q p
+                                        if r ≤ r1
+  ϕ = 1 − 1 + 0.75 ∗ (ξ (r) − 2)2                       (19)
+                                        else r > r 1
+                   ξ (r) − 2
+       
+                                                                                 FIGURE 2. Chromosome structure diagram.
+where Q is a constant, which takes values between 0.5 and 1.
+r1 indicates the number of rounds the network is running
+when the standard deviation of the comprehensive trust value
+of the nodes is less than a specific threshold χ. ξ (r) indicates                2) SELECTION OPERATOR
+the total energy consumed by the network as it runs.                             The reproduction of species in nature is a process of survival
+                               n
+                               X              n
+                                              X                                  of the fittest. Similarly, in AGA, the operation of selecting
+                     ξ (r) =         Ej00 −         Ej               (20)        high quality individuals and eliminating low quality individ-
+                               j=1            j=1                                uals from a large number of individuals is called selection
+                                                                                 operator. At present, the roulette wheel selection method is
+where Ej00 denotes the energy trust value of j when the number                   the most common and simplest method of selection operator
+of running rounds is r1 .                                                        in AGA. The expression formula for the probability of each
+                                                                                 individual being selected is as follows:
+B. ROUTING BASED ON AGA
+Since the single-hop approach is used in the stable phase of                                                         f (x)
+                                                                                                           P(x) =                         (21)
+LEACH protocol, but this approach is not suitable for large-                                                        x=M
+                                                                                                                     P
+scale networks. However, if the multi-hop approach is used,                                                               f (x)
+                                                                                                                    x=1
+the CHs need to forward the collected data through multiple
+nodes to the BS, which will also have a crisis. So the paths                     where x and f (x) represent individual x and the fitness value
+sought by the CHs must be safe and energy-efficient.                             of individual x, respectively. M represents the size of the
+   Currently, the research of AGA has been relatively mature                     population.
+and extensive [31], but few of them have been combined
+with trust mechanisms. Genetic manipulation involves four                        3) CROSSOVER OPERATOR
+main processes: coding, selection, crossover, and mutation.                      The crossover operator means that two-parent individuals
+In TAGA, real number coding is used instead of binary cod-                       exchange corresponding genes to form the next generation.
+ing to represent chromosomes, and a new fitness function                         Its purpose is to enhance population diversity and pro-
+is designed to determine the quality of chromosomes [35].                        mote population evolution. The traditional crossover opera-
+In addition, random crossover and dynamic mutation meth-                         tor randomly selects two individuals based on the crossover
+ods from the literature [32], [33] are used to enhance the                       probability and randomly generates crossover positions for
+population diversity and improve the algorithm convergence.                      exchanging some genes.
+                                                                                    To further enhance the population diversity and the search
+1) ENCODING                                                                      range, the random cross mapping method is introduced to
+The AGA uses different coding methods will produce the                           break the limitation of the number of fixed crossover points
+effect, so the AGA is first faced with how to use the appro-                     in traditional genetic algorithms [32]. The random cross map-
+priate chromosome coding method. The most commonly used                          ping method means that the crossover length is fixed as half
+encoding methods are binary encoding and real encoding, and                      of the chromosome length, but the crossover start point and
+real encoding has the advantage of higher accuracy. Assum-                       endpoint are not fixed. Suppose the chromosome length is L
+ing that the network consists of N nodes, then each node is                      and the crossover length is:
+given a unique positive integer (or ID) between 1 and N, and                                                     
+                                                                                                                  L
+                                                                                                             0
+the BS is denoted as N+1. Thus when nh nodes are selected                                                  L =                            (22)
+                                                                                                                  2
+as CH, then the genes of this chromosome are composed of
+their respective codes, and the chromosome length is nh.                           First, a starting crossover position is randomly selected,
+   To expedite the aggregation of the AGA and obtain an                          and then the end crossover point is extended L 0 units back-
+efficient solution, the gene position of each source CH has its                  wards along the chromosome from the starting point. For
+own corresponding set gi , as shown in Figure 2. Only CH j that                  example, two chromosomes A and B of length 7 (shown in
+satisfies the following three conditions at the same time can                    Figure 3), then a crossover segment of crossover length 3 is
+be added to the set gene gi of source CH i : (i) CH j is within                  generated under the random crossover mapping method.
+the communication range of CH i ; (ii) the distance from CH i                    Figure 3 shows the three cases generated under this method.
+
+VOLUME 10, 2022                                                                                                                          11543
+                                         Y. Han et al.: Energy-Aware and Trust-Based Secure Routing Protocol for WSNs Using Adaptive Genetic Algorithm
+
+
+
+
+FIGURE 3. The random crossover mapping method.
+
+
+
+
+   In addition to the above random cross mapping method,
+crossover probability and mutation probability can also
+increase population diversity. However, the fixed crossover
+probability preset by traditional genetic algorithms may lead
+to low population diversity in the early stages of the algo-
+rithm, which may lead to an early convergence situation.
+In the process of population evolution, different individu-
+als behave differently, then the crossover probability of the
+population should also vary according to the fitness of each
+individual. The adaptive crossover probability [33] involving
+the number of evolutionary generations and the fitness values             FIGURE 4. Gene mutation.
+of the corresponding generations are shown below.
+                                           it                            TABLE 2. Gene set.
+       pc − (pcmax − pcmin ) ∗ f − f avg , if f ≥ f it
+       
+           min                                            avg
+ pc =                1 + e−it         it − f it
+                                     fmax      avg
+         pcmax ,
+       
+                                                   otherwise
+       
+                                                         (23)
+where, pcmin and pcmax represents the maximum and mini-
+mum values of crossover probability, respectively; favg it and
+  it
+fmax denote the mean and maximum of fitness values for all
+individuals in the itth generation, respectively. f denotes the
+fitness value.
+
+4) MUTATION OPERATOR
+When the population diversity is low, all individuals tend                5) FITNESS FUNCTION
+to be optimal, which is likely to fall into local optimization            Each chromosome is potentially the optimal solution, but the
+in advance. So the mutation probability should be increased               chromosome with the highest fitness value at the end of the
+to break through the convergence state of individuals. The                iteration is the optimal route. As shown in Figure 5, assuming
+formula for adaptive mutation is as follows:                              that the third row represents the chromosome with the highest
+                                                                          fitness, the optimal route for the source cluster head CH1 is
+                                            f − f itavg
+         
+                     (pmmax − pmmin )                                     OR1 = {1, 3, 101}. Similarly, the optimal path for source
+                                                         ,
+         
+          pm
+          max     −                     ∗
+                                                                          cluster head CH7 is OR7 = {7, 6, 2, 101}.
+         
+                            1 + eit         it − f it
+                                           fmax      avg
+   pm =                  it
+                                                           (24)
+         
+               if f ≥ favg
+         
+           pmmax , otherwise
+         
+
+where pmmin and pmmax represents the maximum and mini-
+mum values of mutation probability, respectively.
+    To avoid invalid mutations, the variant code at each gene
+position must be chosen randomly from the corresponding set
+gi . Table 2 shows the set corresponding to each gene position,
+for example the set corresponding to position 5 is g5 = [4,               FIGURE 5. Routing path represented by chromosome.
+1, 3]. Figure 4(a) represents the effective mutation that the
+gene code at position 5 is mutated from 4 to 1. Figure 4(b)                 TAGA mainly uses two dimensions, the average compre-
+indicates the invalid mutation that 4 mutates to 6 at gene                hensive trust value on the link and the energy consumed by
+position 5.                                                               CH, to compose the fitness function so as to find a path
+
+11544                                                                                                                                 VOLUME 10, 2022
+Y. Han et al.: Energy-Aware and Trust-Based Secure Routing Protocol for WSNs Using Adaptive Genetic Algorithm
+
+
+
+
+with high security and small energy cost at the same time.
+The fitness function for the kth gene position in a certain
+chromosome is as follows:
+               Hk −1
+                P        t
+                       CCH  i CH i+1
+              CH i ∈ORk ,i=1
+f (ORk ) =
+                        Hk − 1
+                                           0
+                                          EORk
+                                               − E0OR_ min
+                                +1 −     0          0                (25)
+                                        EOR_ max − EOR_ min
+where ORk represents the link of the CH k that occupies
+the k-th gene position; Hk is the number of hops of this
+        t
+link; CCH             denotes the comprehensive trust value that
+            i CH i+1
+the previous hop CH i evaluates the next hop CH i+1 on
+this link; EOR 0     denotes the energy consumption on the link
+                  k
+          0                 0
+ORk ; EOR_ max and EOR_        min represent the maximum and
+minimum energy consumption of all links in all chromo-
+somes, respectively. Therefore, the fitness function of the
+chromosome is:
+                                nh
+                                X
+                          f =         f (ORk )                       (26)
+                                k=1
+where nh is the length of the chromosome.
+
+C. THE PSEUDO-CODE OF TAGA
+The pseudo-code of TAGA is as follows:
+
+D. TIME COMPLEXITY OF TAGA
+The proposed TAGA uses comprehensive trust values to eval-
+uate the security of individual nodes and adaptive genetic
+algorithms to evaluate the security of links, thus improving
+the network’s ability to cope with attacks. Therefore its time
+complexity can be expressed as O(TAGA) = O(time com-
+plexity of the trust model + time complexity of AGA). The
+trust model of TAGA is to construct the comprehensive trust
+by combining direct and indirect trust values. Assuming that
+the network has n nodes, the time complexity of constructing
+direct trust is O(n∗ s), where s is the number of neighbor
+nodes. Since indirect trust is obtained by multiplying the
+corresponding direct trust, the time complexity of indirect
+trust is O (n ∗ s). Similarly, the time complexity of com-
+prehensive trust is O(n∗ s). So, O(time complexity of the
+trust model)=O(n∗ s). Encoding chromosomes with length
+k during the execution of the adaptive genetic algorithm
+produces a time complexity of O(k). The time complexity
+that AGA generates the initial population is O(k∗ p),where
+p is the population size. The average time complexity of
+computing the fitness value is O(p∗ k2 ), while it is O(p∗ k)
+and O(p∗ k2 ) in the best and worst cases, respectively. The
+time complexity of the crossover and variation operations are
+O(p/2) and O(p), respectively. After performing I iterations,
+the time complexity of AGA is O(k+k∗p+I∗ (k2 +3/2)∗ p),
+which is O(I∗ p∗ k2 ). The number of CHs in the network is                       FIGURE 6. The pseudo-code of TAGA.
+much less than the number of nodes, so the time complexity
+of AGA can be simplified to O(n2 ). Therefore the overall time                   VI. SIMULATION
+complexity is O(TAGA)=O(n∗ s+n2 ). Since s is less than n,                       This section focuses on verifying the performance of TAGA
+O(TAGA)=O(n2 ).                                                                  by MTALB in the face of different attacks and comparing
+
+VOLUME 10, 2022                                                                                                                      11545
+                                       Y. Han et al.: Energy-Aware and Trust-Based Secure Routing Protocol for WSNs Using Adaptive Genetic Algorithm
+
+
+
+
+it with IASR and EOSR. We randomly deploy 100 nodes
+in an area of 100∗ 100m2 . The trust threshold is set to
+0.35. The simulation time is in rounds. It is assumed
+that some internal nodes are caught as malicious nodes
+and then launch the attacks, when the network is running
+to the 100th round. Other simulation parameters are set
+in Table 3.
+
+TABLE 3. Simulation parameters.
+
+
+
+
+A. STANDARD DEVIATION THRESHOLD
+Figure 7(a) shows the standard deviation of the comprehen-
+sive trust values of the 100 nodes in the network as the
+network runs. Figure 7(b) shows the integrated trust value
+variation curve for all normal nodes and the convergence
+after the 20th round. From Figure 7(a), it can be seen that
+                                                                        FIGURE 7. Determination of threshold.
+at 20 rounds, the maximum standard deviation is 0.1125, and
+the minimum standard deviation is 0.090994. So in this paper,
+the threshold χ is set at 0.08.
+
+B. RESIST COMMON ROUTING ATTACKS
+1) PACKETS LOST BY MALICIOUS NODES (UNDER BLACK
+HOLE ATTACKS)
+Figure 8 shows that with the increase of malicious nodes, the
+number of packets discarded by malicious nodes in the net-
+work gradually increases. The black hole attack is a malicious
+node tricking the nodes in the network to establish routing
+connections with it, resulting in the packets to be forwarded
+being discarded maliciously. As the malicious nodes discard
+all the received packets. Therefore, according to Equation (3),
+when TAGA evaluates the trust value of the malicious nodes,
+the current trust value will decrease rapidly. Thereby, com-
+pared with IASR and EOSR, the trust value of the malicious
+                                                                        FIGURE 8. Packets lost by malicious nodes (under black hole attacks).
+node quickly drops below the trust threshold. It speeds up the
+speed of identifying malicious nodes and reduces the number
+of malicious dropped packets as much as possible. As can                2) PACKETS LOST BY MALICIOUS NODES (UNDER HELLO
+be seen in Figure 8, the number of packet loss for TAGA is              FLOOD ATTACKS)
+reduced by an average of 16.96% and 25.48% compared to                  Figure 9 shows that as the number of malicious nodes
+IASR and EOSR, respectively.                                            launching hello flood attacks increases, the number of
+
+11546                                                                                                                               VOLUME 10, 2022
+Y. Han et al.: Energy-Aware and Trust-Based Secure Routing Protocol for WSNs Using Adaptive Genetic Algorithm
+
+
+
+
+                                                                                 nodes in the network. This experiment was conducted to
+                                                                                 verify the impact of the difference in the discard probability
+                                                                                 on the network. As can be seen from Figure 10(b), the smaller
+                                                                                 the probability of malicious drops, the greater the damage
+                                                                                 to the network and the greater the difficulty in identifying
+                                                                                 malicious nodes.
+
+
+
+
+FIGURE 9. Packets lost by malicious nodes (under hello flood attacks).
+
+
+
+
+discarded packets by malicious nodes in the network gradu-
+ally increases. The hello flood attack means that a malicious
+node broadcasts hello packets using a signal with enough
+energy to make more distant nodes mistake it as its direct
+neighbor. As a result, a large number of packets are rejected
+by the malicious node. TAGA based on equation (2) can
+make the current trust value decrease quickly for malicious
+nodes. As can be seen in Figure 9, the number of discarded
+packets in TAGA is much lower than that of IASR and EOSR.
+The number of lost packets in TAGA is reduced by 19.83%
+and 33.13% on average compared with IASR and EOSR,
+respectively.
+
+3) PACKETS LOST BY MALICIOUS NODES (UNDER
+SELECTIVE FORWARDING ATTACKS)
+Figure 10(a) shows that as the number of malicious nodes
+launching selective forwarding attacks increases, the num-
+ber of discarded packets by malicious nodes in the network
+gradually increases. The selective forwarding attack means
+that the malicious node forwards or discards important pack-
+ets with a certain probability, and the black hole attack is
+formed when the packets are discarded with a 100% proba-                         FIGURE 10. (a) Packets lost by malicious nodes (under selective
+bility. In this paper, the malicious node discards the received                  forwarding attacks). (b) Number of discarded packets with different
+                                                                                 discard probabilities.
+packets with a probability of 70%. From the combination
+of Figure 10(a) and Figure 8, it is clear that the malicious
+nodes that initiate the selective forwarding attacks discard                     4) PACKETS LOST BY MALICIOUS NODES (UNDER
+more packets than the malicious nodes that initiate the black                    SINKHOLE ATTACKS)
+hole attacks. This is because the malicious nodes both send                      Figure 11 shows that as the number of malicious nodes
+certain packets and discard some packets, making it more                         launching sinkhole attacks increases, the number of pack-
+difficult to identify the malicious nodes. As can be seen in                     ets discarded by malicious nodes in the network gradually
+Figure 10(a), the number of lost packets for TAGA is reduced                     increases. The sinkhole attack means that the malicious node
+by 10.11% and 21.54% on average compared with IASR and                           creates a black hole centered on itself that attracts all nodes
+EOSR, respectively.                                                              in a specific area to send packets to it. It can be seen from
+   Figure 10(b) shows that the number of discarded packets                       Figure 11 that the number of lost packets for TAGA decrease
+by malicious nodes in the network gradually decreases as                         on average by 20.83% and 36.2% compared to IASR and
+the drop probability increases when there are 30% malicious                      EOSR, respectively.
+
+
+VOLUME 10, 2022                                                                                                                                    11547
+                                             Y. Han et al.: Energy-Aware and Trust-Based Secure Routing Protocol for WSNs Using Adaptive Genetic Algorithm
+
+
+
+
+FIGURE 11. Packets lost by malicious nodes (under sinkhole attacks).
+                                                                              FIGURE 13. Malicious recommendation (bad-mouth attacks).
+
+C. RESIST SPECIAL TRUST ATTACKS
+                                                                              spread by malicious nodes in the network gradually increases.
+1) PACKETS LOST BY MALICIOUS NODES (UNDER ON-OFF
+                                                                              The bad-mouth attack is when the evaluator evaluates the
+ATTACKS)
+                                                                              target nodes, the malicious node provides false trust value
+Figure 12 shows that with the increase of malicious nodes                     to the evaluator, which causes the evaluator to incorrectly
+launching on-off attacks, the number of packets discarded                     evaluate the trust value of the target nodes, making the trust
+by malicious nodes in the network gradually increases. The                    value of the target nodes decrease. When IASR computes the
+on-off attacks mean that malicious nodes periodically per-                    indirect values, it uses the weighting coefficient αm , which
+form both good and malicious behaviors, which brings great                    can effectively avoid the influence of malicious recommen-
+challenges to the trust evaluation mechanisms. As can be seen                 dations. EOSR uses the deviation degree of indirect trust to
+from Figure 12, on-off attacks are more destructive compared                  filter each false recommendation. However, the trust models
+to the above attacks. Since TAGA uses the penalty mech-                       of both schemes cannot make the trust value of the adverse
+anism, TAGA is able to identify malicious nodes quickly                       nodes that launch the bad-mouth attacks lower. So in both
+and minimize the damage caused by malicious nodes to the                      schemes, malicious nodes will continue to spread false rec-
+network. The number of lost packets in TAGA is reduced                        ommendations. While the adaptive penalty factor in TAGA
+by 26.72% and 35.45% on average compared to IASR and                          can effectively reduce the trust of the adverse nodes, and the
+EOSR, respectively.                                                           credibility constructed by using the median of direct trust can
+                                                                              effectively filter the false recommendation values.
+
+
+
+
+FIGURE 12. Packets lost by malicious nodes (under on-off attacks).            FIGURE 14. Energy consumption of network.
+
+
+
+
+2) MALICIOUS RECOMMENDATION (BAD-MOUTH ATTACKS)                                D. ENERGY CONSUMPTION OF NETWORK
+Figure 13 shows that with the increase of malicious nodes                     Figure 14 shows that the energy consumption in the net-
+launching bad-mouth attacks, the number of false trust values                 work increases with the number of rounds. First, TAGA uses
+
+11548                                                                                                                                     VOLUME 10, 2022
+Y. Han et al.: Energy-Aware and Trust-Based Secure Routing Protocol for WSNs Using Adaptive Genetic Algorithm
+
+
+
+
+LEACH as the basic framework to improve the CH election                          significantly leading to the rapid identification of malicious
+threshold based on the trust value and residual energy of                        nodes. When TAGA faces black hole attacks, Hello flood
+nodes, so that nodes with high security and high energy as                       attacks, selective forwarding attacks, sinkhole attacks, and
+CHs. Second, TAGA uses AGA to select secure routes for                           on-off attacks in the 1000m∗ 1000m scenario, the average
+CHs. In constructing the fitness function of the AGA, the opti-                  number of packet loss is 36.48%, 63.6%, 47.49%, 44.09%
+mal path selection is controlled using the comprehensive trust                   and 39.09% lower than that in the 100m∗ 100m scenario,
+value within each hop and energy consumption. IASR jointly                       respectively.
+controls the path selection based on the energy consumption
+from the node to the BS, the remaining energy of the relay                       TABLE 5. Summary tables.
+node and the trust value. Therefore, the relay node which is far
+away may be selected. While EOSR may select the node with
+less hops but less residual energy as a relay node based on the
+path evaluation formula. Therefore the energy cost of TAGA
+is lower than that of IASR and EOSR. Compared with IASR
+and EOSR, the energy efficiency of TAGA has increased by
+4.97% and 14.84%.
+
+E. LARGE-SCALE NETWORK
+Table 4 shows the simulation results that 1000 nodes ran-
+domly distributed in a 1000m∗ 1000m area, where 30% of the
+nodes are captured as malicious nodes. IASR and EOSR do
+not identify malicious nodes since the malicious nodes that                      VII. CONCLUSION
+launch bad-mouth attacks only spread false trust values and                      In this paper, an energy-aware and trust-based routing pro-
+do not participate in discarding packets. Performance gener-                     tocol for wireless sensor networks using adaptive genetic
+ated by TAGA defense black hole attacks, hello flood attacks,                    algorithm called TAGA is presented to resist common routing
+selective forwarding attacks, sinkhole attacks, and on-off                       attacks and special trust attacks so as to resist multiple attacks,
+attacks is improved by 28.27%, 24.15%, 24.95%, 24.86%                            improve the speed of identifying the attackers, and select
+and 26.29% when compared with IASR, by 31.08%, 26.47%,                           secure and energy efficient routes. In TAGA, adaptive penalty
+28.03%, 27.58% and 28.08% when compared with EOSR.                               factors, volatilization factors and filtering mechanisms are
+                                                                                 designed to construct the comprehensive trust values, which
+TABLE 4. Simulation results under large-scale network.
+                                                                                 are used to evaluate the security performance of the nodes.
+                                                                                 Then an improved adaptive genetic algorithm with a novel
+                                                                                 CH election threshold is applied to select the secure and high-
+                                                                                 energy nodes as CHs. Finally, an adaptive genetic algorithm is
+                                                                                 adopted to find the optimal path for each CH. The simulation
+                                                                                 results verify the effectiveness of TAGA, and indicate that it
+                                                                                 can effectively decrease the impact of the malicious nodes,
+                                                                                 reduce the number of lost packets, and improve the network
+                                                                                 energy utilization.
+
+                                                                                 REFERENCES
+                                                                                  [1] W. Fang, W. Zhang, W. Yang, Z. Li, W. Gao, and Y. Yang, ‘‘Trust
+F. SUMMARY TABLE                                                                      management-based and energy efficient hierarchical routing protocol
+After the above simulations for different scenarios, we sum-                          in wireless sensor networks,’’ Digit. Commun. Netw., vol. 7, no. 4,
+                                                                                      pp. 470–478, Nov. 2021, doi: 10.1016/j.dcan.2021.03.005.
+marize the proposed TAGA scheme in Table 5. The total                             [2] A. Rachedi and A. Hasnaoui, ‘‘Advanced quality of services with security
+discards in Table 5 shows that the nodes that initiate the on-off                     integration in wireless sensor networks,’’ Wireless Commun. Mobile Com-
+attacks drop the most packets and the sinkhole attacks drop                           put., vol. 15, no. 6, pp. 1106–1116, Apr. 2015.
+the least packets. Both black hole attacks and sinkhole attacks                   [3] G. D. Devanagavi, N. Nalini, and R. C. Biradar, ‘‘Secured routing in wire-
+                                                                                      less sensor networks using fault-free and trusted nodes,’’ Int. J. Commun.
+discard all received packets; selective forwarding attacks and                        Syst., vol. 29, no. 1, pp. 170–193, Jan. 2016.
+on-off attacks discard some packets. This shows that it is eas-                   [4] K. Thangaramya, K. Kulothungan, S. I. Gandhi, and M. Selvi, ‘‘Intelligent
+ier to defend malicious nodes with a large number of dropped                          fuzzy rule-based approach with outlier detection for secured routing in
+                                                                                      WSN,’’ Soft Comput., vol. 24, no. 21, pp. 16483–16497, Apr. 2020.
+packets and harder to defend malicious nodes with partially                       [5] L. Zhang, N. Yin, X. Fu, Q. Lin, and R. Wang, ‘‘A multi-attribute
+dropped packets. It can be seen from the average discards                             pheromone ant secure routing algorithm based on reputation value for
+in Table 5 that the average number of packets discarded by                            sensor networks,’’ Sensors, vol. 17, no. 3, p. 541, Mar. 2017.
+malicious nodes in the scenario of 1000m∗ 1000m is less than                      [6] V. Gomathy, N. Padhy, D. Samanta, M. Sivaram, V. Jain, and I. S. Amiri,
+                                                                                      ‘‘Malicious node detection using heterogeneous cluster based secure rout-
+100m∗ 100m. This is because the number of packets dropped                             ing protocol (HCBS) in wireless adhoc sensor networks,’’ J. Ambient Intell.
+by each malicious node in each evaluation cycle increases                             Hum. Comput., vol. 11, no. 11, pp. 4995–5001, Feb. 2020.
+
+VOLUME 10, 2022                                                                                                                                           11549
+                                                   Y. Han et al.: Energy-Aware and Trust-Based Secure Routing Protocol for WSNs Using Adaptive Genetic Algorithm
+
+
+
+
+ [7] G. Thahniyath and M. Jayaprasad, ‘‘Secure and load balanced routing            [29] T. Yang, X. Xiangyang, L. Peng, L. Tonghui, and P. Leina, ‘‘A secure
+     model for wireless sensor networks,’’ J. King Saud Univ.-Comput. Inf. Sci.,         routing of wireless sensor networks based on trust evaluation model,’’ Proc.
+     Oct. 2020, doi: 10.1016/j.jksuci.2020.10.012.                                       Comput. Sci., vol. 131, pp. 1156–1163, Oct. 2018.
+ [8] K. Hamouid, S. Othmen, and A. Barkat, ‘‘LSTR: Lightweight and secure           [30] Q. Shi, L. Qin, Y. Ding, B. Xie, J. Zheng, and L. Song, ‘‘Information-aware
+     tree-based routing for wireless sensor networks,’’ Wireless Pers. Commun.,          secure routing in wireless sensor networks,’’ Sensors, vol. 20, no. 1, p. 165,
+     vol. 112, no. 3, pp. 1479–1501, Jan. 2020.                                          Dec. 2019.
+ [9] M. Rathee, S. Kumar, A. H. Gandomi, K. Dilip, B. Balusamy, and R. Patan,       [31] N. Sun and Y. Lu, ‘‘A self-adaptive genetic algorithm with improved
+     ‘‘Ant colony optimization based quality of service aware energy balancing           mutation mode based on measurement of population diversity,’’ Neural
+     secure routing algorithm for wireless sensor networks,’’ IEEE Trans. Eng.           Comput. Appl., vol. 31, no. 5, pp. 1435–1443, May 2019.
+     Manag., vol. 68, no. 1, pp. 170–182, Feb. 2021.                                [32] J. Xu, L. Pei, and R.-Z. Zhu, ‘‘Application of a genetic algorithm with ran-
+[10] M. Mathapati, T. S. Kumaran, A. Muruganandham, and M. Mathivanan,                   dom crossover and dynamic mutation on the travelling salesman problem,’’
+     ‘‘Secure routing scheme with multi-dimensional trust evaluation for wire-           Proc. Comput. Sci., vol. 131, pp. 937–945, May 2018.
+     less sensor network,’’ J. Ambient Intell. Humanized Comput., vol. 12, no. 6,   [33] X. Guoxin, T. Xin, P. Wei, and R. Tao, ‘‘Clustering analysis based on chaos
+     pp. 6047–6055, Jun. 2021.                                                           micro variation adaptive genetic algorithm for radio fuze jamming,’’ in
+[11] W. Fang, W. Zhang, W. Chen, Y. Liu, and C. Tang, ‘‘TMSRS: Trust                     Proc. 29th Chin. Control Decis. Conf. (CCDC), May 2017, pp. 616–620,
+     management-based secure routing scheme in industrial wireless sensor net-           doi: 10.1109/CCDC.2017.7978287.
+     work with fog computing,’’ Wireless Netw., vol. 26, no. 5, pp. 3169–3182,      [34] H. Hu, Y. Han, M. Yao, and S. Xue, ‘‘Trust based secure and energy
+     Sep. 2020.                                                                          efficient routing protocol for wireless sensor networks,’’ IEEE Access,
+[12] L. Wei, Y. Qing, and Y. Nan, ‘‘A trust-based secure routing algorithm               early access, Apr. 27, 2021, doi: 10.1109/ACCESS.2021.3075959.
+     for wireless sensor networks,’’ in Proc. 34th Chin. Control Conf. (CCC),       [35] C. Wang, X. Liu, and H. Hu, ‘‘Energy-efficient and load-balanced cluster-
+     Jul. 2015, pp. 7726–7729, doi: 10.1109/ChiCC.2015.7260866.                          ing routing protocol for wireless sensor networks using a chaotic genetic
+[13] A. Ahmed, K. A. Bakar, M. I. Channa, and A. W. Khan, ‘‘A secure routing             algorithm,’’ IEEE Access, vol. 8, pp. 158082–158096, 2020.
+     protocol with trust and energy awareness for wireless sensor network,’’        [36] S. A. Sert, E. Onur, and A. Yazici, ‘‘Security attacks and countermeasures
+     Mobile Netw. Appl., vol. 21, no. 2, pp. 272–285, 2016.                              in surveillance wireless sensor networks,’’ in Proc. 9th Int. Conf. Appl. Inf.
+[14] K. A. Awan, I. Din, A. Almogren, M. Guizani, A. Altameem, and                       Commun. Technol. (AICT), Oct. 2015, pp. 201–205.
+     S. U. Jadoon, ‘‘RobustTrust—A pro-privacy robust distributed trust man-        [37] S. A. Sert, C. Fung, R. George, and A. Yazici, ‘‘An efficient fuzzy path
+     agement mechanism for Internet of Things,’’ IEEE Access, vol. 7,                    selection approach to mitigate selective forwarding attacks in wireless
+     pp. 62095–62106, 2019.                                                              sensor networks,’’ in Proc. IEEE Int. Conf. Fuzzy Syst. (FUZZ-IEEE),
+[15] W. Fang, C. Zhu, W. Chen, W. Zhang, and J. J. P. C. Rodrigues,                      Jul. 2017, pp. 1–6.
+     ‘‘BDTMS: Binomial distribution-based trust management scheme for
+     healthcare-oriented wireless sensor network,’’ in Proc. 4th Int. Wire-
+     less Commun. Mobile Comput. Conf., Jun. 2018, pp. 382–387, doi:
+     10.1109/IWCMC.2018.8450403.                                                                                YOUJIA HAN received the B.Eng. degree from
+[16] R. W. Anwar, A. Zainal, F. Outay, A. Yasar, and S. Iqbal, ‘‘BTEM: Belief                                   the Anhui Wenda University of Information
+     based trust evaluation mechanism for wireless sensor networks,’’ Future                                    Engineering, Hefei, China, in 2018. He is currently
+     Gener. Comput. Syst., vol. 96, pp. 605–616, Jul. 2019.                                                     pursuing the M.S. degree with the Changchun
+[17] M. Zhang, ‘‘Trust computation model based on improved Bayesian for                                         University of Technology, Changchun, China. His
+     wireless sensor networks,’’ in Proc. IEEE 17th Int. Conf. Commun. Tech-                                    main research interest includes wireless sensor
+     nol. (ICCT), Oct. 2017, pp. 960–964, doi: 10.1109/ICCT.2017.8359777.
+                                                                                                                network security.
+[18] A. B. Feroz Khan and G. Anandharaj, ‘‘A cognitive energy efficient and
+     trusted routing model for the security of wireless sensor networks: CEMT,’’
+     Wireless Pers. Commun., vol. 119, no. 4, pp. 3149–3159, Apr. 2021.
+[19] Y. Hu, Y. Wu, and H. Wang, ‘‘Detection of insider selective forwarding
+     attack based on monitor node and trust mechanism in WSN,’’ Wireless
+     Sensor Netw., vol. 6, no. 11, pp. 237–248, 2014.
+[20] D. Qin, S. Yang, S. Jia, Y. Zhang, J. Ma, and Q. Ding, ‘‘Research on trust                               HUANGSHUI HU received the B.Eng. degree
+     sensing based secure routing mechanism for wireless sensor network,’’                                    in computer application and the M.S. and Ph.D.
+     IEEE Access, vol. 5, pp. 9599–9609, 2017.                                                                degrees from the Changchun University of Sci-
+[21] A. Beheshtiasl and A. Ghaffari, ‘‘Secure and trust-aware routing scheme                                  ence and Technology (now Jilin University),
+     in wireless sensor networks,’’ Wireless Pers. Commun., vol. 107, no. 4,                                  Changchun, China, in 1999, 2005, and 2012,
+     pp. 1799–1814, Apr. 2019.                                                                                respectively. From 2005 to 2008, he worked
+[22] X. Yu, F. Li, T. Li, N. Wu, H. Wang, and H. Zhou, ‘‘Trust-based secure                                   as a Research and Development Manager at
+     directed diffusion routing protocol in WSN,’’ J. Ambient Intell. Hum.                                    Changchun Lianxin Technology Company Ltd.,
+     Comput., pp. 1–13, Nov. 2020, doi: 10.1007/s12652-020-02638-z.                                           Changchun. From 2008 to 2013, he worked as
+[23] P. A. Patil, R. S. Deshpande, and P. B. Mane, ‘‘Trust and opportunity based                              the Technical Director of Jilin Omnidirectional
+     routing framework in wireless sensor network using hybrid optimiza-            Technology Company Ltd., Changchun. Since 2015, he has been with the
+     tion algorithm,’’ Wireless Pers. Commun., vol. 115, no. 1, pp. 415–437,        Department of Computer Science and Engineering, Changchun University
+     Jun. 2020.
+                                                                                    of Technology, Changchun, where he is currently a Professor. His main
+[24] T. Kalidoss, L. Rajasekaran, K. Kanagasabai, G. Sannasi, and A. Kannan,
+                                                                                    research interests include topology control in wireless sensor networks and
+     ‘‘QoS aware trust based routing algorithm for wireless sensor networks,’’
+     Wireless Pers. Commun., vol. 110, no. 4, pp. 1637–1658, Feb. 2020.
+                                                                                    multifunction vehicle bus networks.
+[25] M. Hajiee, M. Fartash, and N. Osati Eraghi, ‘‘An energy-aware trust
+     and opportunity based routing algorithm in wireless sensor networks
+     using multipath routes technique,’’ Neural Process. Lett., vol. 53, no. 4,
+                                                                                                                YUXIN GUO graduated from Dalian Jiaotong Uni-
+     pp. 2829–2852, Aug. 2021.
+[26] J. Jasper, ‘‘A secure routing scheme to mitigate attack in wireless adhoc
+                                                                                                                versity, Dalian, China, in 2020. She is currently
+     sensor network,’’ Comput. Secur., vol. 103, Apr. 2021, Art. no. 102197.                                    pursuing the master’s degree with the Changchun
+[27] W. Fang, W. Zhang, W. Chen, J. Liu, Y. Ni, and Y. Yang, ‘‘MSCR:                                            University of Technology, Changchun, China. Her
+     Multidimensional secure clustered routing scheme in hierarchical wireless                                  main research interest includes routing in wireless
+     sensor networks,’’ EURASIP J. Wireless Commun. Netw., vol. 2021, no. 1,                                    sensor networks.
+     pp. 1–20, Jan. 2021.
+[28] Q. Zhang, X. Liu, J. Yu, and X. Qi, ‘‘A trust-based dynamic slicing
+     mechanism for wireless sensor networks,’’ Proc. Comput. Sci., vol. 174,
+     pp. 572–577, Oct. 2020.
+
+11550                                                                                                                                                 VOLUME 10, 2022
+
